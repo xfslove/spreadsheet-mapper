@@ -47,10 +47,10 @@ public class ExcelFileExporter implements UserFileExporter {
       createSheet(excelSheet);
       excelSheet.getRows().forEach(row -> createRowAndCells(row));
       // add comments
-      excelSheet.getRows().forEach(row -> row.getCells().forEach(cell -> {
-        int numberOfSheets = this.workbook.getNumberOfSheets();
-        ExcelCommentUtils.addCommentOnSheet(this.workbook.getSheetAt(numberOfSheets - 1), cell.getComment());
-      }));
+      int numberOfSheets = this.workbook.getNumberOfSheets();
+      Sheet sheet = this.workbook.getSheetAt(numberOfSheets - 1);
+      excelSheet.getRows().forEach(row -> row.getCells().forEach(cell ->
+          ExcelCommentUtils.addCommentOnSheet(sheet, cell.getComment())));
     });
 
     workbook.write(outputStream);

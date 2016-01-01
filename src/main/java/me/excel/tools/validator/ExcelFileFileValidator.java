@@ -2,10 +2,7 @@ package me.excel.tools.validator;
 
 import me.excel.tools.exporter.ExcelCommentUtils;
 import me.excel.tools.factory.ImportTemplate;
-import me.excel.tools.model.excel.ExcelCell;
-import me.excel.tools.model.excel.ExcelCellCommentBean;
-import me.excel.tools.model.excel.ExcelSheet;
-import me.excel.tools.model.excel.ExcelWorkbook;
+import me.excel.tools.model.excel.*;
 import me.excel.tools.model.message.ErrorMessage;
 import me.excel.tools.transfer.ExcelFileTransfer;
 
@@ -57,16 +54,18 @@ public class ExcelFileFileValidator extends ExcelFileTransfer implements UserFil
       return;
     }
 
+    List<ExcelCellComment> excelCellComments = new ArrayList<>();
     ExcelSheet sheet = excelWorkbook.getSheet(0);
     sheet.getRows()
         .forEach(row -> row.getCells()
         .forEach(cell -> errorMessages.stream()
             .filter(errorMessage -> errorMessage.matches(cell))
-            .forEach(errorMessage -> cell.setComment(
-                new ExcelCellCommentBean(errorMessage.getErrorMessage()))
-            )
+            .forEach(errorMessage -> {
+              cell.setComment(new ExcelCellCommentBean(errorMessage.getErrorMessage()));
+              excelCellComments.add(cell.getComment());
+            })
         ));
-//    ExcelCommentUtils.writeToFile(excel, excelWorkbook);
+    ExcelCommentUtils.writeToFile(excel, excelCellComments);
   }
 
   public void validateWorkbook(ExcelWorkbook workbook) {
