@@ -61,28 +61,27 @@ import java.util.List;
  *
  *  } else {
  *
- *　自定义data processor
- *  {@link me.excel.tools.processor.AbstractDataProcessor}
- *  DataProcessor modelDataProcessor = new StudentDataProcessor();
+ *  UserFileImporter userFileImporter = studentImportTemplate.getUserFileImporter();
  *
  *  自定义model factory
  *  StudentModelFactory modelFactory = new StudentModelFactory(Student.class);
- *  modelDataProcessor.setModelFactory(modelFactory);
+ *  userFileImporter.setModelFactory(modelFactory);
  *
  *  自定义特殊的field value setter, 默认提供string, int, double, boolean类型field的value setter
  *  {@link me.excel.tools.utils.AbstractFieldValueSetter}
- *  modelDataProcessor.addFieldValueSetter(new DateValueSetter("student.enrollDate", "yyyy-MM-dd",
+ *  userFileImporter.addFieldValueSetter(new DateValueSetter("student.enrollDate", "yyyy-MM-dd",
  *    (s, enrollDate) -> {
  *      Student student = (Student) s;
  *      student.setEnrollDate(enrollDate);
  *    }
  *  ));
  *
- *  UserFileImporter userFileImporter = studentImportTemplate.getUserFileImporter();
+ *  自定义data processor
+ *  {@link me.excel.tools.processor.DataProcessor}
+ *  DataProcessor modelDataProcessor = new StudentDataProcessor();
  *
  *  只支持单sheet的导入，多sheet不支持
  *  userFileImporter.process(userFile, modelDataProcessor);
- *
  * }
  * </pre>
  *
