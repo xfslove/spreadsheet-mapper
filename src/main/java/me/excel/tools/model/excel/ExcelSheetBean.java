@@ -53,11 +53,11 @@ public class ExcelSheetBean implements ExcelSheet {
   public List<ExcelRow> getDataRows() {
     List<ExcelRow> dataRows = new ArrayList<>();
 
-    for (int i = 0; i < dataRows.size(); i++) {
+    for (int i = 0; i < excelRows.size(); i++) {
       if (i == 0 || i == 1 || i == 2) {
         continue;
       }
-      dataRows.add(dataRows.get(i));
+      dataRows.add(excelRows.get(i));
     }
     return dataRows;
   }

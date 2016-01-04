@@ -2,6 +2,7 @@ package me.excel.tools.utils;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class FieldUtils {
    * @return 比如: name
    */
   public static String getFieldWithoutPrefix(String field) {
-    List<String> splitFields = Arrays.asList(field.split("\\."));
+    List<String> splitFields = new ArrayList<>(Arrays.asList(field.split("\\.")));
     if (splitFields.size() == 1) {
       return field;
     } else {
