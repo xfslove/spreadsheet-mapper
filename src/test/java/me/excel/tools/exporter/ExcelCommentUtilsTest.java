@@ -44,7 +44,9 @@ public class ExcelCommentUtilsTest {
     fileExporter.export(new FileOutputStream(file));
 
 
-    commentCell.setComment(new ExcelCellCommentBean("student\'s code"));
+    ExcelCellCommentBean excelCellComment = new ExcelCellCommentBean();
+    excelCellComment.addComment("student\'s code");
+    commentCell.setComment(excelCellComment);
 
     List<ExcelCellComment> commentList = new ArrayList<>();
     commentList.add(commentCell.getComment());

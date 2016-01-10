@@ -8,7 +8,7 @@ import me.excel.tools.model.excel.ExcelCell;
 public class DoubleFormatValidator extends AbstractFieldValidator {
 
   public DoubleFormatValidator(String field) {
-    super(field, "数据不正确, 应该为小数", "小数");
+    super(field, "应该为小数", "小数");
   }
 
   public DoubleFormatValidator(String field, String message, String prompt) {
@@ -16,12 +16,8 @@ public class DoubleFormatValidator extends AbstractFieldValidator {
   }
 
   @Override
-  public boolean validate(ExcelCell excelCell) {
-    String value = excelCell.getValue();
-    if (value == null) {
-      return false;
-    }
-    return isValidDouble(value);
+  protected boolean customValidate(ExcelCell excelCell) {
+    return isValidDouble(excelCell.getValue());
   }
 
   private boolean isValidDouble(String value) {

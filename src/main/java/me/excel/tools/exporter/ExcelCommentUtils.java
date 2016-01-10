@@ -2,6 +2,7 @@ package me.excel.tools.exporter;
 
 import me.excel.tools.model.excel.ExcelCellComment;
 import me.excel.tools.model.excel.ExcelWorkbook;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
@@ -19,9 +20,13 @@ import java.util.stream.Collectors;
  *
  * Created by hanwen on 15-12-20.
  */
-public class ExcelCommentUtils {
+public abstract class ExcelCommentUtils {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ExcelCommentUtils.class);
+
+  private ExcelCommentUtils() {
+
+  }
 
   /**
    * 将 comments 写到 excel 上
@@ -82,7 +87,7 @@ public class ExcelCommentUtils {
     // Create the comment and set the text
     Drawing drawing = sheet.createDrawingPatriarch();
     Comment comment = drawing.createCellComment(anchor);
-    RichTextString str = factory.createRichTextString(excelCellComment.getComment());
+    RichTextString str = factory.createRichTextString(StringUtils.join(excelCellComment.getComments(), ","));
     comment.setString(str);
 
     // Assign the new comment to the cell

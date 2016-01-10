@@ -35,7 +35,7 @@ public class ExcelFileFileValidator extends ExcelFileTransfer implements UserFil
     validateWorkbook(excelWorkbook);
 
     excelWorkbook.getSheet(0).getDataRows()
-            .forEach(row -> row.getCells()
+        .forEach(row -> row.getCells()
             .forEach(cell -> validateCell(cell)));
 
     if (!this.errorMessages.isEmpty()) {
@@ -54,28 +54,29 @@ public class ExcelFileFileValidator extends ExcelFileTransfer implements UserFil
       return;
     }
 
-    List<ExcelCellComment> excelCellComments = new ArrayList<>();
-    ExcelSheet sheet = excelWorkbook.getSheet(0);
-    sheet.getRows()
-        .forEach(row -> row.getCells()
-        .forEach(cell -> errorMessages.stream()
-            .filter(errorMessage -> errorMessage.matches(cell))
-            .forEach(errorMessage -> {
-              cell.setComment(new ExcelCellCommentBean(errorMessage.getErrorMessage()));
-              excelCellComments.add(cell.getComment());
-            })
-        ));
-    ExcelCommentUtils.writeToFile(excel, excelCellComments);
+    List<ExcelCellComment> commentList = new ArrayList<>();
+    errorMessages.forEach(errorMessage -> {
+      ExcelCell excelCell = errorMessage.getCell();
+      ExcelCellComment excelCellComment;
+      if (excelCell.getComment() == null) {
+        excelCellComment = new ExcelCellCommentBean();
+        excelCell.setComment(excelCellComment);
+      }
+      excelCellComment = excelCell.getComment();
+      excelCellComment.addComment(errorMessage.getContent());
+      commentList.add(excelCellComment);
+    });
+    ExcelCommentUtils.writeToFile(excel, commentList);
   }
 
   public void validateWorkbook(ExcelWorkbook workbook) {
     if (workbook == null) {
       throw new IllegalArgumentException("workbook is null");
     }
-    if (workbook.getSheets().size() == 0) {
+    if (workbook.getSheets().isEmpty()) {
       throw new IllegalArgumentException("sheet is null");
     }
-    if (workbook.getSheet(0).getRows().size() == 0) {
+    if (workbook.getSheet(0).getRows().isEmpty()) {
       throw new IllegalArgumentException("row is null");
     }
     ExcelCell firstCell = workbook.getSheet(0).getRow(0).getCell(0);

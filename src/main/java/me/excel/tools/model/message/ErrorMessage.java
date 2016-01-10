@@ -14,18 +14,18 @@ public class ErrorMessage {
    */
   private ExcelCell cell;
 
-  private String errorMessage;
+  private String content;
 
-  public ErrorMessage(ExcelCell cell, String errorMessage) {
+  public ErrorMessage(ExcelCell cell, String content) {
     this.cell = cell;
-    this.errorMessage = errorMessage;
+    this.content = content;
   }
 
-  public String getErrorMessage() {
-    return errorMessage;
+  public String getContent() {
+    return content;
   }
 
-  public boolean matches(ExcelCell cell) {
-    return this.cell.equals(cell);
+  public ExcelCell getCell() {
+    return cell;
   }
 }

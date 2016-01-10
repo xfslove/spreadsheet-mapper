@@ -5,7 +5,7 @@ import me.excel.tools.model.excel.ExcelCell;
 /**
  * model的field value setter父类, 提供默认的value setter,<br/>
  * 默认的value setter 支持{@link String}, {@link Integer}, {@link Double}, {@link Boolean},<br/>
- * 自定义的value setter 需继承此类
+ * 自定义value setter 用 {@link CommonValueSetter}
  *
  * Created by hanwen on 15-12-16.
  */

@@ -1,5 +1,7 @@
 package me.excel.tools.model.excel;
 
+import java.util.List;
+
 /**
  * excel comment
  *
@@ -11,7 +13,14 @@ public interface ExcelCellComment {
    * comment 内容
    * @return
    */
-  String getComment();
+  List<String> getComments();
+
+  /**
+   * 增加comment
+   *
+   * @param comment
+   */
+  void addComment(String comment);
 
   /**
    * comment 的长度

@@ -12,7 +12,7 @@ public class BooleanValidator extends AbstractFieldValidator {
 
   public BooleanValidator(String matchField) {
     super(matchField,
-        "数据不正确, 格式应为: \'是\':true,t,是,yes,y,1; \'否\':false,f,否,no,n,0",
+        "格式应为: \'是\':true,t,是,yes,y,1; \'否\':false,f,否,no,n,0",
         "\'是\':true,t,是,yes,y,1; \'否\':false,f,否,no,n,0");
   }
 
@@ -21,7 +21,7 @@ public class BooleanValidator extends AbstractFieldValidator {
   }
 
   @Override
-  public boolean validate(ExcelCell excelCell) {
+  protected boolean customValidate(ExcelCell excelCell) {
     return isValidTrue(excelCell.getValue()) && isValidFalse(excelCell.getValue());
   }
 

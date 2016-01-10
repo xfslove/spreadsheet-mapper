@@ -13,7 +13,7 @@ public class RegexFormatValidator extends AbstractFieldValidator {
   protected String regex;
 
   public RegexFormatValidator(String field, String regex) {
-    super(field, "格式不正确, 格式应该满足:"+regex, regex);
+    super(field, "格式应该满足:"+regex, regex);
     this.regex = regex;
   }
 
@@ -23,11 +23,7 @@ public class RegexFormatValidator extends AbstractFieldValidator {
   }
 
   @Override
-  public boolean validate(ExcelCell excelCell) {
-    String value = excelCell.getValue();
-    if (value == null) {
-      return false;
-    }
-    return value.matches(regex);
+  protected boolean customValidate(ExcelCell excelCell) {
+    return excelCell.getValue().matches(regex);
   }
 }

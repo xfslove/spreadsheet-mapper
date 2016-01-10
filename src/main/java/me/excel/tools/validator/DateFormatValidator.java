@@ -14,7 +14,7 @@ public class DateFormatValidator extends AbstractFieldValidator {
   protected String format;
 
   public DateFormatValidator(String field, String format) {
-    super(field, "数据不正确,格式应该为:"+format, format);
+    super(field, "格式应该为:"+format, format);
     this.format = format;
   }
 
@@ -24,12 +24,8 @@ public class DateFormatValidator extends AbstractFieldValidator {
   }
 
   @Override
-  public boolean validate(ExcelCell excelCell) {
-    String value = excelCell.getValue();
-    if (value == null) {
-      return false;
-    }
-    return isValidFormat(format, value);
+  protected boolean customValidate(ExcelCell excelCell) {
+    return isValidFormat(format, excelCell.getValue());
   }
 
   private boolean isValidFormat(String format, String value) {

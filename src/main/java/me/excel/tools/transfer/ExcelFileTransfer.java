@@ -1,6 +1,7 @@
 package me.excel.tools.transfer;
 
 import me.excel.tools.model.excel.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
@@ -124,7 +125,16 @@ public class ExcelFileTransfer implements UserFileTransfer {
     if (cellComment == null) {
       return;
     }
-    excelCell.setComment(new ExcelCellCommentBean(cellComment.getString().getString()));
+    ExcelCellComment excelCellComment = new ExcelCellCommentBean();
+    String commentString = cellComment.getString().getString();
+    if (commentString == null) {
+      return;
+    }
+    String[] comments = StringUtils.split(commentString, ",");
+    for (String comment : comments) {
+      excelCellComment.addComment(comment);
+    }
+    excelCell.setComment(excelCellComment);
   }
 
 

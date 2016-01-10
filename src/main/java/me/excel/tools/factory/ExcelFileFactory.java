@@ -23,6 +23,8 @@ public class ExcelFileFactory implements UserFileFactory {
 
   protected List<String> fields = new ArrayList<>();
 
+  protected List<String> titles = new ArrayList<>();
+
   protected ExcelFileExporter excelFileExporter;
 
   protected FieldValueExtractor fieldValueExtractor;
@@ -34,6 +36,17 @@ public class ExcelFileFactory implements UserFileFactory {
     this.fieldValueExtractor = new DefaultFieldValueExtractor();
   }
 
+  @Override
+  public void setTitles(String... titles) {
+    if (titles == null) {
+      throw new IllegalArgumentException("title is null");
+    }
+    for (String title : titles) {
+      this.titles.add(title);
+    }
+  }
+
+  @Override
   public void setFields(String... fields) {
     if (fields == null) {
       throw new IllegalArgumentException("field is null");
@@ -43,10 +56,12 @@ public class ExcelFileFactory implements UserFileFactory {
     }
   }
 
+  @Override
   public void setDatas(List datas) {
     this.datas = datas;
   }
 
+  @Override
   public void generate(File excel) throws IOException {
     ExcelWorkbook excelWorkbook = createWorkbook();
     if (excelWorkbook == null) {
@@ -93,9 +108,8 @@ public class ExcelFileFactory implements UserFileFactory {
     ExcelRowBean row = new ExcelRowBean(rowIndex);
     sheet.addRow(row);
 
-    for (int i = 0; i < fields.size(); i++) {
-      String field = fields.get(i);
-      ExcelCellBean cell =  new ExcelCellBean(rowIndex, i + 1, null, getI18nValue(field));
+    for (int i = 0; i < titles.size(); i++) {
+      ExcelCellBean cell =  new ExcelCellBean(rowIndex, i + 1, null, titles.get(i));
       row.addCell(cell);
     }
   }
@@ -134,14 +148,10 @@ public class ExcelFileFactory implements UserFileFactory {
     }
   }
 
-  private String getI18nValue(String field) {
-    // TODO get i18n title
-    return field;
-  }
-
   private String getPrompts(String field) {
     List<String> prompts = importTemplate.getValidators().stream()
         .filter(validator -> validator.matches(field))
+        .filter(validator -> validator.getPrompt() != null)
         .map(validator -> validator.getPrompt()).collect(Collectors.toList());
     return prompts.isEmpty() ? "" : StringUtils.join(prompts, ",");
   }
@@ -149,4 +159,6 @@ public class ExcelFileFactory implements UserFileFactory {
   private String getFieldValue(Object data, String field) {
     return fieldValueExtractor.getStringValue(data, field);
   }
+
+
 }

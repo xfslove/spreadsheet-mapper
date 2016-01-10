@@ -1,21 +1,17 @@
 package me.excel.tools.importer;
 
 import me.excel.tools.factory.AbstractModelFactory;
-import me.excel.tools.model.excel.ExcelCell;
 import me.excel.tools.model.excel.ExcelRow;
 import me.excel.tools.processor.DataProcessor;
-import me.excel.tools.utils.AbstractFieldValueSetter;
-import org.apache.poi.util.TempFile;
+import me.excel.tools.utils.CommonValueSetter;
 import org.testng.annotations.Test;
 
 import java.io.File;
-import java.io.InputStream;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 import static org.testng.Assert.assertEquals;
 
@@ -31,11 +27,14 @@ public class ExcelFileImporterTest {
 
     UserFileImporter userFileImporter = new ExcelFileImporter();
     userFileImporter.setModelFactory(new StudentModelFactoryTest(StudentTest.class));
-    userFileImporter.addFieldValueSetter(new DateValueSetterTest("student.enrollDate", "yyyy-MM-dd",
-    (s, date) -> {
-      StudentTest student = (StudentTest) s;
-      student.setEnrollDate(date);
-    }));
+    userFileImporter.addFieldValueSetter(new CommonValueSetter<StudentTest>("student.enrollDate",
+        (s, excelCell) -> {
+          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+          try {
+            s.setEnrollDate(sdf.parse(excelCell.getValue()));
+          } catch (ParseException e) {
+          }
+        }));
 
     userFileImporter.process(excel, new StudentDataProcessorTest());
   }
@@ -63,29 +62,6 @@ public class ExcelFileImporterTest {
       try {
         assertEquals(model1.getEnrollDate(), sdf.parse("2015-09-01"));
         assertEquals(model2.getEnrollDate(), sdf.parse("2015-09-01"));
-      } catch (ParseException e) {
-      }
-    }
-  }
-
-  public class DateValueSetterTest extends AbstractFieldValueSetter {
-
-    private String format;
-
-    private BiConsumer<Object, Date> dateValueSetter;
-
-    public DateValueSetterTest(String matchField, String format, BiConsumer<Object, Date> dateValueSetter) {
-      super(matchField);
-      this.format = format;
-      this.dateValueSetter = dateValueSetter;
-    }
-
-    @Override
-    public void set(Object data, ExcelCell excelCell) {
-
-      SimpleDateFormat sdf = new SimpleDateFormat(format);
-      try {
-        dateValueSetter.accept(data, sdf.parse(excelCell.getValue()));
       } catch (ParseException e) {
       }
     }

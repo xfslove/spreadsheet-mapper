@@ -12,6 +12,13 @@ import java.util.List;
 public interface UserFileFactory {
 
   /**
+   * 设置file中的titles (第一行)
+   *
+   * @param titles
+   */
+  void setTitles(String... titles);
+
+  /**
    * 设置file中的fields
    *
    * @param fields

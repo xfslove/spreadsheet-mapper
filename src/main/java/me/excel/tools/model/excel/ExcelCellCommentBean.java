@@ -1,5 +1,8 @@
 package me.excel.tools.model.excel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by hanwen on 15-12-17.
  */
@@ -7,26 +10,34 @@ public class ExcelCellCommentBean implements ExcelCellComment {
 
   private ExcelCell excelCell;
 
-  private String comment;
+  private List<String> comments = new ArrayList<>();
 
   private int length;
 
   private int height;
 
-  public ExcelCellCommentBean(String comment) {
-    this.comment = comment;
+  public ExcelCellCommentBean() {
     this.length = 3;
     this.height = 1;
   }
 
-  public ExcelCellCommentBean(String comment, int length, int height) {
-    this.comment = comment;
+  public ExcelCellCommentBean(int length, int height) {
     this.length = length;
     this.height = height;
   }
 
-  public String getComment() {
-    return comment;
+  @Override
+  public List<String> getComments() {
+    return comments;
+  }
+
+  @Override
+  public void addComment(String comment) {
+    this.comments.add(comment);
+  }
+
+  public void setComments(List<String> comments) {
+    this.comments = comments;
   }
 
   @Override

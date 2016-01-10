@@ -1,9 +1,12 @@
 package me.excel.tools.validator;
 
 import me.excel.tools.model.excel.ExcelCell;
+import org.apache.commons.lang3.StringUtils;
 
 /**
- * 自定义的field validator需继承此类
+ * model的field validator父类, 提供默认的validator,<br/>
+ * 默认的validator 支持{@link java.util.Date}, {@link Integer}, {@link Double}, {@link Boolean},<br/>
+ * 自定义validator 用 {@link CommonValidator}
  *
  * Created by hanwen on 15-12-16.
  */
@@ -28,11 +31,18 @@ public abstract class AbstractFieldValidator implements FieldValidator {
   }
 
   @Override
-  public abstract boolean validate(ExcelCell excelCell);
+  public boolean validate(ExcelCell excelCell) {
+    if (StringUtils.isBlank(excelCell.getValue())) {
+      return true;
+    }
+    return customValidate(excelCell);
+  }
+
+  protected abstract boolean customValidate(ExcelCell excelCell);
 
   @Override
   public String getErrorMessage() {
-    return errorMessage;
+    return this.errorMessage;
   }
 
   @Override
