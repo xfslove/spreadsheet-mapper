@@ -119,8 +119,7 @@ public class ExcelFileFactory implements UserFileFactory {
     sheet.addRow(row);
 
     for (int i = 0; i < fields.size(); i++) {
-      String field = fields.get(i);
-      ExcelCellBean cell =  new ExcelCellBean(rowIndex, i + 1, null, field);
+      ExcelCellBean cell =  new ExcelCellBean(rowIndex, i + 1, null, fields.get(i));
       row.addCell(cell);
     }
   }
@@ -130,8 +129,7 @@ public class ExcelFileFactory implements UserFileFactory {
     sheet.addRow(row);
 
     for (int i = 0; i < fields.size(); i++) {
-      String field = fields.get(i);
-      ExcelCellBean cell =  new ExcelCellBean(rowIndex, i + 1, null, getPrompts(field));
+      ExcelCellBean cell =  new ExcelCellBean(rowIndex, i + 1, null, getPrompts(fields.get(i)));
       row.addCell(cell);
     }
   }
