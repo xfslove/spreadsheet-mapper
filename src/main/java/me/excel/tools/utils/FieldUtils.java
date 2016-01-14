@@ -60,12 +60,12 @@ public class FieldUtils {
    * @param field
    * @return
    */
-  public static Class getFieldType(Class<?> clazz, String field) {
+  public static Class getFieldType(Class clazz, String field) {
     try {
       return clazz.getDeclaredField(field).getType();
     } catch (NoSuchFieldException e) {
       if (clazz.getSuperclass() != null || clazz.getSuperclass() != Object.class) {
-        return getFieldType(clazz.getSuperclass(), field).getClass();
+        return getFieldType(clazz.getSuperclass(), field);
       }
     }
     return null;

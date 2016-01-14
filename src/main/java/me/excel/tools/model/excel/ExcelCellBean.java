@@ -1,6 +1,7 @@
 package me.excel.tools.model.excel;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.util.NumberToTextConverter;
 
 import java.util.Objects;
 
@@ -40,7 +41,7 @@ public class ExcelCellBean implements ExcelCell {
 
     } else if (cell.getCellType() == Cell.CELL_TYPE_BOOLEAN) {
 
-      value = String.valueOf(cell.getBooleanCellValue());
+      value = Boolean.toString(cell.getBooleanCellValue());
 
     } else if (cell.getCellType() == Cell.CELL_TYPE_ERROR) {
 
@@ -52,7 +53,7 @@ public class ExcelCellBean implements ExcelCell {
 
     } else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 
-      value = String.valueOf(cell.getNumericCellValue());
+      value = NumberToTextConverter.toText(cell.getNumericCellValue());
 
     } else if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
 
