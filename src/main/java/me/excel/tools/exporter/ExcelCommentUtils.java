@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -36,10 +37,10 @@ public abstract class ExcelCommentUtils {
    */
   public static void writeToFile(File excel, List<ExcelCellComment> commentList) {
 
-    List<ExcelWorkbook> excelWorkbooks = commentList.stream()
+    Set<ExcelWorkbook> excelWorkbooks = commentList.stream()
         .filter(excelCellComment -> excelCellComment.getSheet() != null)
         .map(excelCellComment -> excelCellComment.getSheet().getWorkbook())
-        .collect(Collectors.toList());
+        .collect(Collectors.toSet());
 
     if (excelWorkbooks.size() != 1) {
       throw new IllegalArgumentException("comments not in one workbook");

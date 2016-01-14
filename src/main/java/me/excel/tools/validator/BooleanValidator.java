@@ -22,7 +22,7 @@ public class BooleanValidator extends AbstractFieldValidator {
 
   @Override
   protected boolean customValidate(ExcelCell excelCell) {
-    return isValidTrue(excelCell.getValue()) && isValidFalse(excelCell.getValue());
+    return isValidTrue(excelCell.getValue()) || isValidFalse(excelCell.getValue());
   }
 
 

@@ -84,15 +84,16 @@ public class ExcelFileFileValidator extends ExcelFileTransfer implements UserFil
       this.errorMessages.add(new ErrorMessage(firstCell, "只支持单sheet导入"));
     }
     ExcelSheet sheet = workbook.getSheet(0);
-    List<ExcelCell> keyRowCells = sheet.getRow(1).getCells();
+    List<String> keyRowFields = sheet.getRow(1).getCells().stream()
+        .map(excelCell -> excelCell.getValue()).collect(Collectors.toList());
 
-    this.errorMessages.addAll(keyRowCells.stream()
-        .filter(keyRowCell -> !importTemplate.getFieldScope().contains(keyRowCell))
-        .map(keyRowCell -> new ErrorMessage(firstCell, keyRowCell.getField()+":字段不在处理范围内"))
+    this.errorMessages.addAll(keyRowFields.stream()
+        .filter(keyRowField -> !importTemplate.getFieldScope().contains(keyRowField))
+        .map(keyRowField -> new ErrorMessage(firstCell, keyRowField + ":字段不在处理范围内"))
         .collect(Collectors.toList()));
 
     this.errorMessages.addAll(importTemplate.getRequiredFields().stream()
-        .filter(requiredField -> !keyRowCells.contains(requiredField))
+        .filter(requiredField -> !keyRowFields.contains(requiredField))
         .map(requiredField -> new ErrorMessage(firstCell, "不包含所要求的字段:"+requiredField))
         .collect(Collectors.toList()));
   }

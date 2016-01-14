@@ -1,6 +1,6 @@
 package me.excel.tools.importer;
 
-import me.excel.tools.factory.AbstractModelFactory;
+import me.excel.tools.factory.ModelFactory;
 import me.excel.tools.model.excel.ExcelRow;
 import me.excel.tools.processor.DataProcessor;
 import me.excel.tools.utils.CommonValueSetter;
@@ -26,7 +26,7 @@ public class ExcelFileImporterTest {
     File excel = new File(resource.getFile());
 
     UserFileImporter userFileImporter = new ExcelFileImporter();
-    userFileImporter.setModelFactory(new StudentModelFactoryTest(StudentTest.class));
+    userFileImporter.setModelFactory(new StudentModelFactoryTest());
     userFileImporter.addFieldValueSetter(new CommonValueSetter<StudentTest>("student.enrollDate",
         (s, excelCell) -> {
           SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -67,11 +67,7 @@ public class ExcelFileImporterTest {
     }
   }
 
-  public class StudentModelFactoryTest extends AbstractModelFactory {
-
-    public StudentModelFactoryTest(Class modelClazz) {
-      super(modelClazz);
-    }
+  public class StudentModelFactoryTest implements ModelFactory {
 
     @Override
     public Object create(ExcelRow row) {
