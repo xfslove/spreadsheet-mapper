@@ -1,9 +1,10 @@
 package me.excel.tools.factory;
 
 import me.excel.tools.exporter.ExcelFileExporter;
+import me.excel.tools.exporter.UserFileExporter;
 import me.excel.tools.model.excel.*;
-import me.excel.tools.utils.DefaultFieldValueExtractor;
-import me.excel.tools.utils.FieldValueExtractor;
+import me.excel.tools.utils.CellValueConverter;
+import me.excel.tools.utils.ReflectionValueExtractor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -25,15 +26,14 @@ public class ExcelFileFactory implements UserFileFactory {
 
   protected List<String> titles = new ArrayList<>();
 
-  protected ExcelFileExporter excelFileExporter;
+  protected List<CellValueConverter> cellValueConverters = new ArrayList<>();
 
-  protected FieldValueExtractor fieldValueExtractor;
+  protected ReflectionValueExtractor reflectionValueExtractor = new ReflectionValueExtractor();
 
-  protected ImportTemplate importTemplate;
+  protected FileTemplate fileTemplate;
 
-  public ExcelFileFactory(ImportTemplate importTemplate) {
-    this.importTemplate = importTemplate;
-    this.fieldValueExtractor = new DefaultFieldValueExtractor();
+  public ExcelFileFactory(FileTemplate fileTemplate) {
+    this.fileTemplate = fileTemplate;
   }
 
   @Override
@@ -62,6 +62,16 @@ public class ExcelFileFactory implements UserFileFactory {
   }
 
   @Override
+  public void addCellValueConverter(CellValueConverter... converters) {
+    if (converters == null) {
+      throw new IllegalStateException("converter is null");
+    }
+    for (CellValueConverter extractor : converters) {
+      this.cellValueConverters.add(extractor);
+    }
+  }
+
+  @Override
   public void generate(File excel) throws IOException {
     ExcelWorkbook excelWorkbook = createWorkbook();
     if (excelWorkbook == null) {
@@ -76,7 +86,7 @@ public class ExcelFileFactory implements UserFileFactory {
 
     });
 
-    excelFileExporter = new ExcelFileExporter(excelWorkbook);
+    UserFileExporter excelFileExporter = new ExcelFileExporter(excelWorkbook);
     try(OutputStream outputStream = new FileOutputStream(excel)) {
       excelFileExporter.export(outputStream);
     }
@@ -147,7 +157,7 @@ public class ExcelFileFactory implements UserFileFactory {
   }
 
   private String getPrompts(String field) {
-    List<String> prompts = importTemplate.getValidators().stream()
+    List<String> prompts = fileTemplate.getValidators().stream()
         .filter(validator -> validator.matches(field))
         .filter(validator -> validator.getPrompt() != null)
         .map(validator -> validator.getPrompt()).collect(Collectors.toList());
@@ -155,7 +165,7 @@ public class ExcelFileFactory implements UserFileFactory {
   }
 
   private String getFieldValue(Object data, String field) {
-    return fieldValueExtractor.getStringValue(data, field);
+    return reflectionValueExtractor.getStringValue(data, field);
   }
 
 

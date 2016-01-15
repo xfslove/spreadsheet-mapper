@@ -11,7 +11,7 @@ import java.util.List;
  *
  * Created by hanwen on 15-12-16.
  */
-public interface ImportTemplate {
+public interface FileTemplate {
 
   /**
    * 设置支持的field范围

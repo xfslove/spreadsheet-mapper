@@ -50,4 +50,10 @@ public interface ExcelCell {
   ExcelSheet getSheet();
 
   void setComment(ExcelCellComment comment);
+
+  /**
+   * 将一些value转换成readable的
+   * @param value
+   */
+  void convertToReadableValue(String value);
 }

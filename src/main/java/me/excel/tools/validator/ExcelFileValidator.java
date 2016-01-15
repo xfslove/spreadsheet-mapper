@@ -1,7 +1,7 @@
 package me.excel.tools.validator;
 
 import me.excel.tools.exporter.ExcelCommentUtils;
-import me.excel.tools.factory.ImportTemplate;
+import me.excel.tools.factory.FileTemplate;
 import me.excel.tools.model.excel.*;
 import me.excel.tools.model.message.ErrorMessage;
 import me.excel.tools.transfer.ExcelFileTransfer;
@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
 /**
  * Created by hanwen on 15-12-16.
  */
-public class ExcelFileFileValidator extends ExcelFileTransfer implements UserFileValidator {
+public class ExcelFileValidator extends ExcelFileTransfer implements UserFileValidator {
 
-  protected ImportTemplate importTemplate;
+  protected FileTemplate fileTemplate;
 
   protected List<ErrorMessage> errorMessages = new ArrayList<>();
 
-  public ExcelFileFileValidator(ImportTemplate importTemplate) {
-    this.importTemplate = importTemplate;
+  public ExcelFileValidator(FileTemplate fileTemplate) {
+    this.fileTemplate = fileTemplate;
   }
 
   @Override
@@ -88,11 +88,11 @@ public class ExcelFileFileValidator extends ExcelFileTransfer implements UserFil
         .map(excelCell -> excelCell.getValue()).collect(Collectors.toList());
 
     this.errorMessages.addAll(keyRowFields.stream()
-        .filter(keyRowField -> !importTemplate.getFieldScope().contains(keyRowField))
+        .filter(keyRowField -> !fileTemplate.getFieldScope().contains(keyRowField))
         .map(keyRowField -> new ErrorMessage(firstCell, keyRowField + ":字段不在处理范围内"))
         .collect(Collectors.toList()));
 
-    this.errorMessages.addAll(importTemplate.getRequiredFields().stream()
+    this.errorMessages.addAll(fileTemplate.getRequiredFields().stream()
         .filter(requiredField -> !keyRowFields.contains(requiredField))
         .map(requiredField -> new ErrorMessage(firstCell, "不包含所要求的字段:"+requiredField))
         .collect(Collectors.toList()));
@@ -103,7 +103,7 @@ public class ExcelFileFileValidator extends ExcelFileTransfer implements UserFil
       return;
     }
 
-    this.errorMessages.addAll(importTemplate.getValidators().stream()
+    this.errorMessages.addAll(fileTemplate.getValidators().stream()
         .filter(fieldValidator -> fieldValidator.matches(cell))
         .filter(fieldValidator -> !fieldValidator.validate(cell))
         .map(fieldValidator -> new ErrorMessage(cell, fieldValidator.getErrorMessage()))

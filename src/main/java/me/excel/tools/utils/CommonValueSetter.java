@@ -13,6 +13,10 @@ public class CommonValueSetter<D> extends AbstractFieldValueSetter {
 
   protected BiConsumer<D, ExcelCell> associationValueSetter;
 
+  public CommonValueSetter(String matchField) {
+    super(matchField);
+  }
+
   public CommonValueSetter(String matchField, BiConsumer<D, ExcelCell> associationValueSetter) {
     super(matchField);
     this.associationValueSetter = associationValueSetter;

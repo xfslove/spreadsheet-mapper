@@ -3,7 +3,7 @@ package me.excel.tools.factory;
 import me.excel.tools.importer.ExcelFileImporter;
 import me.excel.tools.importer.UserFileImporter;
 import me.excel.tools.validator.AbstractFieldValidator;
-import me.excel.tools.validator.ExcelFileFileValidator;
+import me.excel.tools.validator.ExcelFileValidator;
 import me.excel.tools.validator.FieldValidator;
 import me.excel.tools.validator.UserFileValidator;
 
@@ -13,8 +13,8 @@ import java.util.List;
 /**
  * excel 模板工厂, 用法如下:<br/>
  * <pre>
- *  {@link ExcelImportTemplate}
- *  ImportTemplate studentImportTemplate = new ExcelImportTemplate();
+ *  {@link ExcelTemplate}
+ *  FileTemplate studentImportTemplate = new ExcelTemplate();
  *
  *  设置支持的field范围, 范围之外的field是不允许的
  *  studentImportTemplate.setFieldScope("student.name", "student.code", "student.age", "student.mobile", "student.enrollDate");
@@ -87,7 +87,7 @@ import java.util.List;
  *
  * Created by hanwen on 15-12-16.
  */
-public class ExcelImportTemplate implements ImportTemplate {
+public class ExcelTemplate implements FileTemplate {
 
   protected List<String> fieldScope = new ArrayList<>();
 
@@ -103,9 +103,9 @@ public class ExcelImportTemplate implements ImportTemplate {
 
   protected UserFileImporter userFileImporter;
 
-  public ExcelImportTemplate() {
+  public ExcelTemplate() {
     this.userFileFactory = new ExcelFileFactory(this);
-    this.userFileValidator = new ExcelFileFileValidator(this);
+    this.userFileValidator = new ExcelFileValidator(this);
     this.userFileImporter = new ExcelFileImporter();
   }
 

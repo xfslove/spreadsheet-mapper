@@ -124,6 +124,11 @@ public class ExcelCellBean implements ExcelCell {
   }
 
   @Override
+  public void convertToReadableValue(String value) {
+    this.value = value;
+  }
+
+  @Override
   public boolean equals(Object obj) {
     if (obj == this) {
       return true;

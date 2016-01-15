@@ -1,13 +1,10 @@
 package me.excel.tools.utils;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static me.excel.tools.utils.FieldUtils.getFieldWithoutPrefix;
 
@@ -16,16 +13,18 @@ import static me.excel.tools.utils.FieldUtils.getFieldWithoutPrefix;
  *
  * Created by hanwen on 15-12-16.
  */
-public class DefaultFieldValueExtractor implements FieldValueExtractor {
+public class ReflectionValueExtractor {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFieldValueExtractor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ReflectionValueExtractor.class);
 
-  @Override
   public String getStringValue(Object data, String field) {
 
     String fieldWithoutPrefix = getFieldWithoutPrefix(field);
     try {
       return BeanUtils.getProperty(data, fieldWithoutPrefix);
+    } catch (NestedNullException e) {
+      LOGGER.warn(ExceptionUtils.getStackTrace(e));
+      return "";
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new RuntimeException(e);

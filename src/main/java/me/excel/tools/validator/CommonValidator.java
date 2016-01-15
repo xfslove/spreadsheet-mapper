@@ -13,6 +13,14 @@ public class CommonValidator extends AbstractFieldValidator {
 
   protected Function<ExcelCell, Boolean> validateResultGetter;
 
+  public CommonValidator(String matchField) {
+    super(matchField, null, null);
+  }
+
+  public CommonValidator(String matchField, String errorMessage, String prompt) {
+    super(matchField, errorMessage, prompt);
+  }
+
   public CommonValidator(String matchField, Function<ExcelCell, Boolean> validateResultGetter) {
     super(matchField, null, null);
     this.validateResultGetter = validateResultGetter;

@@ -23,7 +23,7 @@ public class ExcelFileImporter extends ExcelFileTransfer implements UserFileImpo
 
   protected ModelFactory modelFactory;
 
-  protected List<FieldValueSetter> customValueSetters = new ArrayList<>();
+  protected List<FieldValueSetter> fieldValueSetters = new ArrayList<>();
 
   protected ReflectionValueSetter reflectionValueSetter = new ReflectionValueSetter();
 
@@ -58,7 +58,7 @@ public class ExcelFileImporter extends ExcelFileTransfer implements UserFileImpo
       row.getCells().forEach(cell -> {
 
         boolean solved = false;
-        for (FieldValueSetter customValueSetter : customValueSetters) {
+        for (FieldValueSetter customValueSetter : fieldValueSetters) {
           if (customValueSetter.matches(cell)) {
             customValueSetter.set(model, cell);
             solved = true;
@@ -83,9 +83,8 @@ public class ExcelFileImporter extends ExcelFileTransfer implements UserFileImpo
     if (setters == null) {
       return;
     }
-
     for (FieldValueSetter setter : setters) {
-      this.customValueSetters.add(setter);
+      this.fieldValueSetters.add(setter);
     }
   }
 

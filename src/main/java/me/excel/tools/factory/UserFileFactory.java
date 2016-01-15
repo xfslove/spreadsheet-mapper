@@ -1,5 +1,7 @@
 package me.excel.tools.factory;
 
+import me.excel.tools.utils.CellValueConverter;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -31,6 +33,14 @@ public interface UserFileFactory {
    * @param datas
    */
   void setDatas(List datas);
+
+  /**
+   * 设置自定义的转换器
+   *
+   * @param converters
+   * @see me.excel.tools.model.excel.ExcelCell#convertToReadableValue(String)
+   */
+  void addCellValueConverter(CellValueConverter... converters);
 
   /**
    * 生成文件

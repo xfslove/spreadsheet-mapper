@@ -16,6 +16,11 @@ public interface UserFileImporter {
 
   void process(File file, DataProcessor dataProcessor) throws IOException;
 
+  /**
+   * 设置自定义的value setter
+   *
+   * @param setters
+   */
   void addFieldValueSetter(FieldValueSetter... setters);
 
   void setModelFactory(ModelFactory modelFactory);
