@@ -57,7 +57,7 @@ public class ExcelCellBean implements ExcelCell {
 
     } else if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
 
-      value = cell.getStringCellValue();
+      value = cell.getStringCellValue().trim();
 
     } else {
 

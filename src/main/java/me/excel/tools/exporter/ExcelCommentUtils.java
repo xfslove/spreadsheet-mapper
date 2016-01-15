@@ -72,18 +72,24 @@ public abstract class ExcelCommentUtils {
     if (excelCellComment == null) {
       return;
     }
+    int rowIndex = excelCellComment.getCell().getRowNum();
+    int colIndex = excelCellComment.getCell().getColumnNum();
+
+    Row row = sheet.getRow(rowIndex - 1);
+    Cell cell = row.getCell(colIndex - 1);
+    if (cell == null) {
+      cell = row.createCell(colIndex - 1, Cell.CELL_TYPE_STRING);
+    }
     // remove the old comment
-    Row row = sheet.getRow(excelCellComment.getCell().getRowNum() - 1);
-    Cell cell = row.getCell(excelCellComment.getCell().getColumnNum() - 1);
     cell.removeCellComment();
 
     CreationHelper factory = sheet.getWorkbook().getCreationHelper();
     ClientAnchor anchor = factory.createClientAnchor();
     // When the comment box is visible, have it show in a 1x3 space
-    anchor.setCol1(excelCellComment.getCell().getColumnNum() - 1);
-    anchor.setCol2(excelCellComment.getCell().getColumnNum() - 1 + excelCellComment.getHeight());
-    anchor.setRow1(excelCellComment.getCell().getRowNum() - 1);
-    anchor.setRow2(excelCellComment.getCell().getRowNum() - 1 + excelCellComment.getLength());
+    anchor.setCol1(colIndex - 1);
+    anchor.setCol2(colIndex - 1 + excelCellComment.getHeight());
+    anchor.setRow1(rowIndex - 1);
+    anchor.setRow2(rowIndex - 1 + excelCellComment.getLength());
 
     // Create the comment and set the text
     Drawing drawing = sheet.createDrawingPatriarch();

@@ -55,7 +55,7 @@ public class ExcelFileTransfer implements UserFileTransfer {
             for (int k = 0; k < maxColNum; k++) {
 
               Cell cell = row.getCell(k);
-              transferCell(cell);
+              transferCell(cell, k, row.getRowNum());
             }
           }
         }
@@ -90,34 +90,31 @@ public class ExcelFileTransfer implements UserFileTransfer {
 
   }
 
-  private void transferCell(Cell cell) {
-
-    if (cell == null) {
-      return;
-    }
-
-    int colIndex = cell.getColumnIndex();
-    if (cell.getRowIndex() == 1) {
-      ExcelCell tmpCell = new ExcelCellBean(cell, null);
-      cellColIndex2field.put(colIndex, tmpCell.getValue());
-    }
+  private void transferCell(Cell cell, int colIndex, int rowIndex) {
 
     ExcelSheetBean lastSheet = (ExcelSheetBean) excelWorkbook.getLastSheet();
     ExcelRowBean lastRow = (ExcelRowBean) lastSheet.getLastRow();
 
     ExcelCellBean excelCell;
     if (cell == null) {
-      excelCell = ExcelCellBean.emptyCell(cell.getRowIndex() + 1, colIndex + 1, cellColIndex2field.get(colIndex));
+      excelCell = ExcelCellBean.emptyCell(rowIndex + 1, colIndex + 1, cellColIndex2field.get(colIndex));
     } else {
+
+      if (rowIndex == 1) {
+        ExcelCell tmpCell = new ExcelCellBean(cell, null);
+        cellColIndex2field.put(colIndex, tmpCell.getValue());
+      }
+
       String field = null;
-      if (cell.getRowIndex() != 0 && cell.getRowIndex() != 1 && cell.getRowIndex() != 2) {
+      if (rowIndex != 0 && rowIndex != 1 && rowIndex != 2) {
         field = cellColIndex2field.get(colIndex);
       }
       excelCell = new ExcelCellBean(cell, field);
-    }
-    lastRow.addCell(excelCell);
 
-    transferComment(cell, excelCell);
+      transferComment(cell, excelCell);
+    }
+
+    lastRow.addCell(excelCell);
   }
 
   private void transferComment(Cell cell, ExcelCell excelCell) {
