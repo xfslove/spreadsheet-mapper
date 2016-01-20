@@ -50,4 +50,5 @@ public interface UserFileFactory {
    */
   void generate(File file) throws IOException;
 
+  void generate(File file, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException;
 }

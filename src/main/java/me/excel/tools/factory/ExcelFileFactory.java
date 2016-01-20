@@ -73,7 +73,12 @@ public class ExcelFileFactory implements UserFileFactory {
 
   @Override
   public void generate(File excel) throws IOException {
-    ExcelWorkbook excelWorkbook = createWorkbook();
+    generate(excel, true, true, true);
+  }
+
+  @Override
+  public void generate(File excel, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException {
+    ExcelWorkbook excelWorkbook = createWorkbook(createTitles, createFields, createPrompts);
     if (excelWorkbook == null) {
       throw new IllegalArgumentException("workbook is null");
     }
@@ -92,7 +97,7 @@ public class ExcelFileFactory implements UserFileFactory {
     }
   }
 
-  private ExcelWorkbook createWorkbook() {
+  private ExcelWorkbook createWorkbook(boolean createTitles, boolean createFields, boolean createPrompts) {
     ExcelWorkbookBean workbook = new ExcelWorkbookBean();
 
     ExcelSheetBean sheet = new ExcelSheetBean();
@@ -100,12 +105,18 @@ public class ExcelFileFactory implements UserFileFactory {
     workbook.addSheet(sheet);
 
     int rowIndex = 1;
-    createTitleRow(sheet, rowIndex);
-    rowIndex++;
-    createFieldRow(sheet, rowIndex);
-    rowIndex++;
-    createPromptRow(sheet, rowIndex);
-    rowIndex++;
+    if (createTitles) {
+      createTitleRow(sheet, rowIndex);
+      rowIndex++;
+    }
+    if (createFields) {
+      createFieldRow(sheet, rowIndex);
+      rowIndex++;
+    }
+    if (createPrompts) {
+      createPromptRow(sheet, rowIndex);
+      rowIndex++;
+    }
     for (Object data : datas) {
       createDataRow(sheet, data, rowIndex);
       rowIndex++;
