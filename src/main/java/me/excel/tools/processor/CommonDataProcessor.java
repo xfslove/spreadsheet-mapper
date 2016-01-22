@@ -15,6 +15,16 @@ public class CommonDataProcessor<D> implements DataProcessor {
   }
 
   @Override
+  public void preProcessing(Object model) {
+    // do nothing
+  }
+
+  @Override
+  public void postProcessing(Object model) {
+    // do nothing
+  }
+
+  @Override
   public void handle(List models) {
     models.forEach(model -> modelAcceptor.accept((D) model));
   }

@@ -53,6 +53,8 @@ public class ExcelFileImporter extends ExcelFileTransfer implements UserFileImpo
 
       Object model = modelFactory.create(row);
 
+      dataProcessor.preProcessing(model);
+
       List<ExcelCell> unsolved = new ArrayList<>();
 
       row.getCells().forEach(cell -> {
@@ -71,10 +73,12 @@ public class ExcelFileImporter extends ExcelFileTransfer implements UserFileImpo
         }
       });
       reflectionValueSetter.set(model, unsolved);
+
+      dataProcessor.postProcessing(model);
+
       models.add(model);
     });
 
-    // 交给processor
     dataProcessor.handle(models);
   }
 

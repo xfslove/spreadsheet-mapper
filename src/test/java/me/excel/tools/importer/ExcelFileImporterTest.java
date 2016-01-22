@@ -42,6 +42,16 @@ public class ExcelFileImporterTest {
   public class StudentDataProcessorTest implements DataProcessor {
 
     @Override
+    public void preProcessing(Object model) {
+
+    }
+
+    @Override
+    public void postProcessing(Object model) {
+
+    }
+
+    @Override
     public void handle(List models) {
 
       assertEquals(models.size(), 2);
