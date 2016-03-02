@@ -1,7 +1,6 @@
 package me.excel.tools.exporter;
 
 import me.excel.tools.model.excel.ExcelCellComment;
-import me.excel.tools.model.excel.ExcelWorkbook;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -13,8 +12,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * write comment utils
@@ -36,15 +33,6 @@ public abstract class ExcelCommentUtils {
    * @param commentList
    */
   public static void writeToFile(File excel, List<ExcelCellComment> commentList) {
-
-    Set<ExcelWorkbook> excelWorkbooks = commentList.stream()
-        .filter(excelCellComment -> excelCellComment.getSheet() != null)
-        .map(excelCellComment -> excelCellComment.getSheet().getWorkbook())
-        .collect(Collectors.toSet());
-
-    if (excelWorkbooks.size() != 1) {
-      throw new IllegalArgumentException("comments not in one workbook");
-    }
 
     try (Workbook workbook = WorkbookFactory.create(new FileInputStream(excel))) {
 
