@@ -23,7 +23,7 @@ public class ReflectionValueExtractor {
     try {
       return BeanUtils.getProperty(data, fieldWithoutPrefix);
     } catch (NestedNullException e) {
-      LOGGER.warn(ExceptionUtils.getStackTrace(e));
+      LOGGER.trace(ExceptionUtils.getStackTrace(e));
       return "";
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));

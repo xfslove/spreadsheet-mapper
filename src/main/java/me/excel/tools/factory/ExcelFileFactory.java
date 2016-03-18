@@ -3,6 +3,7 @@ package me.excel.tools.factory;
 import me.excel.tools.exporter.ExcelFileExporter;
 import me.excel.tools.exporter.UserFileExporter;
 import me.excel.tools.model.excel.*;
+import me.excel.tools.utils.BooleanConverter;
 import me.excel.tools.utils.CellValueConverter;
 import me.excel.tools.utils.ReflectionValueExtractor;
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +35,8 @@ public class ExcelFileFactory implements UserFileFactory {
 
   public ExcelFileFactory(FileTemplate fileTemplate) {
     this.fileTemplate = fileTemplate;
+    // 以后会支持i18n
+    this.cellValueConverters.add(new BooleanConverter());
   }
 
   @Override
