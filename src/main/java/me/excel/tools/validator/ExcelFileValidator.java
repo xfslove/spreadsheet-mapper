@@ -103,10 +103,19 @@ public class ExcelFileValidator extends ExcelFileTransfer implements UserFileVal
       return;
     }
 
-    this.errorMessages.addAll(fileTemplate.getValidators().stream()
-        .filter(fieldValidator -> fieldValidator.matches(cell))
-        .filter(fieldValidator -> !fieldValidator.validate(cell))
-        .map(fieldValidator -> new ErrorMessage(cell, fieldValidator.getErrorMessage()))
-        .collect(Collectors.toList()));
+    for (FieldValidator fieldValidator : fileTemplate.getValidators()) {
+
+      if (!fieldValidator.matches(cell)) {
+        continue;
+      }
+
+      try {
+        if (!fieldValidator.validate(cell)) {
+          this.errorMessages.add(new ErrorMessage(cell, fieldValidator.getErrorMessage()));
+        }
+      } catch (SkipValidateException e) {
+        this.errorMessages.add(new ErrorMessage(e.getCell(), e.getPrompt()));
+      }
+    }
   }
 }

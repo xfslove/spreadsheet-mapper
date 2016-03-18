@@ -45,11 +45,14 @@ public class ReflectionValueSetter {
     }
     if (String.class.isAssignableFrom(declaredFieldType)) {
       return value;
-    } else if (Integer.class.isAssignableFrom(declaredFieldType)) {
+    } else if (Integer.class.isAssignableFrom(declaredFieldType)
+        || int.class.isAssignableFrom(declaredFieldType)) {
       return Integer.parseInt(value);
-    } else if (Double.class.isAssignableFrom(declaredFieldType)) {
+    } else if (Double.class.isAssignableFrom(declaredFieldType)
+        || double.class.isAssignableFrom(declaredFieldType)) {
       return Double.parseDouble(value);
-    } else if (Boolean.class.isAssignableFrom(declaredFieldType)) {
+    } else if (Boolean.class.isAssignableFrom(declaredFieldType)
+        || boolean.class.isAssignableFrom(declaredFieldType)) {
       return parseBoolean(value);
     }
     return null;

@@ -33,9 +33,9 @@ public class CommonValidator extends AbstractFieldValidator {
 
   @Override
   protected boolean customValidate(ExcelCell excelCell) {
-    if (validateResultGetter.apply(excelCell)) {
+    if (validateResultGetter == null) {
       return true;
     }
-    return false;
+    return validateResultGetter.apply(excelCell);
   }
 }
