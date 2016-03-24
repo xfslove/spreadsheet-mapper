@@ -31,14 +31,14 @@ public abstract class AbstractFieldValidator implements FieldValidator {
   }
 
   @Override
-  public boolean validate(ExcelCell excelCell) {
+  public boolean validate(ExcelCell excelCell) throws SkipValidateException {
     if (StringUtils.isBlank(excelCell.getValue())) {
       return true;
     }
     return customValidate(excelCell);
   }
 
-  protected abstract boolean customValidate(ExcelCell excelCell);
+  protected abstract boolean customValidate(ExcelCell excelCell) throws SkipValidateException;
 
   @Override
   public String getErrorMessage() {
