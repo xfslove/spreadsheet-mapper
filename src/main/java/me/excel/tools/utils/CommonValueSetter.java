@@ -24,6 +24,9 @@ public class CommonValueSetter<D> extends AbstractFieldValueSetter {
 
   @Override
   public void set(Object data, ExcelCell excelCell) {
+    if (excelCell.getValue() == null) {
+      return;
+    }
     associationValueSetter.accept((D) data, excelCell);
   }
 }

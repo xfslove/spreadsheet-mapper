@@ -11,7 +11,7 @@ public interface FieldValidator {
 
   String getPrompt();
 
-  boolean validate(ExcelCell excelCell) throws SkipValidateException;
+  boolean validate(ExcelCell excelCell);
 
   boolean matches(ExcelCell excelCell);
 

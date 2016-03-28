@@ -34,6 +34,10 @@ public class ExcelFileValidator extends ExcelFileTransfer implements UserFileVal
 
     validateWorkbook(excelWorkbook);
 
+    if (!errorMessages.isEmpty()) {
+      return false;
+    }
+
     excelWorkbook.getSheet(0).getDataRows()
         .forEach(row -> row.getCells()
             .forEach(cell -> validateCell(cell)));

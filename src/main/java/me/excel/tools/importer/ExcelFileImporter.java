@@ -48,31 +48,23 @@ public class ExcelFileImporter extends ExcelFileTransfer implements UserFileImpo
     ExcelSheet excelSheet = excelWorkbook.getSheet(0);
 
     List models = new ArrayList<>();
-
     excelSheet.getDataRows().forEach(row -> {
-
       Object model = modelFactory.create(row);
 
       dataProcessor.preProcessing(model);
 
-      List<ExcelCell> unsolved = new ArrayList<>();
+      reflectionValueSetter.set(model, row.getCells());
 
-      row.getCells().forEach(cell -> {
+      for (ExcelCell excelCell : row.getCells()) {
 
-        boolean solved = false;
         for (FieldValueSetter customValueSetter : fieldValueSetters) {
-          if (customValueSetter.matches(cell)) {
-            customValueSetter.set(model, cell);
-            solved = true;
+          if (customValueSetter.matches(excelCell)) {
+            customValueSetter.set(model, excelCell);
             break;
           }
         }
 
-        if (!solved) {
-          unsolved.add(cell);
-        }
-      });
-      reflectionValueSetter.set(model, unsolved);
+      }
 
       dataProcessor.postProcessing(model);
 

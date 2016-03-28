@@ -64,7 +64,7 @@ public class FieldUtils {
     try {
       return clazz.getDeclaredField(field).getType();
     } catch (NoSuchFieldException e) {
-      if (clazz.getSuperclass() != null || clazz.getSuperclass() != Object.class) {
+      if (clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class)) {
         return getFieldType(clazz.getSuperclass(), field);
       }
     }
