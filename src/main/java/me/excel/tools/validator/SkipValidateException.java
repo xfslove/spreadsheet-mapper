@@ -6,7 +6,7 @@ import me.excel.tools.model.excel.ExcelCell;
  * 用于跳过某些校验的exception
  * Created by hanwen on 16/3/18.
  */
-public class SkipValidateException extends RuntimeException {
+public class SkipValidateException extends Exception {
 
   /**
    * 因为哪个cell跳过

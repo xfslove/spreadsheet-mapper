@@ -11,7 +11,7 @@ import java.util.function.Function;
  */
 public class CommonValidator extends AbstractFieldValidator {
 
-  protected Function<ExcelCell, Boolean> validateResultGetter;
+  protected ValidateFunction<ExcelCell, Boolean> validateResultGetter;
 
   public CommonValidator(String matchField) {
     super(matchField, null, null);
@@ -21,18 +21,18 @@ public class CommonValidator extends AbstractFieldValidator {
     super(matchField, errorMessage, prompt);
   }
 
-  public CommonValidator(String matchField, Function<ExcelCell, Boolean> validateResultGetter) {
+  public CommonValidator(String matchField, ValidateFunction<ExcelCell, Boolean> validateResultGetter) {
     super(matchField, null, null);
     this.validateResultGetter = validateResultGetter;
   }
 
-  public CommonValidator(String matchField, String errorMessage, String prompt, Function<ExcelCell, Boolean> validateResultGetter) {
+  public CommonValidator(String matchField, String errorMessage, String prompt, ValidateFunction<ExcelCell, Boolean> validateResultGetter) {
     super(matchField, errorMessage, prompt);
     this.validateResultGetter = validateResultGetter;
   }
 
   @Override
-  protected boolean customValidate(ExcelCell excelCell) {
+  protected boolean customValidate(ExcelCell excelCell) throws SkipValidateException {
     if (validateResultGetter == null) {
       return true;
     }
