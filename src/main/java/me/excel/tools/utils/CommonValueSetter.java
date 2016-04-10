@@ -11,22 +11,19 @@ import java.util.function.BiConsumer;
  */
 public class CommonValueSetter<D> extends AbstractFieldValueSetter {
 
-  protected BiConsumer<D, ExcelCell> associationValueSetter;
+  protected BiConsumer<D, ExcelCell> valueSetter;
 
   public CommonValueSetter(String matchField) {
     super(matchField);
   }
 
-  public CommonValueSetter(String matchField, BiConsumer<D, ExcelCell> associationValueSetter) {
+  public CommonValueSetter(String matchField, BiConsumer<D, ExcelCell> valueSetter) {
     super(matchField);
-    this.associationValueSetter = associationValueSetter;
+    this.valueSetter = valueSetter;
   }
 
   @Override
   public void set(Object data, ExcelCell excelCell) {
-    if (excelCell.getValue() == null) {
-      return;
-    }
-    associationValueSetter.accept((D) data, excelCell);
+    valueSetter.accept((D) data, excelCell);
   }
 }
