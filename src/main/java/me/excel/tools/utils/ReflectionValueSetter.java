@@ -8,6 +8,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -32,6 +33,7 @@ public class ReflectionValueSetter {
     ConvertUtils.register(new SqlDateConverter(null), java.sql.Date.class);
     ConvertUtils.register(new SqlTimeConverter(null), Time.class);
     ConvertUtils.register(new SqlTimestampConverter(null), Timestamp.class);
+    ConvertUtils.register(new BigDecimalConverter(null), BigDecimal.class);
   }
 
   public void set(Object data, List<ExcelCell> excelCells) {
