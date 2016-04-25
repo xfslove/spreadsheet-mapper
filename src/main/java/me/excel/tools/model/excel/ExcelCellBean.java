@@ -1,5 +1,6 @@
 package me.excel.tools.model.excel;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.util.NumberToTextConverter;
 
@@ -57,7 +58,8 @@ public class ExcelCellBean implements ExcelCell {
 
     } else if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
 
-      value = cell.getStringCellValue().trim();
+      String cellValue = cell.getStringCellValue();
+      value = StringUtils.isBlank(cellValue) ? null : cellValue.trim();
 
     } else {
 
