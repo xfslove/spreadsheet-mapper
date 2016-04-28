@@ -1,9 +1,11 @@
 package me.excel.tools.model.excel;
 
+import me.excel.tools.FieldUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by hanwen on 15-12-16.
@@ -19,6 +21,7 @@ public class ExcelSheetBean implements ExcelSheet {
   private ExcelWorkbook excelWorkbook;
 
   public ExcelSheetBean() {
+    // default constructor
   }
 
   public ExcelSheetBean(String sheetName) {
@@ -80,6 +83,7 @@ public class ExcelSheetBean implements ExcelSheet {
     this.excelWorkbook = excelWorkbook;
   }
 
+  @Override
   public ExcelWorkbook getWorkbook() {
     return excelWorkbook;
   }
@@ -103,5 +107,36 @@ public class ExcelSheetBean implements ExcelSheet {
       }
     }
     return false;
+  }
+
+  @Override
+  public List<String> getKeyRowFields() {
+    return getRow(1).getCells().stream()
+        .map(excelCell -> excelCell.getValue()).collect(Collectors.toList());
+  }
+
+  @Override
+  public Set<String> getDistinctCellValuesOfField(String field) {
+
+    if (StringUtils.isBlank(field)) {
+      return Collections.emptySet();
+    }
+
+    Set<String> cellValuesOfField = new HashSet<>();
+
+    for (ExcelRow excelRow :  getDataRows()) {
+      for (ExcelCell excelCell : excelRow.getCells()) {
+
+        String f = excelCell.getField();
+        String v = excelCell.getValue();
+
+        if (StringUtils.contains(f, FieldUtils.BUSINESS_KEY_PREFIX) && field.equals(FieldUtils.getBusinessKeyField(f)) && v != null) {
+          cellValuesOfField.add(v);
+        } else if (field.equals(f) && v != null) {
+          cellValuesOfField.add(v);
+        }
+      }
+    }
+    return cellValuesOfField;
   }
 }

@@ -15,8 +15,9 @@ import java.util.Calendar;
 import java.util.List;
 
 import static me.excel.tools.utils.BooleanTranslator.parseBoolean;
-import static me.excel.tools.utils.FieldUtils.getFieldType;
-import static me.excel.tools.utils.FieldUtils.getFieldWithoutPrefix;
+import static me.excel.tools.FieldUtils.getFieldType;
+import static me.excel.tools.FieldUtils.getFieldWithoutPrefix;
+
 
 /**
  * reflection object value setter
@@ -48,6 +49,8 @@ public class ReflectionValueSetter {
     });
 
   }
+
+
 
   private Object convertValue(Class targetClazz, ExcelCell cell) {
     String value = cell.getValue();

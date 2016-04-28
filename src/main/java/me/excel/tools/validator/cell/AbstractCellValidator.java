@@ -1,16 +1,17 @@
-package me.excel.tools.validator;
+package me.excel.tools.validator.cell;
 
 import me.excel.tools.model.excel.ExcelCell;
+import me.excel.tools.validator.SkipValidateException;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * model的field validator父类, 提供默认的validator,<br/>
  * 默认的validator 支持{@link java.util.Date}, {@link Integer}, {@link Double}, {@link Boolean},<br/>
- * 自定义validator 用 {@link CommonValidator}
+ * 自定义validator 用 {@link CommonCellValidator}
  *
  * Created by hanwen on 15-12-16.
  */
-public abstract class AbstractFieldValidator implements FieldValidator {
+public abstract class AbstractCellValidator implements CellValidator {
 
   protected String matchField;
 
@@ -24,7 +25,7 @@ public abstract class AbstractFieldValidator implements FieldValidator {
    */
   protected String prompt;
 
-  public AbstractFieldValidator(String matchField, String errorMessage, String prompt) {
+  public AbstractCellValidator(String matchField, String errorMessage, String prompt) {
     this.matchField = matchField;
     this.errorMessage = errorMessage;
     this.prompt = prompt;

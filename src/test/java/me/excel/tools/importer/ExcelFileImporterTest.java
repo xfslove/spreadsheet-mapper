@@ -3,6 +3,8 @@ package me.excel.tools.importer;
 import me.excel.tools.factory.ModelFactory;
 import me.excel.tools.model.excel.ExcelRow;
 import me.excel.tools.processor.DataProcessor;
+import me.excel.tools.transfer.ExcelFileTransferImpl;
+import me.excel.tools.transfer.ExcelFileTransfer;
 import me.excel.tools.utils.CommonValueSetter;
 import org.testng.annotations.Test;
 
@@ -19,13 +21,14 @@ import static org.testng.Assert.assertEquals;
  * Created by hanwen on 16-1-4.
  */
 public class ExcelFileImporterTest {
-  
+
   @Test
   public void testProcess() throws Exception {
     URL resource = this.getClass().getResource("test.xlsx");
     File excel = new File(resource.getFile());
+    ExcelFileTransfer excelFileTransfer = new ExcelFileTransferImpl();
 
-    UserFileImporter userFileImporter = new ExcelFileImporter();
+    UserFileImporter userFileImporter = new ExcelFileImporter(excelFileTransfer);
     userFileImporter.setModelFactory(new StudentModelFactoryTest());
     userFileImporter.addFieldValueSetter(new CommonValueSetter<StudentTest>("student.enrollDate",
         (s, excelCell) -> {

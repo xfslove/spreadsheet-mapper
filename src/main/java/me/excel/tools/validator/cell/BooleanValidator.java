@@ -1,14 +1,15 @@
-package me.excel.tools.validator;
+package me.excel.tools.validator.cell;
+
 
 import me.excel.tools.model.excel.ExcelCell;
 
-import static me.excel.tools.utils.BooleanTranslator.isValidTrue;
 import static me.excel.tools.utils.BooleanTranslator.isValidFalse;
+import static me.excel.tools.utils.BooleanTranslator.isValidTrue;
 
 /**
  * Created by hanwen on 15-12-18.
  */
-public class BooleanValidator extends AbstractFieldValidator {
+public class BooleanValidator extends AbstractCellValidator {
 
   public BooleanValidator(String matchField) {
     super(matchField,

@@ -51,7 +51,7 @@ public abstract class ExcelCommentUtils {
       }
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
-      throw new RuntimeException(e);
+      throw new ExcelExportException(e);
     }
 
   }

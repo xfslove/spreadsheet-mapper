@@ -1,11 +1,13 @@
-package me.excel.tools.validator;
+package me.excel.tools.validator.cell;
+
 
 import me.excel.tools.model.excel.ExcelCell;
+import me.excel.tools.validator.SkipValidateException;
 
 /**
  * Created by hanwen on 15-12-15.
  */
-public interface FieldValidator {
+public interface CellValidator {
 
   String getErrorMessage();
 

@@ -1,6 +1,7 @@
 package me.excel.tools.factory;
 
 import me.excel.tools.utils.CellValueConverter;
+import me.excel.tools.utils.ValueExtractor;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,24 +22,26 @@ public interface UserFileFactory {
   void setTitles(String... titles);
 
   /**
-   * 设置file中的fields
+   * 设置file中的fields (第二行)
    *
    * @param fields
    */
   void setFields(String... fields);
 
   /**
-   * 设置file中的data
+   * 设置file中的data (从第四行开始)
    *
-   * @param datas
+   * @param data
    */
-  void setDatas(List datas);
+  void setData(List data);
+
+  void setValueExtractor(ValueExtractor valueExtractor);
 
   /**
    * 设置自定义的转换器
    *
    * @param converters
-   * @see me.excel.tools.model.excel.ExcelCell#convertToReadableValue(String)
+   * @see  me.excel.tools.model.excel.ExcelCell#convertToReadableValue(String)
    */
   void addCellValueConverter(CellValueConverter... converters);
 
@@ -50,5 +53,5 @@ public interface UserFileFactory {
    */
   void generate(File file) throws IOException;
 
-  void generate(File file, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException;
+  void generate(File excel, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException;
 }

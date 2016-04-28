@@ -1,4 +1,4 @@
-package me.excel.tools.utils;
+package me.excel.tools;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -14,6 +14,21 @@ import java.util.List;
 public class FieldUtils {
 
   private FieldUtils() {
+  }
+
+  public static final String BUSINESS_KEY_PREFIX = "businessKey.";
+
+  /**
+   * 获得business key的field
+   *
+   * @param field
+   * @return
+   */
+  public static String getBusinessKeyField(String field) {
+    if (!StringUtils.contains(field, BUSINESS_KEY_PREFIX)) {
+      throw new IllegalStateException("field is not business key");
+    }
+    return field.substring(BUSINESS_KEY_PREFIX.length());
   }
 
   /**

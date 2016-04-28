@@ -1,4 +1,4 @@
-package me.excel.tools.validator;
+package me.excel.tools.validator.cell;
 
 import me.excel.tools.model.excel.ExcelCell;
 import org.apache.commons.lang3.StringUtils;
@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Created by hanwen on 15-12-16.
  */
-public class RequiredValidator implements FieldValidator {
+public class RequiredValidator implements CellValidator {
 
   protected String matchField;
 

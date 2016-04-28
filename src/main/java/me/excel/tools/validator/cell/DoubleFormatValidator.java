@@ -1,11 +1,12 @@
-package me.excel.tools.validator;
+package me.excel.tools.validator.cell;
+
 
 import me.excel.tools.model.excel.ExcelCell;
 
 /**
  * Created by hanwen on 15-12-16.
  */
-public class DoubleFormatValidator extends AbstractFieldValidator {
+public class DoubleFormatValidator extends AbstractCellValidator {
 
   public DoubleFormatValidator(String field) {
     super(field, "应该为小数", "小数");

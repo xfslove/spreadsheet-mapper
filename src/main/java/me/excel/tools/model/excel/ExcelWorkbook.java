@@ -40,4 +40,11 @@ public interface ExcelWorkbook {
    * @return
    */
   ExcelSheet getLastSheet();
+
+  /**
+   * 得到第一个Sheet
+   *
+   * @return
+   */
+  ExcelSheet getFirstSheet();
 }

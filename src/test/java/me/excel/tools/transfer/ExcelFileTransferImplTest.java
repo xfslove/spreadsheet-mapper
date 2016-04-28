@@ -13,13 +13,13 @@ import static org.testng.Assert.assertEquals;
 /**
  * Created by hanwen on 15-12-20.
  */
-public class ExcelFileTransferTest {
+public class ExcelFileTransferImplTest {
   
   @Test
   public void testTransfer() throws Exception {
     InputStream excelIs = this.getClass().getResourceAsStream("test.xlsx");
 
-    ExcelFileTransfer transfer = new ExcelFileTransfer();
+    ExcelFileTransferImpl transfer = new ExcelFileTransferImpl();
     transfer.transfer(excelIs);
 
     ExcelWorkbook excelWorkbook = transfer.excelWorkbook;

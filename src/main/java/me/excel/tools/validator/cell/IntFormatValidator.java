@@ -1,11 +1,12 @@
-package me.excel.tools.validator;
+package me.excel.tools.validator.cell;
+
 
 import me.excel.tools.model.excel.ExcelCell;
 
 /**
  * Created by hanwen on 15-12-16.
  */
-public class IntFormatValidator extends AbstractFieldValidator {
+public class IntFormatValidator extends AbstractCellValidator {
 
   public IntFormatValidator(String field) {
     super(field, "应该为整数", "整数");

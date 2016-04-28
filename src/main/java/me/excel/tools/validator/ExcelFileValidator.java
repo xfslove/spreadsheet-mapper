@@ -5,6 +5,8 @@ import me.excel.tools.factory.FileTemplate;
 import me.excel.tools.model.excel.*;
 import me.excel.tools.model.message.ErrorMessage;
 import me.excel.tools.transfer.ExcelFileTransfer;
+import me.excel.tools.validator.cell.CellValidator;
+import me.excel.tools.validator.row.RowValidator;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,23 +19,30 @@ import java.util.stream.Collectors;
 /**
  * Created by hanwen on 15-12-16.
  */
-public class ExcelFileValidator extends ExcelFileTransfer implements UserFileValidator {
+public class ExcelFileValidator implements UserFileValidator {
 
-  protected FileTemplate fileTemplate;
+  protected FileTemplate importTemplate;
+
+  protected ExcelFileTransfer excelFileTransfer;
 
   protected List<ErrorMessage> errorMessages = new ArrayList<>();
 
-  public ExcelFileValidator(FileTemplate fileTemplate) {
-    this.fileTemplate = fileTemplate;
+  public ExcelFileValidator(FileTemplate fileTemplate, ExcelFileTransfer excelFileTransfer) {
+    this.importTemplate = fileTemplate;
+    this.excelFileTransfer = excelFileTransfer;
   }
 
   @Override
   public boolean validate(File excel) throws IOException {
+
+    if (excel == null) {
+      throw new IllegalArgumentException("excel is null");
+    }
+
     InputStream inputStream = new FileInputStream(excel);
-    transfer(inputStream);
+    ExcelWorkbook excelWorkbook = excelFileTransfer.transfer(inputStream);
 
     validateWorkbook(excelWorkbook);
-
     if (!errorMessages.isEmpty()) {
       return false;
     }
@@ -42,18 +51,22 @@ public class ExcelFileValidator extends ExcelFileTransfer implements UserFileVal
         .forEach(row -> row.getCells()
             .forEach(cell -> validateCell(cell)));
 
-    if (!this.errorMessages.isEmpty()) {
+    if (!errorMessages.isEmpty()) {
       return false;
     }
+
+    excelWorkbook.getSheet(0).getDataRows().forEach(row -> validateRow(row));
+
+    if (!errorMessages.isEmpty()) {
+      return false;
+    }
+
     return true;
   }
 
   @Override
   public void writeFailureMessageComments(File excel) throws IOException {
 
-    if (excelWorkbook == null) {
-      throw new IllegalArgumentException("workbook is null");
-    }
     if (errorMessages.isEmpty()) {
       return;
     }
@@ -73,53 +86,51 @@ public class ExcelFileValidator extends ExcelFileTransfer implements UserFileVal
     ExcelCommentUtils.writeToFile(excel, commentList);
   }
 
-  public void validateWorkbook(ExcelWorkbook workbook) {
-    if (workbook == null) {
-      throw new IllegalArgumentException("workbook is null");
-    }
-    if (workbook.getSheets().isEmpty()) {
-      throw new IllegalArgumentException("sheet is null");
-    }
-    if (workbook.getSheet(0).getRows().isEmpty()) {
-      throw new IllegalArgumentException("row is null");
-    }
-    ExcelCell firstCell = workbook.getSheet(0).getRow(0).getCell(0);
-    if (workbook.getSheets().size() != 1) {
-      this.errorMessages.add(new ErrorMessage(firstCell, "只支持单sheet导入"));
-    }
-    ExcelSheet sheet = workbook.getSheet(0);
-    List<String> keyRowFields = sheet.getRow(1).getCells().stream()
-        .map(excelCell -> excelCell.getValue()).collect(Collectors.toList());
-
-    this.errorMessages.addAll(keyRowFields.stream()
-        .filter(keyRowField -> !fileTemplate.getFieldScope().contains(keyRowField))
-        .map(keyRowField -> new ErrorMessage(firstCell, keyRowField + ":字段不在处理范围内"))
-        .collect(Collectors.toList()));
-
-    this.errorMessages.addAll(fileTemplate.getRequiredFields().stream()
-        .filter(requiredField -> !keyRowFields.contains(requiredField))
-        .map(requiredField -> new ErrorMessage(firstCell, "不包含所要求的字段:"+requiredField))
-        .collect(Collectors.toList()));
-  }
-
-  public void validateCell(ExcelCell cell) {
+  private void validateCell(ExcelCell cell) {
     if (cell == null) {
       return;
     }
 
-    for (FieldValidator fieldValidator : fileTemplate.getValidators()) {
+    for (CellValidator cellValidator : importTemplate.getCellValidators()) {
 
-      if (!fieldValidator.matches(cell)) {
+      if (!cellValidator.matches(cell)) {
         continue;
       }
 
       try {
-        if (!fieldValidator.validate(cell)) {
-          this.errorMessages.add(new ErrorMessage(cell, fieldValidator.getErrorMessage()));
+        if (!cellValidator.validate(cell)) {
+          errorMessages.add(new ErrorMessage(cell, cellValidator.getErrorMessage()));
         }
       } catch (SkipValidateException e) {
-        this.errorMessages.add(new ErrorMessage(e.getCell(), e.getPrompt()));
+        errorMessages.addAll(e.getCells().stream().map(excelCell -> new ErrorMessage(excelCell, e.getPrompt())).collect(Collectors.toList()));
       }
     }
+  }
+
+  private void validateRow(ExcelRow row) {
+    if (row == null) {
+      return;
+    }
+
+    for (RowValidator rowValidator : importTemplate.getRowValidators()) {
+
+      try {
+        if (!rowValidator.validate(row)) {
+
+          errorMessages.addAll(rowValidator.getMessageOnCells(row).stream()
+              .map(excelCell -> new ErrorMessage(excelCell, rowValidator.getErrorMessage())).collect(Collectors.toList()));
+        }
+      } catch (SkipValidateException e) {
+        errorMessages.addAll(e.getCells().stream().map(excelCell -> new ErrorMessage(excelCell, e.getPrompt())).collect(Collectors.toList()));
+      }
+    }
+  }
+
+  private void validateWorkbook(ExcelWorkbook workbook) {
+    errorMessages.addAll(
+        importTemplate.getWorkbookValidators().stream()
+            .filter(workbookValidator -> !workbookValidator.validate(workbook))
+            .map(workbookValidator -> new ErrorMessage(workbookValidator.getMessageOnCell(workbook), workbookValidator.getErrorMessage()))
+            .collect(Collectors.toList()));
   }
 }

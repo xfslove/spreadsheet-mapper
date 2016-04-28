@@ -16,10 +16,12 @@ import java.util.List;
 
 /**
  * excel 文件导入器
- *
+ * <p>
  * Created by hanwen on 15-12-16.
  */
-public class ExcelFileImporter extends ExcelFileTransfer implements UserFileImporter {
+public class ExcelFileImporter implements UserFileImporter {
+
+  protected ExcelFileTransfer excelFileTransfer;
 
   protected ModelFactory modelFactory;
 
@@ -27,25 +29,23 @@ public class ExcelFileImporter extends ExcelFileTransfer implements UserFileImpo
 
   protected ReflectionValueSetter reflectionValueSetter = new ReflectionValueSetter();
 
-  @Override
-  public void process(File file, DataProcessor dataProcessor) throws IOException {
+  public ExcelFileImporter(ExcelFileTransfer excelFileTransfer) {
+    this.excelFileTransfer = excelFileTransfer;
+  }
 
-    if (file == null) {
+  @Override
+  public void process(File excel, DataProcessor dataProcessor) throws IOException {
+
+    if (excel == null) {
       throw new IllegalArgumentException("file is null");
     }
     if (dataProcessor == null) {
       throw new IllegalArgumentException("dataProcessor is null");
     }
 
-    FileInputStream inputStream = new FileInputStream(file);
+    FileInputStream inputStream = new FileInputStream(excel);
 
-    transfer(inputStream);
-
-    if (excelWorkbook.sizeOfSheets() != 1) {
-      throw new IllegalArgumentException("excel workbook only supported size of sheet is one");
-    }
-
-    ExcelSheet excelSheet = excelWorkbook.getSheet(0);
+    ExcelSheet excelSheet = excelFileTransfer.transfer(inputStream).getFirstSheet();
 
     List models = new ArrayList<>();
     excelSheet.getDataRows().forEach(row -> {
@@ -79,6 +79,7 @@ public class ExcelFileImporter extends ExcelFileTransfer implements UserFileImpo
     if (setters == null) {
       return;
     }
+
     for (FieldValueSetter setter : setters) {
       this.fieldValueSetters.add(setter);
     }

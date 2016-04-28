@@ -1,5 +1,8 @@
 package me.excel.tools.utils;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Created by hanwen on 15-12-18.
  */
@@ -18,20 +21,10 @@ public class BooleanTranslator {
   }
 
   public static boolean isValidTrue(String value) {
-    if ("是".equals(value) || "yes".equalsIgnoreCase(value) ||
-        "y".equalsIgnoreCase(value) || "1".equals(value) ||
-        "true".equalsIgnoreCase(value) || "t".equalsIgnoreCase(value)) {
-      return true;
-    }
-    return false;
+    return ArrayUtils.contains(new String[]{"是", "yes", "y", "1", "true", "t"}, StringUtils.lowerCase(value));
   }
 
   public static boolean isValidFalse(String value) {
-    if ("否".equals(value) || "no".equalsIgnoreCase(value) ||
-        "n".equalsIgnoreCase(value) || "0".equals(value) ||
-        "false".equalsIgnoreCase(value) || "f".equalsIgnoreCase(value)) {
-      return true;
-    }
-    return false;
+    return ArrayUtils.contains(new String[]{"否", "no", "n", "0", "false", "f"}, StringUtils.lowerCase(value));
   }
 }

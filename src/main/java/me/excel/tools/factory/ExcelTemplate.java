@@ -1,101 +1,44 @@
 package me.excel.tools.factory;
 
-import me.excel.tools.importer.ExcelFileImporter;
 import me.excel.tools.importer.UserFileImporter;
-import me.excel.tools.validator.AbstractFieldValidator;
+import me.excel.tools.importer.ExcelFileImporter;
+import me.excel.tools.model.excel.ExcelWorkbook;
+import me.excel.tools.transfer.ExcelFileTransferImpl;
+import me.excel.tools.transfer.ExcelFileTransfer;
+import me.excel.tools.utils.BooleanConverter;
+import me.excel.tools.utils.ReflectionValueExtractor;
 import me.excel.tools.validator.ExcelFileValidator;
-import me.excel.tools.validator.FieldValidator;
 import me.excel.tools.validator.UserFileValidator;
+import me.excel.tools.validator.cell.CellValidator;
+import me.excel.tools.validator.row.RowValidator;
+import me.excel.tools.validator.workbook.*;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
- * excel 模板工厂, 用法如下:<br/>
- * <pre>
- *  {@link ExcelTemplate}
- *  FileTemplate studentImportTemplate = new ExcelTemplate();
- *
- *  设置支持的field范围, 范围之外的field是不允许的
- *  studentImportTemplate.setFieldScope("student.name", "student.code", "student.age", "student.mobile", "student.enrollDate");
- *
- *  设置必须包含的field
- *  studentImportTemplate.setRequiredFields("student.name", "student.code", "student.age", "student.mobile", "student.enrollDate");
- *
- *  设置最少的field的数量
- *  studentImportTemplate.setMinFieldCount(3);
- *
- *  设置validators, {@link AbstractFieldValidator}
- *  // FieldValidator
- *  //    matchField   对应的field
- *  //    prompt  校验要求，在模板上要写出来的
- *  //    errorMsg  错误信息的template，支持 {0} 替换, 替换的是field， 需继承　{@link AbstractFieldValidator#getErrorMessage()}
- *  //    validate(ExcelCell excelCell) return boolean
- *  studentImportTemplate.addValidator(new RequiredValidator("student.code"));
- *  studentImportTemplate.addValidator(new RequiredValidator("student.name"));
- *  studentImportTemplate.addValidator(new DateFormatValidator("student.enrollDate", "yyyy-MM-dd"));
- *  studentImportTemplate.addValidator(new RegexFormatValidator("student.mobile", "\\d{11}"));
- *  studentImportTemplate.addValidator(new IntFormatValidator("student.age"));
- *
- *  生成模板. 根据validator在模板上生成了校验要求
- *  {@link UserFileFactory}
- *  UserFileFactory userFileFactory = studentImportTemplate.getUserFileFactory();
- *  userFileFactory.setFields("student.name", "student.code", "student.age", "student.mobile", "student.enrollDate");
- *
- *  List<Student> students = new ArrayList<>();
- *  userFileFactory.setDatas(students);
- *  生成导入模板
- *  File userFile = new File("/home/hanwen/tmp/template.xlsx");
- *  userFileFactory.generate(userFile);
- *
- *  ///////////
- *  ///////////
- *  ///////////　上传上来的文件
- *  File excel = new File("/home/hanwen/tmp/student.xlsx");
- *  UserFileValidator userFileValidator = studentImportTemplate.getUserFileValidator();
- *  boolean valid = userFileValidator.validate(excel);
- *  if (!valid) {
- *
- *  将错误信息写入到上传上来的文件中
- *  userFileValidator.writeFailureMessageComments(excel);
- *
- *  } else {
- *
- *  UserFileImporter userFileImporter = studentImportTemplate.getUserFileImporter();
- *
- *  自定义model factory
- *  StudentModelFactory modelFactory = new StudentModelFactory(Student.class);
- *  userFileImporter.setModelFactory(modelFactory);
- *
- *  自定义特殊的field value setter, 默认提供string, int, double, boolean类型field的value setter
- *  {@link me.excel.tools.utils.AbstractFieldValueSetter}
- *  userFileImporter.addFieldValueSetter(new DateValueSetter("student.enrollDate", "yyyy-MM-dd",
- *    (s, enrollDate) -> {
- *      Student student = (Student) s;
- *      student.setEnrollDate(enrollDate);
- *    }
- *  ));
- *
- *  自定义data processor
- *  {@link me.excel.tools.processor.DataProcessor}
- *  DataProcessor modelDataProcessor = new StudentDataProcessor();
- *
- *  只支持单sheet的导入，多sheet不支持
- *  userFileImporter.process(userFile, modelDataProcessor);
- * }
- * </pre>
- *
+ * excel 模板工厂, 只支持单sheet的导入，多sheet不支持
+ * <p>
  * Created by hanwen on 15-12-16.
  */
 public class ExcelTemplate implements FileTemplate {
+
+  protected int minFieldCount;
 
   protected List<String> fieldScope = new ArrayList<>();
 
   protected List<String> requiredFields = new ArrayList<>();
 
-  protected int minFieldCount;
+  protected List<CellValidator> cellValidators = new ArrayList<>();
 
-  protected List<FieldValidator> validators = new ArrayList<>();
+  protected List<RowValidator> rowValidators = new ArrayList<>();
+
+  protected List<WorkbookValidator> workbookValidators = new ArrayList<>();
 
   protected UserFileFactory userFileFactory;
 
@@ -103,10 +46,24 @@ public class ExcelTemplate implements FileTemplate {
 
   protected UserFileImporter userFileImporter;
 
+  protected ExcelFileTransfer excelFileTransfer;
+
   public ExcelTemplate() {
     this.userFileFactory = new ExcelFileFactory(this);
-    this.userFileValidator = new ExcelFileValidator(this);
-    this.userFileImporter = new ExcelFileImporter();
+    this.userFileFactory.setValueExtractor(new ReflectionValueExtractor());
+    this.userFileFactory.addCellValueConverter(new BooleanConverter());
+
+    this.excelFileTransfer = new ExcelFileTransferImpl();
+
+    this.userFileValidator = new ExcelFileValidator(this, new ExcelFileTransferImpl());
+    this.userFileImporter = new ExcelFileImporter(new ExcelFileTransferImpl());
+
+    addWorkbookValidator(
+        new SheetSizeValidator(1),
+        new FieldScopeValidator(this.fieldScope),
+        new RequireFieldValidator(this.requiredFields),
+        new FieldCountValidator(this.minFieldCount)
+    );
   }
 
   @Override
@@ -137,13 +94,50 @@ public class ExcelTemplate implements FileTemplate {
   }
 
   @Override
-  public void addValidator(FieldValidator... validators) {
+  public void addCellValidator(CellValidator... validators) {
     if (validators == null) {
       return;
     }
-    for (FieldValidator validator : validators) {
-      this.validators.add(validator);
+    for (CellValidator validator : validators) {
+      this.cellValidators.add(validator);
     }
+  }
+
+  @Override
+  public void addRowValidator(RowValidator... validators) {
+    if (validators == null) {
+      return;
+    }
+    for (RowValidator validator : validators) {
+      this.rowValidators.add(validator);
+    }
+  }
+
+  @Override
+  public void addWorkbookValidator(WorkbookValidator... validators) {
+    if (validators == null) {
+      return;
+    }
+    for (WorkbookValidator validator : validators) {
+      this.workbookValidators.add(validator);
+    }
+  }
+
+  @Override
+  public Set<String> getCellValuesOfField(File excel, String field) throws IOException {
+    if (excel == null) {
+      return Collections.emptySet();
+    }
+
+    FileInputStream inputStream = new FileInputStream(excel);
+    ExcelWorkbook excelWorkbook = excelFileTransfer.transfer(inputStream);
+
+    return excelWorkbook.getFirstSheet().getDistinctCellValuesOfField(field);
+  }
+
+  @Override
+  public int getMinFieldCount() {
+    return this.minFieldCount;
   }
 
   @Override
@@ -157,8 +151,18 @@ public class ExcelTemplate implements FileTemplate {
   }
 
   @Override
-  public List<FieldValidator> getValidators() {
-    return this.validators;
+  public List<CellValidator> getCellValidators() {
+    return this.cellValidators;
+  }
+
+  @Override
+  public List<WorkbookValidator> getWorkbookValidators() {
+    return this.workbookValidators;
+  }
+
+  @Override
+  public List<RowValidator> getRowValidators() {
+    return this.rowValidators;
   }
 
   @Override
@@ -171,7 +175,6 @@ public class ExcelTemplate implements FileTemplate {
     return this.userFileValidator;
   }
 
-  @Override
   public UserFileImporter getUserFileImporter() {
     return this.userFileImporter;
   }

@@ -1,4 +1,5 @@
-package me.excel.tools.validator;
+package me.excel.tools.validator.cell;
+
 
 import me.excel.tools.model.excel.ExcelCell;
 
@@ -9,7 +10,7 @@ import java.util.Date;
 /**
  * Created by hanwen on 15-12-16.
  */
-public class DateFormatValidator extends AbstractFieldValidator {
+public class DateFormatValidator extends AbstractCellValidator {
 
   protected String format;
 

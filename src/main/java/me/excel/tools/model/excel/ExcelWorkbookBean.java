@@ -11,6 +11,7 @@ public class ExcelWorkbookBean implements ExcelWorkbook {
   private final List<ExcelSheet> excelSheets = new ArrayList<>();
 
   public ExcelWorkbookBean() {
+    // default constructor
   }
 
   @Override
@@ -44,4 +45,11 @@ public class ExcelWorkbookBean implements ExcelWorkbook {
     return getSheet(sizeOfSheets() - 1);
   }
 
+  @Override
+  public ExcelSheet getFirstSheet() {
+    if (sizeOfSheets() == 0) {
+      return null;
+    }
+    return getSheet(0);
+  }
 }

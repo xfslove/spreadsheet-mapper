@@ -1,6 +1,10 @@
 package me.excel.tools.validator;
 
+
 import me.excel.tools.model.excel.ExcelCell;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 用于跳过某些校验的exception
@@ -9,51 +13,82 @@ import me.excel.tools.model.excel.ExcelCell;
 public class SkipValidateException extends Exception {
 
   /**
-   * 因为哪个cell跳过
+   * 将错误信息写到哪些cell上
    */
-  protected ExcelCell cell;
+  protected List<ExcelCell> cells = new ArrayList<>();
 
   /**
    * 错误消息
    */
   protected String prompt;
 
-  public SkipValidateException(ExcelCell cell) {
-    this.cell = cell;
+  public SkipValidateException(ExcelCell... cells) {
     this.prompt = "数据错误";
+
+    if (cells != null) {
+
+      for (ExcelCell cell : cells) {
+        this.cells.add(cell);
+      }
+    }
   }
 
-  public SkipValidateException(ExcelCell cell, String prompt) {
-    this.cell = cell;
+  public SkipValidateException(String prompt, ExcelCell... cells) {
     this.prompt = prompt;
+    if (cells != null) {
+
+      for (ExcelCell cell : cells) {
+        this.cells.add(cell);
+      }
+    }
   }
 
-  public SkipValidateException(String message, ExcelCell cell, String prompt) {
+  public SkipValidateException(String message, String prompt, ExcelCell... cells) {
     super(message);
-    this.cell = cell;
     this.prompt = prompt;
+    if (cells != null) {
+
+      for (ExcelCell cell : cells) {
+        this.cells.add(cell);
+      }
+    }
   }
 
-  public SkipValidateException(String message, Throwable cause, ExcelCell cell, String prompt) {
+  public SkipValidateException(String message, Throwable cause, String prompt, ExcelCell... cells) {
     super(message, cause);
-    this.cell = cell;
     this.prompt = prompt;
+    if (cells != null) {
+
+      for (ExcelCell cell : cells) {
+        this.cells.add(cell);
+      }
+    }
   }
 
-  public SkipValidateException(Throwable cause, ExcelCell cell, String prompt) {
+  public SkipValidateException(Throwable cause, String prompt, ExcelCell... cells) {
     super(cause);
-    this.cell = cell;
     this.prompt = prompt;
+    if (cells != null) {
+
+      for (ExcelCell cell : cells) {
+        this.cells.add(cell);
+      }
+    }
   }
 
-  public SkipValidateException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, ExcelCell cell, String prompt) {
+  public SkipValidateException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, String prompt, ExcelCell... cells) {
     super(message, cause, enableSuppression, writableStackTrace);
-    this.cell = cell;
     this.prompt = prompt;
+    if (cells != null) {
+
+      for (ExcelCell cell : cells) {
+        this.cells.add(cell);
+      }
+    }
   }
 
-  public ExcelCell getCell() {
-    return cell;
+  public List<ExcelCell> getCells() {
+    return cells;
   }
 
   public String getPrompt() {

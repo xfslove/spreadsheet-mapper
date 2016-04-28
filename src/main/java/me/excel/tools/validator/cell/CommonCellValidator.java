@@ -1,32 +1,33 @@
-package me.excel.tools.validator;
+package me.excel.tools.validator.cell;
+
 
 import me.excel.tools.model.excel.ExcelCell;
-
-import java.util.function.Function;
+import me.excel.tools.validator.SkipValidateException;
+import me.excel.tools.validator.ValidateFunction;
 
 /**
  * 自定义validator
  *
  * Created by hanwen on 16-1-7.
  */
-public class CommonValidator extends AbstractFieldValidator {
+public class CommonCellValidator extends AbstractCellValidator {
 
   protected ValidateFunction<ExcelCell, Boolean> validateResultGetter;
 
-  public CommonValidator(String matchField) {
+  public CommonCellValidator(String matchField) {
     super(matchField, null, null);
   }
 
-  public CommonValidator(String matchField, String errorMessage, String prompt) {
+  public CommonCellValidator(String matchField, String errorMessage, String prompt) {
     super(matchField, errorMessage, prompt);
   }
 
-  public CommonValidator(String matchField, ValidateFunction<ExcelCell, Boolean> validateResultGetter) {
+  public CommonCellValidator(String matchField, ValidateFunction<ExcelCell, Boolean> validateResultGetter) {
     super(matchField, null, null);
     this.validateResultGetter = validateResultGetter;
   }
 
-  public CommonValidator(String matchField, String errorMessage, String prompt, ValidateFunction<ExcelCell, Boolean> validateResultGetter) {
+  public CommonCellValidator(String matchField, String errorMessage, String prompt, ValidateFunction<ExcelCell, Boolean> validateResultGetter) {
     super(matchField, errorMessage, prompt);
     this.validateResultGetter = validateResultGetter;
   }
