@@ -57,13 +57,9 @@ public class ExcelFileImporter implements UserFileImporter {
 
       for (ExcelCell excelCell : row.getCells()) {
 
-        for (CellValueSetter customValueSetter : cellValueSetters) {
-          if (customValueSetter.matches(excelCell)) {
-            customValueSetter.set(model, excelCell);
-            break;
-          }
-        }
-
+        cellValueSetters.stream()
+            .filter(customValueSetter -> customValueSetter.matches(excelCell))
+            .forEach(customValueSetter -> customValueSetter.set(model, excelCell));
       }
 
       dataProcessor.postProcessing(model);

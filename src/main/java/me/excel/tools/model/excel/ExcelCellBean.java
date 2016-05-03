@@ -1,6 +1,6 @@
 package me.excel.tools.model.excel;
 
-import me.excel.tools.model.ExcelSupportedDateFormat;
+import me.excel.tools.ExcelSupportedDateFormat;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -132,11 +132,6 @@ public class ExcelCellBean implements ExcelCell {
   public void setComment(ExcelCellComment excelCellComment) {
     ((ExcelCellCommentBean) excelCellComment).setCell(this);
     this.excelCellComment = excelCellComment;
-  }
-
-  @Override
-  public void convertToReadableValue(String value) {
-    this.value = value;
   }
 
   @Override

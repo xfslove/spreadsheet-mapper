@@ -1,7 +1,8 @@
 package me.excel.tools.setter;
 
+import me.excel.tools.importer.ExcelImportException;
 import me.excel.tools.model.excel.ExcelCell;
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -28,10 +29,10 @@ public class LocalDateTimeValueSetter extends AbstractCellValueSetter {
   public void set(Object data, ExcelCell excelCell) {
     try {
       DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(pattern);
-      BeanUtils.setProperty(data, getFieldWithoutPrefix(excelCell.getField()), dateTimeFormatter.parseLocalDateTime(excelCell.getValue()));
+      PropertyUtils.setProperty(data, getFieldWithoutPrefix(excelCell.getField()), dateTimeFormatter.parseLocalDateTime(excelCell.getValue()));
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
-      throw new RuntimeException(e);
+      throw new ExcelImportException(e);
     }
   }
 }

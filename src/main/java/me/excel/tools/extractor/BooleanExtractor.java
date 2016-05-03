@@ -1,14 +1,11 @@
 package me.excel.tools.extractor;
 
 
-import me.excel.tools.FieldUtils;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static me.excel.tools.FieldUtils.getFieldWithoutPrefix;
 
 /**
  * Created by hanwen on 16/3/18.
@@ -24,16 +21,8 @@ public class BooleanExtractor extends AbstractCellValueExtractor {
   @Override
   public String getStringValue(Object data, String field) {
 
-    String fieldWithoutPrefix;
-
-    if (field.contains(FieldUtils.BUSINESS_KEY_PREFIX)) {
-      fieldWithoutPrefix = getFieldWithoutPrefix(FieldUtils.getBusinessKeyField(field));
-    } else {
-      fieldWithoutPrefix = getFieldWithoutPrefix(field);
-    }
-
     try {
-      Object value = PropertyUtils.getProperty(data, fieldWithoutPrefix);
+      Object value = PropertyUtils.getProperty(data, getFiledWithOutPrefix(field));
 
       if (Boolean.TRUE.equals(value)) {
         return "是";

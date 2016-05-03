@@ -1,7 +1,8 @@
-package me.excel.tools.model;
+package me.excel.tools;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,5 +33,9 @@ public class ExcelSupportedDateFormat {
 
   public static String getDateFormat(String format) {
     return EXCEL_SUPPORTED_DATE_FORMAT.get(StringUtils.lowerCase(format));
+  }
+
+  public static Collection<String> getSupportedFormats() {
+    return EXCEL_SUPPORTED_DATE_FORMAT.values();
   }
 }

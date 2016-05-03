@@ -2,9 +2,9 @@ package me.excel.tools.factory;
 
 import me.excel.tools.exporter.ExcelFileExporter;
 import me.excel.tools.exporter.UserFileExporter;
-import me.excel.tools.model.excel.*;
-import me.excel.tools.extractor.DefaultValueExtractor;
 import me.excel.tools.extractor.CellValueExtractor;
+import me.excel.tools.extractor.DefaultValueExtractor;
+import me.excel.tools.model.excel.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -194,17 +194,13 @@ public class ExcelFileFactory implements UserFileFactory {
 
   private String getFieldValue(Object data, String field) {
 
-    String stringValue = null;
+    String stringValue = defaultValueExtractor.getStringValue(data, field);
 
     // default extractor first
     for (CellValueExtractor cellValueExtractor : cellValueExtractors) {
       if (cellValueExtractor.matches(field)) {
         stringValue = cellValueExtractor.getStringValue(data, field);
       }
-    }
-
-    if (stringValue == null) {
-      stringValue = defaultValueExtractor.getStringValue(data, field);
     }
 
     return stringValue;

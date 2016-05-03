@@ -1,20 +1,26 @@
 package me.excel.tools.factory;
 
+import me.excel.tools.ExcelSupportedDateFormat;
 import me.excel.tools.extractor.BooleanExtractor;
-import me.excel.tools.extractor.CellValueExtractor;
 import me.excel.tools.extractor.LocalDateExtractor;
 import me.excel.tools.extractor.LocalDateTimeExtractor;
 import me.excel.tools.importer.ExcelFileImporter;
 import me.excel.tools.importer.UserFileImporter;
 import me.excel.tools.model.excel.ExcelWorkbook;
-import me.excel.tools.setter.*;
+import me.excel.tools.setter.BooleanValueSetter;
+import me.excel.tools.setter.LocalDateTimeValueSetter;
+import me.excel.tools.setter.LocalDateValueSetter;
 import me.excel.tools.transfer.ExcelFileTransfer;
 import me.excel.tools.transfer.ExcelFileTransferImpl;
 import me.excel.tools.validator.ExcelFileValidator;
 import me.excel.tools.validator.UserFileValidator;
-import me.excel.tools.validator.cell.*;
+import me.excel.tools.validator.cell.BooleanValidator;
+import me.excel.tools.validator.cell.CellValidator;
+import me.excel.tools.validator.cell.LocalDateTimeValidator;
+import me.excel.tools.validator.cell.LocalDateValidator;
 import me.excel.tools.validator.row.RowValidator;
 import me.excel.tools.validator.workbook.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,6 +59,8 @@ public class ExcelTemplate implements FileTemplate {
 
   public ExcelTemplate() {
 
+    this.excelFileTransfer = new ExcelFileTransferImpl();
+
     addWorkbookValidator(
         new SheetSizeValidator(1),
         new FieldScopeValidator(this.fieldScope),
@@ -60,56 +68,9 @@ public class ExcelTemplate implements FileTemplate {
         new FieldCountValidator(this.minFieldCount)
     );
 
-    List<CellValueExtractor> defaultExtractors = new ArrayList<>();
-    List<CellValueSetter> defaultValueSetters = new ArrayList<>();
-
-    for (CellValidator cellValidator : cellValidators) {
-      String matchField = cellValidator.getMatchField();
-      if (cellValidator instanceof BooleanValidator) {
-        defaultExtractors.add(new BooleanExtractor(matchField));
-        defaultValueSetters.add(new BooleanValueSetter(matchField));
-        continue;
-      }
-      String prompt = cellValidator.getPrompt();
-      if (cellValidator instanceof LocalDateValidator) {
-        defaultExtractors.add(new LocalDateExtractor(matchField, prompt));
-        defaultValueSetters.add(new LocalDateValueSetter(matchField, prompt));
-        continue;
-      }
-      if (cellValidator instanceof LocalDateTimeValidator) {
-        defaultExtractors.add(new LocalDateTimeExtractor(matchField, prompt));
-        defaultValueSetters.add(new LocalDateTimeValueSetter(matchField, prompt));
-        continue;
-      }
-      if (cellValidator instanceof IntValidator) {
-        defaultValueSetters.add(new IntValueSetter(matchField));
-        continue;
-      }
-      if (cellValidator instanceof LongValidator) {
-        defaultValueSetters.add(new LongValueSetter(matchField));
-        continue;
-      }
-      if (cellValidator instanceof DoubleValidator) {
-        defaultValueSetters.add(new DoubleValueSetter(matchField));
-        continue;
-      }
-      if (cellValidator instanceof FloatValidator) {
-        defaultValueSetters.add(new FloatValueSetter(matchField));
-        continue;
-      }
-    }
-
     this.userFileFactory = new ExcelFileFactory(this);
-    this.userFileFactory.addValueExtractors(
-        defaultExtractors.toArray(new CellValueExtractor[0])
-    );
 
     this.userFileImporter = new ExcelFileImporter(excelFileTransfer);
-    this.userFileImporter.addCellValueSetter(
-        defaultValueSetters.toArray(new CellValueSetter[0])
-    );
-
-    this.excelFileTransfer = new ExcelFileTransferImpl();
 
     this.userFileValidator = new ExcelFileValidator(this, excelFileTransfer);
   }
@@ -148,6 +109,8 @@ public class ExcelTemplate implements FileTemplate {
     }
     for (CellValidator validator : validators) {
       this.cellValidators.add(validator);
+      addDefaultValueExtractor(validator);
+      addDefaultValueSetter(validator);
     }
   }
 
@@ -225,5 +188,40 @@ public class ExcelTemplate implements FileTemplate {
 
   public UserFileImporter getUserFileImporter() {
     return this.userFileImporter;
+  }
+
+  private void addDefaultValueSetter(CellValidator validator) {
+    String matchField = validator.getMatchField();
+    String dateTimePattern = extraPatternFromPrompt(validator.getPrompt());
+    if (validator instanceof BooleanValidator) {
+      userFileImporter.addCellValueSetter(new BooleanValueSetter(matchField));
+    } else if (validator instanceof LocalDateValidator) {
+      userFileImporter.addCellValueSetter(new LocalDateValueSetter(matchField, dateTimePattern));
+    } else if (validator instanceof LocalDateTimeValidator) {
+      userFileImporter.addCellValueSetter(new LocalDateTimeValueSetter(matchField, dateTimePattern));
+    }
+  }
+
+  private void addDefaultValueExtractor(CellValidator validator) {
+    String matchField = validator.getMatchField();
+    String dateTimePattern = extraPatternFromPrompt(validator.getPrompt());
+    if (validator instanceof BooleanValidator) {
+      userFileFactory.addValueExtractors(new BooleanExtractor(matchField));
+    } else if (validator instanceof LocalDateValidator) {
+      userFileFactory.addValueExtractors(new LocalDateExtractor(matchField, dateTimePattern));
+    } else if (validator instanceof LocalDateTimeValidator) {
+      userFileFactory.addValueExtractors(new LocalDateTimeExtractor(matchField, dateTimePattern));
+    }
+  }
+
+  private String extraPatternFromPrompt(String prompt) {
+
+    for (String supportedFormat : ExcelSupportedDateFormat.getSupportedFormats()) {
+      if (StringUtils.indexOfIgnoreCase(prompt, supportedFormat) != -1) {
+        return supportedFormat;
+      }
+    }
+
+    return null;
   }
 }

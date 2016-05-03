@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * user localDate or localDateTime validator<br/>
+ * use localDate or localDateTime validator<br/>
  * Created by hanwen on 15-12-16.
  */
 @Deprecated

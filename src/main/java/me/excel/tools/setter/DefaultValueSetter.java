@@ -1,5 +1,7 @@
 package me.excel.tools.setter;
 
+import me.excel.tools.FieldUtils;
+import me.excel.tools.importer.ExcelImportException;
 import me.excel.tools.model.excel.ExcelCell;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
@@ -18,7 +20,7 @@ import static me.excel.tools.FieldUtils.getFieldWithoutPrefix;
 
 
 /**
- * reflection object value setter
+ * default object value setter
  *
  * Created by hanwen on 15-12-18.
  */
@@ -39,12 +41,26 @@ public class DefaultValueSetter {
 
     excelCells.forEach(cell -> {
       try {
-        BeanUtils.setProperty(data, getFieldWithoutPrefix(cell.getField()), cell.getValue());
+        BeanUtils.setProperty(data, getFieldWithoutPrefix(cell.getField()), matches(data, cell) ? cell.getValue() : null);
       } catch (Exception e) {
         LOGGER.error(ExceptionUtils.getStackTrace(e));
-        throw new RuntimeException(e);
+        throw new ExcelImportException(e);
       }
     });
 
+  }
+
+  private boolean matches(Object data, ExcelCell cell) {
+    Class fieldType = FieldUtils.getFieldType(data.getClass(), getFieldWithoutPrefix(cell.getField()).split("\\."));
+
+    if (Integer.class.isAssignableFrom(fieldType) || int.class.isAssignableFrom(fieldType) ||
+        Long.class.isAssignableFrom(fieldType) || long.class.isAssignableFrom(fieldType) ||
+        Double.class.isAssignableFrom(fieldType) || double.class.isAssignableFrom(fieldType) ||
+        Float.class.isAssignableFrom(fieldType) || float.class.isAssignableFrom(fieldType) ||
+        String.class.isAssignableFrom(fieldType)) {
+      return true;
+    }
+
+    return false;
   }
 }
