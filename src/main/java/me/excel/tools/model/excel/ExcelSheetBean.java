@@ -124,15 +124,13 @@ public class ExcelSheetBean implements ExcelSheet {
 
     Set<String> cellValuesOfField = new HashSet<>();
 
-    for (ExcelRow excelRow :  getDataRows()) {
+    for (ExcelRow excelRow : getDataRows()) {
       for (ExcelCell excelCell : excelRow.getCells()) {
 
         String f = excelCell.getField();
         String v = excelCell.getValue();
 
-        if (StringUtils.contains(f, FieldUtils.BUSINESS_KEY_PREFIX) && field.equals(FieldUtils.getBusinessKeyField(f)) && v != null) {
-          cellValuesOfField.add(v);
-        } else if (field.equals(f) && v != null) {
+        if (FieldUtils.getFieldWithoutPrefix(f).equals(FieldUtils.getFieldWithoutPrefix(field)) && v != null) {
           cellValuesOfField.add(v);
         }
       }

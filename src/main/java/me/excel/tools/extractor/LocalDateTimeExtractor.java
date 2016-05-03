@@ -1,11 +1,12 @@
 package me.excel.tools.extractor;
 
-import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static me.excel.tools.FieldUtils.getFieldWithoutPrefix;
 
 /**
  * Created by hanwen on 5/3/16.
@@ -25,13 +26,10 @@ public class LocalDateTimeExtractor extends AbstractCellValueExtractor {
   public String getStringValue(Object data, String field) {
 
     try {
-      LocalDateTime value = (LocalDateTime) PropertyUtils.getProperty(data, getFiledWithOutPrefix(field));
+      LocalDateTime value = (LocalDateTime) PropertyUtils.getProperty(data, getFieldWithoutPrefix(field));
 
       return value.toString(pattern);
 
-    } catch (NestedNullException e) {
-      LOGGER.trace(e.getMessage());
-      return "";
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new IllegalArgumentException(e);

@@ -1,6 +1,5 @@
 package me.excel.tools.extractor;
 
-import me.excel.tools.FieldUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -12,7 +11,7 @@ import static me.excel.tools.FieldUtils.getFieldWithoutPrefix;
 
 /**
  * 默认的object属性extractor
- *
+ * <p>
  * Created by hanwen on 15-12-16.
  */
 public class DefaultValueExtractor {
@@ -21,16 +20,8 @@ public class DefaultValueExtractor {
 
   public String getStringValue(Object data, String field) {
 
-    String fieldWithoutPrefix;
-
-    if (field.contains(FieldUtils.BUSINESS_KEY_PREFIX)) {
-      fieldWithoutPrefix = getFieldWithoutPrefix(FieldUtils.getBusinessKeyField(field));
-    } else {
-      fieldWithoutPrefix = getFieldWithoutPrefix(field);
-    }
-
     try {
-      return BeanUtils.getProperty(data, fieldWithoutPrefix);
+      return BeanUtils.getProperty(data, getFieldWithoutPrefix(field));
     } catch (NestedNullException e) {
       LOGGER.trace(e.getMessage());
       return "";

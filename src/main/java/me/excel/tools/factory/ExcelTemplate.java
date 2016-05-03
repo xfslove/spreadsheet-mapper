@@ -1,7 +1,7 @@
 package me.excel.tools.factory;
 
 import me.excel.tools.ExcelSupportedDateFormat;
-import me.excel.tools.extractor.BooleanExtractor;
+import me.excel.tools.extractor.BooleanZhExtractor;
 import me.excel.tools.extractor.LocalDateExtractor;
 import me.excel.tools.extractor.LocalDateTimeExtractor;
 import me.excel.tools.importer.ExcelFileImporter;
@@ -206,7 +206,7 @@ public class ExcelTemplate implements FileTemplate {
     String matchField = validator.getMatchField();
     String dateTimePattern = extraPatternFromPrompt(validator.getPrompt());
     if (validator instanceof BooleanValidator) {
-      userFileFactory.addValueExtractors(new BooleanExtractor(matchField));
+      userFileFactory.addValueExtractors(new BooleanZhExtractor(matchField));
     } else if (validator instanceof LocalDateValidator) {
       userFileFactory.addValueExtractors(new LocalDateExtractor(matchField, dateTimePattern));
     } else if (validator instanceof LocalDateTimeValidator) {

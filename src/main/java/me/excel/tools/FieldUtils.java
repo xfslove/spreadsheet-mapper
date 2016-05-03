@@ -39,9 +39,16 @@ public class FieldUtils {
    * @return 比如: name
    */
   public static String getFieldWithoutPrefix(String field) {
-    List<String> splitFields = new ArrayList<>(Arrays.asList(field.split("\\.")));
+
+    String realField = field;
+
+    if (field.contains(BUSINESS_KEY_PREFIX)) {
+      realField = FieldUtils.getBusinessKeyField(field);
+    }
+
+    List<String> splitFields = new ArrayList<>(Arrays.asList(realField.split("\\.")));
     if (splitFields.size() == 1) {
-      return field;
+      return realField;
     } else {
       splitFields.remove(0);
       return StringUtils.join(splitFields, ".");
