@@ -14,7 +14,7 @@ import java.io.OutputStream;
 import java.util.List;
 
 /**
- * write comment utils
+ * write comment extractor
  *
  * Created by hanwen on 15-12-20.
  */

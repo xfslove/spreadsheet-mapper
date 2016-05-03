@@ -37,6 +37,11 @@ public class RequiredValidator implements CellValidator {
   }
 
   @Override
+  public String getMatchField() {
+    return matchField;
+  }
+
+  @Override
   public boolean validate(ExcelCell excelCell) {
     return StringUtils.isNotBlank(excelCell.getValue());
   }

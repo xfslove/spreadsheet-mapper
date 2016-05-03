@@ -1,4 +1,4 @@
-package me.excel.tools.utils;
+package me.excel.tools.setter;
 
 
 import me.excel.tools.model.excel.ExcelCell;
@@ -10,12 +10,17 @@ import me.excel.tools.model.excel.ExcelCell;
  *
  * Created by hanwen on 15-12-16.
  */
-public abstract class AbstractFieldValueSetter implements FieldValueSetter {
+public abstract class AbstractCellValueSetter implements CellValueSetter {
 
   protected String matchField;
 
-  public AbstractFieldValueSetter(String matchField) {
+  public AbstractCellValueSetter(String matchField) {
     this.matchField = matchField;
+  }
+
+  @Override
+  public String getMatchField() {
+    return matchField;
   }
 
   @Override
@@ -24,10 +29,5 @@ public abstract class AbstractFieldValueSetter implements FieldValueSetter {
   @Override
   public boolean matches(ExcelCell excelCell) {
     return excelCell.getField().equals(matchField);
-  }
-
-  @Override
-  public boolean matches(String field) {
-    return field.equals(matchField);
   }
 }

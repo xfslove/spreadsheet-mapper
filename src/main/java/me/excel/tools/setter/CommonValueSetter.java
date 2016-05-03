@@ -1,4 +1,4 @@
-package me.excel.tools.utils;
+package me.excel.tools.setter;
 
 import me.excel.tools.model.excel.ExcelCell;
 
@@ -9,7 +9,7 @@ import java.util.function.BiConsumer;
  * <p>
  * Created by hanwen on 16-1-7.
  */
-public class CommonValueSetter<D> extends AbstractFieldValueSetter {
+public class CommonValueSetter<D> extends AbstractCellValueSetter {
 
   protected BiConsumer<D, ExcelCell> valueSetter;
 

@@ -43,12 +43,17 @@ public abstract class AbstractCellValidator implements CellValidator {
 
   @Override
   public String getErrorMessage() {
-    return this.errorMessage;
+    return errorMessage;
   }
 
   @Override
   public String getPrompt() {
-    return this.prompt;
+    return prompt;
+  }
+
+  @Override
+  public String getMatchField() {
+    return matchField;
   }
 
   @Override

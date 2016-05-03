@@ -2,13 +2,14 @@ package me.excel.tools;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * model field utils
- *
+ * model field extractor
+ * <p>
  * Created by hanwen on 15-12-18.
  */
 public class FieldUtils {
@@ -48,6 +49,29 @@ public class FieldUtils {
   }
 
   /**
+   * <p>
+   * 获得Field, 查找算法是先从本类找, 如果找不到就递归到父类找, 如果找不到就返回null.
+   * </p>
+   * <p>
+   * 支持private, private final, protected, protected final, public, public final 的field.
+   * </p>
+   *
+   * @param clazz
+   * @param fieldName
+   * @return {@link Field}
+   */
+  public static Field getField(Class clazz, String fieldName) {
+    try {
+      return clazz.getDeclaredField(fieldName);
+    } catch (NoSuchFieldException e) {
+      if (clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class)) {
+        return getField(clazz.getSuperclass(), fieldName);
+      }
+    }
+    return null;
+  }
+
+  /**
    * 获得field name对应的field type (支持 nested object)
    *
    * @param clazz
@@ -72,17 +96,17 @@ public class FieldUtils {
    * 获得field name对应的field type
    *
    * @param clazz
-   * @param field
+   * @param fieldName
    * @return
    */
-  public static Class getFieldType(Class clazz, String field) {
-    try {
-      return clazz.getDeclaredField(field).getType();
-    } catch (NoSuchFieldException e) {
-      if (clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class)) {
-        return getFieldType(clazz.getSuperclass(), field);
-      }
+  public static Class getFieldType(Class clazz, String fieldName) {
+
+    Field field = getField(clazz, fieldName);
+
+    if (field == null) {
+      return null;
     }
-    return null;
+
+    return field.getType();
   }
 }

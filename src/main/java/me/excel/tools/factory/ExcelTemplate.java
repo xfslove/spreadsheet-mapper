@@ -1,15 +1,18 @@
 package me.excel.tools.factory;
 
-import me.excel.tools.importer.UserFileImporter;
+import me.excel.tools.extractor.BooleanExtractor;
+import me.excel.tools.extractor.CellValueExtractor;
+import me.excel.tools.extractor.LocalDateExtractor;
+import me.excel.tools.extractor.LocalDateTimeExtractor;
 import me.excel.tools.importer.ExcelFileImporter;
+import me.excel.tools.importer.UserFileImporter;
 import me.excel.tools.model.excel.ExcelWorkbook;
-import me.excel.tools.transfer.ExcelFileTransferImpl;
+import me.excel.tools.setter.*;
 import me.excel.tools.transfer.ExcelFileTransfer;
-import me.excel.tools.utils.BooleanConverter;
-import me.excel.tools.utils.ReflectionValueExtractor;
+import me.excel.tools.transfer.ExcelFileTransferImpl;
 import me.excel.tools.validator.ExcelFileValidator;
 import me.excel.tools.validator.UserFileValidator;
-import me.excel.tools.validator.cell.CellValidator;
+import me.excel.tools.validator.cell.*;
 import me.excel.tools.validator.row.RowValidator;
 import me.excel.tools.validator.workbook.*;
 
@@ -49,14 +52,6 @@ public class ExcelTemplate implements FileTemplate {
   protected ExcelFileTransfer excelFileTransfer;
 
   public ExcelTemplate() {
-    this.userFileFactory = new ExcelFileFactory(this);
-    this.userFileFactory.setValueExtractor(new ReflectionValueExtractor());
-    this.userFileFactory.addCellValueConverter(new BooleanConverter());
-
-    this.excelFileTransfer = new ExcelFileTransferImpl();
-
-    this.userFileValidator = new ExcelFileValidator(this, new ExcelFileTransferImpl());
-    this.userFileImporter = new ExcelFileImporter(new ExcelFileTransferImpl());
 
     addWorkbookValidator(
         new SheetSizeValidator(1),
@@ -64,6 +59,59 @@ public class ExcelTemplate implements FileTemplate {
         new RequireFieldValidator(this.requiredFields),
         new FieldCountValidator(this.minFieldCount)
     );
+
+    List<CellValueExtractor> defaultExtractors = new ArrayList<>();
+    List<CellValueSetter> defaultValueSetters = new ArrayList<>();
+
+    for (CellValidator cellValidator : cellValidators) {
+      String matchField = cellValidator.getMatchField();
+      if (cellValidator instanceof BooleanValidator) {
+        defaultExtractors.add(new BooleanExtractor(matchField));
+        defaultValueSetters.add(new BooleanValueSetter(matchField));
+        continue;
+      }
+      String prompt = cellValidator.getPrompt();
+      if (cellValidator instanceof LocalDateValidator) {
+        defaultExtractors.add(new LocalDateExtractor(matchField, prompt));
+        defaultValueSetters.add(new LocalDateValueSetter(matchField, prompt));
+        continue;
+      }
+      if (cellValidator instanceof LocalDateTimeValidator) {
+        defaultExtractors.add(new LocalDateTimeExtractor(matchField, prompt));
+        defaultValueSetters.add(new LocalDateTimeValueSetter(matchField, prompt));
+        continue;
+      }
+      if (cellValidator instanceof IntValidator) {
+        defaultValueSetters.add(new IntValueSetter(matchField));
+        continue;
+      }
+      if (cellValidator instanceof LongValidator) {
+        defaultValueSetters.add(new LongValueSetter(matchField));
+        continue;
+      }
+      if (cellValidator instanceof DoubleValidator) {
+        defaultValueSetters.add(new DoubleValueSetter(matchField));
+        continue;
+      }
+      if (cellValidator instanceof FloatValidator) {
+        defaultValueSetters.add(new FloatValueSetter(matchField));
+        continue;
+      }
+    }
+
+    this.userFileFactory = new ExcelFileFactory(this);
+    this.userFileFactory.addValueExtractors(
+        defaultExtractors.toArray(new CellValueExtractor[0])
+    );
+
+    this.userFileImporter = new ExcelFileImporter(excelFileTransfer);
+    this.userFileImporter.addCellValueSetter(
+        defaultValueSetters.toArray(new CellValueSetter[0])
+    );
+
+    this.excelFileTransfer = new ExcelFileTransferImpl();
+
+    this.userFileValidator = new ExcelFileValidator(this, excelFileTransfer);
   }
 
   @Override
@@ -130,7 +178,7 @@ public class ExcelTemplate implements FileTemplate {
     }
 
     FileInputStream inputStream = new FileInputStream(excel);
-    ExcelWorkbook excelWorkbook = excelFileTransfer.transfer(inputStream);
+    ExcelWorkbook excelWorkbook = excelFileTransfer.transfer(false, inputStream);
 
     return excelWorkbook.getFirstSheet().getDistinctCellValuesOfField(field);
   }

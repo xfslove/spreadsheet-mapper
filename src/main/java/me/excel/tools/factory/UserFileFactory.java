@@ -1,7 +1,6 @@
 package me.excel.tools.factory;
 
-import me.excel.tools.utils.CellValueConverter;
-import me.excel.tools.utils.ValueExtractor;
+import me.excel.tools.extractor.CellValueExtractor;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +8,7 @@ import java.util.List;
 
 /**
  * file factory
- *
+ * <p>
  * Created by hanwen on 15-12-16.
  */
 public interface UserFileFactory {
@@ -29,21 +28,18 @@ public interface UserFileFactory {
   void setFields(String... fields);
 
   /**
+   * 设置自定义的属性提取器
+   *
+   * @param cellValueExtractors
+   */
+  void addValueExtractors(CellValueExtractor... cellValueExtractors);
+
+  /**
    * 设置file中的data (从第四行开始)
    *
    * @param data
    */
   void setData(List data);
-
-  void setValueExtractor(ValueExtractor valueExtractor);
-
-  /**
-   * 设置自定义的转换器
-   *
-   * @param converters
-   * @see  me.excel.tools.model.excel.ExcelCell#convertToReadableValue(String)
-   */
-  void addCellValueConverter(CellValueConverter... converters);
 
   /**
    * 生成文件

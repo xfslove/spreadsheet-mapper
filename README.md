@@ -6,7 +6,7 @@ package me.excel.tools.importer;
 import me.excel.tools.factory.AbstractModelFactory;
 import me.excel.tools.model.excel.ExcelRow;
 import me.excel.tools.processor.DataProcessor;
-import me.excel.tools.utils.CommonValueSetter;
+import me.excel.tools.setter.CommonValueSetter;
 import org.testng.annotations.Test;
 
 import java.io.File;

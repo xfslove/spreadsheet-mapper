@@ -3,8 +3,8 @@ package me.excel.tools.validator.cell;
 
 import me.excel.tools.model.excel.ExcelCell;
 
-import static me.excel.tools.utils.BooleanTranslator.isValidFalse;
-import static me.excel.tools.utils.BooleanTranslator.isValidTrue;
+import static me.excel.tools.BooleanTranslator.isValidFalse;
+import static me.excel.tools.BooleanTranslator.isValidTrue;
 
 /**
  * Created by hanwen on 15-12-18.

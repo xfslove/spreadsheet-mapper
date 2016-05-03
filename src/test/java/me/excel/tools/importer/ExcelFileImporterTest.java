@@ -5,7 +5,7 @@ import me.excel.tools.model.excel.ExcelRow;
 import me.excel.tools.processor.DataProcessor;
 import me.excel.tools.transfer.ExcelFileTransferImpl;
 import me.excel.tools.transfer.ExcelFileTransfer;
-import me.excel.tools.utils.CommonValueSetter;
+import me.excel.tools.setter.CommonValueSetter;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -30,7 +30,7 @@ public class ExcelFileImporterTest {
 
     UserFileImporter userFileImporter = new ExcelFileImporter(excelFileTransfer);
     userFileImporter.setModelFactory(new StudentModelFactoryTest());
-    userFileImporter.addFieldValueSetter(new CommonValueSetter<StudentTest>("student.enrollDate",
+    userFileImporter.addCellValueSetter(new CommonValueSetter<StudentTest>("student.enrollDate",
         (s, excelCell) -> {
           SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
           try {
@@ -73,8 +73,8 @@ public class ExcelFileImporterTest {
       assertEquals(model2.getAge(), new Integer(18));
 
       try {
-        assertEquals(model1.getEnrollDate(), sdf.parse("2015-09-01"));
-        assertEquals(model2.getEnrollDate(), sdf.parse("2015-09-01"));
+        assertEquals(model1.getEnrollDate(), sdf.parse("2015-09-02"));
+        assertEquals(model2.getEnrollDate(), sdf.parse("2015-09-02"));
       } catch (ParseException e) {
       }
     }

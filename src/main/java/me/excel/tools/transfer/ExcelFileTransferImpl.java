@@ -30,10 +30,10 @@ public class ExcelFileTransferImpl implements ExcelFileTransfer {
    * @param inputStream 会自动关闭
    */
   @Override
-  public ExcelWorkbook transfer(InputStream inputStream) {
+  public ExcelWorkbook transfer(boolean reload, InputStream inputStream) {
 
     // reduce file io
-    if (excelWorkbook != null) {
+    if (!reload) {
       return excelWorkbook;
     }
 
@@ -114,7 +114,7 @@ public class ExcelFileTransferImpl implements ExcelFileTransfer {
       }
 
       String field = null;
-      if (rowIndex != 0 && rowIndex != 1 && rowIndex != 2) {
+      if (rowIndex != 0 && rowIndex != 1) {
         field = cellColIndex2field.get(colIndex);
       }
       excelCell = new ExcelCellBean(cell, field);

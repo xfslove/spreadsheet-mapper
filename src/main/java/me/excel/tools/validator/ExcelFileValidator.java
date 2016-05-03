@@ -40,7 +40,7 @@ public class ExcelFileValidator implements UserFileValidator {
     }
 
     InputStream inputStream = new FileInputStream(excel);
-    ExcelWorkbook excelWorkbook = excelFileTransfer.transfer(inputStream);
+    ExcelWorkbook excelWorkbook = excelFileTransfer.transfer(true, inputStream);
 
     validateWorkbook(excelWorkbook);
     if (!errorMessages.isEmpty()) {

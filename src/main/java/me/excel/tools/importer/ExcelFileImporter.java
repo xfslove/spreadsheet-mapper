@@ -5,8 +5,8 @@ import me.excel.tools.model.excel.ExcelCell;
 import me.excel.tools.model.excel.ExcelSheet;
 import me.excel.tools.processor.DataProcessor;
 import me.excel.tools.transfer.ExcelFileTransfer;
-import me.excel.tools.utils.FieldValueSetter;
-import me.excel.tools.utils.ReflectionValueSetter;
+import me.excel.tools.setter.CellValueSetter;
+import me.excel.tools.setter.DefaultValueSetter;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,9 +25,9 @@ public class ExcelFileImporter implements UserFileImporter {
 
   protected ModelFactory modelFactory;
 
-  protected List<FieldValueSetter> fieldValueSetters = new ArrayList<>();
+  protected List<CellValueSetter> cellValueSetters = new ArrayList<>();
 
-  protected ReflectionValueSetter reflectionValueSetter = new ReflectionValueSetter();
+  protected DefaultValueSetter defaultValueSetter = new DefaultValueSetter();
 
   public ExcelFileImporter(ExcelFileTransfer excelFileTransfer) {
     this.excelFileTransfer = excelFileTransfer;
@@ -45,7 +45,7 @@ public class ExcelFileImporter implements UserFileImporter {
 
     FileInputStream inputStream = new FileInputStream(excel);
 
-    ExcelSheet excelSheet = excelFileTransfer.transfer(inputStream).getFirstSheet();
+    ExcelSheet excelSheet = excelFileTransfer.transfer(true, inputStream).getFirstSheet();
 
     List models = new ArrayList<>();
     excelSheet.getDataRows().forEach(row -> {
@@ -53,11 +53,11 @@ public class ExcelFileImporter implements UserFileImporter {
 
       dataProcessor.preProcessing(model);
 
-      reflectionValueSetter.set(model, row.getCells());
+      defaultValueSetter.set(model, row.getCells());
 
       for (ExcelCell excelCell : row.getCells()) {
 
-        for (FieldValueSetter customValueSetter : fieldValueSetters) {
+        for (CellValueSetter customValueSetter : cellValueSetters) {
           if (customValueSetter.matches(excelCell)) {
             customValueSetter.set(model, excelCell);
             break;
@@ -75,13 +75,13 @@ public class ExcelFileImporter implements UserFileImporter {
   }
 
   @Override
-  public void addFieldValueSetter(FieldValueSetter... setters) {
+  public void addCellValueSetter(CellValueSetter... setters) {
     if (setters == null) {
       return;
     }
 
-    for (FieldValueSetter setter : setters) {
-      this.fieldValueSetters.add(setter);
+    for (CellValueSetter setter : setters) {
+      this.cellValueSetters.add(setter);
     }
   }
 

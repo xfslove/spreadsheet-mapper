@@ -13,6 +13,8 @@ public interface CellValidator {
 
   String getPrompt();
 
+  String getMatchField();
+
   boolean validate(ExcelCell excelCell) throws SkipValidateException;
 
   boolean matches(ExcelCell excelCell);

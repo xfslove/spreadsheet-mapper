@@ -1,9 +1,12 @@
 package me.excel.tools.model.excel;
 
+import me.excel.tools.model.ExcelSupportedDateFormat;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.util.NumberToTextConverter;
 
+import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 /**
@@ -54,7 +57,13 @@ public class ExcelCellBean implements ExcelCell {
 
     } else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 
-      value = NumberToTextConverter.toText(cell.getNumericCellValue());
+      if (DateUtil.isCellDateFormatted(cell)) {
+        String dateFormat = ExcelSupportedDateFormat.getDateFormat(cell.getCellStyle().getDataFormatString());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        value = simpleDateFormat.format(cell.getDateCellValue());
+      } else {
+        value = NumberToTextConverter.toText(cell.getNumericCellValue());
+      }
 
     } else if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
 

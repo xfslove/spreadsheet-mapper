@@ -3,8 +3,8 @@ package me.excel.tools.factory;
 import me.excel.tools.exporter.ExcelFileExporter;
 import me.excel.tools.exporter.UserFileExporter;
 import me.excel.tools.model.excel.*;
-import me.excel.tools.utils.CellValueConverter;
-import me.excel.tools.utils.ValueExtractor;
+import me.excel.tools.extractor.DefaultValueExtractor;
+import me.excel.tools.extractor.CellValueExtractor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -26,9 +26,9 @@ public class ExcelFileFactory implements UserFileFactory {
 
   protected List<String> titles = new ArrayList<>();
 
-  protected List<CellValueConverter> cellValueConverters = new ArrayList<>();
+  protected DefaultValueExtractor defaultValueExtractor = new DefaultValueExtractor();
 
-  protected ValueExtractor valueExtractor;
+  protected List<CellValueExtractor> cellValueExtractors = new ArrayList<>();
 
   protected FileTemplate fileTemplate;
 
@@ -57,23 +57,18 @@ public class ExcelFileFactory implements UserFileFactory {
   }
 
   @Override
+  public void addValueExtractors(CellValueExtractor... cellValueExtractors) {
+    if (cellValueExtractors == null) {
+      return;
+    }
+    for (CellValueExtractor cellValueExtractor : cellValueExtractors) {
+      this.cellValueExtractors.add(cellValueExtractor);
+    }
+  }
+
+  @Override
   public void setData(List data) {
     this.data = data;
-  }
-
-  @Override
-  public void setValueExtractor(ValueExtractor valueExtractor) {
-    this.valueExtractor = valueExtractor;
-  }
-
-  @Override
-  public void addCellValueConverter(CellValueConverter... converters) {
-    if (converters == null) {
-      throw new IllegalStateException("converter is null");
-    }
-    for (CellValueConverter extractor : converters) {
-      this.cellValueConverters.add(extractor);
-    }
   }
 
   @Override
@@ -118,10 +113,12 @@ public class ExcelFileFactory implements UserFileFactory {
       createFieldRow(sheet, rowIndex);
       rowIndex++;
     }
+
     if (createPrompts) {
       createPromptRow(sheet, rowIndex);
       rowIndex++;
     }
+
     for (Object data : this.data) {
       createDataRow(sheet, data, rowIndex);
       rowIndex++;
@@ -130,7 +127,7 @@ public class ExcelFileFactory implements UserFileFactory {
     return workbook;
   }
 
-  private void createTitleRow(ExcelSheetBean sheet, int rowIndex) {
+  private ExcelRow createTitleRow(ExcelSheetBean sheet, int rowIndex) {
     ExcelRowBean row = new ExcelRowBean(rowIndex);
     sheet.addRow(row);
 
@@ -138,9 +135,10 @@ public class ExcelFileFactory implements UserFileFactory {
       ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, null, titles.get(i));
       row.addCell(cell);
     }
+    return row;
   }
 
-  private void createFieldRow(ExcelSheetBean sheet, int rowIndex) {
+  private ExcelRow createFieldRow(ExcelSheetBean sheet, int rowIndex) {
     ExcelRowBean row = new ExcelRowBean(rowIndex);
     sheet.addRow(row);
 
@@ -148,19 +146,22 @@ public class ExcelFileFactory implements UserFileFactory {
       ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, null, fields.get(i));
       row.addCell(cell);
     }
+    return row;
   }
 
-  private void createPromptRow(ExcelSheetBean sheet, int rowIndex) {
+  private ExcelRow createPromptRow(ExcelSheetBean sheet, int rowIndex) {
     ExcelRowBean row = new ExcelRowBean(rowIndex);
     sheet.addRow(row);
 
     for (int i = 0; i < fields.size(); i++) {
-      ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, null, getPrompts(fields.get(i)));
+      String field = fields.get(i);
+      ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, field, getPrompts(field));
       row.addCell(cell);
     }
+    return row;
   }
 
-  private void createDataRow(ExcelSheetBean sheet, Object data, int rowIndex) {
+  private ExcelRow createDataRow(ExcelSheetBean sheet, Object data, int rowIndex) {
     ExcelRowBean row = new ExcelRowBean(rowIndex);
     sheet.addRow(row);
 
@@ -168,11 +169,9 @@ public class ExcelFileFactory implements UserFileFactory {
       String field = fields.get(i);
       String fieldValue = getFieldValue(data, field);
       ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, field, fieldValue);
-      cellValueConverters.stream()
-          .filter(fieldValueConverter -> fieldValueConverter.matches(cell))
-          .forEach(fieldValueConverter -> cell.convertToReadableValue(fieldValueConverter.getReadableValue(cell)));
       row.addCell(cell);
     }
+    return row;
   }
 
   private String getPrompts(String field) {
@@ -194,8 +193,20 @@ public class ExcelFileFactory implements UserFileFactory {
   }
 
   private String getFieldValue(Object data, String field) {
-    return valueExtractor.getStringValue(data, field);
+
+    String stringValue = null;
+
+    // default extractor first
+    for (CellValueExtractor cellValueExtractor : cellValueExtractors) {
+      if (cellValueExtractor.matches(field)) {
+        stringValue = cellValueExtractor.getStringValue(data, field);
+      }
+    }
+
+    if (stringValue == null) {
+      stringValue = defaultValueExtractor.getStringValue(data, field);
+    }
+
+    return stringValue;
   }
-
-
 }

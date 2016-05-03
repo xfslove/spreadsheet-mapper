@@ -2,7 +2,7 @@ package me.excel.tools.importer;
 
 import me.excel.tools.factory.ModelFactory;
 import me.excel.tools.processor.DataProcessor;
-import me.excel.tools.utils.FieldValueSetter;
+import me.excel.tools.setter.CellValueSetter;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +21,7 @@ public interface UserFileImporter {
    *
    * @param setters
    */
-  void addFieldValueSetter(FieldValueSetter... setters);
+  void addCellValueSetter(CellValueSetter... setters);
 
   void setModelFactory(ModelFactory modelFactory);
 }
