@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * excel 模板工厂, 只支持单sheet的导入，多sheet不支持
@@ -216,12 +217,12 @@ public class ExcelTemplate implements FileTemplate {
 
   private String extraPatternFromPrompt(String prompt) {
 
-    for (String supportedFormat : ExcelSupportedDateFormat.getSupportedFormats()) {
-      if (StringUtils.indexOfIgnoreCase(prompt, supportedFormat) != -1) {
-        return supportedFormat;
-      }
-    }
+    List<String> possiblePatterns = ExcelSupportedDateFormat.getSupportedFormats().stream()
+        .filter(supportedFormat -> StringUtils.indexOfIgnoreCase(prompt, supportedFormat) != -1)
+        .collect(Collectors.toList());
 
-    return null;
+    possiblePatterns.sort((pattern, pattern1) -> pattern1.length() - pattern.length());
+
+    return possiblePatterns.isEmpty() ? null : possiblePatterns.get(0);
   }
 }

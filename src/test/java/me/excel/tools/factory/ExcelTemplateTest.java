@@ -37,7 +37,7 @@ public class ExcelTemplateTest {
     excelTemplate.setRequiredFields("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
 
     excelTemplate.addCellValidator(
-        new LocalDateValidator("student.enrollDate"),
+        new LocalDateValidator("student.enrollDate", "yyyy-MM-dd"),
         new BooleanValidator("student.inSchool"),
         new IntValidator("student.age")
     );
@@ -76,7 +76,7 @@ public class ExcelTemplateTest {
     ExcelTemplate excelTemplate = new ExcelTemplate();
 
     excelTemplate.addCellValidator(
-        new LocalDateValidator("student.enrollDate"),
+        new LocalDateValidator("student.enrollDate", "yyyy-MM-dd"),
         new BooleanValidator("student.inSchool"),
         new IntValidator("student.age")
     );

@@ -10,18 +10,21 @@ import org.joda.time.format.DateTimeFormatter;
  */
 public class LocalDateValidator extends AbstractCellValidator {
 
-  public LocalDateValidator(String field) {
-    super(field, "格式应该为: yyyy-MM-dd", "yyyy-MM-dd");
+  private String format;
+
+  public LocalDateValidator(String field, String format) {
+    super(field, "格式应该为: " + format, format);
+    this.format = format;
   }
 
-  public LocalDateValidator(String field, String errorMessage, String prompt) {
+  public LocalDateValidator(String field, String format, String errorMessage, String prompt) {
     super(field, errorMessage, prompt);
+    this.format = format;
   }
-
   @Override
-  protected boolean customValidate(ExcelCell excelCell) throws SkipValidateException {
+  protected boolean customValidate(ExcelCell excelCell) {
 
-    DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+    DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(format);
 
     try {
       dateTimeFormatter.parseLocalDate(excelCell.getValue());
