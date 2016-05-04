@@ -1,15 +1,15 @@
 package me.excel.tools.extractor;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * Created by hanwen on 5/3/16.
  */
-public class CommonValueExtractor extends AbstractCellValueExtractor {
+public class CommonValueExtractor<D> extends AbstractCellValueExtractor {
 
-  protected BiFunction<Object, String, String> stringValueGetter;
+  protected Function<D, String> stringValueGetter;
 
-  public CommonValueExtractor(String matchField, BiFunction<Object, String, String> stringValueGetter) {
+  public CommonValueExtractor(String matchField, Function<D, String> stringValueGetter) {
     super(matchField);
     this.stringValueGetter = stringValueGetter;
   }
@@ -19,6 +19,6 @@ public class CommonValueExtractor extends AbstractCellValueExtractor {
     if (stringValueGetter == null) {
       return null;
     }
-    return stringValueGetter.apply(data, field);
+    return stringValueGetter.apply((D) data);
   }
 }

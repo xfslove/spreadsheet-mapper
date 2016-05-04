@@ -14,9 +14,9 @@ public class ExcelConstants {
 
   public static final String FULL_LOCAL_DATE_PATTERN = "yyyy-MM-dd";
 
-  public static final String LOCAL_DATE_WITH_YEAR_MONTH_PATTERN = "yyyy-MM-dd";
+  public static final String LOCAL_DATE_WITH_YEAR_MONTH_PATTERN = "yyyy-MM";
 
-  public static final String LOCAL_DATE_WITH_YEAR_PATTERN = "yyyy-MM-dd";
+  public static final String LOCAL_DATE_WITH_YEAR_PATTERN = "yyyy";
 
   public static final String FULL_LOCAL_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 

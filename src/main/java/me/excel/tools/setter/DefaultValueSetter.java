@@ -21,7 +21,7 @@ import static me.excel.tools.FieldUtils.getFieldWithoutPrefix;
 
 /**
  * default object value setter
- *
+ * <p>
  * Created by hanwen on 15-12-18.
  */
 public class DefaultValueSetter {
@@ -53,11 +53,12 @@ public class DefaultValueSetter {
   private boolean matches(Object data, ExcelCell cell) {
     Class fieldType = FieldUtils.getFieldType(data.getClass(), getFieldWithoutPrefix(cell.getField()).split("\\."));
 
-    if (Integer.class.isAssignableFrom(fieldType) || int.class.isAssignableFrom(fieldType) ||
-        Long.class.isAssignableFrom(fieldType) || long.class.isAssignableFrom(fieldType) ||
-        Double.class.isAssignableFrom(fieldType) || double.class.isAssignableFrom(fieldType) ||
-        Float.class.isAssignableFrom(fieldType) || float.class.isAssignableFrom(fieldType) ||
-        String.class.isAssignableFrom(fieldType)) {
+    if (fieldType != null &&
+        (Integer.class.equals(fieldType) || int.class.equals(fieldType) ||
+         Long.class.equals(fieldType) || long.class.equals(fieldType) ||
+         Double.class.equals(fieldType) || double.class.equals(fieldType) ||
+         Float.class.equals(fieldType) || float.class.equals(fieldType) ||
+         String.class.equals(fieldType))) {
       return true;
     }
 

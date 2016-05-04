@@ -1,5 +1,6 @@
 package me.excel.tools.setter;
 
+import me.excel.tools.FieldUtils;
 import me.excel.tools.model.excel.ExcelCell;
 
 import java.util.function.BiConsumer;
@@ -24,6 +25,24 @@ public class CommonValueSetter<D> extends AbstractCellValueSetter {
 
   @Override
   public void set(Object data, ExcelCell excelCell) {
-    valueSetter.accept((D) data, excelCell);
+    boolean isNullSet = false;
+    if (excelCell.getValue() == null) {
+      isNullSet = setNullValue(data, excelCell.getField());
+    }
+    if (!isNullSet) {
+      valueSetter.accept((D) data, excelCell);
+    }
+  }
+
+  private boolean setNullValue(Object data, String fieldName) {
+
+    Class fieldType = FieldUtils.getFieldType(data.getClass(), FieldUtils.getFieldWithoutPrefix(fieldName).split("\\."));
+
+    if (fieldType != null) {
+      // 已在reflectValueSetter中处理过
+      return true;
+    }
+
+    return false;
   }
 }
