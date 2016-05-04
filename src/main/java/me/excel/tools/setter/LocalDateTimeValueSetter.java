@@ -29,7 +29,8 @@ public class LocalDateTimeValueSetter extends AbstractCellValueSetter {
   public void set(Object data, ExcelCell excelCell) {
     try {
       DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(pattern);
-      PropertyUtils.setProperty(data, getFieldWithoutPrefix(excelCell.getField()), dateTimeFormatter.parseLocalDateTime(excelCell.getValue()));
+      String value = excelCell.getValue();
+      PropertyUtils.setProperty(data, getFieldWithoutPrefix(excelCell.getField()), value == null ? null : dateTimeFormatter.parseLocalDateTime(value));
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new ExcelImportException(e);
