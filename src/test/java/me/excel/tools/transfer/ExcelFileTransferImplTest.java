@@ -20,7 +20,7 @@ public class ExcelFileTransferImplTest {
     InputStream excelIs = this.getClass().getResourceAsStream("test.xlsx");
 
     ExcelFileTransferImpl transfer = new ExcelFileTransferImpl();
-    transfer.transfer(true, excelIs);
+    transfer.transfer(excelIs);
 
     ExcelWorkbook excelWorkbook = transfer.excelWorkbook;
 

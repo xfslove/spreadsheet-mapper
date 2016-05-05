@@ -1,26 +1,15 @@
 package me.excel.tools.factory;
 
-import me.excel.tools.ExcelSupportedDateFormat;
-import me.excel.tools.extractor.BooleanZhExtractor;
-import me.excel.tools.extractor.LocalDateExtractor;
-import me.excel.tools.extractor.LocalDateTimeExtractor;
 import me.excel.tools.importer.ExcelFileImporter;
 import me.excel.tools.importer.UserFileImporter;
 import me.excel.tools.model.excel.ExcelWorkbook;
-import me.excel.tools.setter.BooleanValueSetter;
-import me.excel.tools.setter.LocalDateTimeValueSetter;
-import me.excel.tools.setter.LocalDateValueSetter;
 import me.excel.tools.transfer.ExcelFileTransfer;
 import me.excel.tools.transfer.ExcelFileTransferImpl;
 import me.excel.tools.validator.ExcelFileValidator;
 import me.excel.tools.validator.UserFileValidator;
-import me.excel.tools.validator.cell.BooleanValidator;
 import me.excel.tools.validator.cell.CellValidator;
-import me.excel.tools.validator.cell.LocalDateTimeValidator;
-import me.excel.tools.validator.cell.LocalDateValidator;
 import me.excel.tools.validator.row.RowValidator;
 import me.excel.tools.validator.workbook.*;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * excel 模板工厂, 只支持单sheet的导入，多sheet不支持
@@ -71,7 +59,7 @@ public class ExcelTemplate implements FileTemplate {
 
     this.userFileFactory = new ExcelFileFactory(this);
 
-    this.userFileImporter = new ExcelFileImporter(excelFileTransfer);
+    this.userFileImporter = new ExcelFileImporter(this, excelFileTransfer);
 
     this.userFileValidator = new ExcelFileValidator(this, excelFileTransfer);
   }
@@ -110,8 +98,6 @@ public class ExcelTemplate implements FileTemplate {
     }
     for (CellValidator validator : validators) {
       this.cellValidators.add(validator);
-      addDefaultValueExtractor(validator);
-      addDefaultValueSetter(validator);
     }
   }
 
@@ -142,7 +128,7 @@ public class ExcelTemplate implements FileTemplate {
     }
 
     FileInputStream inputStream = new FileInputStream(excel);
-    ExcelWorkbook excelWorkbook = excelFileTransfer.transfer(false, inputStream);
+    ExcelWorkbook excelWorkbook = excelFileTransfer.transfer(inputStream);
 
     return excelWorkbook.getFirstSheet().getDistinctCellValuesOfField(field);
   }
@@ -191,38 +177,4 @@ public class ExcelTemplate implements FileTemplate {
     return this.userFileImporter;
   }
 
-  private void addDefaultValueSetter(CellValidator validator) {
-    String matchField = validator.getMatchField();
-    String dateTimePattern = extraPatternFromPrompt(validator.getPrompt());
-    if (validator instanceof BooleanValidator) {
-      userFileImporter.addCellValueSetter(new BooleanValueSetter(matchField));
-    } else if (validator instanceof LocalDateValidator) {
-      userFileImporter.addCellValueSetter(new LocalDateValueSetter(matchField, dateTimePattern));
-    } else if (validator instanceof LocalDateTimeValidator) {
-      userFileImporter.addCellValueSetter(new LocalDateTimeValueSetter(matchField, dateTimePattern));
-    }
-  }
-
-  private void addDefaultValueExtractor(CellValidator validator) {
-    String matchField = validator.getMatchField();
-    String dateTimePattern = extraPatternFromPrompt(validator.getPrompt());
-    if (validator instanceof BooleanValidator) {
-      userFileFactory.addValueExtractors(new BooleanZhExtractor(matchField));
-    } else if (validator instanceof LocalDateValidator) {
-      userFileFactory.addValueExtractors(new LocalDateExtractor(matchField, dateTimePattern));
-    } else if (validator instanceof LocalDateTimeValidator) {
-      userFileFactory.addValueExtractors(new LocalDateTimeExtractor(matchField, dateTimePattern));
-    }
-  }
-
-  private String extraPatternFromPrompt(String prompt) {
-
-    List<String> possiblePatterns = ExcelSupportedDateFormat.getSupportedFormats().stream()
-        .filter(supportedFormat -> StringUtils.indexOfIgnoreCase(prompt, supportedFormat) != -1)
-        .collect(Collectors.toList());
-
-    possiblePatterns.sort((pattern, pattern1) -> pattern1.length() - pattern.length());
-
-    return possiblePatterns.isEmpty() ? null : possiblePatterns.get(0);
-  }
 }

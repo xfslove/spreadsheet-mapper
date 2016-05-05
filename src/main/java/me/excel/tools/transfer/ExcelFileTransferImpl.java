@@ -30,12 +30,7 @@ public class ExcelFileTransferImpl implements ExcelFileTransfer {
    * @param inputStream 会自动关闭
    */
   @Override
-  public ExcelWorkbook transfer(boolean reload, InputStream inputStream) {
-
-    // reduce file io
-    if (!reload) {
-      return excelWorkbook;
-    }
+  public ExcelWorkbook transfer(InputStream inputStream) {
 
     try (Workbook workbook = WorkbookFactory.create(inputStream)) {
 

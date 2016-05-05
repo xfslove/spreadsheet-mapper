@@ -1,10 +1,14 @@
 package me.excel.tools.factory;
 
+import me.excel.tools.ExcelSupportedDateFormat;
 import me.excel.tools.exporter.ExcelFileExporter;
 import me.excel.tools.exporter.UserFileExporter;
-import me.excel.tools.extractor.CellValueExtractor;
-import me.excel.tools.extractor.DefaultValueExtractor;
+import me.excel.tools.extractor.*;
 import me.excel.tools.model.excel.*;
+import me.excel.tools.validator.cell.BooleanValidator;
+import me.excel.tools.validator.cell.CellValidator;
+import me.excel.tools.validator.cell.LocalDateTimeValidator;
+import me.excel.tools.validator.cell.LocalDateValidator;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -13,6 +17,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -78,6 +83,9 @@ public class ExcelFileFactory implements UserFileFactory {
 
   @Override
   public void generate(File excel, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException {
+
+    addDefaultValueExtractors();
+
     ExcelWorkbook excelWorkbook = createWorkbook(createTitles, createFields, createPrompts);
     if (excelWorkbook == null) {
       throw new IllegalArgumentException("workbook is null");
@@ -194,15 +202,46 @@ public class ExcelFileFactory implements UserFileFactory {
 
   private String getFieldValue(Object data, String field) {
 
-    String stringValue = defaultValueExtractor.getStringValue(data, field);
-
-    // default extractor first
     for (CellValueExtractor cellValueExtractor : cellValueExtractors) {
       if (cellValueExtractor.matches(field)) {
-        stringValue = cellValueExtractor.getStringValue(data, field);
+        return cellValueExtractor.getStringValue(data, field);
       }
     }
 
-    return stringValue;
+    return defaultValueExtractor.getStringValue(data, field);
+  }
+
+  private void addDefaultValueExtractors() {
+
+    Set<String> customExtractors = cellValueExtractors.stream().map(extractor -> extractor.getMatchField()).collect(Collectors.toSet());
+
+    for (CellValidator validator : fileTemplate.getCellValidators()) {
+
+      String matchField = validator.getMatchField();
+
+      if (customExtractors.contains(matchField)) {
+        continue;
+      }
+
+      String dateTimePattern = extraPatternFromPrompt(validator.getPrompt());
+      if (validator instanceof BooleanValidator) {
+        addValueExtractors(new BooleanZhExtractor(matchField));
+      } else if (validator instanceof LocalDateValidator) {
+        addValueExtractors(new LocalDateExtractor(matchField, dateTimePattern));
+      } else if (validator instanceof LocalDateTimeValidator) {
+        addValueExtractors(new LocalDateTimeExtractor(matchField, dateTimePattern));
+      }
+    }
+  }
+
+  private String extraPatternFromPrompt(String prompt) {
+
+    List<String> possiblePatterns = ExcelSupportedDateFormat.getSupportedFormats().stream()
+        .filter(supportedFormat -> StringUtils.indexOfIgnoreCase(prompt, supportedFormat) != -1)
+        .collect(Collectors.toList());
+
+    possiblePatterns.sort((pattern, pattern1) -> pattern1.length() - pattern.length());
+
+    return possiblePatterns.isEmpty() ? null : possiblePatterns.get(0);
   }
 }

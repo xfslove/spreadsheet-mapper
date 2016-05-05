@@ -16,6 +16,6 @@ public interface ExcelFileTransfer {
    *
    * @param inputStream
    */
-  ExcelWorkbook transfer(boolean reload, InputStream inputStream);
+  ExcelWorkbook transfer(InputStream inputStream);
 
 }

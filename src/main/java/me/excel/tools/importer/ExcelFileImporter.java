@@ -1,18 +1,26 @@
 package me.excel.tools.importer;
 
+import me.excel.tools.ExcelSupportedDateFormat;
+import me.excel.tools.factory.FileTemplate;
 import me.excel.tools.factory.ModelFactory;
 import me.excel.tools.model.excel.ExcelCell;
 import me.excel.tools.model.excel.ExcelSheet;
 import me.excel.tools.processor.DataProcessor;
+import me.excel.tools.setter.*;
 import me.excel.tools.transfer.ExcelFileTransfer;
-import me.excel.tools.setter.CellValueSetter;
-import me.excel.tools.setter.DefaultValueSetter;
+import me.excel.tools.validator.cell.BooleanValidator;
+import me.excel.tools.validator.cell.CellValidator;
+import me.excel.tools.validator.cell.LocalDateTimeValidator;
+import me.excel.tools.validator.cell.LocalDateValidator;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * excel 文件导入器
@@ -20,6 +28,8 @@ import java.util.List;
  * Created by hanwen on 15-12-16.
  */
 public class ExcelFileImporter implements UserFileImporter {
+
+  protected FileTemplate fileTemplate;
 
   protected ExcelFileTransfer excelFileTransfer;
 
@@ -29,7 +39,8 @@ public class ExcelFileImporter implements UserFileImporter {
 
   protected DefaultValueSetter defaultValueSetter = new DefaultValueSetter();
 
-  public ExcelFileImporter(ExcelFileTransfer excelFileTransfer) {
+  public ExcelFileImporter(FileTemplate fileTemplate, ExcelFileTransfer excelFileTransfer) {
+    this.fileTemplate = fileTemplate;
     this.excelFileTransfer = excelFileTransfer;
   }
 
@@ -45,7 +56,9 @@ public class ExcelFileImporter implements UserFileImporter {
 
     FileInputStream inputStream = new FileInputStream(excel);
 
-    ExcelSheet excelSheet = excelFileTransfer.transfer(true, inputStream).getFirstSheet();
+    ExcelSheet excelSheet = excelFileTransfer.transfer(inputStream).getFirstSheet();
+
+    addDefaultValueSetters();
 
     List models = new ArrayList<>();
     excelSheet.getDataRows().forEach(row -> {
@@ -57,9 +70,12 @@ public class ExcelFileImporter implements UserFileImporter {
 
       for (ExcelCell excelCell : row.getCells()) {
 
-        cellValueSetters.stream()
-            .filter(customValueSetter -> customValueSetter.matches(excelCell))
-            .forEach(customValueSetter -> customValueSetter.set(model, excelCell));
+        for (CellValueSetter customValueSetter : cellValueSetters) {
+          if (customValueSetter.matches(excelCell)) {
+            customValueSetter.set(model, excelCell);
+            break;
+          }
+        }
       }
 
       dataProcessor.postProcessing(model);
@@ -84,5 +100,38 @@ public class ExcelFileImporter implements UserFileImporter {
   @Override
   public void setModelFactory(ModelFactory modelFactory) {
     this.modelFactory = modelFactory;
+  }
+
+  private void addDefaultValueSetters() {
+
+    Set<String> customSetters = cellValueSetters.stream().map(setter -> setter.getMatchField()).collect(Collectors.toSet());
+
+    for (CellValidator validator : fileTemplate.getCellValidators()) {
+      String matchField = validator.getMatchField();
+
+      if (customSetters.contains(matchField)) {
+        continue;
+      }
+
+      String dateTimePattern = extraPatternFromPrompt(validator.getPrompt());
+      if (validator instanceof BooleanValidator) {
+        addCellValueSetter(new BooleanValueSetter(matchField));
+      } else if (validator instanceof LocalDateValidator) {
+        addCellValueSetter(new LocalDateValueSetter(matchField, dateTimePattern));
+      } else if (validator instanceof LocalDateTimeValidator) {
+        addCellValueSetter(new LocalDateTimeValueSetter(matchField, dateTimePattern));
+      }
+    }
+  }
+
+  protected String extraPatternFromPrompt(String prompt) {
+
+    List<String> possiblePatterns = ExcelSupportedDateFormat.getSupportedFormats().stream()
+        .filter(supportedFormat -> StringUtils.indexOfIgnoreCase(prompt, supportedFormat) != -1)
+        .collect(Collectors.toList());
+
+    possiblePatterns.sort((pattern, pattern1) -> pattern1.length() - pattern.length());
+
+    return possiblePatterns.isEmpty() ? null : possiblePatterns.get(0);
   }
 }
