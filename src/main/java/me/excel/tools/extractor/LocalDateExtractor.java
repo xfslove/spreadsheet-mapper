@@ -1,5 +1,6 @@
 package me.excel.tools.extractor;
 
+import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.joda.time.LocalDate;
@@ -28,8 +29,11 @@ public class LocalDateExtractor extends AbstractCellValueExtractor {
     try {
       LocalDate value = (LocalDate) PropertyUtils.getProperty(data, getFieldWithoutPrefix(field));
 
-      return value.toString(pattern);
+      return value == null ? null : value.toString(pattern);
 
+    } catch (NestedNullException e) {
+      LOGGER.trace(e.getMessage());
+      return null;
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new IllegalArgumentException(e);

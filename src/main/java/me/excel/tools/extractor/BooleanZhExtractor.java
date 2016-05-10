@@ -1,6 +1,7 @@
 package me.excel.tools.extractor;
 
 
+import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -30,8 +31,11 @@ public class BooleanZhExtractor extends AbstractCellValueExtractor {
       } else if (Boolean.FALSE.equals(value)) {
         return "否";
       } else {
-        return "";
+        return null;
       }
+    } catch (NestedNullException e) {
+      LOGGER.trace(e.getMessage());
+      return null;
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new IllegalArgumentException(e);

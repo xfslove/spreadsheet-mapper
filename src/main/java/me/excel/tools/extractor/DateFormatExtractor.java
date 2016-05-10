@@ -1,6 +1,7 @@
 package me.excel.tools.extractor;
 
 import me.excel.tools.FieldUtils;
+import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -34,7 +35,10 @@ public class DateFormatExtractor extends AbstractCellValueExtractor {
 
       return value == null ? null : simpleDateFormat.format(value);
 
-    } catch (Exception e) {
+    }catch (NestedNullException e) {
+      LOGGER.trace(e.getMessage());
+      return null;
+    }  catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new IllegalArgumentException(e);
     }
