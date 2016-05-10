@@ -24,4 +24,6 @@ public class ExcelConstants {
 
   public static final String LOCAL_DATE_TIME_WITH_HOUR_PATTERN = "yyyy-MM-dd HH";
 
+  public static final String ERROR_PATTERN = "error-date-pattern";
+
 }
