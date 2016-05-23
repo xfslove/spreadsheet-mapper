@@ -32,7 +32,7 @@ public class LocalDateExtractor extends AbstractCellValueExtractor {
       return value == null ? null : value.toString(pattern);
 
     } catch (NestedNullException e) {
-      LOGGER.trace(e.getMessage());
+      LOGGER.trace(ExceptionUtils.getStackTrace(e));
       return null;
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));

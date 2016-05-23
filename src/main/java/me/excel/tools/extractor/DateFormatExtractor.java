@@ -36,7 +36,7 @@ public class DateFormatExtractor extends AbstractCellValueExtractor {
       return value == null ? null : simpleDateFormat.format(value);
 
     }catch (NestedNullException e) {
-      LOGGER.trace(e.getMessage());
+      LOGGER.trace(ExceptionUtils.getStackTrace(e));
       return null;
     }  catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));

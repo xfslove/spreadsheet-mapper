@@ -23,7 +23,7 @@ public class DefaultValueExtractor {
     try {
       return BeanUtils.getProperty(data, getFieldWithoutPrefix(field));
     } catch (NestedNullException e) {
-      LOGGER.trace(e.getMessage());
+      LOGGER.trace(ExceptionUtils.getStackTrace(e));
       return null;
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));

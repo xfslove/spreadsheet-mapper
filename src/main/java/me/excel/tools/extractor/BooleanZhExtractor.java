@@ -34,7 +34,7 @@ public class BooleanZhExtractor extends AbstractCellValueExtractor {
         return null;
       }
     } catch (NestedNullException e) {
-      LOGGER.trace(e.getMessage());
+      LOGGER.trace(ExceptionUtils.getStackTrace(e));
       return null;
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
