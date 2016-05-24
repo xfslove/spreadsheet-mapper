@@ -37,8 +37,11 @@ public class ExcelFileFactory implements UserFileFactory {
 
   protected FileTemplate fileTemplate;
 
-  public ExcelFileFactory(FileTemplate fileTemplate) {
+  protected File file;
+
+  public ExcelFileFactory(FileTemplate fileTemplate, File file) {
     this.fileTemplate = fileTemplate;
+    this.file = file;
   }
 
   @Override
@@ -77,12 +80,12 @@ public class ExcelFileFactory implements UserFileFactory {
   }
 
   @Override
-  public void generate(File excel) throws IOException {
-    generate(excel, true, true, true);
+  public void generate() throws IOException {
+    generate(true, true, true);
   }
 
   @Override
-  public void generate(File excel, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException {
+  public void generate(boolean createTitles, boolean createFields, boolean createPrompts) throws IOException {
 
     addDefaultValueExtractors();
 
@@ -100,7 +103,7 @@ public class ExcelFileFactory implements UserFileFactory {
     });
 
     UserFileExporter excelFileExporter = new ExcelFileExporter(excelWorkbook);
-    try (OutputStream outputStream = new FileOutputStream(excel)) {
+    try (OutputStream outputStream = new FileOutputStream(file)) {
       excelFileExporter.export(outputStream);
     }
   }

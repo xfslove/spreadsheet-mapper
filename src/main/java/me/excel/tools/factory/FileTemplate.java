@@ -6,7 +6,6 @@ import me.excel.tools.validator.cell.CellValidator;
 import me.excel.tools.validator.row.RowValidator;
 import me.excel.tools.validator.workbook.WorkbookValidator;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -63,12 +62,11 @@ public interface FileTemplate {
   /**
    * 得到file中field字段的所有值
    *
-   * @param file
    * @param field
    * @return
    * @throws IOException
    */
-  Set<String> getCellValuesOfField(File file, String field) throws IOException;
+  Set<String> getCellValuesOfField(String field);
 
   int getMinFieldCount();
 

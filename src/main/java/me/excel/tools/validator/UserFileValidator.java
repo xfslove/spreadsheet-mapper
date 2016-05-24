@@ -1,8 +1,5 @@
 package me.excel.tools.validator;
 
-import java.io.File;
-import java.io.IOException;
-
 /**
  * file validator
  * <p>
@@ -10,7 +7,7 @@ import java.io.IOException;
  */
 public interface UserFileValidator {
 
-  boolean validate(File file) throws IOException;
+  boolean validate();
 
-  void writeFailureMessageComments(File file) throws IOException;
+  void writeFailureMessageComments();
 }

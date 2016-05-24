@@ -4,9 +4,6 @@ import me.excel.tools.factory.ModelFactory;
 import me.excel.tools.processor.DataProcessor;
 import me.excel.tools.setter.CellValueSetter;
 
-import java.io.File;
-import java.io.IOException;
-
 /**
  * file importer
  *
@@ -14,7 +11,7 @@ import java.io.IOException;
  */
 public interface UserFileImporter {
 
-  void process(File file, DataProcessor dataProcessor) throws IOException;
+  void process(DataProcessor dataProcessor);
 
   /**
    * 设置自定义的value setter

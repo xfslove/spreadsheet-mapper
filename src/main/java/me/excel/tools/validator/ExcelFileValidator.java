@@ -4,14 +4,10 @@ import me.excel.tools.exporter.ExcelCommentUtils;
 import me.excel.tools.factory.FileTemplate;
 import me.excel.tools.model.excel.*;
 import me.excel.tools.model.message.ErrorMessage;
-import me.excel.tools.transfer.ExcelFileTransfer;
 import me.excel.tools.validator.cell.CellValidator;
 import me.excel.tools.validator.row.RowValidator;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,24 +19,24 @@ public class ExcelFileValidator implements UserFileValidator {
 
   protected FileTemplate importTemplate;
 
-  protected ExcelFileTransfer excelFileTransfer;
+  protected ExcelWorkbook excelWorkbook;
+
+  protected File file;
 
   protected List<ErrorMessage> errorMessages = new ArrayList<>();
 
-  public ExcelFileValidator(FileTemplate fileTemplate, ExcelFileTransfer excelFileTransfer) {
+  public ExcelFileValidator(FileTemplate fileTemplate, ExcelWorkbook excelWorkbook, File file) {
     this.importTemplate = fileTemplate;
-    this.excelFileTransfer = excelFileTransfer;
+    this.excelWorkbook = excelWorkbook;
+    this.file = file;
   }
 
   @Override
-  public boolean validate(File excel) throws IOException {
+  public boolean validate() {
 
-    if (excel == null) {
+    if (excelWorkbook == null) {
       throw new IllegalArgumentException("excel is null");
     }
-
-    InputStream inputStream = new FileInputStream(excel);
-    ExcelWorkbook excelWorkbook = excelFileTransfer.transfer(inputStream);
 
     validateWorkbook(excelWorkbook);
     if (!errorMessages.isEmpty()) {
@@ -65,7 +61,7 @@ public class ExcelFileValidator implements UserFileValidator {
   }
 
   @Override
-  public void writeFailureMessageComments(File excel) throws IOException {
+  public void writeFailureMessageComments(){
 
     if (errorMessages.isEmpty()) {
       return;
@@ -83,7 +79,7 @@ public class ExcelFileValidator implements UserFileValidator {
       excelCellComment.addComment(errorMessage.getContent());
       commentList.add(excelCellComment);
     });
-    ExcelCommentUtils.writeToFile(excel, commentList);
+    ExcelCommentUtils.writeToFile(file, commentList);
   }
 
   private void validateCell(ExcelCell cell) {

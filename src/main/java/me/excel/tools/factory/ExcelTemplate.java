@@ -44,11 +44,13 @@ public class ExcelTemplate implements FileTemplate {
 
   protected UserFileImporter userFileImporter;
 
-  protected ExcelFileTransfer excelFileTransfer;
+  protected ExcelWorkbook excelWorkbook;
 
-  public ExcelTemplate() {
+  public ExcelTemplate(File file) throws IOException {
 
-    this.excelFileTransfer = new ExcelFileTransferImpl();
+    ExcelFileTransfer excelFileTransfer = new ExcelFileTransferImpl();
+
+    this.excelWorkbook = excelFileTransfer.transfer(new FileInputStream(file));
 
     addWorkbookValidator(
         new SheetSizeValidator(1),
@@ -57,11 +59,11 @@ public class ExcelTemplate implements FileTemplate {
         new FieldCountValidator(this.minFieldCount)
     );
 
-    this.userFileFactory = new ExcelFileFactory(this);
+    this.userFileFactory = new ExcelFileFactory(this, file);
 
-    this.userFileImporter = new ExcelFileImporter(this, excelFileTransfer);
+    this.userFileImporter = new ExcelFileImporter(this, excelWorkbook);
 
-    this.userFileValidator = new ExcelFileValidator(this, excelFileTransfer);
+    this.userFileValidator = new ExcelFileValidator(this, excelWorkbook, file);
   }
 
   @Override
@@ -122,13 +124,10 @@ public class ExcelTemplate implements FileTemplate {
   }
 
   @Override
-  public Set<String> getCellValuesOfField(File excel, String field) throws IOException {
-    if (excel == null) {
+  public Set<String> getCellValuesOfField(String field) {
+    if (excelWorkbook == null) {
       return Collections.emptySet();
     }
-
-    FileInputStream inputStream = new FileInputStream(excel);
-    ExcelWorkbook excelWorkbook = excelFileTransfer.transfer(inputStream);
 
     return excelWorkbook.getFirstSheet().getDistinctCellValuesOfField(field);
   }

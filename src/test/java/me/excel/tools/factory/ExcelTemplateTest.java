@@ -32,7 +32,7 @@ public class ExcelTemplateTest {
     URL resource = this.getClass().getResource("test.xlsx");
     File excel = new File(resource.getFile());
 
-    ExcelTemplate excelTemplate = new ExcelTemplate();
+    ExcelTemplate excelTemplate = new ExcelTemplate(excel);
     excelTemplate.setFieldScope("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
     excelTemplate.setRequiredFields("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
 
@@ -44,12 +44,12 @@ public class ExcelTemplateTest {
 
     UserFileValidator userFileValidator = excelTemplate.getUserFileValidator();
 
-    assertTrue(userFileValidator.validate(excel));
+    assertTrue(userFileValidator.validate());
 
     UserFileImporter userFileImporter = excelTemplate.getUserFileImporter();
 
     userFileImporter.setModelFactory(new StudentModelFactoryTest());
-    userFileImporter.process(excel, new StudentDataProcessorTest());
+    userFileImporter.process(new StudentDataProcessorTest());
   }
 
   @Test
@@ -73,7 +73,9 @@ public class ExcelTemplateTest {
     list.add(s1);
     list.add(s2);
 
-    ExcelTemplate excelTemplate = new ExcelTemplate();
+    File file = TempFile.createTempFile("test", ".xlsx");
+
+    ExcelTemplate excelTemplate = new ExcelTemplate(file);
 
     excelTemplate.addCellValidator(
         new LocalDateValidator("student.enrollDate", "yyyy-MM-dd"),
@@ -87,9 +89,7 @@ public class ExcelTemplateTest {
     userFileFactory.setFields("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
     userFileFactory.setTitles("学号", "年龄", "姓名", "入学日期", "是否在校");
 
-    File file = TempFile.createTempFile("test", ".xlsx");
-
-    userFileFactory.generate(file);
+    userFileFactory.generate();
   }
 
   public class StudentDataProcessorTest implements DataProcessor {

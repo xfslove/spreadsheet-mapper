@@ -5,18 +5,15 @@ import me.excel.tools.factory.FileTemplate;
 import me.excel.tools.factory.ModelFactory;
 import me.excel.tools.model.excel.ExcelCell;
 import me.excel.tools.model.excel.ExcelSheet;
+import me.excel.tools.model.excel.ExcelWorkbook;
 import me.excel.tools.processor.DataProcessor;
 import me.excel.tools.setter.*;
-import me.excel.tools.transfer.ExcelFileTransfer;
 import me.excel.tools.validator.cell.BooleanValidator;
 import me.excel.tools.validator.cell.CellValidator;
 import me.excel.tools.validator.cell.LocalDateTimeValidator;
 import me.excel.tools.validator.cell.LocalDateValidator;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +28,7 @@ public class ExcelFileImporter implements UserFileImporter {
 
   protected FileTemplate fileTemplate;
 
-  protected ExcelFileTransfer excelFileTransfer;
+  protected ExcelWorkbook excelWorkbook;
 
   protected ModelFactory modelFactory;
 
@@ -39,24 +36,22 @@ public class ExcelFileImporter implements UserFileImporter {
 
   protected DefaultValueSetter defaultValueSetter = new DefaultValueSetter();
 
-  public ExcelFileImporter(FileTemplate fileTemplate, ExcelFileTransfer excelFileTransfer) {
+  public ExcelFileImporter(FileTemplate fileTemplate, ExcelWorkbook excelWorkbook) {
     this.fileTemplate = fileTemplate;
-    this.excelFileTransfer = excelFileTransfer;
+    this.excelWorkbook = excelWorkbook;
   }
 
   @Override
-  public void process(File excel, DataProcessor dataProcessor) throws IOException {
+  public void process(DataProcessor dataProcessor) {
 
-    if (excel == null) {
-      throw new IllegalArgumentException("file is null");
+    if (excelWorkbook == null) {
+      throw new IllegalArgumentException("excel is null");
     }
     if (dataProcessor == null) {
       throw new IllegalArgumentException("dataProcessor is null");
     }
 
-    FileInputStream inputStream = new FileInputStream(excel);
-
-    ExcelSheet excelSheet = excelFileTransfer.transfer(inputStream).getFirstSheet();
+    ExcelSheet excelSheet = excelWorkbook.getFirstSheet();
 
     addDefaultValueSetters();
 

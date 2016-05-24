@@ -2,7 +2,6 @@ package me.excel.tools.factory;
 
 import me.excel.tools.extractor.CellValueExtractor;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -44,10 +43,9 @@ public interface UserFileFactory {
   /**
    * 生成文件
    *
-   * @param file
    * @throws IOException
    */
-  void generate(File file) throws IOException;
+  void generate() throws IOException;
 
-  void generate(File excel, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException;
+  void generate(boolean createTitles, boolean createFields, boolean createPrompts) throws IOException;
 }
