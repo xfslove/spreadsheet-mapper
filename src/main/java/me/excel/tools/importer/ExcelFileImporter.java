@@ -57,6 +57,8 @@ public class ExcelFileImporter implements UserFileImporter {
 
     List models = new ArrayList<>();
     excelSheet.getDataRows().forEach(row -> {
+
+      Object origin = modelFactory.create(row);
       Object model = modelFactory.create(row);
 
       dataProcessor.preProcessing(model);
@@ -73,7 +75,7 @@ public class ExcelFileImporter implements UserFileImporter {
         }
       }
 
-      dataProcessor.postProcessing(model);
+      dataProcessor.postProcessing(origin, model);
 
       models.add(model);
     });

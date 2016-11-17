@@ -100,7 +100,7 @@ public class ExcelTemplateTest {
     }
 
     @Override
-    public void postProcessing(Object model) {
+    public void postProcessing(Object origin, Object model) {
 
     }
 

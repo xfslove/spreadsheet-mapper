@@ -1,6 +1,8 @@
 package me.excel.tools.processor;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -8,24 +10,37 @@ import java.util.function.Consumer;
  */
 public class CommonDataProcessor<D> implements DataProcessor {
 
-  protected Consumer<D> modelAcceptor;
+  protected Consumer<D> preAcceptor;
 
-  public CommonDataProcessor(Consumer<D> modelAcceptor) {
-    this.modelAcceptor = modelAcceptor;
+  protected BiConsumer<D, D> postAcceptor;
+
+  protected Consumer<D> handleAcceptor;
+
+  public CommonDataProcessor(Consumer<D> handleAcceptor) {
+    this.handleAcceptor = handleAcceptor;
   }
 
   @Override
   public void preProcessing(Object model) {
-    // do nothing
+    Optional<Consumer<D>> preAcceptor = Optional.ofNullable(this.preAcceptor);
+    if (preAcceptor.isPresent()) {
+      preAcceptor.get().accept((D) model);
+    }
   }
 
   @Override
-  public void postProcessing(Object model) {
-    // do nothing
+  public void postProcessing(Object origin, Object model) {
+    Optional<BiConsumer<D, D>> postAcceptor = Optional.ofNullable(this.postAcceptor);
+    if (postAcceptor.isPresent()) {
+      postAcceptor.get().accept((D) origin, (D) model);
+    }
   }
 
   @Override
   public void handle(List models) {
-    models.forEach(model -> modelAcceptor.accept((D) model));
+    Optional<Consumer<D>> handleAcceptor = Optional.ofNullable(this.handleAcceptor);
+    if (handleAcceptor.isPresent()) {
+      models.forEach(model -> handleAcceptor.get().accept((D) model));
+    }
   }
 }

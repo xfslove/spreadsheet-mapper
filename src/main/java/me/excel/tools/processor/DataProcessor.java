@@ -9,7 +9,7 @@ public interface DataProcessor {
 
   void preProcessing(Object model);
 
-  void postProcessing(Object model);
+  void postProcessing(Object origin, Object model);
 
   void handle(List models);
 }
