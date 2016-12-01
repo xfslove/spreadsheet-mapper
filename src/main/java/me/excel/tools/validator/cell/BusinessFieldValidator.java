@@ -16,10 +16,7 @@ public class BusinessFieldValidator extends CommonCellValidator {
   }
 
   @Override
-  protected boolean customValidate(ExcelCell excelCell) throws SkipValidateException {
-    if (StringUtils.isBlank(excelCell.getValue())) {
-      return false;
-    }
-    return super.customValidate(excelCell);
+  public boolean validate(ExcelCell excelCell) throws SkipValidateException {
+    return !StringUtils.isBlank(excelCell.getValue()) && super.customValidate(excelCell);
   }
 }

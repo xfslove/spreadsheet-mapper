@@ -33,10 +33,7 @@ public abstract class AbstractCellValidator implements CellValidator {
 
   @Override
   public boolean validate(ExcelCell excelCell) throws SkipValidateException {
-    if (StringUtils.isBlank(excelCell.getValue())) {
-      return true;
-    }
-    return customValidate(excelCell);
+    return StringUtils.isBlank(excelCell.getValue()) || customValidate(excelCell);
   }
 
   protected abstract boolean customValidate(ExcelCell excelCell) throws SkipValidateException;
