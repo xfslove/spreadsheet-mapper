@@ -34,11 +34,10 @@ public class NumberScaleValidator extends AbstractCellValidator {
 
     String[] numberPlace = value.split("\\.");
 
-    if (numberPlace.length == 1) {
-      return false;
+    int scale = 0;
+    if (numberPlace.length != 1) {
+      scale = numberPlace[1].length();
     }
-
-    int scale = numberPlace[1].length();
 
     return gte <= scale && scale <= lte;
   }
