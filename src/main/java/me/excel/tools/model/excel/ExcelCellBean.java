@@ -1,6 +1,5 @@
 package me.excel.tools.model.excel;
 
-import me.excel.tools.ExcelConstants;
 import me.excel.tools.ExcelSupportedDateFormat;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -62,7 +61,7 @@ public class ExcelCellBean implements ExcelCell {
         String dateFormat = ExcelSupportedDateFormat.getDateFormat(cell.getCellStyle().getDataFormatString());
 
         if (dateFormat == null) {
-          value = ExcelConstants.ERROR_PATTERN;
+          value = ExcelSupportedDateFormat.ERROR_PATTERN;
         } else {
           SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
           value = simpleDateFormat.format(cell.getDateCellValue());
