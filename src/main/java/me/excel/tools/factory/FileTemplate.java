@@ -32,13 +32,6 @@ public interface FileTemplate {
   void setRequiredFields(String... fields);
 
   /**
-   * 设置最少需要的field数量
-   *
-   * @param count
-   */
-  void setMinFieldCount(int count);
-
-  /**
    * 增加单元格验证器
    *
    * @param validators
@@ -67,8 +60,6 @@ public interface FileTemplate {
    * @throws IOException
    */
   Set<String> getCellValuesOfField(String field);
-
-  int getMinFieldCount();
 
   List<String> getFieldScope();
 

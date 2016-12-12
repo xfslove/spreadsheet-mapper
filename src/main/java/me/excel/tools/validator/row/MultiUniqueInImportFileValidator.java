@@ -23,6 +23,11 @@ public class MultiUniqueInImportFileValidator extends AbstractRowValidator {
     Collections.addAll(this.fields, fields);
   }
 
+  public MultiUniqueInImportFileValidator(String prompt, String errorMessage, String... fields) {
+    super(prompt, errorMessage, fields);
+    Collections.addAll(this.fields, fields);
+  }
+
   public MultiUniqueInImportFileValidator(String prompt, String errorMessage, String[] messageOnFields, String... fields) {
     super(prompt, errorMessage, messageOnFields);
     Collections.addAll(this.fields, fields);

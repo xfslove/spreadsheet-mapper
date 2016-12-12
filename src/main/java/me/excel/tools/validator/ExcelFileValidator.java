@@ -10,6 +10,7 @@ import me.excel.tools.validator.row.RowValidator;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -45,13 +46,13 @@ public class ExcelFileValidator implements UserFileValidator {
 
     excelWorkbook.getSheet(0).getDataRows()
         .forEach(row -> row.getCells()
-            .forEach(cell -> validateCell(cell)));
+            .forEach(this::validateCell));
 
     if (!errorMessages.isEmpty()) {
       return false;
     }
 
-    excelWorkbook.getSheet(0).getDataRows().forEach(row -> validateRow(row));
+    excelWorkbook.getSheet(0).getDataRows().forEach(this::validateRow);
 
     if (!errorMessages.isEmpty()) {
       return false;
@@ -114,6 +115,7 @@ public class ExcelFileValidator implements UserFileValidator {
         if (!rowValidator.validate(row)) {
 
           errorMessages.addAll(rowValidator.getMessageOnCells(row).stream()
+              .filter(Objects::nonNull)
               .map(excelCell -> new ErrorMessage(excelCell, rowValidator.getErrorMessage())).collect(Collectors.toList()));
         }
       } catch (SkipValidateException e) {

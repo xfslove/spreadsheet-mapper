@@ -9,7 +9,10 @@ import me.excel.tools.validator.ExcelFileValidator;
 import me.excel.tools.validator.UserFileValidator;
 import me.excel.tools.validator.cell.CellValidator;
 import me.excel.tools.validator.row.RowValidator;
-import me.excel.tools.validator.workbook.*;
+import me.excel.tools.validator.workbook.FieldScopeValidator;
+import me.excel.tools.validator.workbook.RequireFieldValidator;
+import me.excel.tools.validator.workbook.SheetSizeValidator;
+import me.excel.tools.validator.workbook.WorkbookValidator;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,8 +28,6 @@ import java.util.Set;
  * Created by hanwen on 15-12-16.
  */
 public class ExcelTemplate implements FileTemplate {
-
-  protected int minFieldCount;
 
   protected List<String> fieldScope = new ArrayList<>();
 
@@ -55,8 +56,7 @@ public class ExcelTemplate implements FileTemplate {
     addWorkbookValidator(
         new SheetSizeValidator(1),
         new FieldScopeValidator(this.fieldScope),
-        new RequireFieldValidator(this.requiredFields),
-        new FieldCountValidator(this.minFieldCount)
+        new RequireFieldValidator(this.requiredFields)
     );
 
     this.userFileFactory = new ExcelFileFactory(this, file);
@@ -86,11 +86,6 @@ public class ExcelTemplate implements FileTemplate {
     for (String field : fields) {
       this.requiredFields.add(field);
     }
-  }
-
-  @Override
-  public void setMinFieldCount(int count) {
-    this.minFieldCount = count;
   }
 
   @Override
@@ -130,11 +125,6 @@ public class ExcelTemplate implements FileTemplate {
     }
 
     return excelWorkbook.getFirstSheet().getDistinctCellValuesOfField(field);
-  }
-
-  @Override
-  public int getMinFieldCount() {
-    return this.minFieldCount;
   }
 
   @Override

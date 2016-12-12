@@ -46,7 +46,7 @@ public abstract class AbstractRowValidator implements RowValidator {
   @Override
   public List<ExcelCell> getMessageOnCells(ExcelRow excelRow) {
 
-    return excelRow.getCells().stream().filter(excelCell -> messageOnFields.contains(excelCell.getField())).collect(Collectors.toList());
+    return messageOnFields.stream().map(excelRow::getCell).collect(Collectors.toList());
   }
 
   @Override
