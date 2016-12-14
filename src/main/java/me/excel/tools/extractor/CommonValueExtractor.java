@@ -15,7 +15,7 @@ public class CommonValueExtractor<D> extends AbstractCellValueExtractor {
   }
 
   @Override
-  public String getStringValue(Object data, String field) {
+  public String getStringValue(Object data) {
     if (stringValueGetter == null) {
       return null;
     }

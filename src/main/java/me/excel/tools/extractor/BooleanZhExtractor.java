@@ -21,10 +21,10 @@ public class BooleanZhExtractor extends AbstractCellValueExtractor {
   }
 
   @Override
-  public String getStringValue(Object data, String field) {
+  public String getStringValue(Object data) {
 
     try {
-      Object value = PropertyUtils.getProperty(data, getFieldWithoutPrefix(field));
+      Object value = PropertyUtils.getProperty(data, getFieldWithoutPrefix(getMatchField()));
 
       if (Boolean.TRUE.equals(value)) {
         return "是";

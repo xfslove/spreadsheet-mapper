@@ -24,10 +24,10 @@ public class LocalDateExtractor extends AbstractCellValueExtractor {
   }
 
   @Override
-  public String getStringValue(Object data, String field) {
+  public String getStringValue(Object data) {
 
     try {
-      LocalDate value = (LocalDate) PropertyUtils.getProperty(data, getFieldWithoutPrefix(field));
+      LocalDate value = (LocalDate) PropertyUtils.getProperty(data, getFieldWithoutPrefix(getMatchField()));
 
       return value == null ? null : value.toString(pattern);
 

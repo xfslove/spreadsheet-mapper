@@ -26,10 +26,10 @@ public class DateFormatExtractor extends AbstractCellValueExtractor {
   }
 
   @Override
-  public String getStringValue(Object data, String field) {
+  public String getStringValue(Object data) {
 
     try {
-      Date value = (Date) PropertyUtils.getProperty(data, FieldUtils.getFieldWithoutPrefix(field));
+      Date value = (Date) PropertyUtils.getProperty(data, FieldUtils.getFieldWithoutPrefix(getMatchField()));
 
       SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 

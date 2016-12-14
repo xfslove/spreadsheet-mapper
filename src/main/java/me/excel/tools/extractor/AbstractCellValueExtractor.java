@@ -17,7 +17,7 @@ public abstract class AbstractCellValueExtractor implements CellValueExtractor {
   }
 
   @Override
-  public abstract String getStringValue(Object data, String field);
+  public abstract String getStringValue(Object data);
 
   @Override
   public boolean matches(String field) {

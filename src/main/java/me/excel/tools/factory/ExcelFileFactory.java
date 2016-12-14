@@ -200,7 +200,7 @@ public class ExcelFileFactory implements UserFileFactory {
 
     for (CellValueExtractor cellValueExtractor : cellValueExtractors) {
       if (cellValueExtractor.matches(field)) {
-        return cellValueExtractor.getStringValue(data, field);
+        return cellValueExtractor.getStringValue(data);
       }
     }
 

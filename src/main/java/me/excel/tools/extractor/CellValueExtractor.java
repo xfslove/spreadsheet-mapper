@@ -7,7 +7,7 @@ public interface CellValueExtractor {
 
   String getMatchField();
 
-  String getStringValue(Object data, String field);
+  String getStringValue(Object data);
 
   boolean matches(String field);
 }
