@@ -3,7 +3,7 @@
 ```
 <repositories>
   <repository>
-    <id>java-excel-tools-mvn-repository</id>
+    <id>java-excel-tools</id>
     <url>https://raw.github.com/xfslove/mvn-repository/mvn-repository/</url>
   </repository>
 </repositories>
