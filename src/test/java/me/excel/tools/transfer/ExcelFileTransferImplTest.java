@@ -1,5 +1,6 @@
 package me.excel.tools.transfer;
 
+import me.excel.tools.ExcelSupportedDateFormat;
 import me.excel.tools.model.excel.ExcelRow;
 import me.excel.tools.model.excel.ExcelSheet;
 import me.excel.tools.model.excel.ExcelWorkbook;
@@ -19,6 +20,8 @@ public class ExcelFileTransferImplTest {
   public void testTransfer() throws Exception {
     InputStream excelIs = this.getClass().getResourceAsStream("test.xlsx");
 
+    ExcelSupportedDateFormat.registerFormat("[$-409]d\\-mmm\\-yy;@", "yyyy-MM-dd");
+
     ExcelFileTransferImpl transfer = new ExcelFileTransferImpl();
     transfer.transfer(excelIs);
 
@@ -34,10 +37,10 @@ public class ExcelFileTransferImplTest {
       assertEquals(row.sizeOfCells(), 4);
       if (i == 0) {
         assertEquals(row.getCells().stream()
-            .map(cell -> cell.getValue()).collect(Collectors.toList()).toString(), "[111111, std1, 18, 2015-09-01]");
+            .map(cell -> cell.getValue()).collect(Collectors.toList()).toString(), "[111111, std1, 18, 2015-10-01]");
       } else {
         assertEquals(row.getCells().stream()
-            .map(cell -> cell.getValue()).collect(Collectors.toList()).toString(), "[2222, std2, 18, 2015-09-01]");
+            .map(cell -> cell.getValue()).collect(Collectors.toList()).toString(), "[2222, std2, 18, 2015-10-01]");
       }
     }
 

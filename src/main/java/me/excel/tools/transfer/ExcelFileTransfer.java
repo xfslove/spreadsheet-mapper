@@ -2,6 +2,7 @@ package me.excel.tools.transfer;
 
 import me.excel.tools.model.excel.ExcelWorkbook;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -14,8 +15,8 @@ public interface ExcelFileTransfer {
   /**
    * transfer inputStream to java bean
    *
-   * @param inputStream
+   * @param inputStream close auto
    */
-  ExcelWorkbook transfer(InputStream inputStream);
+  ExcelWorkbook transfer(InputStream inputStream) throws IOException;
 
 }

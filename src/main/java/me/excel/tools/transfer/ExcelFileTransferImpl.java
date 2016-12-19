@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,17 +25,18 @@ public class ExcelFileTransferImpl implements ExcelFileTransfer {
 
   private Map<Integer, String> cellColIndex2field = new HashMap<>();
 
-  /**
-   * 将 inputStream 写入 {@link ExcelWorkbook}
-   *
-   * @param inputStream 会自动关闭
-   */
   @Override
-  public ExcelWorkbook transfer(InputStream inputStream) {
+  public ExcelWorkbook transfer(InputStream inputStream) throws IOException {
 
-    try (Workbook workbook = WorkbookFactory.create(inputStream)) {
+    excelWorkbook = new ExcelWorkbookBean();
 
-      excelWorkbook = new ExcelWorkbookBean();
+    try {
+
+      if (inputStream.available() == 0) {
+        return excelWorkbook;
+      }
+
+      Workbook workbook = WorkbookFactory.create(inputStream);
 
       int sheetCount = workbook.getNumberOfSheets();
 
@@ -62,12 +64,15 @@ public class ExcelFileTransferImpl implements ExcelFileTransfer {
         }
       }
 
+      return excelWorkbook;
     } catch (Exception e) {
+
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new ExcelTransferException(e);
-    }
 
-    return excelWorkbook;
+    } finally {
+      inputStream.close();
+    }
   }
 
   private void transferSheet(Sheet sheet) {
