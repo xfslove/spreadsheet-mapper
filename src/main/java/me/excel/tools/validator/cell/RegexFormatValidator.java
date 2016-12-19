@@ -14,12 +14,12 @@ public class RegexFormatValidator extends AbstractCellValidator {
   protected String regex;
 
   public RegexFormatValidator(String field, String regex) {
-    super(field, "格式应该满足:"+regex, regex);
+    super(field, "格式应该满足:" + regex);
     this.regex = regex;
   }
 
-  public RegexFormatValidator(String field, String regex, String message, String prompt) {
-    super(field, message, prompt);
+  public RegexFormatValidator(String field, String regex, String message) {
+    super(field, message);
     this.regex = regex;
   }
 

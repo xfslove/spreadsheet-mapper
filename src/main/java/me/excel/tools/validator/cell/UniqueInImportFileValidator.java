@@ -14,11 +14,11 @@ public class UniqueInImportFileValidator extends AbstractCellValidator {
   private Set<String> cellValueHolder = new HashSet<>();
 
   public UniqueInImportFileValidator(String field) {
-    super(field, "导入文件中存在重复数据", "在本导入文件中唯一");
+    super(field, "导入文件中存在重复数据");
   }
 
   public UniqueInImportFileValidator(String field, String errorMessage, String prompt) {
-    super(field, errorMessage, prompt);
+    super(field, errorMessage);
   }
 
   @Override

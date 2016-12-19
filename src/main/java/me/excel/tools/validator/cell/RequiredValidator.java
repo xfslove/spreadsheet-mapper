@@ -10,11 +10,11 @@ import org.apache.commons.lang3.StringUtils;
 public class RequiredValidator extends AbstractCellValidator {
 
   public RequiredValidator(String matchField) {
-    super(matchField, "应该为必填", "必填");
+    super(matchField, "应该为必填");
   }
 
-  public RequiredValidator(String matchField, String errorMessage, String prompt) {
-    super(matchField, errorMessage, prompt);
+  public RequiredValidator(String matchField, String errorMessage) {
+    super(matchField, errorMessage);
   }
 
   @Override

@@ -9,11 +9,11 @@ import org.apache.commons.lang3.math.NumberUtils;
 public class NumberValidator extends AbstractCellValidator {
 
   public NumberValidator(String field) {
-    super(field, "应该为数字", "数字");
+    super(field, "应该为数字");
   }
 
-  public NumberValidator(String field, String message, String prompt) {
-    super(field, message, prompt);
+  public NumberValidator(String field, String message) {
+    super(field, message);
   }
 
   @Override

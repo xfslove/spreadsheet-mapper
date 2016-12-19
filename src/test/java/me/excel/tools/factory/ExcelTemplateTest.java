@@ -1,8 +1,15 @@
 package me.excel.tools.factory;
 
+import me.excel.tools.generator.UserFileGenerator;
+import me.excel.tools.extractor.BooleanZhExtractor;
 import me.excel.tools.importer.UserFileImporter;
 import me.excel.tools.model.excel.ExcelRow;
 import me.excel.tools.processor.DataProcessor;
+import me.excel.tools.prompter.BooleanPrompter;
+import me.excel.tools.prompter.PromptBuilder;
+import me.excel.tools.prompter.RequiredPrompter;
+import me.excel.tools.setter.BooleanValueSetter;
+import me.excel.tools.setter.LocalDateValueSetter;
 import me.excel.tools.validator.UserFileValidator;
 import me.excel.tools.validator.cell.BooleanValidator;
 import me.excel.tools.validator.cell.IntValidator;
@@ -33,20 +40,26 @@ public class ExcelTemplateTest {
     File excel = new File(resource.getFile());
 
     ExcelTemplate excelTemplate = new ExcelTemplate(excel);
-    excelTemplate.setFieldScope("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
-    excelTemplate.setRequiredFields("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
 
-    excelTemplate.addCellValidator(
+    UserFileValidator userFileValidator = excelTemplate.getUserFileValidator();
+
+    userFileValidator.setFieldScope("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
+    userFileValidator.setRequiredFields("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
+
+    userFileValidator.addCellValidator(
         new LocalDateValidator("student.enrollDate", "yyyy-MM-dd"),
         new BooleanValidator("student.inSchool"),
         new IntValidator("student.age")
     );
 
-    UserFileValidator userFileValidator = excelTemplate.getUserFileValidator();
-
     assertTrue(userFileValidator.validate());
 
     UserFileImporter userFileImporter = excelTemplate.getUserFileImporter();
+
+    userFileImporter.addCellValueSetter(
+        new LocalDateValueSetter("student.enrollDate", "yyyy-MM-dd"),
+        new BooleanValueSetter("student.inSchool")
+    );
 
     userFileImporter.setModelFactory(new StudentModelFactoryTest());
     userFileImporter.process(new StudentDataProcessorTest());
@@ -77,19 +90,26 @@ public class ExcelTemplateTest {
 
     ExcelTemplate excelTemplate = new ExcelTemplate(file);
 
-    excelTemplate.addCellValidator(
-        new LocalDateValidator("student.enrollDate", "yyyy-MM-dd"),
-        new BooleanValidator("student.inSchool"),
-        new IntValidator("student.age")
+    UserFileGenerator userFileGenerator = excelTemplate.getUserFileGenerator();
+
+    userFileGenerator.addCellPrompters(
+        new PromptBuilder()
+            .prompt("student.age", "整数")
+            .prompt("student.enrollDate", "yyyy-MM-dd")
+            .add(new RequiredPrompter("student.code"))
+            .add(new RequiredPrompter("student.age"))
+            .add(new RequiredPrompter("student.name"))
+            .add(new BooleanPrompter("student.inSchool"))
+            .build()
     );
 
-    UserFileFactory userFileFactory = excelTemplate.getUserFileFactory();
+    userFileGenerator.addValueExtractors(new BooleanZhExtractor("student.inSchool"));
 
-    userFileFactory.setData(list);
-    userFileFactory.setFields("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
-    userFileFactory.setTitles("学号", "年龄", "姓名", "入学日期", "是否在校");
+    userFileGenerator.setData(list);
+    userFileGenerator.setFields("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
+    userFileGenerator.setTitles("学号", "年龄", "姓名", "入学日期", "是否在校");
 
-    userFileFactory.generate();
+    userFileGenerator.generate();
   }
 
   public class StudentDataProcessorTest implements DataProcessor {
@@ -100,7 +120,7 @@ public class ExcelTemplateTest {
     }
 
     @Override
-    public void postProcessing(Object origin, Object model) {
+    public void postProcessing(Object model) {
 
     }
 

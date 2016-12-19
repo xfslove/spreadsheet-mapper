@@ -1,7 +1,6 @@
 package me.excel.tools.validator.cell;
 
 import me.excel.tools.model.excel.ExcelCell;
-import me.excel.tools.validator.SkipValidateException;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -13,14 +12,15 @@ public class LocalDateValidator extends AbstractCellValidator {
   private String format;
 
   public LocalDateValidator(String field, String format) {
-    super(field, "格式应该为: " + format, format);
+    super(field, "格式应该为: " + format);
     this.format = format;
   }
 
-  public LocalDateValidator(String field, String format, String errorMessage, String prompt) {
-    super(field, errorMessage, prompt);
+  public LocalDateValidator(String field, String format, String errorMessage) {
+    super(field, errorMessage);
     this.format = format;
   }
+
   @Override
   protected boolean customValidate(ExcelCell excelCell) {
 

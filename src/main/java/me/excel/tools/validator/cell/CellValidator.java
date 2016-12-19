@@ -11,10 +11,6 @@ public interface CellValidator {
 
   String getErrorMessage();
 
-  String getPrompt();
-
-  String getMatchField();
-
   boolean validate(ExcelCell excelCell) throws SkipValidateException;
 
   boolean matches(ExcelCell excelCell);

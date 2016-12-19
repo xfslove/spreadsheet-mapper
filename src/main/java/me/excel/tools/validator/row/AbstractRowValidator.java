@@ -6,6 +6,7 @@ import me.excel.tools.model.excel.ExcelRow;
 import me.excel.tools.validator.SkipValidateException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,23 +15,13 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractRowValidator implements RowValidator {
 
-  protected String prompt;
+  private String errorMessage;
 
-  protected String errorMessage;
+  private List<String> messageOnFields = new ArrayList<>();
 
-  protected List<String> messageOnFields = new ArrayList<>();
-
-  public AbstractRowValidator(String prompt, String errorMessage, String[] messageOnFields) {
-    this.prompt = prompt;
+  public AbstractRowValidator(String errorMessage, String[] messageOnFields) {
     this.errorMessage = errorMessage;
-    for (String messageOnField : messageOnFields) {
-      this.messageOnFields.add(messageOnField);
-    }
-  }
-
-  @Override
-  public String getPrompt() {
-    return prompt;
+    Collections.addAll(this.messageOnFields, messageOnFields);
   }
 
   @Override

@@ -8,11 +8,11 @@ import me.excel.tools.model.excel.ExcelCell;
 public class FloatValidator extends AbstractCellValidator {
 
   public FloatValidator(String field) {
-    super(field, "应该为小数", "小数");
+    super(field, "应该为小数");
   }
 
-  public FloatValidator(String field, String message, String prompt) {
-    super(field, message, prompt);
+  public FloatValidator(String field, String message) {
+    super(field, message);
   }
 
   @Override

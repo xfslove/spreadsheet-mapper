@@ -1,6 +1,7 @@
-package me.excel.tools.factory;
+package me.excel.tools.generator;
 
 import me.excel.tools.extractor.CellValueExtractor;
+import me.excel.tools.prompter.CellPrompter;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface UserFileFactory {
+public interface UserFileGenerator {
 
   /**
    * 设置file中的titles (第一行)
@@ -32,6 +33,13 @@ public interface UserFileFactory {
    * @param cellValueExtractors
    */
   void addValueExtractors(CellValueExtractor... cellValueExtractors);
+
+  /**
+   * 设置field的提示
+   *
+   * @param cellPrompters
+   */
+  void addCellPrompters(CellPrompter... cellPrompters);
 
   /**
    * 设置file中的data (从第四行开始)

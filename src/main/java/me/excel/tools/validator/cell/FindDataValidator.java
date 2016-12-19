@@ -11,11 +11,7 @@ import me.excel.tools.validator.ValidateFunction;
 public class FindDataValidator extends CommonCellValidator {
 
   public FindDataValidator(String matchField, ValidateFunction<ExcelCell, Boolean> validateResultGetter) {
-    super(matchField, "无法找到对应数据", "", validateResultGetter);
-  }
-
-  public FindDataValidator(String matchField, String prompt, ValidateFunction<ExcelCell, Boolean> validateResultGetter) {
-    super(matchField, "无法找到对应数据", prompt, validateResultGetter);
+    super(matchField, "无法找到对应数据", validateResultGetter);
   }
 
 }

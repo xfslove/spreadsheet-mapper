@@ -14,13 +14,15 @@ public class NumberScaleValidator extends AbstractCellValidator {
   private int lte;
 
   public NumberScaleValidator(String matchField, int gte, int lte) {
-    super(matchField, "小数位数范围[" + gte + ", " + lte + "]", "小数位数范围[" + gte + ", " + lte + "]");
+    super(matchField, "小数位数范围[" + gte + ", " + lte + "]");
     this.gte = gte;
     this.lte = lte;
   }
 
-  public NumberScaleValidator(String matchField, String errorMessage, String prompt) {
-    super(matchField, errorMessage, prompt);
+  public NumberScaleValidator(String matchField, int gte, int lte, String errorMessage) {
+    super(matchField, errorMessage);
+    this.gte = gte;
+    this.lte = lte;
   }
 
   @Override

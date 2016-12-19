@@ -1,14 +1,18 @@
 package me.excel.tools.validator;
 
 import me.excel.tools.exporter.ExcelCommentUtils;
-import me.excel.tools.factory.FileTemplate;
 import me.excel.tools.model.excel.*;
 import me.excel.tools.model.message.ErrorMessage;
 import me.excel.tools.validator.cell.CellValidator;
 import me.excel.tools.validator.row.RowValidator;
+import me.excel.tools.validator.workbook.FieldScopeValidator;
+import me.excel.tools.validator.workbook.RequireFieldValidator;
+import me.excel.tools.validator.workbook.SheetSizeValidator;
+import me.excel.tools.validator.workbook.WorkbookValidator;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -18,18 +22,74 @@ import java.util.stream.Collectors;
  */
 public class ExcelFileValidator implements UserFileValidator {
 
-  protected FileTemplate importTemplate;
+  private List<String> fieldScope = new ArrayList<>();
 
-  protected ExcelWorkbook excelWorkbook;
+  private List<String> requiredFields = new ArrayList<>();
 
-  protected File file;
+  private List<CellValidator> cellValidators = new ArrayList<>();
 
-  protected List<ErrorMessage> errorMessages = new ArrayList<>();
+  private List<RowValidator> rowValidators = new ArrayList<>();
 
-  public ExcelFileValidator(FileTemplate fileTemplate, ExcelWorkbook excelWorkbook, File file) {
-    this.importTemplate = fileTemplate;
+  private List<WorkbookValidator> workbookValidators = new ArrayList<>();
+
+  private ExcelWorkbook excelWorkbook;
+
+  private File file;
+
+  private List<ErrorMessage> errorMessages = new ArrayList<>();
+
+  public ExcelFileValidator(ExcelWorkbook excelWorkbook, File file) {
+
+    addWorkbookValidator(
+        new SheetSizeValidator(1),
+        new FieldScopeValidator(this.fieldScope),
+        new RequireFieldValidator(this.requiredFields)
+    );
+
     this.excelWorkbook = excelWorkbook;
     this.file = file;
+  }
+
+  @Override
+  public void setFieldScope(String... fields) {
+    if (fields == null) {
+      throw new IllegalArgumentException("field scope is null");
+    }
+
+    Collections.addAll(this.fieldScope, fields);
+  }
+
+  @Override
+  public void setRequiredFields(String... fields) {
+    if (fields == null) {
+      throw new IllegalArgumentException("required field is null");
+    }
+
+    Collections.addAll(this.requiredFields, fields);
+  }
+
+  @Override
+  public void addCellValidator(CellValidator... validators) {
+    if (validators == null) {
+      return;
+    }
+    Collections.addAll(this.cellValidators, validators);
+  }
+
+  @Override
+  public void addRowValidator(RowValidator... validators) {
+    if (validators == null) {
+      return;
+    }
+    Collections.addAll(this.rowValidators, validators);
+  }
+
+  @Override
+  public void addWorkbookValidator(WorkbookValidator... validators) {
+    if (validators == null) {
+      return;
+    }
+    Collections.addAll(this.workbookValidators, validators);
   }
 
   @Override
@@ -54,15 +114,11 @@ public class ExcelFileValidator implements UserFileValidator {
 
     excelWorkbook.getSheet(0).getDataRows().forEach(this::validateRow);
 
-    if (!errorMessages.isEmpty()) {
-      return false;
-    }
-
-    return true;
+    return errorMessages.isEmpty();
   }
 
   @Override
-  public void writeFailureMessageComments(){
+  public void writeFailureMessageComments() {
 
     if (errorMessages.isEmpty()) {
       return;
@@ -88,7 +144,7 @@ public class ExcelFileValidator implements UserFileValidator {
       return;
     }
 
-    for (CellValidator cellValidator : importTemplate.getCellValidators()) {
+    for (CellValidator cellValidator : cellValidators) {
 
       if (!cellValidator.matches(cell)) {
         continue;
@@ -109,7 +165,7 @@ public class ExcelFileValidator implements UserFileValidator {
       return;
     }
 
-    for (RowValidator rowValidator : importTemplate.getRowValidators()) {
+    for (RowValidator rowValidator : rowValidators) {
 
       try {
         if (!rowValidator.validate(row)) {
@@ -126,7 +182,7 @@ public class ExcelFileValidator implements UserFileValidator {
 
   private void validateWorkbook(ExcelWorkbook workbook) {
     errorMessages.addAll(
-        importTemplate.getWorkbookValidators().stream()
+        workbookValidators.stream()
             .filter(workbookValidator -> !workbookValidator.validate(workbook))
             .map(workbookValidator -> new ErrorMessage(workbookValidator.getMessageOnCell(workbook), workbookValidator.getErrorMessage()))
             .collect(Collectors.toList()));

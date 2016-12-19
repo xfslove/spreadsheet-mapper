@@ -1,6 +1,5 @@
 package me.excel.tools.importer;
 
-import me.excel.tools.factory.FileTemplate;
 import me.excel.tools.factory.ModelFactory;
 import me.excel.tools.model.excel.ExcelCell;
 import me.excel.tools.model.excel.ExcelSheet;
@@ -19,18 +18,15 @@ import java.util.List;
  */
 public class ExcelFileImporter implements UserFileImporter {
 
-  protected FileTemplate fileTemplate;
+  private ExcelWorkbook excelWorkbook;
 
-  protected ExcelWorkbook excelWorkbook;
+  private ModelFactory modelFactory;
 
-  protected ModelFactory modelFactory;
+  private List<CellValueSetter> cellValueSetters = new ArrayList<>();
 
-  protected List<CellValueSetter> cellValueSetters = new ArrayList<>();
+  private DefaultValueSetter defaultValueSetter = new DefaultValueSetter();
 
-  protected DefaultValueSetter defaultValueSetter = new DefaultValueSetter();
-
-  public ExcelFileImporter(FileTemplate fileTemplate, ExcelWorkbook excelWorkbook) {
-    this.fileTemplate = fileTemplate;
+  public ExcelFileImporter(ExcelWorkbook excelWorkbook) {
     this.excelWorkbook = excelWorkbook;
   }
 
@@ -52,7 +48,7 @@ public class ExcelFileImporter implements UserFileImporter {
       Object origin = modelFactory.create(row);
       Object model = modelFactory.create(row);
 
-      dataProcessor.preProcessing(model);
+      dataProcessor.preProcessing(origin);
 
       defaultValueSetter.set(model, row.getCells());
 
@@ -66,7 +62,7 @@ public class ExcelFileImporter implements UserFileImporter {
         }
       }
 
-      dataProcessor.postProcessing(origin, model);
+      dataProcessor.postProcessing(model);
 
       models.add(model);
     });

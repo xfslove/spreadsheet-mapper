@@ -11,8 +11,7 @@ public abstract class AbstractCellValueExtractor implements CellValueExtractor {
     this.matchField = matchField;
   }
 
-  @Override
-  public String getMatchField() {
+  protected final String getMatchField() {
     return matchField;
   }
 

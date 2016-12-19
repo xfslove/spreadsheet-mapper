@@ -13,16 +13,16 @@ import java.util.Map;
 
 /**
  * excel 文件到 {@link ExcelWorkbook}的转换器
- *
+ * <p>
  * Created by hanwen on 15-12-16.
  */
 public class ExcelFileTransferImpl implements ExcelFileTransfer {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ExcelFileTransferImpl.class);
 
-  protected ExcelWorkbook excelWorkbook;
+  private ExcelWorkbook excelWorkbook;
 
-  protected Map<Integer, String> cellColIndex2field = new HashMap<>();
+  private Map<Integer, String> cellColIndex2field = new HashMap<>();
 
   /**
    * 将 inputStream 写入 {@link ExcelWorkbook}
@@ -137,5 +137,7 @@ public class ExcelFileTransferImpl implements ExcelFileTransfer {
     excelCell.setComment(excelCellComment);
   }
 
-
+  protected final ExcelWorkbook getExcelWorkbook() {
+    return excelWorkbook;
+  }
 }

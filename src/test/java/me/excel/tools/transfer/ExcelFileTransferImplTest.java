@@ -14,7 +14,7 @@ import static org.testng.Assert.assertEquals;
  * Created by hanwen on 15-12-20.
  */
 public class ExcelFileTransferImplTest {
-  
+
   @Test
   public void testTransfer() throws Exception {
     InputStream excelIs = this.getClass().getResourceAsStream("test.xlsx");
@@ -22,7 +22,7 @@ public class ExcelFileTransferImplTest {
     ExcelFileTransferImpl transfer = new ExcelFileTransferImpl();
     transfer.transfer(excelIs);
 
-    ExcelWorkbook excelWorkbook = transfer.excelWorkbook;
+    ExcelWorkbook excelWorkbook = transfer.getExcelWorkbook();
 
     assertEquals(excelWorkbook.sizeOfSheets(), 1);
     ExcelSheet sheet = excelWorkbook.getSheet(0);

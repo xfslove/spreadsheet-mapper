@@ -12,8 +12,6 @@ import java.util.List;
  */
 public interface RowValidator {
 
-  String getPrompt();
-
   String getErrorMessage();
 
   List<String> getMessageOnFields();

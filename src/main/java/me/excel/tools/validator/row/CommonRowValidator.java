@@ -12,18 +12,13 @@ public class CommonRowValidator extends AbstractRowValidator {
 
   protected ValidateFunction<ExcelRow, Boolean> validateResultGetter;
 
-  public CommonRowValidator(ValidateFunction<ExcelRow, Boolean> validateResultGetter, String prompt, String errorMessage, String[] messageOnFields) {
-    super(prompt, errorMessage, messageOnFields);
+  public CommonRowValidator(ValidateFunction<ExcelRow, Boolean> validateResultGetter, String errorMessage, String[] messageOnFields) {
+    super(errorMessage, messageOnFields);
     this.validateResultGetter = validateResultGetter;
   }
 
-  public CommonRowValidator(ValidateFunction<ExcelRow, Boolean> validateResultGetter, String errorMessage,  String[] messageOnFields) {
-    super(null, errorMessage, messageOnFields);
-    this.validateResultGetter = validateResultGetter;
-  }
-
-  public CommonRowValidator(ValidateFunction<ExcelRow, Boolean> validateResultGetter,  String[] messageOnFields) {
-    super(null, null, messageOnFields);
+  public CommonRowValidator(ValidateFunction<ExcelRow, Boolean> validateResultGetter, String[] messageOnFields) {
+    super(null, messageOnFields);
     this.validateResultGetter = validateResultGetter;
   }
 

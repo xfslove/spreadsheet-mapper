@@ -7,9 +7,9 @@ import java.util.List;
  */
 public interface DataProcessor {
 
-  void preProcessing(Object model);
+  void preProcessing(Object origin);
 
-  void postProcessing(Object origin, Object model);
+  void postProcessing(Object model);
 
   void handle(List models);
 }

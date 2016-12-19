@@ -5,8 +5,6 @@ package me.excel.tools.extractor;
  */
 public interface CellValueExtractor {
 
-  String getMatchField();
-
   String getStringValue(Object data);
 
   boolean matches(String field);

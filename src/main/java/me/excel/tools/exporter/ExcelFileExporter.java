@@ -21,9 +21,9 @@ import java.io.OutputStream;
  */
 public class ExcelFileExporter implements UserFileExporter {
 
-  protected ExcelWorkbook excelWorkbook;
+  private ExcelWorkbook excelWorkbook;
 
-  protected Workbook workbook;
+  private Workbook workbook;
 
   public ExcelFileExporter(ExcelWorkbook excelWorkbook) {
     this.excelWorkbook = excelWorkbook;
@@ -45,7 +45,7 @@ public class ExcelFileExporter implements UserFileExporter {
 
     excelWorkbook.getSheets().forEach(excelSheet -> {
       createSheet(excelSheet);
-      excelSheet.getRows().forEach(row -> createRowAndCells(row));
+      excelSheet.getRows().forEach(this::createRowAndCells);
       // add comments
       int numberOfSheets = this.workbook.getNumberOfSheets();
       Sheet sheet = this.workbook.getSheetAt(numberOfSheets - 1);

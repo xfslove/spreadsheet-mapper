@@ -9,11 +9,11 @@ import me.excel.tools.model.excel.ExcelCell;
 public class DoubleValidator extends AbstractCellValidator {
 
   public DoubleValidator(String field) {
-    super(field, "应该为小数", "小数");
+    super(field, "应该为小数");
   }
 
-  public DoubleValidator(String field, String message, String prompt) {
-    super(field, message, prompt);
+  public DoubleValidator(String field, String message) {
+    super(field, message);
   }
 
   @Override

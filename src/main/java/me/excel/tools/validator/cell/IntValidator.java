@@ -9,11 +9,11 @@ import me.excel.tools.model.excel.ExcelCell;
 public class IntValidator extends AbstractCellValidator {
 
   public IntValidator(String field) {
-    super(field, "应该为整数", "整数");
+    super(field, "应该为整数");
   }
 
-  public IntValidator(String field, String message, String prompt) {
-    super(field, message, prompt);
+  public IntValidator(String field, String message) {
+    super(field, message);
   }
 
   @Override

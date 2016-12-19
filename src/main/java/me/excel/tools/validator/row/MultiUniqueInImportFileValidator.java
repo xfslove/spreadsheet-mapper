@@ -19,17 +19,17 @@ public class MultiUniqueInImportFileValidator extends AbstractRowValidator {
   private List<String> fields = new ArrayList<>();
 
   public MultiUniqueInImportFileValidator(String... fields) {
-    super("在本导入文件中唯一", "导入文件中存在重复数据", fields);
+    super("导入文件中存在重复数据", fields);
     Collections.addAll(this.fields, fields);
   }
 
-  public MultiUniqueInImportFileValidator(String prompt, String errorMessage, String... fields) {
-    super(prompt, errorMessage, fields);
+  public MultiUniqueInImportFileValidator(String errorMessage, String... fields) {
+    super(errorMessage, fields);
     Collections.addAll(this.fields, fields);
   }
 
-  public MultiUniqueInImportFileValidator(String prompt, String errorMessage, String[] messageOnFields, String... fields) {
-    super(prompt, errorMessage, messageOnFields);
+  public MultiUniqueInImportFileValidator(String errorMessage, String[] messageOnFields, String... fields) {
+    super(errorMessage, messageOnFields);
     Collections.addAll(this.fields, fields);
   }
 

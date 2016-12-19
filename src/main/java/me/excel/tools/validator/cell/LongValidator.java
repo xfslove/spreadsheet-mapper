@@ -9,11 +9,11 @@ import me.excel.tools.validator.SkipValidateException;
 public class LongValidator extends AbstractCellValidator {
 
   public LongValidator(String field) {
-    super(field, "应该为整数", "整数");
+    super(field, "应该为整数");
   }
 
-  public LongValidator(String field, String message, String prompt) {
-    super(field, message, prompt);
+  public LongValidator(String field, String message) {
+    super(field, message);
   }
 
   @Override
