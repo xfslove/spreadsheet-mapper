@@ -32,16 +32,16 @@ import static org.testng.Assert.assertTrue;
 /**
  * Created by hanwen on 5/3/16.
  */
-public class ExcelTemplateTest {
+public class ExcelFileTemplateTest {
 
   @Test
   public void testProcess() throws Exception {
     URL resource = this.getClass().getResource("test.xlsx");
     File excel = new File(resource.getFile());
 
-    ExcelTemplate excelTemplate = new ExcelTemplate(excel);
+    ExcelFileTemplate excelFileTemplate = new ExcelFileTemplate(excel);
 
-    UserFileValidator userFileValidator = excelTemplate.getUserFileValidator();
+    UserFileValidator userFileValidator = excelFileTemplate.getUserFileValidator();
 
     userFileValidator.setFieldScope("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
     userFileValidator.setRequiredFields("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
@@ -54,7 +54,7 @@ public class ExcelTemplateTest {
 
     assertTrue(userFileValidator.validate());
 
-    UserFileImporter userFileImporter = excelTemplate.getUserFileImporter();
+    UserFileImporter userFileImporter = excelFileTemplate.getUserFileImporter();
 
     userFileImporter.addCellValueSetter(
         new LocalDateValueSetter("student.enrollDate", "yyyy-MM-dd"),
@@ -88,9 +88,9 @@ public class ExcelTemplateTest {
 
     File file = TempFile.createTempFile("test", ".xlsx");
 
-    ExcelTemplate excelTemplate = new ExcelTemplate(file);
+    ExcelFileTemplate excelFileTemplate = new ExcelFileTemplate(file);
 
-    UserFileGenerator userFileGenerator = excelTemplate.getUserFileGenerator();
+    UserFileGenerator userFileGenerator = excelFileTemplate.getUserFileGenerator();
 
     userFileGenerator.addCellPrompters(
         new PromptBuilder()

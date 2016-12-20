@@ -21,7 +21,7 @@ import java.util.Set;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public class ExcelTemplate implements FileTemplate {
+public class ExcelFileTemplate implements UserFileTemplate {
 
   private UserFileGenerator userFileGenerator;
 
@@ -31,7 +31,7 @@ public class ExcelTemplate implements FileTemplate {
 
   protected ExcelWorkbook excelWorkbook;
 
-  public ExcelTemplate(File file) throws IOException {
+  public ExcelFileTemplate(File file) throws IOException {
 
     ExcelFileTransfer excelFileTransfer = new ExcelFileTransferImpl();
 
