@@ -6,7 +6,7 @@
 	
 1. <code>interface UserFileTemplate</code>
 
-	模板工厂，用来得到<code>UserFileValidator</code>、<code>UserFileGenerator</code>和<code>UserFileImporter</code>
+	模板工厂，用来得到<code>UserFileValidator</code>和<code>UserFileImporter</code>
 	
 1. <code>interface UserFileValidator</code>
 
@@ -79,13 +79,13 @@
 - 构建一个Excel模板
 
 ```
-ExcelTemplate excelTemplate = new ExcelTemplate(excel);
+UserFileTemplate excelTemplate = new ExcelFileTemplate(excel);
 ```
 
-- 生成导入模板
+- 生成导入文件
 
 ```
-excelTemplate.getUserFileGenerator();
+userFileGenerator = new ExcelFileGenerator();
 userFileGenerator.setTitles("姓名", "年龄", "生日");
 userFileGenerator.setFields("person.name", "person.age", "person.birthday");
 // 添加字段提示
@@ -96,7 +96,7 @@ userFileGenerator.addCellPrompters(
             .add(new RequiredPrompter("person.name"))
             .build()
     );
-userFileGenerator.generate();
+userFileGenerator.generate(excel);
 ```
 
 - 校验
@@ -133,7 +133,7 @@ userFileImporter.process(new PersonListProcessor());
 
 - 导出数据
 
-	和生成模板类似，只需要把导出的数据给<code>ExcelFileGenerator</code>即可
+	和生成导入文件类似，只需要把导出的数据给<code>ExcelFileGenerator</code>即可
 
 ```
 userFileGenerator.setData(data);

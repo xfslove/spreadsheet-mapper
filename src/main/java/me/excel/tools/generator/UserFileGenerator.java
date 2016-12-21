@@ -4,10 +4,11 @@ import me.excel.tools.extractor.CellValueExtractor;
 import me.excel.tools.prompter.CellPrompter;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
- * file factory
+ * file generator
  * <p>
  * Created by hanwen on 15-12-16.
  */
@@ -53,7 +54,7 @@ public interface UserFileGenerator {
    *
    * @throws IOException
    */
-  void generate() throws IOException;
+  void generate(OutputStream outputStream) throws IOException;
 
-  void generate(boolean createTitles, boolean createFields, boolean createPrompts) throws IOException;
+  void generate(OutputStream outputStream, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException;
 }

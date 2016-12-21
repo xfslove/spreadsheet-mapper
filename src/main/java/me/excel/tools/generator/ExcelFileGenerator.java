@@ -8,8 +8,6 @@ import me.excel.tools.model.excel.*;
 import me.excel.tools.prompter.CellPrompter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -33,12 +31,6 @@ public class ExcelFileGenerator implements UserFileGenerator {
   private List<CellValueExtractor> cellValueExtractors = new ArrayList<>();
 
   private List<CellPrompter> cellPrompters = new ArrayList<>();
-
-  protected File file;
-
-  public ExcelFileGenerator(File file) {
-    this.file = file;
-  }
 
   @Override
   public void setTitles(String... titles) {
@@ -78,12 +70,12 @@ public class ExcelFileGenerator implements UserFileGenerator {
   }
 
   @Override
-  public void generate() throws IOException {
-    generate(true, true, true);
+  public void generate(OutputStream outputStream) throws IOException {
+    generate(outputStream, true, true, true);
   }
 
   @Override
-  public void generate(boolean createTitles, boolean createFields, boolean createPrompts) throws IOException {
+  public void generate(OutputStream outputStream, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException {
 
     ExcelWorkbook excelWorkbook = createWorkbook(createTitles, createFields, createPrompts);
     if (excelWorkbook == null) {
@@ -99,9 +91,7 @@ public class ExcelFileGenerator implements UserFileGenerator {
     });
 
     UserFileExporter excelFileExporter = new ExcelFileExporter(excelWorkbook);
-    try (OutputStream outputStream = new FileOutputStream(file)) {
-      excelFileExporter.export(outputStream);
-    }
+    excelFileExporter.export(outputStream);
   }
 
   private ExcelWorkbook createWorkbook(boolean createTitles, boolean createFields, boolean createPrompts) {

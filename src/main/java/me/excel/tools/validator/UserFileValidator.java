@@ -1,8 +1,11 @@
 package me.excel.tools.validator;
 
+import me.excel.tools.model.message.ErrorMessage;
 import me.excel.tools.validator.cell.CellValidator;
 import me.excel.tools.validator.row.RowValidator;
 import me.excel.tools.validator.workbook.WorkbookValidator;
+
+import java.util.List;
 
 /**
  * file validator
@@ -48,5 +51,11 @@ public interface UserFileValidator {
 
   boolean validate();
 
-  void writeFailureMessageComments();
+  /**
+   * 得到错误信息
+   *
+   * @return
+   */
+  List<ErrorMessage> getErrorMessages();
+
 }
