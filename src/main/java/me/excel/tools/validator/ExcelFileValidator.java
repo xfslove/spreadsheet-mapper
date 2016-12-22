@@ -101,7 +101,7 @@ public class ExcelFileValidator implements UserFileValidator {
       return false;
     }
 
-    excelWorkbook.getSheet(0).getDataRows()
+    excelWorkbook.getSheet(1).getDataRows()
         .forEach(row -> row.getCells()
             .forEach(this::validateCell));
 
@@ -109,7 +109,7 @@ public class ExcelFileValidator implements UserFileValidator {
       return false;
     }
 
-    excelWorkbook.getSheet(0).getDataRows().forEach(this::validateRow);
+    excelWorkbook.getSheet(1).getDataRows().forEach(this::validateRow);
 
     return errorMessages.isEmpty();
   }
@@ -135,7 +135,7 @@ public class ExcelFileValidator implements UserFileValidator {
           errorMessages.add(new ErrorMessage(cell, cellValidator.getErrorMessage()));
         }
       } catch (SkipValidateException e) {
-        errorMessages.addAll(e.getCells().stream().map(excelCell -> new ErrorMessage(excelCell, e.getPrompt())).collect(Collectors.toList()));
+        errorMessages.addAll(e.getCells().stream().map(excelCell -> new ErrorMessage(excelCell, e.getErrorMessage())).collect(Collectors.toList()));
       }
     }
   }
@@ -155,7 +155,7 @@ public class ExcelFileValidator implements UserFileValidator {
               .map(excelCell -> new ErrorMessage(excelCell, rowValidator.getErrorMessage())).collect(Collectors.toList()));
         }
       } catch (SkipValidateException e) {
-        errorMessages.addAll(e.getCells().stream().map(excelCell -> new ErrorMessage(excelCell, e.getPrompt())).collect(Collectors.toList()));
+        errorMessages.addAll(e.getCells().stream().map(excelCell -> new ErrorMessage(excelCell, e.getErrorMessage())).collect(Collectors.toList()));
       }
     }
   }

@@ -13,14 +13,21 @@ import java.util.Set;
 public interface UserFileTemplate {
 
   /**
-   * 得到file中field字段的所有值
-   *
    * @param field
    * @return
+   * @see me.excel.tools.model.excel.ExcelSheet#getDistinctCellValuesOfField(String)
    */
   Set<String> getCellValuesOfField(String field);
 
+  /**
+   * @return
+   * @see UserFileValidator
+   */
   UserFileValidator getUserFileValidator();
 
+  /**
+   * @return
+   * @see UserFileImporter
+   */
   UserFileImporter getUserFileImporter();
 }

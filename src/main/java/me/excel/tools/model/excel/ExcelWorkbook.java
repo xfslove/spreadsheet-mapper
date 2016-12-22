@@ -1,48 +1,54 @@
 package me.excel.tools.model.excel;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * excel workbook
- *
+ * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface ExcelWorkbook {
+public interface ExcelWorkbook extends Serializable {
 
   /**
-   * workbook 中所有sheet
+   * get sheets of this workbook
+   *
    * @return
    */
   List<ExcelSheet> getSheets();
 
   /**
-   * workbook 所有sheet数量
+   * get sheets size of this workbook
+   *
    * @return
    */
   int sizeOfSheets();
 
   /**
-   * 增加一个sheet
+   * add sheet
+   *
    * @param excelSheet
    * @return
    */
   boolean addSheet(ExcelSheet excelSheet);
 
   /**
-   * 根据 index 得到sheet
-   * @param index
+   * get sheet by index
+   *
+   * @param index 1-based
    * @return
    */
   ExcelSheet getSheet(int index);
 
   /**
-   * 得到最后一个sheet
+   * get last sheet
+   *
    * @return
    */
   ExcelSheet getLastSheet();
 
   /**
-   * 得到第一个Sheet
+   * get first Sheet
    *
    * @return
    */

@@ -1,5 +1,6 @@
 package me.excel.tools.exporter;
 
+import me.excel.tools.ExcelConstants;
 import me.excel.tools.model.excel.ExcelCell;
 import me.excel.tools.model.excel.ExcelRow;
 import me.excel.tools.model.excel.ExcelSheet;
@@ -15,8 +16,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * {@link ExcelWorkbook}导出到excel文件的导出器
- *
  * Created by hanwen on 15-12-16.
  */
 public class ExcelFileExporter implements UserFileExporter {
@@ -30,9 +29,9 @@ public class ExcelFileExporter implements UserFileExporter {
   }
 
   /**
-   * 导出 {@link ExcelWorkbook} 到 outputStream 中
+   * export {@link me.excel.tools.model.excel.ExcelWorkbook} to supplied output stream
    *
-   * @param outputStream 不会自动关闭
+   * @param outputStream
    * @throws IOException
    */
   @Override
@@ -45,12 +44,9 @@ public class ExcelFileExporter implements UserFileExporter {
 
     excelWorkbook.getSheets().forEach(excelSheet -> {
       createSheet(excelSheet);
-      excelSheet.getRows().forEach(this::createRowAndCells);
-      // add comments
       int numberOfSheets = this.workbook.getNumberOfSheets();
-      Sheet sheet = this.workbook.getSheetAt(numberOfSheets - 1);
-      excelSheet.getRows().forEach(row -> row.getCells().forEach(cell ->
-          ExcelCommentUtils.addCommentOnSheet(sheet, cell.getComment())));
+      Sheet lastSheet = this.workbook.getSheetAt(numberOfSheets - 1);
+      excelSheet.getRows().forEach(row -> createRowAndCells(lastSheet, row));
     });
 
     workbook.write(outputStream);
@@ -85,7 +81,7 @@ public class ExcelFileExporter implements UserFileExporter {
     }
   }
 
-  private void createRowAndCells(ExcelRow excelRow) {
+  private void createRowAndCells(Sheet sheet, ExcelRow excelRow) {
     Row row;
     int numberOfSheets = this.workbook.getNumberOfSheets();
     Sheet currentSheet = this.workbook.getSheetAt(numberOfSheets - 1);
@@ -96,10 +92,13 @@ public class ExcelFileExporter implements UserFileExporter {
     }
 
     for (int i = 0; i < excelRow.sizeOfCells(); i++) {
-      ExcelCell excelCell = excelRow.getCell(i);
+      ExcelCell excelCell = excelRow.getCell(i + 1);
       String value = excelCell.getValue();
       Cell cell = row.createCell(i, Cell.CELL_TYPE_STRING);
-      cell.setCellValue(value == null ? "" : value);
+      cell.setCellValue(value == null ? ExcelConstants.EMPTY_VALUE : value);
+
+      // add comments
+      ExcelCommentUtils.addComment(sheet, excelCell.getComment());
     }
   }
 

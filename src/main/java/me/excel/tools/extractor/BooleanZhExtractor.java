@@ -7,12 +7,14 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static me.excel.tools.FieldUtils.getFieldWithoutPrefix;
+import static me.excel.tools.FieldUtils.detectRealField;
 
 /**
+ * chinese boolean readable value extractor
+ * <p>
  * Created by hanwen on 16/3/18.
  */
-public class BooleanZhExtractor extends AbstractCellValueExtractor {
+public class BooleanZhExtractor extends FieldValueExtractorAdapter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BooleanZhExtractor.class);
 
@@ -24,7 +26,7 @@ public class BooleanZhExtractor extends AbstractCellValueExtractor {
   public String getStringValue(Object data) {
 
     try {
-      Object value = PropertyUtils.getProperty(data, getFieldWithoutPrefix(getMatchField()));
+      Object value = PropertyUtils.getProperty(data, detectRealField(getMatchField()));
 
       if (Boolean.TRUE.equals(value)) {
         return "是";

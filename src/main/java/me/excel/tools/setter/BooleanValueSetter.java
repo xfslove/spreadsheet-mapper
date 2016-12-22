@@ -8,12 +8,14 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static me.excel.tools.FieldUtils.getFieldWithoutPrefix;
+import static me.excel.tools.FieldUtils.detectRealField;
 
 /**
+ * boolean field value setter
+ * <p>
  * Created by hanwen on 5/3/16.
  */
-public class BooleanValueSetter extends AbstractCellValueSetter {
+public class BooleanValueSetter extends FieldValueSetterAdapter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BooleanValueSetter.class);
 
@@ -24,7 +26,7 @@ public class BooleanValueSetter extends AbstractCellValueSetter {
   @Override
   public void set(Object data, ExcelCell excelCell) {
     try {
-      BeanUtils.setProperty(data, getFieldWithoutPrefix(excelCell.getField()), BooleanTranslator.parseBoolean(excelCell.getValue()));
+      BeanUtils.setProperty(data, detectRealField(excelCell.getField()), BooleanTranslator.parseBoolean(excelCell.getValue()));
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new ExcelImportException(e);

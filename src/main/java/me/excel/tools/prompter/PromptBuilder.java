@@ -8,19 +8,19 @@ import java.util.List;
  */
 public class PromptBuilder {
 
-  private List<CellPrompter> prompterList = new ArrayList<>();
+  private List<FieldPrompter> prompterList = new ArrayList<>();
 
-  public CellPrompter[] build() {
-    return prompterList.toArray(new CellPrompter[0]);
+  public FieldPrompter[] build() {
+    return prompterList.toArray(new FieldPrompter[0]);
   }
 
-  public PromptBuilder add(CellPrompter prompter) {
+  public PromptBuilder add(FieldPrompter prompter) {
     prompterList.add(prompter);
     return this;
   }
 
   public PromptBuilder prompt(String field, String prompt) {
-    prompterList.add(new DefaultCellPrompter(field, prompt));
+    prompterList.add(new DefaultFieldPrompter(field, prompt));
     return this;
   }
 }

@@ -5,13 +5,13 @@ import java.io.OutputStream;
 
 /**
  * file exporter
- *
+ * <p>
  * Created by hanwen on 15-12-16.
  */
 public interface UserFileExporter {
 
   /**
-   * export java bean to outputStream
+   * export file to supplied output stream
    *
    * @param outputStream
    * @throws IOException

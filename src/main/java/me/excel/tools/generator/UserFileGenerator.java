@@ -1,60 +1,96 @@
 package me.excel.tools.generator;
 
-import me.excel.tools.extractor.CellValueExtractor;
-import me.excel.tools.prompter.CellPrompter;
+import me.excel.tools.extractor.FieldValueExtractor;
+import me.excel.tools.prompter.FieldPrompter;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
 /**
- * file generator
+ * <pre>
+ * file generator, generated all cell type is string (include number, date ...).
+ *
+ * file format:
+ *
+ * first row  : titles
+ * --------------------
+ * second row : fields
+ * --------------------
+ * third row  : prompts
+ * --------------------
+ * data row ...
+ * </pre>
  * <p>
  * Created by hanwen on 15-12-16.
  */
 public interface UserFileGenerator {
 
   /**
-   * 设置file中的titles (第一行)
+   * set titles (first row)
    *
    * @param titles
    */
   void setTitles(String... titles);
 
   /**
-   * 设置file中的fields (第二行)
+   * set fields (second row)
    *
    * @param fields
    */
   void setFields(String... fields);
 
   /**
-   * 设置自定义的属性提取器
-   *
-   * @param cellValueExtractors
-   */
-  void addValueExtractors(CellValueExtractor... cellValueExtractors);
-
-  /**
-   * 设置field的提示
-   *
-   * @param cellPrompters
-   */
-  void addCellPrompters(CellPrompter... cellPrompters);
-
-  /**
-   * 设置file中的data (从第四行开始)
+   * set data to generate data row (after third row)
    *
    * @param data
    */
   void setData(List data);
 
   /**
-   * 生成文件
+   * @param fieldValueExtractors
+   * @see FieldValueExtractor
+   */
+  void addValueExtractors(FieldValueExtractor... fieldValueExtractors);
+
+  /**
+   * @param fieldPrompters
+   * @see FieldPrompter
+   */
+  void addCellPrompters(FieldPrompter... fieldPrompters);
+
+  /**
+   * @param file
+   * @throws IOException
+   * @see #generate(OutputStream)
+   */
+  void generate(File file) throws IOException;
+
+  /**
+   * generate file to supplied output stream
    *
    * @throws IOException
    */
   void generate(OutputStream outputStream) throws IOException;
 
+  /**
+   * @param file
+   * @param createTitles
+   * @param createFields
+   * @param createPrompts
+   * @throws IOException
+   * @see #generate(OutputStream, boolean, boolean, boolean)
+   */
+  void generate(File file, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException;
+
+  /**
+   * @param outputStream
+   * @param createTitles  detect if show titles
+   * @param createFields  detect if show fields
+   * @param createPrompts detect if show prompts
+   * @throws IOException
+   * @see #generate(OutputStream)
+   */
   void generate(OutputStream outputStream, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException;
 }

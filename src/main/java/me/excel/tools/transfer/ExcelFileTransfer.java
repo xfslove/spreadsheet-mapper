@@ -7,15 +7,15 @@ import java.io.InputStream;
 
 /**
  * excel transfer
- *
+ * <p>
  * Created by hanwen on 15-12-16.
  */
 public interface ExcelFileTransfer {
 
   /**
-   * transfer inputStream to java bean
+   * transfer supplied excel stream to {@link ExcelWorkbook}
    *
-   * @param inputStream close auto
+   * @param inputStream auto close
    */
   ExcelWorkbook transfer(InputStream inputStream) throws IOException;
 

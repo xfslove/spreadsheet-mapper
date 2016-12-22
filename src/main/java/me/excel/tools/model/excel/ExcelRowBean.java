@@ -42,7 +42,10 @@ public class ExcelRowBean implements ExcelRow {
 
   @Override
   public ExcelCell getCell(int index) {
-    return excelCells.get(index);
+    if (index < 1) {
+      throw new IllegalArgumentException("index must greater than zero");
+    }
+    return excelCells.get(index - 1);
   }
 
   @Override
@@ -56,7 +59,7 @@ public class ExcelRowBean implements ExcelRow {
     if (sizeOfCells() == 0) {
       return null;
     }
-    return getCell(sizeOfCells() - 1);
+    return getCell(sizeOfCells());
   }
 
   @Override

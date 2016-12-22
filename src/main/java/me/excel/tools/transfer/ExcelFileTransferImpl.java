@@ -1,7 +1,8 @@
 package me.excel.tools.transfer;
 
+import me.excel.tools.model.comment.ExcelCellComment;
+import me.excel.tools.model.comment.ExcelCellCommentBean;
 import me.excel.tools.model.excel.*;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
@@ -12,11 +13,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * excel 文件到 {@link ExcelWorkbook}的转换器
- * <p>
- * Created by hanwen on 15-12-16.
- */
 public class ExcelFileTransferImpl implements ExcelFileTransfer {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ExcelFileTransferImpl.class);
@@ -135,10 +131,7 @@ public class ExcelFileTransferImpl implements ExcelFileTransfer {
     if (commentString == null) {
       return;
     }
-    String[] comments = StringUtils.split(commentString, ",");
-    for (String comment : comments) {
-      excelCellComment.addComment(comment);
-    }
+    excelCellComment.setComment(commentString);
     excelCell.setComment(excelCellComment);
   }
 

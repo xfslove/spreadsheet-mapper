@@ -49,7 +49,10 @@ public class ExcelSheetBean implements ExcelSheet {
 
   @Override
   public ExcelRow getRow(int index) {
-    return excelRows.get(index);
+    if (index < 1) {
+      throw new IllegalArgumentException("index must greater than zero");
+    }
+    return excelRows.get(index - 1);
   }
 
   @Override
@@ -76,7 +79,7 @@ public class ExcelSheetBean implements ExcelSheet {
     if (sizeOfRows() == 0) {
       return null;
     }
-    return getRow(sizeOfRows() - 1);
+    return getRow(sizeOfRows());
   }
 
   public void setWorkbook(ExcelWorkbook excelWorkbook) {
@@ -111,8 +114,8 @@ public class ExcelSheetBean implements ExcelSheet {
 
   @Override
   public List<String> getKeyRowFields() {
-    return getRow(1).getCells().stream()
-        .map(excelCell -> excelCell.getValue()).collect(Collectors.toList());
+    return getRow(2).getCells().stream()
+        .map(ExcelCell::getValue).collect(Collectors.toList());
   }
 
   @Override
@@ -130,7 +133,7 @@ public class ExcelSheetBean implements ExcelSheet {
         String f = excelCell.getField();
         String v = excelCell.getValue();
 
-        if (FieldUtils.getFieldWithoutPrefix(f).equals(FieldUtils.getFieldWithoutPrefix(field)) && v != null) {
+        if (FieldUtils.detectRealField(f).equals(FieldUtils.detectRealField(field)) && v != null) {
           cellValuesOfField.add(v);
         }
       }

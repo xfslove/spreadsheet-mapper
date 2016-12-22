@@ -2,18 +2,23 @@ package me.excel.tools.model.message;
 
 import me.excel.tools.model.excel.ExcelCell;
 
+import java.io.Serializable;
+
 /**
  * excel validate error message
- *
+ * <p>
  * Created by hanwen on 15-12-15.
  */
-public class ErrorMessage {
+public class ErrorMessage implements Serializable {
 
   /**
-   * 对应的cell
+   * belong cell
    */
   private ExcelCell cell;
 
+  /**
+   * error content
+   */
   private String content;
 
   public ErrorMessage(ExcelCell cell, String content) {

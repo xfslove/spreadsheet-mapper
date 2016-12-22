@@ -111,9 +111,9 @@ userFileValidator.addCellValidator(
     );
 // 得到校验结果
 boolean passed = userFileValidator.validate();
-// 如果验证失败，把错误信息写到文件上
+// 如果验证失败，得到错误信息
 if (!passed) {
-	userFileValidator.writeFailureMessageComments();
+	userFileValidator.getErrorMessages();
 }  
 ```
 

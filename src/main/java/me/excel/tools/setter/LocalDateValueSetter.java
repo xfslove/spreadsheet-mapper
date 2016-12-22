@@ -9,12 +9,14 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static me.excel.tools.FieldUtils.getFieldWithoutPrefix;
+import static me.excel.tools.FieldUtils.detectRealField;
 
 /**
+ * local date field value setter
+ * <p>
  * Created by hanwen on 5/3/16.
  */
-public class LocalDateValueSetter extends AbstractCellValueSetter {
+public class LocalDateValueSetter extends FieldValueSetterAdapter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(LocalDateValueSetter.class);
 
@@ -24,12 +26,13 @@ public class LocalDateValueSetter extends AbstractCellValueSetter {
     super(matchField);
     this.pattern = pattern;
   }
+
   @Override
   public void set(Object data, ExcelCell excelCell) {
     try {
       DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(pattern);
       String value = excelCell.getValue();
-      PropertyUtils.setProperty(data, getFieldWithoutPrefix(excelCell.getField()), value == null ? null : dateTimeFormatter.parseLocalDate(value));
+      PropertyUtils.setProperty(data, detectRealField(excelCell.getField()), value == null ? null : dateTimeFormatter.parseLocalDate(value));
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new ExcelImportException(e);

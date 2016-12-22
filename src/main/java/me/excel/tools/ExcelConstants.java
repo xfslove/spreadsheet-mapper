@@ -6,7 +6,12 @@ package me.excel.tools;
 public class ExcelConstants {
 
   private ExcelConstants() {
+    // default constructor
   }
+
+  public static final String SEPARATOR = ",";
+
+  public static final String EMPTY_VALUE = "";
 
   public static final String SUFFIX_XLS = ".xls";
 

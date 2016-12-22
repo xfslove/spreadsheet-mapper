@@ -1,5 +1,6 @@
 package me.excel.tools.model.excel;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -8,46 +9,46 @@ import java.util.Set;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface ExcelSheet {
+public interface ExcelSheet extends Serializable {
 
   /**
-   * 得到sheet的名称
+   * sheet name
    *
    * @return
    */
   String getSheetName();
 
   /**
-   * sheet 所有的row（包括fields和数据）
+   * get rows of this sheet
    *
    * @return
    */
   List<ExcelRow> getRows();
 
   /**
-   * sheet 所有row的数量
+   * get rows zise of this sheet
    *
    * @return
    */
   int sizeOfRows();
 
   /**
-   * 根据 index 获得row
+   * get row by index
    *
-   * @param index
+   * @param index 1-based
    * @return
    */
   ExcelRow getRow(int index);
 
   /**
-   * sheet 所有的数据row
+   * get data rows of this sheet (exclude first, second, third rows)
    *
    * @return
    */
   List<ExcelRow> getDataRows();
 
   /**
-   * 增加一个row
+   * add row
    *
    * @param excelRow
    * @return
@@ -55,42 +56,42 @@ public interface ExcelSheet {
   boolean addRow(ExcelRow excelRow);
 
   /**
-   * 得到最后一个row
+   * get last row
    *
    * @return
    */
   ExcelRow getLastRow();
 
   /**
-   * sheet 所在workbook
+   * workbook of sheet at
    *
    * @return
    */
   ExcelWorkbook getWorkbook();
 
   /**
-   * sheet 所在位置
+   * get sheet index
    *
    * @return 1-based
    */
   int getIndex();
 
   /**
-   * 是否有comment
+   * has comment
    *
    * @return
    */
   boolean hasComments();
 
   /**
-   * 得到所有的keys
+   * get all fields
    *
    * @return
    */
   List<String> getKeyRowFields();
 
   /**
-   * 得到某个字段的所有值
+   * collect all values of supplied field (distinct)
    *
    * @param field
    * @return

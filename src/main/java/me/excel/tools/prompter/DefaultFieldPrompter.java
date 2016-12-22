@@ -1,15 +1,17 @@
 package me.excel.tools.prompter;
 
 /**
+ * default prompter
+ * <p>
  * Created by hanwen on 2016/12/19.
  */
-public class DefaultCellPrompter implements CellPrompter {
+public class DefaultFieldPrompter implements FieldPrompter {
 
   private String matchField;
 
   private String prompt;
 
-  public DefaultCellPrompter(String matchField, String prompt) {
+  public DefaultFieldPrompter(String matchField, String prompt) {
     this.matchField = matchField;
     this.prompt = prompt;
   }

@@ -7,12 +7,14 @@ import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static me.excel.tools.FieldUtils.getFieldWithoutPrefix;
+import static me.excel.tools.FieldUtils.detectRealField;
 
 /**
+ * local date readable value extractor
+ *
  * Created by hanwen on 5/3/16.
  */
-public class LocalDateExtractor extends AbstractCellValueExtractor {
+public class LocalDateExtractor extends FieldValueExtractorAdapter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(LocalDateExtractor.class);
 
@@ -27,7 +29,7 @@ public class LocalDateExtractor extends AbstractCellValueExtractor {
   public String getStringValue(Object data) {
 
     try {
-      LocalDate value = (LocalDate) PropertyUtils.getProperty(data, getFieldWithoutPrefix(getMatchField()));
+      LocalDate value = (LocalDate) PropertyUtils.getProperty(data, detectRealField(getMatchField()));
 
       return value == null ? null : value.toString(pattern);
 

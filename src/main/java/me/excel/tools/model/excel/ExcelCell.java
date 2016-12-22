@@ -1,53 +1,69 @@
 package me.excel.tools.model.excel;
 
+import me.excel.tools.model.comment.ExcelCellComment;
+
+import java.io.Serializable;
+
 /**
  * excel cell
- *
+ * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface ExcelCell {
+public interface ExcelCell extends Serializable {
 
   /**
-   * cell 所在行数
+   * cell row num
+   *
    * @return 1-based
    */
   int getRowNum();
 
   /**
-   * cell 所在列数
+   * cell column num
+   *
    * @return 1-based
    */
   int getColumnNum();
 
   /**
-   * cell 对应的字段
+   * cell belong field
+   *
    * @return
    */
   String getField();
 
   /**
-   * 得到cell的值
+   * cell value
+   *
    * @return
    */
   String getValue();
 
   /**
-   * cell 所在行
+   * sheet of cell at
+   *
+   * @return
+   */
+  ExcelSheet getSheet();
+
+  /**
+   * row of cell at
+   *
    * @return
    */
   ExcelRow getRow();
 
   /**
-   * cell 的备注
+   * cell comment
+   *
    * @return
    */
   ExcelCellComment getComment();
 
   /**
-   * cell 所在sheet
-   * @return
+   * set comment at the cell
+   *
+   * @param comment
    */
-  ExcelSheet getSheet();
-
   void setComment(ExcelCellComment comment);
 }

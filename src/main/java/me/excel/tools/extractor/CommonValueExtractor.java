@@ -3,9 +3,11 @@ package me.excel.tools.extractor;
 import java.util.function.Function;
 
 /**
+ * customer value extractor
+ * <p>
  * Created by hanwen on 5/3/16.
  */
-public class CommonValueExtractor<D> extends AbstractCellValueExtractor {
+public class CommonValueExtractor<D> extends FieldValueExtractorAdapter {
 
   protected Function<D, String> stringValueGetter;
 

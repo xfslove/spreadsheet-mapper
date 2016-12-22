@@ -8,24 +8,31 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * model field extractor
+ * model field utils
  * <p>
  * Created by hanwen on 15-12-18.
  */
 public class FieldUtils {
 
   private FieldUtils() {
+    // default constructor
   }
 
+  /**
+   * <pre>
+   * the business key present a domain model, it can identified a domain model.
+   * it useful where update a domain model using excel template.
+   * </pre>
+   */
   public static final String BUSINESS_KEY_PREFIX = "businessKey.";
 
   /**
-   * 获得business key的field
+   * get field with out business key
    *
    * @param field
    * @return
    */
-  public static String getBusinessKeyField(String field) {
+  public static String subtractBusinessKey(String field) {
     if (!StringUtils.contains(field, BUSINESS_KEY_PREFIX)) {
       throw new IllegalStateException("field is not business key");
     }
@@ -33,17 +40,22 @@ public class FieldUtils {
   }
 
   /**
-   * 获得去掉前缀的field name
+   * <pre>
+   * get field name without prefix
+   * eg:
+   * model.name -> name
+   * model.nested.name -> nested.name
+   * </pre>
    *
-   * @param field 比如: model.name
-   * @return 比如: name
+   * @param field
+   * @return
    */
-  public static String getFieldWithoutPrefix(String field) {
+  public static String detectRealField(String field) {
 
     String realField = field;
 
     if (field.contains(BUSINESS_KEY_PREFIX)) {
-      realField = FieldUtils.getBusinessKeyField(field);
+      realField = FieldUtils.subtractBusinessKey(field);
     }
 
     List<String> splitFields = new ArrayList<>(Arrays.asList(realField.split("\\.")));
@@ -56,12 +68,10 @@ public class FieldUtils {
   }
 
   /**
-   * <p>
-   * 获得Field, 查找算法是先从本类找, 如果找不到就递归到父类找, 如果找不到就返回null.
-   * </p>
-   * <p>
-   * 支持private, private final, protected, protected final, public, public final 的field.
-   * </p>
+   * <pre>
+   * get field if can't find return null.
+   * supported private, private final, protected, protected final, public, public final.
+   * </pre>
    *
    * @param clazz
    * @param fieldName
@@ -79,10 +89,10 @@ public class FieldUtils {
   }
 
   /**
-   * 获得field name对应的field type (支持 nested object)
+   * get field type if can't find return null.
    *
    * @param clazz
-   * @param fields 比如: [objectB, objectA, name] 表示objectB.objectA.name
+   * @param fields eg: [objectB, objectA, name] is objectB.objectA.name
    * @return
    */
   public static Class getFieldType(Class clazz, String[] fields) {
@@ -100,11 +110,10 @@ public class FieldUtils {
   }
 
   /**
-   * 获得field name对应的field type
-   *
    * @param clazz
    * @param fieldName
    * @return
+   * @see #getFieldType(Class, String[])
    */
   public static Class getFieldType(Class clazz, String fieldName) {
 

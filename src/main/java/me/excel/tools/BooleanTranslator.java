@@ -4,6 +4,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
+ * translate human boolean to java bean value.
+ * <p>
  * Created by hanwen on 15-12-18.
  */
 public class BooleanTranslator {

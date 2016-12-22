@@ -1,19 +1,36 @@
 package me.excel.tools.exporter;
 
+import me.excel.tools.ExcelConstants;
+import me.excel.tools.model.comment.ExcelCellComment;
+import me.excel.tools.model.comment.ExcelCellCommentBean;
 import me.excel.tools.model.excel.*;
 import org.apache.poi.util.TempFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.FileOutputStream;
-
-import static org.testng.Assert.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by hanwen on 15-12-20.
  */
 public class ExcelFileExporterTest {
-  
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExcelFileExporterTest.class);
+
+  private File excel;
+
+  @BeforeTest
+  public void init() throws IOException {
+    excel = TempFile.createTempFile("test", ExcelConstants.SUFFIX_XLSX);
+    LOGGER.info(excel.getAbsolutePath());
+  }
+
   @Test
   public void testExport() throws Exception {
 
@@ -38,8 +55,20 @@ public class ExcelFileExporterTest {
 
     UserFileExporter fileExporter = new ExcelFileExporter(excelWorkbook);
 
-    File file = TempFile.createTempFile("test", ".xlsx");
+    fileExporter.export(new FileOutputStream(excel));
+  }
 
-    fileExporter.export(new FileOutputStream(file));
+  @Test(dependsOnMethods = "testExport")
+  public void testWriteComments() throws Exception {
+
+    ExcelCellCommentBean excelCellComment = new ExcelCellCommentBean();
+    excelCellComment.setComment("test comment1");
+    excelCellComment.setSheetIndex(1);
+    excelCellComment.setRowNum(1);
+    excelCellComment.setColumnNum(1);
+
+    List<ExcelCellComment> commentList = new ArrayList<>();
+    commentList.add(excelCellComment);
+    ExcelCommentUtils.writeComments(excel, commentList);
   }
 }

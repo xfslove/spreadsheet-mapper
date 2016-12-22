@@ -1,60 +1,69 @@
 package me.excel.tools.model.excel;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * excel row
- *
+ * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface ExcelRow {
+public interface ExcelRow extends Serializable {
 
   /**
-   * row 所在行数
+   * row num
+   *
    * @return 1-based
    */
   int getRowNum();
 
   /**
-   * row 所在sheet
+   * sheet of row at
+   *
    * @return
    */
   ExcelSheet getSheet();
 
   /**
-   * row 中所有的cell
+   * get cells of this row
+   *
    * @return
    */
   List<ExcelCell> getCells();
 
   /**
-   * row 中所有的cell数量
+   * get cells size of this row
+   *
    * @return
    */
   int sizeOfCells();
 
   /**
-   * 根据 index 得到cell
-   * @param index
+   * get cell by index
+   *
+   * @param index 1-based
    * @return
    */
   ExcelCell getCell(int index);
 
   /**
-   * 增加一个 cell
+   * add cell
+   *
    * @param excelCell
    * @return
    */
   boolean addCell(ExcelCell excelCell);
 
   /**
-   * row 中最后一个cell
+   * get last cell of this row
+   *
    * @return
    */
   ExcelCell getLastCell();
 
   /**
-   * 根据 field 得到cell
+   * get cell by field (see {@link ExcelCell#getField()})
+   *
    * @param field
    * @return
    */

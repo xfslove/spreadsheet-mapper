@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
+ * customer data processor
+ * <p>
  * Created by hanwen on 16-1-18.
  */
 public class CommonDataProcessor<D> implements DataProcessor {

@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * support date format when excel value transfer to java bean field
+ * <p>
  * Created by hanwen on 5/3/16.
  */
 public class ExcelSupportedDateFormat {
@@ -39,6 +41,12 @@ public class ExcelSupportedDateFormat {
     registerFormat("yyyy\\-mm\\-dd\\ HH:mm:ss", FULL_LOCAL_DATE_TIME_PATTERN);
   }
 
+  /**
+   * register customer format
+   *
+   * @param excelDateFormat
+   * @param dateFormat
+   */
   public static void registerFormat(String excelDateFormat, String dateFormat) {
     EXCEL_SUPPORTED_DATE_FORMAT.put(excelDateFormat, dateFormat);
   }

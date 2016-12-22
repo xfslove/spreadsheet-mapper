@@ -1,10 +1,11 @@
 package me.excel.tools.prompter;
 
 /**
- * boolean 提示器
+ * boolean prompter
+ * <p>
  * Created by hanwen on 2016/12/19.
  */
-public class BooleanPrompter extends DefaultCellPrompter {
+public class BooleanPrompter extends DefaultFieldPrompter {
 
   public BooleanPrompter(String matchField) {
     super(matchField,

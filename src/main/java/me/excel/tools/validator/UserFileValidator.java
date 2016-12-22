@@ -8,51 +8,53 @@ import me.excel.tools.validator.workbook.WorkbookValidator;
 import java.util.List;
 
 /**
- * file validator
+ * file data validator
  * <p>
  * Created by hanwen on 15-12-16.
  */
 public interface UserFileValidator {
 
   /**
-   * 设置支持的field范围
+   * set supported fields scope in template
    *
    * @param fields
    */
   void setFieldScope(String... fields);
 
   /**
-   * 设置必须的field范围
+   * set required fields in template
    *
    * @param fields
    */
   void setRequiredFields(String... fields);
 
   /**
-   * 增加单元格验证器
-   *
    * @param validators
+   * @see CellValidator
    */
   void addCellValidator(CellValidator... validators);
 
   /**
-   * 增加行验证器行验证器, 在单元格验证器之后验证
-   *
    * @param validators
+   * @see RowValidator
    */
   void addRowValidator(RowValidator... validators);
 
   /**
-   * 增加工作表验证器
-   *
    * @param validators
+   * @see WorkbookValidator
    */
   void addWorkbookValidator(WorkbookValidator... validators);
 
+  /**
+   * execute validate
+   *
+   * @return
+   */
   boolean validate();
 
   /**
-   * 得到错误信息
+   * get validate error messages
    *
    * @return
    */

@@ -18,7 +18,7 @@ public class ExcelFileTransferImplTest {
 
   @Test
   public void testTransfer() throws Exception {
-    InputStream excelIs = this.getClass().getResourceAsStream("test.xlsx");
+    InputStream excelIs = this.getClass().getResourceAsStream("test.xls");
 
     ExcelSupportedDateFormat.registerFormat("[$-409]d\\-mmm\\-yy;@", "yyyy-MM-dd");
 
@@ -28,12 +28,12 @@ public class ExcelFileTransferImplTest {
     ExcelWorkbook excelWorkbook = transfer.getExcelWorkbook();
 
     assertEquals(excelWorkbook.sizeOfSheets(), 1);
-    ExcelSheet sheet = excelWorkbook.getSheet(0);
+    ExcelSheet sheet = excelWorkbook.getSheet(1);
     assertEquals(sheet.getSheetName(), "Sheet0");
 
     assertEquals(sheet.sizeOfRows(), 2);
     for (int i = 0; i < 2; i++) {
-      ExcelRow row = sheet.getRow(i);
+      ExcelRow row = sheet.getRow(i + 1);
       assertEquals(row.sizeOfCells(), 4);
       if (i == 0) {
         assertEquals(row.getCells().stream()

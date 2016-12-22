@@ -1,6 +1,8 @@
 package me.excel.tools.model.excel;
 
 import me.excel.tools.ExcelSupportedDateFormat;
+import me.excel.tools.model.comment.ExcelCellComment;
+import me.excel.tools.model.comment.ExcelCellCommentBean;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;

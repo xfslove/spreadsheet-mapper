@@ -1,13 +1,15 @@
 package me.excel.tools.extractor;
 
 /**
+ * field value extractor adapter, easy implements customer value extractor extends this.
+ * <p>
  * Created by hanwen on 5/3/16.
  */
-public abstract class AbstractCellValueExtractor implements CellValueExtractor {
+public abstract class FieldValueExtractorAdapter implements FieldValueExtractor {
 
   private String matchField;
 
-  public AbstractCellValueExtractor(String matchField) {
+  public FieldValueExtractorAdapter(String matchField) {
     this.matchField = matchField;
   }
 

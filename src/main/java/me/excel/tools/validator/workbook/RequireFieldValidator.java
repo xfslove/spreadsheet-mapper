@@ -1,5 +1,6 @@
 package me.excel.tools.validator.workbook;
 
+import me.excel.tools.ExcelConstants;
 import me.excel.tools.model.excel.ExcelCell;
 import me.excel.tools.model.excel.ExcelWorkbook;
 import org.apache.commons.lang3.StringUtils;
@@ -24,14 +25,14 @@ public class RequireFieldValidator implements WorkbookValidator {
   @Override
   public String getErrorMessage() {
     if (this.excelWorkbook == null) {
-      return "";
+      return ExcelConstants.EMPTY_VALUE;
     }
-    return "不包含所要求的字段:" + StringUtils.join(getLostFields(this.excelWorkbook), ",");
+    return "不包含所要求的字段:" + StringUtils.join(getLostFields(this.excelWorkbook), ExcelConstants.SEPARATOR);
   }
 
   @Override
   public ExcelCell getMessageOnCell(ExcelWorkbook excelWorkbook) {
-    return excelWorkbook.getFirstSheet().getRow(0).getCell(0);
+    return excelWorkbook.getFirstSheet().getRow(1).getCell(1);
   }
 
   @Override

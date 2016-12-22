@@ -34,7 +34,10 @@ public class ExcelWorkbookBean implements ExcelWorkbook {
 
   @Override
   public ExcelSheet getSheet(int index) {
-    return excelSheets.get(index);
+    if (index < 1) {
+      throw new IllegalArgumentException("index must greater than zero");
+    }
+    return excelSheets.get(index - 1);
   }
 
   @Override
@@ -42,7 +45,7 @@ public class ExcelWorkbookBean implements ExcelWorkbook {
     if (sizeOfSheets() == 0) {
       return null;
     }
-    return getSheet(sizeOfSheets() - 1);
+    return getSheet(sizeOfSheets());
   }
 
   @Override
@@ -50,6 +53,6 @@ public class ExcelWorkbookBean implements ExcelWorkbook {
     if (sizeOfSheets() == 0) {
       return null;
     }
-    return getSheet(0);
+    return getSheet(1);
   }
 }

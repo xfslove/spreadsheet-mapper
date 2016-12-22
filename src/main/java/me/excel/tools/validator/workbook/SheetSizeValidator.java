@@ -22,7 +22,7 @@ public class SheetSizeValidator implements WorkbookValidator {
 
   @Override
   public ExcelCell getMessageOnCell(ExcelWorkbook excelWorkbook) {
-    return excelWorkbook.getFirstSheet().getRow(0).getCell(0);
+    return excelWorkbook.getFirstSheet().getRow(1).getCell(1);
   }
 
   @Override

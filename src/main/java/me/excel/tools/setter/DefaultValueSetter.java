@@ -16,11 +16,11 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 
-import static me.excel.tools.FieldUtils.getFieldWithoutPrefix;
+import static me.excel.tools.FieldUtils.detectRealField;
 
 
 /**
- * default object value setter
+ * default field value setter, using {@link BeanUtils#setProperty(Object, String, Object)}
  * <p>
  * Created by hanwen on 15-12-18.
  */
@@ -41,7 +41,7 @@ public class DefaultValueSetter {
 
     excelCells.forEach(cell -> {
       try {
-        BeanUtils.setProperty(data, getFieldWithoutPrefix(cell.getField()), matches(data, cell) ? cell.getValue() : null);
+        BeanUtils.setProperty(data, detectRealField(cell.getField()), matches(data, cell) ? cell.getValue() : null);
       } catch (Exception e) {
         LOGGER.error(ExceptionUtils.getStackTrace(e));
         throw new ExcelImportException(e);
@@ -51,17 +51,14 @@ public class DefaultValueSetter {
   }
 
   private boolean matches(Object data, ExcelCell cell) {
-    Class fieldType = FieldUtils.getFieldType(data.getClass(), getFieldWithoutPrefix(cell.getField()).split("\\."));
+    Class fieldType = FieldUtils.getFieldType(data.getClass(), detectRealField(cell.getField()).split("\\."));
 
-    if (fieldType != null &&
+    return fieldType != null &&
         (Integer.class.equals(fieldType) || int.class.equals(fieldType) ||
-         Long.class.equals(fieldType) || long.class.equals(fieldType) ||
-         Double.class.equals(fieldType) || double.class.equals(fieldType) ||
-         Float.class.equals(fieldType) || float.class.equals(fieldType) ||
-         String.class.equals(fieldType))) {
-      return true;
-    }
+            Long.class.equals(fieldType) || long.class.equals(fieldType) ||
+            Double.class.equals(fieldType) || double.class.equals(fieldType) ||
+            Float.class.equals(fieldType) || float.class.equals(fieldType) ||
+            String.class.equals(fieldType));
 
-    return false;
   }
 }

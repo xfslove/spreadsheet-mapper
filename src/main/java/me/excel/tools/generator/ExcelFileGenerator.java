@@ -1,13 +1,16 @@
 package me.excel.tools.generator;
 
+import me.excel.tools.ExcelConstants;
 import me.excel.tools.exporter.ExcelFileExporter;
 import me.excel.tools.exporter.UserFileExporter;
-import me.excel.tools.extractor.CellValueExtractor;
+import me.excel.tools.extractor.FieldValueExtractor;
 import me.excel.tools.extractor.DefaultValueExtractor;
 import me.excel.tools.model.excel.*;
-import me.excel.tools.prompter.CellPrompter;
+import me.excel.tools.prompter.FieldPrompter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -28,9 +31,9 @@ public class ExcelFileGenerator implements UserFileGenerator {
 
   private DefaultValueExtractor defaultValueExtractor = new DefaultValueExtractor();
 
-  private List<CellValueExtractor> cellValueExtractors = new ArrayList<>();
+  private List<FieldValueExtractor> fieldValueExtractors = new ArrayList<>();
 
-  private List<CellPrompter> cellPrompters = new ArrayList<>();
+  private List<FieldPrompter> fieldPrompters = new ArrayList<>();
 
   @Override
   public void setTitles(String... titles) {
@@ -49,19 +52,19 @@ public class ExcelFileGenerator implements UserFileGenerator {
   }
 
   @Override
-  public void addValueExtractors(CellValueExtractor... cellValueExtractors) {
-    if (cellValueExtractors == null) {
+  public void addValueExtractors(FieldValueExtractor... fieldValueExtractors) {
+    if (fieldValueExtractors == null) {
       return;
     }
-    Collections.addAll(this.cellValueExtractors, cellValueExtractors);
+    Collections.addAll(this.fieldValueExtractors, fieldValueExtractors);
   }
 
   @Override
-  public void addCellPrompters(CellPrompter... cellPrompters) {
-    if (cellPrompters == null) {
+  public void addCellPrompters(FieldPrompter... fieldPrompters) {
+    if (fieldPrompters == null) {
       return;
     }
-    Collections.addAll(this.cellPrompters, cellPrompters);
+    Collections.addAll(this.fieldPrompters, fieldPrompters);
   }
 
   @Override
@@ -70,8 +73,18 @@ public class ExcelFileGenerator implements UserFileGenerator {
   }
 
   @Override
+  public void generate(File excel) throws IOException {
+    generate(new FileOutputStream(excel));
+  }
+
+  @Override
   public void generate(OutputStream outputStream) throws IOException {
     generate(outputStream, true, true, true);
+  }
+
+  @Override
+  public void generate(File excel, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException {
+    generate(new FileOutputStream(excel), createTitles, createFields, createPrompts);
   }
 
   @Override
@@ -81,14 +94,6 @@ public class ExcelFileGenerator implements UserFileGenerator {
     if (excelWorkbook == null) {
       throw new IllegalArgumentException("workbook is null");
     }
-
-    excelWorkbook.getSheet(0).getDataRows().forEach(row -> {
-
-      if (row.sizeOfCells() != fields.size()) {
-        throw new IllegalArgumentException("fields mistake at row" + row.getRowNum());
-      }
-
-    });
 
     UserFileExporter excelFileExporter = new ExcelFileExporter(excelWorkbook);
     excelFileExporter.export(outputStream);
@@ -173,15 +178,15 @@ public class ExcelFileGenerator implements UserFileGenerator {
 
   private String getPrompts(String field) {
 
-    List<String> prompts = cellPrompters.stream().filter(cellPrompter -> cellPrompter.matches(field)).map(CellPrompter::getPrompt).collect(Collectors.toList());
-    return prompts.isEmpty() ? "" : StringUtils.join(prompts, ",");
+    List<String> prompts = fieldPrompters.stream().filter(fieldPrompter -> fieldPrompter.matches(field)).map(FieldPrompter::getPrompt).collect(Collectors.toList());
+    return prompts.isEmpty() ? ExcelConstants.EMPTY_VALUE : StringUtils.join(prompts, ExcelConstants.SEPARATOR);
   }
 
   private String getFieldValue(Object data, String field) {
 
-    for (CellValueExtractor cellValueExtractor : cellValueExtractors) {
-      if (cellValueExtractor.matches(field)) {
-        return cellValueExtractor.getStringValue(data);
+    for (FieldValueExtractor fieldValueExtractor : fieldValueExtractors) {
+      if (fieldValueExtractor.matches(field)) {
+        return fieldValueExtractor.getStringValue(data);
       }
     }
 

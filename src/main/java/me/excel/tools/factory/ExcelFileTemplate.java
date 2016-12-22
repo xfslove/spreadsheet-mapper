@@ -8,13 +8,15 @@ import me.excel.tools.transfer.ExcelFileTransferImpl;
 import me.excel.tools.validator.ExcelFileValidator;
 import me.excel.tools.validator.UserFileValidator;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.Set;
 
 /**
- * excel 模板工厂, 只支持单sheet的导入，多sheet不支持
+ * excel template factory, only support single sheet importing, multi sheet not support.
  * <p>
  * Created by hanwen on 15-12-16.
  */
@@ -25,6 +27,17 @@ public class ExcelFileTemplate implements UserFileTemplate {
   private UserFileImporter userFileImporter;
 
   private ExcelWorkbook excelWorkbook;
+
+  public ExcelFileTemplate(File excel) throws IOException {
+
+    ExcelFileTransfer excelFileTransfer = new ExcelFileTransferImpl();
+
+    this.excelWorkbook = excelFileTransfer.transfer(new FileInputStream(excel));
+
+    this.userFileImporter = new ExcelFileImporter(excelWorkbook);
+
+    this.userFileValidator = new ExcelFileValidator(excelWorkbook);
+  }
 
   public ExcelFileTemplate(InputStream inputStream) throws IOException {
 

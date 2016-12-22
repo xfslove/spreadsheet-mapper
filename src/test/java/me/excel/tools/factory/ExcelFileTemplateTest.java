@@ -1,8 +1,8 @@
 package me.excel.tools.factory;
 
+import me.excel.tools.extractor.BooleanZhExtractor;
 import me.excel.tools.generator.ExcelFileGenerator;
 import me.excel.tools.generator.UserFileGenerator;
-import me.excel.tools.extractor.BooleanZhExtractor;
 import me.excel.tools.importer.UserFileImporter;
 import me.excel.tools.model.excel.ExcelRow;
 import me.excel.tools.processor.DataProcessor;
@@ -22,8 +22,6 @@ import org.joda.time.format.DateTimeFormatter;
 import org.testng.annotations.Test;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -39,10 +37,10 @@ public class ExcelFileTemplateTest {
 
   @Test
   public void testProcess() throws Exception {
-    URL resource = this.getClass().getResource("test.xlsx");
+    URL resource = this.getClass().getResource("test.xls");
     File excel = new File(resource.getFile());
 
-    ExcelFileTemplate excelFileTemplate = new ExcelFileTemplate(new FileInputStream(excel));
+    ExcelFileTemplate excelFileTemplate = new ExcelFileTemplate(excel);
 
     UserFileValidator userFileValidator = excelFileTemplate.getUserFileValidator();
 
@@ -111,7 +109,7 @@ public class ExcelFileTemplateTest {
     userFileGenerator.setFields("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
     userFileGenerator.setTitles("学号", "年龄", "姓名", "入学日期", "是否在校");
 
-    userFileGenerator.generate(new FileOutputStream(file));
+    userFileGenerator.generate(file);
   }
 
   public class StudentDataProcessorTest implements DataProcessor {

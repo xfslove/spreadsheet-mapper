@@ -5,14 +5,15 @@ import me.excel.tools.model.excel.ExcelCell;
 import me.excel.tools.model.excel.ExcelSheet;
 import me.excel.tools.model.excel.ExcelWorkbook;
 import me.excel.tools.processor.DataProcessor;
-import me.excel.tools.setter.CellValueSetter;
 import me.excel.tools.setter.DefaultValueSetter;
+import me.excel.tools.setter.FieldValueSetter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
- * excel 文件导入器
+ * excel importer
  * <p>
  * Created by hanwen on 15-12-16.
  */
@@ -22,7 +23,7 @@ public class ExcelFileImporter implements UserFileImporter {
 
   private ModelFactory modelFactory;
 
-  private List<CellValueSetter> cellValueSetters = new ArrayList<>();
+  private List<FieldValueSetter> fieldValueSetters = new ArrayList<>();
 
   private DefaultValueSetter defaultValueSetter = new DefaultValueSetter();
 
@@ -54,8 +55,8 @@ public class ExcelFileImporter implements UserFileImporter {
 
       for (ExcelCell excelCell : row.getCells()) {
 
-        for (CellValueSetter customValueSetter : cellValueSetters) {
-          if (customValueSetter.matches(excelCell)) {
+        for (FieldValueSetter customValueSetter : fieldValueSetters) {
+          if (customValueSetter.matches(excelCell.getField())) {
             customValueSetter.set(model, excelCell);
             break;
           }
@@ -71,14 +72,12 @@ public class ExcelFileImporter implements UserFileImporter {
   }
 
   @Override
-  public void addCellValueSetter(CellValueSetter... setters) {
+  public void addCellValueSetter(FieldValueSetter... setters) {
     if (setters == null) {
       return;
     }
 
-    for (CellValueSetter setter : setters) {
-      this.cellValueSetters.add(setter);
-    }
+    Collections.addAll(this.fieldValueSetters, setters);
   }
 
   @Override
