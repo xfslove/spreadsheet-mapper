@@ -12,15 +12,7 @@ import java.util.List;
  * <pre>
  * file generator, generated all cell type is string (include number, date ...).
  *
- * file format:
- *
- * first row  : titles
- * --------------------
- * second row : fields
- * --------------------
- * third row  : prompts
- * --------------------
- * data row ...
+ * file format see {@link me.excel.tools.factory.UserFileTemplate}
  * </pre>
  * <p>
  * Created by hanwen on 15-12-16.

@@ -111,9 +111,11 @@ userFileValidator.addCellValidator(
     );
 // 得到校验结果
 boolean passed = userFileValidator.validate();
-// 如果验证失败，得到错误信息
+// 如果验证失败，得到错误信息，并写到excel中
 if (!passed) {
-	userFileValidator.getErrorMessages();
+	List<ErrorMessage> errors = userFileValidator.getErrorMessages();
+	List<ExcelCellComment> comments = ExcelCommentUtils.transferErrorMessagesToComments(errors);
+	ExcelCommentUtils.writeComments(excel, comments);
 }  
 ```
 

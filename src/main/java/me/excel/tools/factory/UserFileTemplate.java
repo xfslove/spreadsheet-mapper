@@ -6,8 +6,19 @@ import me.excel.tools.validator.UserFileValidator;
 import java.util.Set;
 
 /**
+ * <pre>
  * import template factory
- * <p>
+ *
+ * template format:
+ *
+ * first row  : titles
+ * --------------------
+ * second row : fields
+ * --------------------
+ * third row  : prompts
+ * --------------------
+ * data row ...
+ * </pre>
  * Created by hanwen on 15-12-16.
  */
 public interface UserFileTemplate {
