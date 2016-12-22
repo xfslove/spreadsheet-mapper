@@ -9,7 +9,7 @@ import java.util.function.Function;
  */
 public class CommonValueExtractor<D> extends FieldValueExtractorAdapter {
 
-  protected Function<D, String> stringValueGetter;
+  private Function<D, String> stringValueGetter;
 
   public CommonValueExtractor(String matchField, Function<D, String> stringValueGetter) {
     super(matchField);

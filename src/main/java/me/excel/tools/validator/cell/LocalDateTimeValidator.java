@@ -1,7 +1,6 @@
 package me.excel.tools.validator.cell;
 
 import me.excel.tools.model.excel.ExcelCell;
-import me.excel.tools.validator.SkipValidateException;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -25,7 +24,7 @@ public class LocalDateTimeValidator extends CellValidatorAdapter {
   }
 
   @Override
-  protected boolean customValidate(ExcelCell excelCell) throws SkipValidateException {
+  protected boolean customValidate(ExcelCell excelCell) {
     DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(format);
 
     try {

@@ -1,7 +1,6 @@
 package me.excel.tools.validator.cell;
 
 import me.excel.tools.model.excel.ExcelCell;
-import me.excel.tools.validator.SkipValidateException;
 
 /**
  * long validator
@@ -19,7 +18,7 @@ public class LongValidator extends CellValidatorAdapter {
   }
 
   @Override
-  protected boolean customValidate(ExcelCell excelCell) throws SkipValidateException {
+  protected boolean customValidate(ExcelCell excelCell) {
     try {
       Long.parseLong(excelCell.getValue());
     } catch (NumberFormatException e) {

@@ -1,7 +1,6 @@
 package me.excel.tools.validator.cell;
 
 import me.excel.tools.model.excel.ExcelCell;
-import me.excel.tools.validator.SkipValidateException;
 import org.apache.commons.lang3.math.NumberUtils;
 
 /**
@@ -28,7 +27,7 @@ public class NumberScaleRangeValidator extends CellValidatorAdapter {
   }
 
   @Override
-  protected boolean customValidate(ExcelCell excelCell) throws SkipValidateException {
+  protected boolean customValidate(ExcelCell excelCell) {
 
     String value = excelCell.getValue();
 

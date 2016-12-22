@@ -12,7 +12,7 @@ import me.excel.tools.validator.ValidateFunction;
  */
 public class CommonRowValidator extends RowValidatorAdapter {
 
-  protected ValidateFunction<ExcelRow, Boolean> validateResultGetter;
+  private ValidateFunction<ExcelRow, Boolean> validateResultGetter;
 
   public CommonRowValidator(ValidateFunction<ExcelRow, Boolean> validateResultGetter, String errorMessage, String[] messageOnFields) {
     super(errorMessage, messageOnFields);

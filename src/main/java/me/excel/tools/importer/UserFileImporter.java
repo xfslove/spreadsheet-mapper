@@ -10,7 +10,11 @@ import me.excel.tools.setter.FieldValueSetter;
  * Created by hanwen on 15-12-16.
  */
 public interface UserFileImporter {
-
+  
+  /**
+   * @param dataProcessor
+   * @see DataProcessor
+   */
   void process(DataProcessor dataProcessor);
 
   /**
@@ -19,5 +23,9 @@ public interface UserFileImporter {
    */
   void addCellValueSetter(FieldValueSetter... setters);
 
+  /**
+   * @param modelFactory
+   * @see ModelFactory
+   */
   void setModelFactory(ModelFactory modelFactory);
 }

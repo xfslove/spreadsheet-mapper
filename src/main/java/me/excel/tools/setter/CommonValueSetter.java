@@ -11,7 +11,7 @@ import java.util.function.BiConsumer;
  */
 public class CommonValueSetter<D> extends FieldValueSetterAdapter {
 
-  protected BiConsumer<D, ExcelCell> valueSetter;
+  private BiConsumer<D, ExcelCell> valueSetter;
 
   public CommonValueSetter(String matchField) {
     super(matchField);

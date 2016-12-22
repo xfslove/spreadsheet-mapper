@@ -26,5 +26,4 @@ public class BooleanValidator extends CellValidatorAdapter {
     return isValidTrue(excelCell.getValue()) || isValidFalse(excelCell.getValue());
   }
 
-
 }
