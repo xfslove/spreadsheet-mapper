@@ -1,5 +1,6 @@
 package me.excel.tools.transfer;
 
+import me.excel.tools.ExcelConstants;
 import me.excel.tools.ExcelSupportedDateFormat;
 import me.excel.tools.model.excel.ExcelRow;
 import me.excel.tools.model.excel.ExcelSheet;
@@ -18,7 +19,7 @@ public class ExcelFileTransferImplTest {
 
   @Test
   public void testTransfer() throws Exception {
-    InputStream excelIs = this.getClass().getResourceAsStream("test.xls");
+    InputStream excelIs = this.getClass().getResourceAsStream("test" + ExcelConstants.SUFFIX_XLSX);
 
     ExcelSupportedDateFormat.registerFormat("[$-409]d\\-mmm\\-yy;@", "yyyy-MM-dd");
 

@@ -1,5 +1,6 @@
 package me.excel.tools.factory;
 
+import me.excel.tools.ExcelConstants;
 import me.excel.tools.extractor.BooleanZhExtractor;
 import me.excel.tools.generator.ExcelFileGenerator;
 import me.excel.tools.generator.UserFileGenerator;
@@ -37,7 +38,7 @@ public class ExcelFileTemplateTest {
 
   @Test
   public void testProcess() throws Exception {
-    URL resource = this.getClass().getResource("test.xls");
+    URL resource = this.getClass().getResource("test" + ExcelConstants.SUFFIX_XLSX);
     File excel = new File(resource.getFile());
 
     ExcelFileTemplate excelFileTemplate = new ExcelFileTemplate(excel);
@@ -87,7 +88,7 @@ public class ExcelFileTemplateTest {
     list.add(s1);
     list.add(s2);
 
-    File file = TempFile.createTempFile("test", ".xlsx");
+    File file = TempFile.createTempFile("test", ExcelConstants.SUFFIX_XLSX);
 
 
     UserFileGenerator userFileGenerator = new ExcelFileGenerator();
