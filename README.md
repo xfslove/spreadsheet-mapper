@@ -60,9 +60,11 @@
 <dependency>
   <groupId>java.excel.tools</groupId>
   <artifactId>java-excel-tools</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
 </dependency>
 ```
+
+## Require JDK1.8
 
 
 ### Quick Start
