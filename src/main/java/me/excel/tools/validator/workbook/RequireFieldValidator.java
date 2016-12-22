@@ -6,17 +6,20 @@ import me.excel.tools.model.excel.ExcelWorkbook;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * required field validator
+ * <p>
  * Created by hanwen on 4/26/16.
  */
 public class RequireFieldValidator implements WorkbookValidator {
 
-  protected List<String> requireFields = new ArrayList<>();
+  private List<String> requireFields = new ArrayList<>();
 
-  protected ExcelWorkbook excelWorkbook;
+  private ExcelWorkbook excelWorkbook;
 
   public RequireFieldValidator(List<String> requireFields) {
     this.requireFields = requireFields;
@@ -31,8 +34,8 @@ public class RequireFieldValidator implements WorkbookValidator {
   }
 
   @Override
-  public ExcelCell getMessageOnCell(ExcelWorkbook excelWorkbook) {
-    return excelWorkbook.getFirstSheet().getRow(1).getCell(1);
+  public List<ExcelCell> getCausedByCells(ExcelWorkbook excelWorkbook) {
+    return Collections.singletonList(excelWorkbook.getFirstSheet().getRow(1).getCell(1));
   }
 
   @Override

@@ -8,15 +8,32 @@ import me.excel.tools.validator.SkipValidateException;
 import java.util.List;
 
 /**
+ * excel row values validator
+ * <p>
  * Created by hanwen on 4/26/16.
  */
 public interface RowValidator {
 
+  /**
+   * get validate error message
+   *
+   * @return
+   */
   String getErrorMessage();
 
-  List<String> getMessageOnFields();
+  /**
+   * get caused by which cell
+   *
+   * @return
+   */
+  List<ExcelCell> getCausedByCells(ExcelRow excelRow);
 
-  List<ExcelCell> getMessageOnCells(ExcelRow excelRow);
-
+  /**
+   * validate supplied excel row
+   *
+   * @param excelRow
+   * @return
+   * @throws SkipValidateException
+   */
   boolean validate(ExcelRow excelRow) throws SkipValidateException;
 }

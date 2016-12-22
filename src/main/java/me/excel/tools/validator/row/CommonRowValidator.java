@@ -6,9 +6,11 @@ import me.excel.tools.validator.SkipValidateException;
 import me.excel.tools.validator.ValidateFunction;
 
 /**
+ * customer row validator
+ * <p>
  * Created by hanwen on 4/26/16.
  */
-public class CommonRowValidator extends AbstractRowValidator {
+public class CommonRowValidator extends RowValidatorAdapter {
 
   protected ValidateFunction<ExcelRow, Boolean> validateResultGetter;
 

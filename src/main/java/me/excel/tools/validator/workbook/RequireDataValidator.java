@@ -1,6 +1,5 @@
 package me.excel.tools.validator.workbook;
 
-
 import me.excel.tools.model.excel.ExcelCell;
 import me.excel.tools.model.excel.ExcelWorkbook;
 
@@ -8,21 +7,15 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * sheet size validator
+ * required import data validator
  * <p>
- * Created by hanwen on 4/26/16.
+ * Created by hanwen on 2016/12/22.
  */
-public class SheetSizeValidator implements WorkbookValidator {
-
-  private int size;
-
-  public SheetSizeValidator(int size) {
-    this.size = size;
-  }
+public class RequireDataValidator implements WorkbookValidator {
 
   @Override
   public String getErrorMessage() {
-    return "只支持单sheet导入";
+    return "导入模板中没有数据";
   }
 
   @Override
@@ -32,12 +25,6 @@ public class SheetSizeValidator implements WorkbookValidator {
 
   @Override
   public boolean validate(ExcelWorkbook excelWorkbook) {
-    if (excelWorkbook == null) {
-      throw new IllegalArgumentException("workbook is null");
-    }
-    if (excelWorkbook.sizeOfSheets() == 0) {
-      throw new IllegalArgumentException("sheet is null");
-    }
-    return excelWorkbook.sizeOfSheets() == size;
+    return excelWorkbook.getFirstSheet().getDataRows().size() > 0;
   }
 }

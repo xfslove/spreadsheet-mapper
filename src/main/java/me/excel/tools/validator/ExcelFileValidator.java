@@ -6,10 +6,7 @@ import me.excel.tools.model.excel.ExcelWorkbook;
 import me.excel.tools.model.message.ErrorMessage;
 import me.excel.tools.validator.cell.CellValidator;
 import me.excel.tools.validator.row.RowValidator;
-import me.excel.tools.validator.workbook.FieldScopeValidator;
-import me.excel.tools.validator.workbook.RequireFieldValidator;
-import me.excel.tools.validator.workbook.SheetSizeValidator;
-import me.excel.tools.validator.workbook.WorkbookValidator;
+import me.excel.tools.validator.workbook.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +37,7 @@ public class ExcelFileValidator implements UserFileValidator {
 
     addWorkbookValidator(
         new SheetSizeValidator(1),
+        new RequireDataValidator(),
         new FieldScopeValidator(this.fieldScope),
         new RequireFieldValidator(this.requiredFields)
     );
@@ -126,7 +124,7 @@ public class ExcelFileValidator implements UserFileValidator {
 
     for (CellValidator cellValidator : cellValidators) {
 
-      if (!cellValidator.matches(cell)) {
+      if (!cellValidator.matches(cell.getField())) {
         continue;
       }
 
@@ -150,7 +148,7 @@ public class ExcelFileValidator implements UserFileValidator {
       try {
         if (!rowValidator.validate(row)) {
 
-          errorMessages.addAll(rowValidator.getMessageOnCells(row).stream()
+          errorMessages.addAll(rowValidator.getCausedByCells(row).stream()
               .filter(Objects::nonNull)
               .map(excelCell -> new ErrorMessage(excelCell, rowValidator.getErrorMessage())).collect(Collectors.toList()));
         }
@@ -161,10 +159,15 @@ public class ExcelFileValidator implements UserFileValidator {
   }
 
   private void validateWorkbook(ExcelWorkbook workbook) {
-    errorMessages.addAll(
-        workbookValidators.stream()
-            .filter(workbookValidator -> !workbookValidator.validate(workbook))
-            .map(workbookValidator -> new ErrorMessage(workbookValidator.getMessageOnCell(workbook), workbookValidator.getErrorMessage()))
-            .collect(Collectors.toList()));
+
+    for (WorkbookValidator workbookValidator : workbookValidators) {
+
+      if (!workbookValidator.validate(excelWorkbook)) {
+
+        errorMessages.addAll(workbookValidator.getCausedByCells(excelWorkbook).stream()
+            .filter(Objects::nonNull)
+            .map(excelCell -> new ErrorMessage(excelCell, workbookValidator.getErrorMessage())).collect(Collectors.toList()));
+      }
+    }
   }
 }

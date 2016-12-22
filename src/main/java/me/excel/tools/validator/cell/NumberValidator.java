@@ -4,9 +4,11 @@ import me.excel.tools.model.excel.ExcelCell;
 import org.apache.commons.lang3.math.NumberUtils;
 
 /**
+ * number validator
+ * <p>
  * Created by hanwen on 16/7/7.
  */
-public class NumberValidator extends AbstractCellValidator {
+public class NumberValidator extends CellValidatorAdapter {
 
   public NumberValidator(String field) {
     super(field, "应该为数字");

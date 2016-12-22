@@ -5,9 +5,11 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 /**
+ * local date validator
+ * <p>
  * Created by hanwen on 5/3/16.
  */
-public class LocalDateValidator extends AbstractCellValidator {
+public class LocalDateValidator extends CellValidatorAdapter {
 
   private String format;
 

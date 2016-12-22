@@ -7,9 +7,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * value unique in template validator
+ * <p>
  * Created by hanwen on 2016/12/1.
  */
-public class UniqueInImportFileValidator extends AbstractCellValidator {
+public class UniqueInImportFileValidator extends CellValidatorAdapter {
 
   private Set<String> cellValueHolder = new HashSet<>();
 

@@ -5,21 +5,23 @@ import me.excel.tools.validator.SkipValidateException;
 import org.apache.commons.lang3.math.NumberUtils;
 
 /**
+ * number scale range validator
+ * <p>
  * Created by hanwen on 2016/12/1.
  */
-public class NumberScaleValidator extends AbstractCellValidator {
+public class NumberScaleRangeValidator extends CellValidatorAdapter {
 
   private int gte;
 
   private int lte;
 
-  public NumberScaleValidator(String matchField, int gte, int lte) {
+  public NumberScaleRangeValidator(String matchField, int gte, int lte) {
     super(matchField, "小数位数范围[" + gte + ", " + lte + "]");
     this.gte = gte;
     this.lte = lte;
   }
 
-  public NumberScaleValidator(String matchField, int gte, int lte, String errorMessage) {
+  public NumberScaleRangeValidator(String matchField, int gte, int lte, String errorMessage) {
     super(matchField, errorMessage);
     this.gte = gte;
     this.lte = lte;

@@ -11,15 +11,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * row values validator adapter, easy implements customer value validator extends this.
+ * <p>
  * Created by hanwen on 4/26/16.
  */
-public abstract class AbstractRowValidator implements RowValidator {
+public abstract class RowValidatorAdapter implements RowValidator {
 
   private String errorMessage;
 
   private List<String> messageOnFields = new ArrayList<>();
 
-  public AbstractRowValidator(String errorMessage, String[] messageOnFields) {
+  public RowValidatorAdapter(String errorMessage, String[] messageOnFields) {
     this.errorMessage = errorMessage;
     Collections.addAll(this.messageOnFields, messageOnFields);
   }
@@ -30,13 +32,7 @@ public abstract class AbstractRowValidator implements RowValidator {
   }
 
   @Override
-  public List<String> getMessageOnFields() {
-    return messageOnFields;
-  }
-
-  @Override
-  public List<ExcelCell> getMessageOnCells(ExcelRow excelRow) {
-
+  public List<ExcelCell> getCausedByCells(ExcelRow excelRow) {
     return messageOnFields.stream().map(excelRow::getCell).collect(Collectors.toList());
   }
 

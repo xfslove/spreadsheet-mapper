@@ -16,6 +16,10 @@ public class DefaultFieldPrompter implements FieldPrompter {
     this.prompt = prompt;
   }
 
+  protected final String getMatchField() {
+    return matchField;
+  }
+
   @Override
   public boolean matches(String field) {
     return matchField.equals(field);

@@ -5,15 +5,17 @@ import me.excel.tools.validator.SkipValidateException;
 import org.apache.commons.lang3.StringUtils;
 
 /**
+ * required validator
+ * <p>
  * Created by hanwen on 15-12-16.
  */
-public class RequiredValidator extends AbstractCellValidator {
+public class RequireValidator extends CellValidatorAdapter {
 
-  public RequiredValidator(String matchField) {
+  public RequireValidator(String matchField) {
     super(matchField, "应该为必填");
   }
 
-  public RequiredValidator(String matchField, String errorMessage) {
+  public RequireValidator(String matchField, String errorMessage) {
     super(matchField, errorMessage);
   }
 

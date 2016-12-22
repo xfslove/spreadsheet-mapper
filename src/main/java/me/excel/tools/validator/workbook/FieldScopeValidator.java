@@ -1,23 +1,26 @@
 package me.excel.tools.validator.workbook;
 
 import me.excel.tools.ExcelConstants;
+import me.excel.tools.FieldUtils;
 import me.excel.tools.model.excel.ExcelCell;
 import me.excel.tools.model.excel.ExcelWorkbook;
-import me.excel.tools.FieldUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * field scope validator
+ * <p>
  * Created by hanwen on 4/26/16.
  */
 public class FieldScopeValidator implements WorkbookValidator {
 
-  protected List<String> fieldScopes = new ArrayList<>();
+  private List<String> fieldScopes = new ArrayList<>();
 
-  protected ExcelWorkbook excelWorkbook;
+  private ExcelWorkbook excelWorkbook;
 
   public FieldScopeValidator(List<String> fieldScopes) {
     this.fieldScopes = fieldScopes;
@@ -32,8 +35,8 @@ public class FieldScopeValidator implements WorkbookValidator {
   }
 
   @Override
-  public ExcelCell getMessageOnCell(ExcelWorkbook excelWorkbook) {
-    return excelWorkbook.getFirstSheet().getRow(1).getCell(1);
+  public List<ExcelCell> getCausedByCells(ExcelWorkbook excelWorkbook) {
+    return Collections.singletonList(excelWorkbook.getFirstSheet().getRow(1).getCell(1));
   }
 
   @Override

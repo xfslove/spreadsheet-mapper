@@ -9,11 +9,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * value union unique in template validator
+ * <p>
  * Created by hanwen on 2016/12/1.
  */
-public class MultiUniqueInImportFileValidator extends AbstractRowValidator {
+public class MultiUniqueInImportFileValidator extends RowValidatorAdapter {
 
-  // 格式為 field1:value1 field2:value2 ...
+  // 格式为 field1:value1 field2:value2 ...
   private Set<String> rowValueHolder = new HashSet<>();
 
   private List<String> fields = new ArrayList<>();
@@ -55,7 +57,7 @@ public class MultiUniqueInImportFileValidator extends AbstractRowValidator {
   }
 
   /**
-   * 緩存中的string 格式為 field:value
+   * 缓存中的string 格式为 field:value
    *
    * @param cell
    * @return

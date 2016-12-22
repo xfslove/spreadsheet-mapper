@@ -6,11 +6,11 @@ import me.excel.tools.validator.SkipValidateException;
 import me.excel.tools.validator.ValidateFunction;
 
 /**
- * 自定义validator
+ * customer cell validator
  * <p>
  * Created by hanwen on 16-1-7.
  */
-public class CommonCellValidator extends AbstractCellValidator {
+public class CommonCellValidator extends CellValidatorAdapter {
 
   protected ValidateFunction<ExcelCell, Boolean> validateResultGetter;
 

@@ -4,9 +4,11 @@ package me.excel.tools.validator.cell;
 import me.excel.tools.model.excel.ExcelCell;
 
 /**
+ * regex format validator
+ * <p>
  * Created by hanwen on 15-12-16.
  */
-public class RegexFormatValidator extends AbstractCellValidator {
+public class RegexFormatValidator extends CellValidatorAdapter {
 
   /**
    * regex statement

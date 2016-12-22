@@ -3,9 +3,11 @@ package me.excel.tools.validator.cell;
 import me.excel.tools.model.excel.ExcelCell;
 
 /**
+ * float validator
+ * <p>
  * Created by hanwen on 5/3/16.
  */
-public class FloatValidator extends AbstractCellValidator {
+public class FloatValidator extends CellValidatorAdapter {
 
   public FloatValidator(String field) {
     super(field, "应该为小数");
