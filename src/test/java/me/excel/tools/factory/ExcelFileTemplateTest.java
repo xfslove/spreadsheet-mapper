@@ -7,7 +7,7 @@ import me.excel.tools.generator.UserFileGenerator;
 import me.excel.tools.importer.UserFileImporter;
 import me.excel.tools.model.excel.ExcelRow;
 import me.excel.tools.processor.DataProcessor;
-import me.excel.tools.prompter.DefaultPromptConstants;
+import me.excel.tools.prompter.DefaultZhPromptConstants;
 import me.excel.tools.prompter.PromptBuilder;
 import me.excel.tools.setter.BooleanValueSetter;
 import me.excel.tools.setter.LocalDateValueSetter;
@@ -96,10 +96,10 @@ public class ExcelFileTemplateTest {
         new PromptBuilder()
             .prompt("student.age", "整数")
             .prompt("student.enrollDate", "yyyy-MM-dd")
-            .prompt("student.code", DefaultPromptConstants.REQUIRE_FIELD)
-            .prompt("student.age", DefaultPromptConstants.REQUIRE_FIELD)
-            .prompt("student.name", DefaultPromptConstants.REQUIRE_FIELD)
-            .prompt("student.inSchool", DefaultPromptConstants.BOOLEAN_FIELD)
+            .prompt("student.code", DefaultZhPromptConstants.REQUIRE_FIELD)
+            .prompt("student.age", DefaultZhPromptConstants.REQUIRE_FIELD)
+            .prompt("student.name", DefaultZhPromptConstants.REQUIRE_FIELD)
+            .prompt("student.inSchool", DefaultZhPromptConstants.BOOLEAN_FIELD)
             .build()
     );
 

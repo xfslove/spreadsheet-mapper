@@ -19,11 +19,11 @@ public abstract class RowValidatorAdapter implements RowValidator {
 
   private String errorMessage;
 
-  private List<String> messageOnFields = new ArrayList<>();
+  private List<String> causedByFields = new ArrayList<>();
 
-  public RowValidatorAdapter(String errorMessage, String[] messageOnFields) {
+  public RowValidatorAdapter(String errorMessage, String[] causedByFields) {
     this.errorMessage = errorMessage;
-    Collections.addAll(this.messageOnFields, messageOnFields);
+    Collections.addAll(this.causedByFields, causedByFields);
   }
 
   @Override
@@ -33,7 +33,7 @@ public abstract class RowValidatorAdapter implements RowValidator {
 
   @Override
   public List<ExcelCell> getCausedByCells(ExcelRow excelRow) {
-    return messageOnFields.stream().map(excelRow::getCell).collect(Collectors.toList());
+    return causedByFields.stream().map(excelRow::getCell).collect(Collectors.toList());
   }
 
   @Override

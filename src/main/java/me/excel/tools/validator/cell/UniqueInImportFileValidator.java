@@ -15,12 +15,12 @@ public class UniqueInImportFileValidator extends CellValidatorAdapter {
 
   private Set<String> cellValueHolder = new HashSet<>();
 
-  public UniqueInImportFileValidator(String field) {
-    super(field, "导入文件中存在重复数据");
+  public UniqueInImportFileValidator(String matchField) {
+    super(matchField, "导入文件中存在重复数据");
   }
 
-  public UniqueInImportFileValidator(String field, String errorMessage, String prompt) {
-    super(field, errorMessage);
+  public UniqueInImportFileValidator(String matchField, String errorMessage) {
+    super(matchField, errorMessage);
   }
 
   @Override

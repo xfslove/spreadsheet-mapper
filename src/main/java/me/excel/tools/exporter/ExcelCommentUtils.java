@@ -42,7 +42,7 @@ public abstract class ExcelCommentUtils {
             Collectors.groupingBy(e -> e.getCell().getSheet().getIndex(),
                 Collectors.groupingBy(e -> e.getCell().getRowNum(),
                     Collectors.groupingBy(e -> e.getCell().getColumnNum(),
-                        Collectors.collectingAndThen(Collectors.toList(), e -> e.stream().map(ErrorMessage::getContent).collect(Collectors.toList()))
+                        Collectors.collectingAndThen(Collectors.toList(), e -> e.stream().map(ErrorMessage::getErrorMessage).collect(Collectors.toList()))
                     )
                 )
             )
@@ -80,7 +80,7 @@ public abstract class ExcelCommentUtils {
             Collectors.groupingBy(e -> e.getCell().getSheet().getIndex(),
                 Collectors.groupingBy(e -> e.getCell().getRowNum(),
                     Collectors.groupingBy(e -> e.getCell().getColumnNum(),
-                        Collectors.collectingAndThen(Collectors.toList(), e -> e.stream().map(ErrorMessage::getContent).collect(Collectors.toList()))
+                        Collectors.collectingAndThen(Collectors.toList(), e -> e.stream().map(ErrorMessage::getErrorMessage).collect(Collectors.toList()))
                     )
                 )
             )

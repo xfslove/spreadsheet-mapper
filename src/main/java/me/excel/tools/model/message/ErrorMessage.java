@@ -17,17 +17,17 @@ public class ErrorMessage implements Serializable {
   private ExcelCell cell;
 
   /**
-   * error content
+   * error message
    */
-  private String content;
+  private String errorMessage;
 
-  public ErrorMessage(ExcelCell cell, String content) {
+  public ErrorMessage(ExcelCell cell, String errorMessage) {
     this.cell = cell;
-    this.content = content;
+    this.errorMessage = errorMessage;
   }
 
-  public String getContent() {
-    return content;
+  public String getErrorMessage() {
+    return errorMessage;
   }
 
   public ExcelCell getCell() {

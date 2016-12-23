@@ -10,12 +10,12 @@ import org.apache.commons.lang3.math.NumberUtils;
  */
 public class NumberValidator extends CellValidatorAdapter {
 
-  public NumberValidator(String field) {
-    super(field, "应该为数字");
+  public NumberValidator(String matchField) {
+    super(matchField, "应该为数字");
   }
 
-  public NumberValidator(String field, String message) {
-    super(field, message);
+  public NumberValidator(String matchField, String message) {
+    super(matchField, message);
   }
 
   @Override

@@ -10,12 +10,12 @@ import me.excel.tools.model.excel.ExcelCell;
  */
 public class DoubleValidator extends CellValidatorAdapter {
 
-  public DoubleValidator(String field) {
-    super(field, "应该为小数");
+  public DoubleValidator(String matchField) {
+    super(matchField, "应该为小数");
   }
 
-  public DoubleValidator(String field, String message) {
-    super(field, message);
+  public DoubleValidator(String matchField, String errorMessage) {
+    super(matchField, errorMessage);
   }
 
   @Override

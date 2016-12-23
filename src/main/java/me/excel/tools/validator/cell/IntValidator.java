@@ -10,12 +10,12 @@ import me.excel.tools.model.excel.ExcelCell;
  */
 public class IntValidator extends CellValidatorAdapter {
 
-  public IntValidator(String field) {
-    super(field, "应该为整数");
+  public IntValidator(String matchField) {
+    super(matchField, "应该为整数");
   }
 
-  public IntValidator(String field, String message) {
-    super(field, message);
+  public IntValidator(String matchField, String message) {
+    super(matchField, message);
   }
 
   @Override

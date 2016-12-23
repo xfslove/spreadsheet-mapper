@@ -13,13 +13,13 @@ public class LocalDateTimeValidator extends CellValidatorAdapter {
 
   private String format;
 
-  public LocalDateTimeValidator(String field, String format) {
-    super(field, "格式应该为: " + format);
+  public LocalDateTimeValidator(String matchField, String format) {
+    super(matchField, "格式应该为: " + format);
     this.format = format;
   }
 
-  public LocalDateTimeValidator(String field, String format, String errorMessage) {
-    super(field, errorMessage);
+  public LocalDateTimeValidator(String matchField, String format, String errorMessage) {
+    super(matchField, errorMessage);
     this.format = format;
   }
 

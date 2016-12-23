@@ -22,6 +22,6 @@ public abstract class FieldValueExtractorAdapter implements FieldValueExtractor 
 
   @Override
   public boolean matches(String field) {
-    return field.equals(matchField);
+    return field.equals(this.matchField);
   }
 }

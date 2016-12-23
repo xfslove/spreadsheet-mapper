@@ -15,13 +15,13 @@ public class RegexFormatValidator extends CellValidatorAdapter {
    */
   protected String regex;
 
-  public RegexFormatValidator(String field, String regex) {
-    super(field, "格式应该满足:" + regex);
+  public RegexFormatValidator(String matchField, String regex) {
+    super(matchField, "格式应该满足:" + regex);
     this.regex = regex;
   }
 
-  public RegexFormatValidator(String field, String regex, String message) {
-    super(field, message);
+  public RegexFormatValidator(String matchField, String regex, String message) {
+    super(matchField, message);
     this.regex = regex;
   }
 

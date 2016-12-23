@@ -1,5 +1,6 @@
 package me.excel.tools.validator.row;
 
+import me.excel.tools.ExcelConstants;
 import me.excel.tools.model.excel.ExcelCell;
 import me.excel.tools.model.excel.ExcelRow;
 import me.excel.tools.validator.SkipValidateException;
@@ -15,24 +16,24 @@ import java.util.stream.Collectors;
  */
 public class MultiUniqueInImportFileValidator extends RowValidatorAdapter {
 
-  // 格式为 field1:value1 field2:value2 ...
+  // 格式为 field1:value1,field2:value2,...
   private Set<String> rowValueHolder = new HashSet<>();
 
   private List<String> fields = new ArrayList<>();
 
-  public MultiUniqueInImportFileValidator(String... fields) {
-    super("导入文件中存在重复数据", fields);
-    Collections.addAll(this.fields, fields);
+  public MultiUniqueInImportFileValidator(String[] matchFields) {
+    super("导入文件中存在重复数据", matchFields);
+    Collections.addAll(this.fields, matchFields);
   }
 
-  public MultiUniqueInImportFileValidator(String errorMessage, String... fields) {
-    super(errorMessage, fields);
-    Collections.addAll(this.fields, fields);
+  public MultiUniqueInImportFileValidator(String errorMessage, String[] matchFields) {
+    super(errorMessage, matchFields);
+    Collections.addAll(this.fields, matchFields);
   }
 
-  public MultiUniqueInImportFileValidator(String errorMessage, String[] messageOnFields, String... fields) {
-    super(errorMessage, messageOnFields);
-    Collections.addAll(this.fields, fields);
+  public MultiUniqueInImportFileValidator(String errorMessage, String[] causedByFields, String[] matchFields) {
+    super(errorMessage, causedByFields);
+    Collections.addAll(this.fields, matchFields);
   }
 
   @Override
@@ -42,7 +43,7 @@ public class MultiUniqueInImportFileValidator extends RowValidatorAdapter {
         .map(field -> buildHoldString(excelRow.getCell(field)))
         .collect(Collectors.toList());
 
-    String holdValue = StringUtils.join(holdStringList, " ");
+    String holdValue = StringUtils.join(holdStringList, ExcelConstants.SEPARATOR);
 
     if (StringUtils.isBlank(holdValue)) {
       return true;

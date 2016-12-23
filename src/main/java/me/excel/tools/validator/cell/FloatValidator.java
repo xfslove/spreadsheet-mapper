@@ -9,12 +9,12 @@ import me.excel.tools.model.excel.ExcelCell;
  */
 public class FloatValidator extends CellValidatorAdapter {
 
-  public FloatValidator(String field) {
-    super(field, "应该为小数");
+  public FloatValidator(String matchField) {
+    super(matchField, "应该为小数");
   }
 
-  public FloatValidator(String field, String message) {
-    super(field, message);
+  public FloatValidator(String matchField, String errorMessage) {
+    super(matchField, errorMessage);
   }
 
   @Override

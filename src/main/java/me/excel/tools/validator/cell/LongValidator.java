@@ -9,12 +9,12 @@ import me.excel.tools.model.excel.ExcelCell;
  */
 public class LongValidator extends CellValidatorAdapter {
 
-  public LongValidator(String field) {
-    super(field, "应该为整数");
+  public LongValidator(String matchField) {
+    super(matchField, "应该为整数");
   }
 
-  public LongValidator(String field, String message) {
-    super(field, message);
+  public LongValidator(String matchField, String errorMessage) {
+    super(matchField, errorMessage);
   }
 
   @Override
