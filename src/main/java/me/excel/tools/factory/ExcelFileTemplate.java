@@ -56,7 +56,7 @@ public class ExcelFileTemplate implements UserFileTemplate {
       return Collections.emptySet();
     }
 
-    return excelWorkbook.getFirstSheet().getDistinctCellValuesOfField(field);
+    return excelWorkbook.getFirstSheet().getDistinctCellValuesByField(field);
   }
 
   @Override

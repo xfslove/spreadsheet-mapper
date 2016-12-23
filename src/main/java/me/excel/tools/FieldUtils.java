@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static me.excel.tools.ExcelConstants.BUSINESS_KEY_PREFIX;
+import static me.excel.tools.ExcelConstants.DOT_SEPARATOR;
+
 /**
  * model field utils
  * <p>
@@ -17,14 +20,6 @@ public class FieldUtils {
   private FieldUtils() {
     // default constructor
   }
-
-  /**
-   * <pre>
-   * the business key present a domain model, it can identified a domain model.
-   * it useful where update a domain model using excel template.
-   * </pre>
-   */
-  public static final String BUSINESS_KEY_PREFIX = "businessKey.";
 
   /**
    * get field with out business key
@@ -63,7 +58,7 @@ public class FieldUtils {
       return realField;
     } else {
       splitFields.remove(0);
-      return StringUtils.join(splitFields, ".");
+      return StringUtils.join(splitFields, DOT_SEPARATOR);
     }
   }
 
@@ -101,9 +96,7 @@ public class FieldUtils {
     }
     if (fields.length > 1) {
       String[] newFields = new String[fields.length - 1];
-      for (int i = 0; i < newFields.length; i++) {
-        newFields[i] = fields[i + 1];
-      }
+      System.arraycopy(fields, 1, newFields, 0, newFields.length);
       return getFieldType(getFieldType(clazz, fields[0]), newFields);
     }
     return getFieldType(clazz, fields[0]);

@@ -7,7 +7,7 @@ import me.excel.tools.model.excel.ExcelWorkbook;
 import java.util.List;
 
 /**
- * excel row values validator
+ * excel workbook validator
  * <p>
  * Created by hanwen on 4/26/16.
  */
@@ -26,7 +26,7 @@ public interface WorkbookValidator {
    * @param excelWorkbook
    * @return
    */
-  List<ExcelCell> getCausedByCells(ExcelWorkbook excelWorkbook);
+  List<ExcelCell> getMessageOnCells(ExcelWorkbook excelWorkbook);
 
   /**
    * validate supplied excel workbook

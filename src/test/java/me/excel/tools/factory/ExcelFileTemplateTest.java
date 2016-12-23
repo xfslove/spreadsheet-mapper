@@ -44,8 +44,8 @@ public class ExcelFileTemplateTest {
 
     UserFileValidator userFileValidator = excelFileTemplate.getUserFileValidator();
 
-    userFileValidator.setFieldScope("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
-    userFileValidator.setRequiredFields("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
+//    userFileValidator.setFieldScope("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
+//    userFileValidator.setRequiredFields("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
 
     userFileValidator.addCellValidator(
         new LocalDateValidator("student.enrollDate", "yyyy-MM-dd"),

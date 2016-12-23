@@ -2,8 +2,8 @@ package me.excel.tools.validator.cell;
 
 
 import me.excel.tools.model.excel.ExcelCell;
-import me.excel.tools.validator.SkipValidateException;
-import me.excel.tools.validator.ValidateFunction;
+
+import java.util.function.Function;
 
 /**
  * customer cell validator
@@ -12,7 +12,7 @@ import me.excel.tools.validator.ValidateFunction;
  */
 public class CommonCellValidator extends CellValidatorAdapter {
 
-  protected ValidateFunction<ExcelCell, Boolean> validateResultGetter;
+  protected Function<ExcelCell, Boolean> validateResultGetter;
 
   public CommonCellValidator(String matchField) {
     super(matchField, null);
@@ -22,18 +22,18 @@ public class CommonCellValidator extends CellValidatorAdapter {
     super(matchField, errorMessage);
   }
 
-  public CommonCellValidator(String matchField, ValidateFunction<ExcelCell, Boolean> validateResultGetter) {
+  public CommonCellValidator(String matchField, Function<ExcelCell, Boolean> validateResultGetter) {
     super(matchField, null);
     this.validateResultGetter = validateResultGetter;
   }
 
-  public CommonCellValidator(String matchField, String errorMessage, ValidateFunction<ExcelCell, Boolean> validateResultGetter) {
+  public CommonCellValidator(String matchField, String errorMessage, Function<ExcelCell, Boolean> validateResultGetter) {
     super(matchField, errorMessage);
     this.validateResultGetter = validateResultGetter;
   }
 
   @Override
-  protected boolean customValidate(ExcelCell excelCell) throws SkipValidateException {
+  protected boolean customValidate(ExcelCell excelCell) {
     if (validateResultGetter == null) {
       return true;
     }

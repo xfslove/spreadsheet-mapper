@@ -28,6 +28,7 @@ public class ExcelSupportedDateFormat {
   public static final String ERROR_PATTERN = "error-date-pattern";
 
   private ExcelSupportedDateFormat() {
+    // default constructor
   }
 
   private static final Map<String, String> EXCEL_SUPPORTED_DATE_FORMAT = new HashMap<>();

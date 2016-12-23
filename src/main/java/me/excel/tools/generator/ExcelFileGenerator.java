@@ -179,7 +179,7 @@ public class ExcelFileGenerator implements UserFileGenerator {
   private String getPrompts(String field) {
 
     List<String> prompts = fieldPrompters.stream().filter(fieldPrompter -> fieldPrompter.matches(field)).map(FieldPrompter::getPrompt).collect(Collectors.toList());
-    return prompts.isEmpty() ? ExcelConstants.EMPTY_VALUE : StringUtils.join(prompts, ExcelConstants.SEPARATOR);
+    return prompts.isEmpty() ? ExcelConstants.EMPTY_VALUE : StringUtils.join(prompts, ExcelConstants.COMMA_SEPARATOR);
   }
 
   private String getFieldValue(Object data, String field) {

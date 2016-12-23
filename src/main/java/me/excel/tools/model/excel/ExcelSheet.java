@@ -26,7 +26,7 @@ public interface ExcelSheet extends Serializable {
   List<ExcelRow> getRows();
 
   /**
-   * get rows zise of this sheet
+   * get rows size of this sheet
    *
    * @return
    */
@@ -48,12 +48,26 @@ public interface ExcelSheet extends Serializable {
   List<ExcelRow> getDataRows();
 
   /**
+   * get data size of this sheet
+   *
+   * @return
+   */
+  int sizeOfData();
+
+  /**
    * add row
    *
    * @param excelRow
    * @return
    */
   boolean addRow(ExcelRow excelRow);
+
+  /**
+   * get first row
+   *
+   * @return
+   */
+  ExcelRow getFirstRow();
 
   /**
    * get last row
@@ -84,17 +98,10 @@ public interface ExcelSheet extends Serializable {
   boolean hasComments();
 
   /**
-   * get all fields
-   *
-   * @return
-   */
-  List<String> getKeyRowFields();
-
-  /**
    * collect all values of supplied field (distinct)
    *
    * @param field
    * @return
    */
-  Set<String> getDistinctCellValuesOfField(String field);
+  Set<String> getDistinctCellValuesByField(String field);
 }

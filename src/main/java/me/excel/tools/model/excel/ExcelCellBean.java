@@ -137,7 +137,7 @@ public class ExcelCellBean implements ExcelCell {
 
   @Override
   public void setComment(ExcelCellComment excelCellComment) {
-    ((ExcelCellCommentBean) excelCellComment).setCell(this);
+    excelCellComment.setCell(this);
     this.excelCellComment = excelCellComment;
   }
 

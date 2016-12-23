@@ -55,6 +55,14 @@ public class ExcelRowBean implements ExcelRow {
   }
 
   @Override
+  public ExcelCell getFirstCell() {
+    if (sizeOfCells() == 0) {
+      return null;
+    }
+    return getCell(1);
+  }
+
+  @Override
   public ExcelCell getLastCell() {
     if (sizeOfCells() == 0) {
       return null;

@@ -3,12 +3,10 @@ package me.excel.tools.validator.row;
 
 import me.excel.tools.model.excel.ExcelCell;
 import me.excel.tools.model.excel.ExcelRow;
-import me.excel.tools.validator.SkipValidateException;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * row values validator adapter, easy implements customer value validator extends this.
@@ -19,11 +17,11 @@ public abstract class RowValidatorAdapter implements RowValidator {
 
   private String errorMessage;
 
-  private List<String> causedByFields = new ArrayList<>();
+  private List<String> matchFields = new ArrayList<>();
 
-  public RowValidatorAdapter(String errorMessage, String[] causedByFields) {
+  public RowValidatorAdapter(String errorMessage, String[] matchFields) {
     this.errorMessage = errorMessage;
-    Collections.addAll(this.causedByFields, causedByFields);
+    Collections.addAll(this.matchFields, matchFields);
   }
 
   @Override
@@ -32,14 +30,20 @@ public abstract class RowValidatorAdapter implements RowValidator {
   }
 
   @Override
-  public List<ExcelCell> getCausedByCells(ExcelRow excelRow) {
-    return causedByFields.stream().map(excelRow::getCell).collect(Collectors.toList());
+  public List<ExcelCell> getMessageOnCells(ExcelRow excelRow) {
+
+    List<ExcelCell> causedByCells = new ArrayList<>();
+    for (String field : matchFields) {
+      causedByCells.add(excelRow.getCell(field));
+    }
+
+    return causedByCells;
   }
 
   @Override
-  public boolean validate(ExcelRow excelRow) throws SkipValidateException {
+  public boolean validate(ExcelRow excelRow) {
     return customValidate(excelRow);
   }
 
-  protected abstract boolean customValidate(ExcelRow excelRow) throws SkipValidateException;
+  protected abstract boolean customValidate(ExcelRow excelRow);
 }

@@ -3,7 +3,6 @@ package me.excel.tools.validator.row;
 
 import me.excel.tools.model.excel.ExcelCell;
 import me.excel.tools.model.excel.ExcelRow;
-import me.excel.tools.validator.SkipValidateException;
 
 import java.util.List;
 
@@ -26,14 +25,13 @@ public interface RowValidator {
    *
    * @return
    */
-  List<ExcelCell> getCausedByCells(ExcelRow excelRow);
+  List<ExcelCell> getMessageOnCells(ExcelRow excelRow);
 
   /**
    * validate supplied excel row
    *
    * @param excelRow
    * @return
-   * @throws SkipValidateException
    */
-  boolean validate(ExcelRow excelRow) throws SkipValidateException;
+  boolean validate(ExcelRow excelRow);
 }

@@ -9,7 +9,19 @@ public class ExcelConstants {
     // default constructor
   }
 
-  public static final String SEPARATOR = ",";
+  /**
+   * <pre>
+   * the business key present a domain model, it can identified a domain model.
+   * it useful where update a domain model using excel template.
+   * </pre>
+   */
+  public static final String BUSINESS_KEY_PREFIX = "businessKey.";
+
+  public static final String DOT_SEPARATOR = ".";
+
+  public static final String COMMA_SEPARATOR = ",";
+
+  public static final String SEMICOLON_SEPARATOR = ":";
 
   public static final String EMPTY_VALUE = "";
 

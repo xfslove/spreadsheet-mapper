@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by hanwen on 15-12-16.
@@ -69,9 +68,22 @@ public class ExcelSheetBean implements ExcelSheet {
   }
 
   @Override
+  public int sizeOfData() {
+    return getDataRows().size();
+  }
+
+  @Override
   public boolean addRow(ExcelRow excelRow) {
     ((ExcelRowBean) excelRow).setSheet(this);
     return excelRows.add(excelRow);
+  }
+
+  @Override
+  public ExcelRow getFirstRow() {
+    if (sizeOfRows() == 0) {
+      return null;
+    }
+    return getRow(1);
   }
 
   @Override
@@ -113,13 +125,7 @@ public class ExcelSheetBean implements ExcelSheet {
   }
 
   @Override
-  public List<String> getKeyRowFields() {
-    return getRow(2).getCells().stream()
-        .map(ExcelCell::getValue).collect(Collectors.toList());
-  }
-
-  @Override
-  public Set<String> getDistinctCellValuesOfField(String field) {
+  public Set<String> getDistinctCellValuesByField(String field) {
 
     if (StringUtils.isBlank(field)) {
       return Collections.emptySet();

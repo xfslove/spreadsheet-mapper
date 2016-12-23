@@ -55,6 +55,13 @@ public interface ExcelRow extends Serializable {
   boolean addCell(ExcelCell excelCell);
 
   /**
+   * get first cell of this row
+   *
+   * @return
+   */
+  ExcelCell getFirstCell();
+
+  /**
    * get last cell of this row
    *
    * @return

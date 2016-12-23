@@ -56,7 +56,7 @@ public abstract class ExcelCommentUtils {
           comment.setSheetIndex(sheet.getKey());
           comment.setRowNum(row.getKey());
           comment.setColumnNum(column.getKey());
-          comment.setComment(StringUtils.join(column.getValue(), ExcelConstants.SEPARATOR));
+          comment.setComment(StringUtils.join(column.getValue(), ExcelConstants.COMMA_SEPARATOR));
           commentList.add(comment);
         }
       }
@@ -94,7 +94,7 @@ public abstract class ExcelCommentUtils {
           comment.setSheetIndex(sheet.getKey());
           comment.setRowNum(row.getKey());
           comment.setColumnNum(column.getKey());
-          comment.setComment(StringUtils.join(column.getValue(), ExcelConstants.SEPARATOR));
+          comment.setComment(StringUtils.join(column.getValue(), ExcelConstants.COMMA_SEPARATOR));
           commentList.add(comment);
         }
       }

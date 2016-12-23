@@ -3,6 +3,7 @@ package me.excel.tools.validator;
 import me.excel.tools.model.message.ErrorMessage;
 import me.excel.tools.validator.cell.CellValidator;
 import me.excel.tools.validator.row.RowValidator;
+import me.excel.tools.validator.sheet.SheetValidator;
 import me.excel.tools.validator.workbook.WorkbookValidator;
 
 import java.util.List;
@@ -15,20 +16,6 @@ import java.util.List;
 public interface UserFileValidator {
 
   /**
-   * set supported fields scope in template
-   *
-   * @param fields
-   */
-  void setFieldScope(String... fields);
-
-  /**
-   * set required fields in template
-   *
-   * @param fields
-   */
-  void setRequiredFields(String... fields);
-
-  /**
    * @param validators
    * @see CellValidator
    */
@@ -39,6 +26,12 @@ public interface UserFileValidator {
    * @see RowValidator
    */
   void addRowValidator(RowValidator... validators);
+
+  /**
+   * @param validators
+   * @see SheetValidator
+   */
+  void addSheetValidator(SheetValidator... validators);
 
   /**
    * @param validators

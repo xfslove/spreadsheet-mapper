@@ -26,7 +26,7 @@ public interface UserFileTemplate {
   /**
    * @param field
    * @return
-   * @see me.excel.tools.model.excel.ExcelSheet#getDistinctCellValuesOfField(String)
+   * @see me.excel.tools.model.excel.ExcelSheet#getDistinctCellValuesByField(String)
    */
   Set<String> getCellValuesOfField(String field);
 

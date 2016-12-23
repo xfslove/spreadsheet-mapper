@@ -1,7 +1,6 @@
 package me.excel.tools.validator.cell;
 
 import me.excel.tools.model.excel.ExcelCell;
-import me.excel.tools.validator.SkipValidateException;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -20,12 +19,12 @@ public class RequireValidator extends CellValidatorAdapter {
   }
 
   @Override
-  public boolean validate(ExcelCell excelCell) throws SkipValidateException {
+  public boolean validate(ExcelCell excelCell) {
     return customValidate(excelCell);
   }
 
   @Override
-  protected boolean customValidate(ExcelCell excelCell) throws SkipValidateException {
+  protected boolean customValidate(ExcelCell excelCell) {
     return StringUtils.isNotBlank(excelCell.getValue());
   }
 }

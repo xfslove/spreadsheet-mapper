@@ -2,8 +2,8 @@ package me.excel.tools.validator.row;
 
 
 import me.excel.tools.model.excel.ExcelRow;
-import me.excel.tools.validator.SkipValidateException;
-import me.excel.tools.validator.ValidateFunction;
+
+import java.util.function.Function;
 
 /**
  * customer row validator
@@ -12,20 +12,20 @@ import me.excel.tools.validator.ValidateFunction;
  */
 public class CommonRowValidator extends RowValidatorAdapter {
 
-  private ValidateFunction<ExcelRow, Boolean> validateResultGetter;
+  private Function<ExcelRow, Boolean> validateResultGetter;
 
-  public CommonRowValidator(ValidateFunction<ExcelRow, Boolean> validateResultGetter, String errorMessage, String[] messageOnFields) {
+  public CommonRowValidator(Function<ExcelRow, Boolean> validateResultGetter, String errorMessage, String[] messageOnFields) {
     super(errorMessage, messageOnFields);
     this.validateResultGetter = validateResultGetter;
   }
 
-  public CommonRowValidator(ValidateFunction<ExcelRow, Boolean> validateResultGetter, String[] messageOnFields) {
+  public CommonRowValidator(Function<ExcelRow, Boolean> validateResultGetter, String[] messageOnFields) {
     super(null, messageOnFields);
     this.validateResultGetter = validateResultGetter;
   }
 
   @Override
-  protected boolean customValidate(ExcelRow excelRow) throws SkipValidateException {
+  protected boolean customValidate(ExcelRow excelRow) {
     if (validateResultGetter == null) {
       return true;
     }

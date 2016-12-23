@@ -2,7 +2,6 @@ package me.excel.tools.validator.cell;
 
 
 import me.excel.tools.model.excel.ExcelCell;
-import me.excel.tools.validator.SkipValidateException;
 
 /**
  * excel cell value validator
@@ -23,9 +22,8 @@ public interface CellValidator {
    *
    * @param excelCell
    * @return
-   * @throws SkipValidateException
    */
-  boolean validate(ExcelCell excelCell) throws SkipValidateException;
+  boolean validate(ExcelCell excelCell);
 
   /**
    * matches which field

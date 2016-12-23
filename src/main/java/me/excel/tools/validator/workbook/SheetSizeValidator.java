@@ -22,22 +22,16 @@ public class SheetSizeValidator implements WorkbookValidator {
 
   @Override
   public String getErrorMessage() {
-    return "只支持单sheet导入";
+    return "工作表数量不是" + size + "个";
   }
 
   @Override
-  public List<ExcelCell> getCausedByCells(ExcelWorkbook excelWorkbook) {
-    return Collections.singletonList(excelWorkbook.getFirstSheet().getRow(1).getCell(1));
+  public List<ExcelCell> getMessageOnCells(ExcelWorkbook excelWorkbook) {
+    return Collections.singletonList(excelWorkbook.getFirstSheet().getFirstRow().getFirstCell());
   }
 
   @Override
   public boolean validate(ExcelWorkbook excelWorkbook) {
-    if (excelWorkbook == null) {
-      throw new IllegalArgumentException("workbook is null");
-    }
-    if (excelWorkbook.sizeOfSheets() == 0) {
-      throw new IllegalArgumentException("sheet is null");
-    }
     return excelWorkbook.sizeOfSheets() == size;
   }
 }
