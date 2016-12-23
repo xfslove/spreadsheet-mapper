@@ -22,8 +22,27 @@ public abstract class CellValidatorAdapter implements CellValidator {
   }
 
   @Override
+  public String getErrorMessage() {
+    return errorMessage;
+  }
+
+  @Override
   public boolean validate(ExcelCell excelCell) {
     return StringUtils.isBlank(excelCell.getValue()) || customValidate(excelCell);
+  }
+
+  @Override
+  public boolean matches(String field) {
+    return field.equals(matchField);
+  }
+
+  /**
+   * for customer access errorMessage
+   *
+   * @param errorMessage
+   */
+  protected void setErrorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
   }
 
   protected final String getMatchField() {
@@ -31,15 +50,5 @@ public abstract class CellValidatorAdapter implements CellValidator {
   }
 
   protected abstract boolean customValidate(ExcelCell excelCell);
-
-  @Override
-  public String getErrorMessage() {
-    return errorMessage;
-  }
-
-  @Override
-  public boolean matches(String field) {
-    return field.equals(matchField);
-  }
 
 }

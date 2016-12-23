@@ -10,21 +10,38 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * <pre>
  * required field validator
- * <p>
+ *
+ * all validators matches by field,
+ * if field lost means all the ({@link me.excel.tools.validator.cell.CellValidator} and {@link me.excel.tools.setter.FieldValueSetter}) of this field will skip.
+ * this validator useful to detect if excel files contains all the fields you want handle.
+ *
+ * eg: class A has fields [A, B...].
+ * if you want modify A, B, supplied the {@link RequireFieldValidator#requireFields} as [A, B]. when the excel files lost A or B,
+ * this validator will get false.
+ * </pre>
  * Created by hanwen on 4/26/16.
  */
 public class RequireFieldValidator implements SheetValidator {
 
   private List<String> requireFields = new ArrayList<>();
 
+  private String errorMessage;
+
   public RequireFieldValidator(String... requireFields) {
     Collections.addAll(this.requireFields, requireFields);
+    this.errorMessage = "不包含所有要求的字段";
+  }
+
+  public RequireFieldValidator(String errorMessage, String... requireFields) {
+    Collections.addAll(this.requireFields, requireFields);
+    this.errorMessage = errorMessage;
   }
 
   @Override
   public String getErrorMessage() {
-    return "不包含所有要求的字段";
+    return errorMessage;
   }
 
   @Override

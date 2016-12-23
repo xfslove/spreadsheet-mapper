@@ -29,14 +29,7 @@ public class ExcelFileTemplate implements UserFileTemplate {
   private ExcelWorkbook excelWorkbook;
 
   public ExcelFileTemplate(File excel) throws IOException {
-
-    ExcelFileTransfer excelFileTransfer = new ExcelFileTransferImpl();
-
-    this.excelWorkbook = excelFileTransfer.transfer(new FileInputStream(excel));
-
-    this.userFileImporter = new ExcelFileImporter(excelWorkbook);
-
-    this.userFileValidator = new ExcelFileValidator(excelWorkbook);
+    this(new FileInputStream(excel));
   }
 
   public ExcelFileTemplate(InputStream inputStream) throws IOException {
@@ -51,15 +44,6 @@ public class ExcelFileTemplate implements UserFileTemplate {
   }
 
   @Override
-  public Set<String> getCellValuesOfField(String field) {
-    if (excelWorkbook == null) {
-      return Collections.emptySet();
-    }
-
-    return excelWorkbook.getFirstSheet().getDistinctCellValuesByField(field);
-  }
-
-  @Override
   public UserFileValidator getUserFileValidator() {
     return this.userFileValidator;
   }
@@ -67,6 +51,15 @@ public class ExcelFileTemplate implements UserFileTemplate {
   @Override
   public UserFileImporter getUserFileImporter() {
     return this.userFileImporter;
+  }
+
+  @Override
+  public Set<String> getCellValuesOfField(String field) {
+    if (excelWorkbook == null) {
+      return Collections.emptySet();
+    }
+
+    return excelWorkbook.getFirstSheet().getDistinctCellValuesByField(field);
   }
 
 }

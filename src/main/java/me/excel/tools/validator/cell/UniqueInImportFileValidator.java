@@ -7,8 +7,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * <pre>
  * value unique in template validator
- * <p>
+ *
+ * like {@link me.excel.tools.validator.row.MultiUniqueInImportFileValidator},
+ * this validator only check one cell value if unique.
+ * </pre>
  * Created by hanwen on 2016/12/1.
  */
 public class UniqueInImportFileValidator extends CellValidatorAdapter {

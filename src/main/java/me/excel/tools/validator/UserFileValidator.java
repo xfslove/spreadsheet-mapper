@@ -17,15 +17,9 @@ public interface UserFileValidator {
 
   /**
    * @param validators
-   * @see CellValidator
+   * @see WorkbookValidator
    */
-  void addCellValidator(CellValidator... validators);
-
-  /**
-   * @param validators
-   * @see RowValidator
-   */
-  void addRowValidator(RowValidator... validators);
+  void addWorkbookValidator(WorkbookValidator... validators);
 
   /**
    * @param validators
@@ -35,9 +29,15 @@ public interface UserFileValidator {
 
   /**
    * @param validators
-   * @see WorkbookValidator
+   * @see RowValidator
    */
-  void addWorkbookValidator(WorkbookValidator... validators);
+  void addRowValidator(RowValidator... validators);
+
+  /**
+   * @param validators
+   * @see CellValidator
+   */
+  void addCellValidator(CellValidator... validators);
 
   /**
    * execute validate

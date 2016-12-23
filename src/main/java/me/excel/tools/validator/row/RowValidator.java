@@ -7,7 +7,7 @@ import me.excel.tools.model.excel.ExcelRow;
 import java.util.List;
 
 /**
- * excel row values validator
+ * excel row values validator, after sheet validators, if sheet validators failure, row validators will skip.
  * <p>
  * Created by hanwen on 4/26/16.
  */

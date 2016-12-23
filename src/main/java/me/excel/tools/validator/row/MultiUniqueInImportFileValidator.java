@@ -8,13 +8,18 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
 /**
- * value union unique in template validator
- * <p>
+ * <pre>
+ * value union unique in template validator, it useful when you want validate some cells value union unique.
+ *
+ * eg:
+ * if you excel files has person.idCardNumber and person.idCardType, you will want check if person's identify unique,
+ * when the excel files has duplicate person identify this validator will get false.
+ * </pre>
  * Created by hanwen on 2016/12/1.
  */
 public class MultiUniqueInImportFileValidator extends RowValidatorAdapter {
 
-  // 格式为 field1:value1,field2:value2,...
+  // format: "field1:value1,field2:value2,..."
   private Set<String> rowValueHolder = new HashSet<>();
 
   private List<String> matchFields = new ArrayList<>();
@@ -26,11 +31,6 @@ public class MultiUniqueInImportFileValidator extends RowValidatorAdapter {
 
   public MultiUniqueInImportFileValidator(String errorMessage, String[] matchFields) {
     super(errorMessage, matchFields);
-    Collections.addAll(this.matchFields, matchFields);
-  }
-
-  public MultiUniqueInImportFileValidator(String errorMessage, String[] causedByFields, String[] matchFields) {
-    super(errorMessage, causedByFields);
     Collections.addAll(this.matchFields, matchFields);
   }
 
@@ -54,7 +54,7 @@ public class MultiUniqueInImportFileValidator extends RowValidatorAdapter {
   }
 
   /**
-   * 缓存中的string 格式为 field:value
+   * build cache string as "field:value"
    *
    * @param cell
    * @return

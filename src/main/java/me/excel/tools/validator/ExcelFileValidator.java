@@ -106,6 +106,10 @@ public class ExcelFileValidator implements UserFileValidator {
     return errorMessages;
   }
 
+
+  /*==================
+   below is internal validate
+   ===================*/
   private void validateWorkbook(ExcelWorkbook workbook) {
 
     for (WorkbookValidator workbookValidator : workbookValidators) {
@@ -132,6 +136,22 @@ public class ExcelFileValidator implements UserFileValidator {
     }
   }
 
+  private void validateRow(ExcelRow row) {
+    if (row == null) {
+      return;
+    }
+
+    for (RowValidator rowValidator : rowValidators) {
+
+      if (!rowValidator.validate(row)) {
+
+        errorMessages.addAll(rowValidator.getMessageOnCells(row).stream()
+            .filter(Objects::nonNull)
+            .map(excelCell -> new ErrorMessage(excelCell, rowValidator.getErrorMessage())).collect(Collectors.toList()));
+      }
+    }
+  }
+
   private void validateCell(ExcelCell cell) {
     if (cell == null) {
       return;
@@ -145,22 +165,6 @@ public class ExcelFileValidator implements UserFileValidator {
 
       if (!cellValidator.validate(cell)) {
         errorMessages.add(new ErrorMessage(cell, cellValidator.getErrorMessage()));
-      }
-    }
-  }
-
-  private void validateRow(ExcelRow row) {
-    if (row == null) {
-      return;
-    }
-
-    for (RowValidator rowValidator : rowValidators) {
-
-      if (!rowValidator.validate(row)) {
-
-        errorMessages.addAll(rowValidator.getMessageOnCells(row).stream()
-            .filter(Objects::nonNull)
-            .map(excelCell -> new ErrorMessage(excelCell, rowValidator.getErrorMessage())).collect(Collectors.toList()));
       }
     }
   }

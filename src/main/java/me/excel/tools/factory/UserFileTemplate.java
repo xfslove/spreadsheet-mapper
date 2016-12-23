@@ -24,13 +24,6 @@ import java.util.Set;
 public interface UserFileTemplate {
 
   /**
-   * @param field
-   * @return
-   * @see me.excel.tools.model.excel.ExcelSheet#getDistinctCellValuesByField(String)
-   */
-  Set<String> getCellValuesOfField(String field);
-
-  /**
    * @return
    * @see UserFileValidator
    */
@@ -41,4 +34,11 @@ public interface UserFileTemplate {
    * @see UserFileImporter
    */
   UserFileImporter getUserFileImporter();
+
+  /**
+   * @param field
+   * @return
+   * @see me.excel.tools.model.excel.ExcelSheet#getDistinctCellValuesByField(String)
+   */
+  Set<String> getCellValuesOfField(String field);
 }

@@ -4,7 +4,7 @@ package me.excel.tools.validator.cell;
 import me.excel.tools.model.excel.ExcelCell;
 
 /**
- * excel cell value validator
+ * excel cell value validator, after sheet validators, if sheet validators failure, row validators will skip.
  * <p>
  * Created by hanwen on 15-12-15.
  */
@@ -18,7 +18,7 @@ public interface CellValidator {
   String getErrorMessage();
 
   /**
-   * validate supplied excel cell
+   * validate supplied excel cell value
    *
    * @param excelCell
    * @return

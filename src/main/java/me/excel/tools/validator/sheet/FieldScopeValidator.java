@@ -9,21 +9,36 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * field scope validator
- * <p>
+ * <pre>
+ * field scope validator,
+ *
+ * it useful when you only want handle some special fields of a java bean, this validator can prevent unexpected things, for security.
+ *
+ * eg : class A has fields [A, other fields...].
+ * if you only want modify A, you can supplied the {@link FieldScopeValidator#fieldScopes} as [A], when the excel files fields has others,
+ * this validator will get false.
+ * </pre>
  * Created by hanwen on 4/26/16.
  */
 public class FieldScopeValidator implements SheetValidator {
 
   private List<String> fieldScopes = new ArrayList<>();
 
+  private String errorMessage;
+
   public FieldScopeValidator(String... fieldScopes) {
     Collections.addAll(this.fieldScopes, fieldScopes);
+    this.errorMessage = "有字段不在处理范围内";
+  }
+
+  public FieldScopeValidator(String errorMessage, String... fieldScopes) {
+    Collections.addAll(this.fieldScopes, fieldScopes);
+    this.errorMessage = errorMessage;
   }
 
   @Override
   public String getErrorMessage() {
-    return "有字段不在处理范围内";
+    return errorMessage;
   }
 
   @Override

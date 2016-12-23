@@ -20,8 +20,8 @@ public class RegexFormatValidator extends CellValidatorAdapter {
     this.regex = regex;
   }
 
-  public RegexFormatValidator(String matchField, String regex, String message) {
-    super(matchField, message);
+  public RegexFormatValidator(String matchField, String regex, String errorMessage) {
+    super(matchField, errorMessage);
     this.regex = regex;
   }
 
