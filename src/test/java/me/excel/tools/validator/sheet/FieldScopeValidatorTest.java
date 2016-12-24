@@ -3,13 +3,9 @@ package me.excel.tools.validator.sheet;
 import me.excel.tools.model.excel.ExcelCellBean;
 import me.excel.tools.model.excel.ExcelRowBean;
 import me.excel.tools.model.excel.ExcelSheetBean;
-import me.excel.tools.model.excel.ExcelWorkbookBean;
-import me.excel.tools.validator.sheet.FieldScopeValidator;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Created by hanwen on 2016/12/22.
@@ -20,7 +16,7 @@ public class FieldScopeValidatorTest {
   public void testValidate() throws Exception {
 
 
-    FieldScopeValidator fieldScopeValidator = new FieldScopeValidator("person.name", "person.age", "person.birthday");
+    FieldScopeValidator fieldScopeValidator = new FieldScopeValidator(new String[] {"person.name", "person.age", "person.birthday"});
 
     ExcelSheetBean sheet = new ExcelSheetBean();
     ExcelRowBean row = new ExcelRowBean(1);

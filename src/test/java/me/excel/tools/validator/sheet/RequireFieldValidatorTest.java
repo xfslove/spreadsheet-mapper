@@ -17,7 +17,7 @@ public class RequireFieldValidatorTest {
   @Test
   public void testValidate() throws Exception {
 
-    RequireFieldValidator requireFieldValidator = new RequireFieldValidator("person.name", "person.age", "person.birthday");
+    RequireFieldValidator requireFieldValidator = new RequireFieldValidator(new String[] {"person.name", "person.age", "person.birthday"});
 
     ExcelSheetBean sheet = new ExcelSheetBean();
     ExcelRowBean row = new ExcelRowBean(1);
