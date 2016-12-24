@@ -46,19 +46,13 @@
 - 第三行提示
 - 第四行以后是数据	
 
-## pom.xml
+## POM.XML
+
+项目已经发布到maven central repository
+
 ```
-<repositories>
-  <repository>
-    <id>java-excel-tools-mvn-repository</id>
-    <url>https://raw.github.com/xfslove/mvn-repository/mvn-repository/</url>
-  </repository>
-</repositories>
-
-... others
-
 <dependency>
-  <groupId>java.excel.tools</groupId>
+  <groupId>me.xfslove</groupId>
   <artifactId>java-excel-tools</artifactId>
   <version>1.1.1</version>
 </dependency>
