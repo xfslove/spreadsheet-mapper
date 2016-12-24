@@ -52,7 +52,7 @@
 
 ```
 <dependency>
-  <groupId>me.xfslove</groupId>
+  <groupId>com.github.xfslove</groupId>
   <artifactId>java-excel-tools</artifactId>
   <version>1.1.1</version>
 </dependency>
