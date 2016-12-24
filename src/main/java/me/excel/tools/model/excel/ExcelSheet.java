@@ -12,23 +12,17 @@ import java.util.Set;
 public interface ExcelSheet extends Serializable {
 
   /**
-   * sheet name
-   *
-   * @return
+   * @return sheet name
    */
   String getSheetName();
 
   /**
-   * get rows of this sheet
-   *
-   * @return
+   * @return rows of this sheet
    */
   List<ExcelRow> getRows();
 
   /**
-   * get rows size of this sheet
-   *
-   * @return
+   * @return rows size of this sheet
    */
   int sizeOfRows();
 
@@ -36,50 +30,40 @@ public interface ExcelSheet extends Serializable {
    * get row by index
    *
    * @param index 1-based
-   * @return
+   * @return row
    */
   ExcelRow getRow(int index);
 
   /**
-   * get data rows of this sheet (exclude first, second, third rows)
-   *
-   * @return
+   * @return data rows of this sheet (exclude first, second, third rows)
    */
   List<ExcelRow> getDataRows();
 
   /**
-   * get data size of this sheet
-   *
-   * @return
+   * @return data size of this sheet
    */
   int sizeOfData();
 
   /**
    * add row
    *
-   * @param excelRow
-   * @return
+   * @param excelRow row
+   * @return success
    */
   boolean addRow(ExcelRow excelRow);
 
   /**
-   * get first row
-   *
-   * @return
+   * @return first row
    */
   ExcelRow getFirstRow();
 
   /**
-   * get last row
-   *
-   * @return
+   * @return last row
    */
   ExcelRow getLastRow();
 
   /**
-   * workbook of sheet at
-   *
-   * @return
+   * @return workbook of sheet at
    */
   ExcelWorkbook getWorkbook();
 
@@ -91,17 +75,15 @@ public interface ExcelSheet extends Serializable {
   int getIndex();
 
   /**
-   * has comment
-   *
-   * @return
+   * @return has comment
    */
   boolean hasComments();
 
   /**
    * collect all values of supplied field (distinct)
    *
-   * @param field
-   * @return
+   * @param field field
+   * @return values of field
    */
   Set<String> getDistinctCellValuesByField(String field);
 }

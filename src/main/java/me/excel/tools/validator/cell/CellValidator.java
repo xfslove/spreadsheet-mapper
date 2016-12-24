@@ -11,25 +11,23 @@ import me.excel.tools.model.excel.ExcelCell;
 public interface CellValidator {
 
   /**
-   * get validate error message
-   *
-   * @return
+   * @return validate error message
    */
   String getErrorMessage();
 
   /**
    * validate supplied excel cell value
    *
-   * @param excelCell
-   * @return
+   * @param excelCell cell
+   * @return success
    */
   boolean validate(ExcelCell excelCell);
 
   /**
    * matches which field
    *
-   * @param field
-   * @return
+   * @param field field
+   * @return success
    */
   boolean matches(String field);
 }

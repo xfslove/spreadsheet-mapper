@@ -16,6 +16,8 @@ public interface ExcelFileTransfer {
    * transfer supplied excel stream to {@link ExcelWorkbook}
    *
    * @param inputStream auto close
+   * @return workbook
+   * @throws IOException io exception
    */
   ExcelWorkbook transfer(InputStream inputStream) throws IOException;
 

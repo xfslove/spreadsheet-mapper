@@ -24,8 +24,8 @@ public class FieldUtils {
   /**
    * get field with out business key
    *
-   * @param field
-   * @return
+   * @param field field
+   * @return field without business key
    */
   public static String subtractBusinessKey(String field) {
     if (!StringUtils.contains(field, BUSINESS_KEY_PREFIX)) {
@@ -38,12 +38,12 @@ public class FieldUtils {
    * <pre>
    * get field name without prefix
    * eg:
-   * model.name -> name
-   * model.nested.name -> nested.name
+   * model.name -&gt; name
+   * model.nested.name -&gt; nested.name
    * </pre>
    *
-   * @param field
-   * @return
+   * @param field field
+   * @return field name of model
    */
   public static String detectRealField(String field) {
 
@@ -68,16 +68,16 @@ public class FieldUtils {
    * supported private, private final, protected, protected final, public, public final.
    * </pre>
    *
-   * @param clazz
-   * @param fieldName
+   * @param clazz clazz
+   * @param field field name of model
    * @return {@link Field}
    */
-  public static Field getField(Class clazz, String fieldName) {
+  public static Field getField(Class clazz, String field) {
     try {
-      return clazz.getDeclaredField(fieldName);
+      return clazz.getDeclaredField(field);
     } catch (NoSuchFieldException e) {
       if (clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class)) {
-        return getField(clazz.getSuperclass(), fieldName);
+        return getField(clazz.getSuperclass(), field);
       }
     }
     return null;
@@ -86,9 +86,9 @@ public class FieldUtils {
   /**
    * get field type if can't find return null.
    *
-   * @param clazz
+   * @param clazz  clazz
    * @param fields eg: [objectB, objectA, name] is objectB.objectA.name
-   * @return
+   * @return {@link Field#getType()}
    */
   public static Class getFieldType(Class clazz, String[] fields) {
     if (fields.length == 0 || clazz == null) {
@@ -103,9 +103,9 @@ public class FieldUtils {
   }
 
   /**
-   * @param clazz
-   * @param fieldName
-   * @return
+   * @param clazz     clazz
+   * @param fieldName field name of model
+   * @return {@link Field#getType()}
    * @see #getFieldType(Class, String[])
    */
   public static Class getFieldType(Class clazz, String fieldName) {

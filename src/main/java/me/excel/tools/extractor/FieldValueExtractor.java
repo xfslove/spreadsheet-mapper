@@ -10,16 +10,16 @@ public interface FieldValueExtractor {
   /**
    * get human readable value to shown on cell
    *
-   * @param data
-   * @return
+   * @param data supplied model
+   * @return human readable value
    */
   String getStringValue(Object data);
 
   /**
    * matches which field
    *
-   * @param field
-   * @return
+   * @param field field
+   * @return success
    */
   boolean matches(String field);
 }

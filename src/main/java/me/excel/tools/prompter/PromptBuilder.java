@@ -12,6 +12,9 @@ public class PromptBuilder {
 
   private List<FieldPrompter> prompterList = new ArrayList<>();
 
+  /**
+   * @return get field prompters
+   */
   public FieldPrompter[] build() {
     return prompterList.toArray(new FieldPrompter[0]);
   }
@@ -19,8 +22,8 @@ public class PromptBuilder {
   /**
    * add prompt
    *
-   * @param prompter
-   * @return
+   * @param prompter prompter
+   * @return this
    */
   public PromptBuilder add(FieldPrompter prompter) {
     prompterList.add(prompter);
@@ -30,9 +33,9 @@ public class PromptBuilder {
   /**
    * add prompt
    *
-   * @param field
-   * @param prompt
-   * @return
+   * @param field  field
+   * @param prompt prompt string
+   * @return this
    */
   public PromptBuilder prompt(String field, String prompt) {
     prompterList.add(new DefaultFieldPrompter(field, prompt));
@@ -42,9 +45,9 @@ public class PromptBuilder {
   /**
    * add prompt
    *
-   * @param field
-   * @param prompts
-   * @return
+   * @param field   field
+   * @param prompts prompt strings
+   * @return this
    */
   public PromptBuilder prompt(String field, String... prompts) {
     if (prompts == null) {

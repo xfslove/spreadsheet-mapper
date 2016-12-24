@@ -14,25 +14,21 @@ import java.util.List;
 public interface WorkbookValidator {
 
   /**
-   * get validate error message
-   *
-   * @return
+   * @return validate error message
    */
   String getErrorMessage();
 
   /**
-   * get caused by which cell
-   *
-   * @param excelWorkbook
-   * @return
+   * @param excelWorkbook workbook
+   * @return message on which cells
    */
   List<ExcelCell> getMessageOnCells(ExcelWorkbook excelWorkbook);
 
   /**
    * validate supplied excel workbook
    *
-   * @param excelWorkbook
-   * @return
+   * @param excelWorkbook workbook
+   * @return success
    */
   boolean validate(ExcelWorkbook excelWorkbook);
 }

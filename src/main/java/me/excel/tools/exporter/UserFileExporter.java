@@ -13,8 +13,8 @@ public interface UserFileExporter {
   /**
    * export file to supplied output stream
    *
-   * @param outputStream
-   * @throws IOException
+   * @param outputStream notice close the stream
+   * @throws IOException io exception
    */
   void export(OutputStream outputStream) throws IOException;
 }

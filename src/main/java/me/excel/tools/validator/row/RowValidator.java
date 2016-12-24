@@ -14,24 +14,21 @@ import java.util.List;
 public interface RowValidator {
 
   /**
-   * get validate error message
-   *
-   * @return
+   * @return validate error message
    */
   String getErrorMessage();
 
   /**
-   * get caused by which cell
-   *
-   * @return
+   * @param excelRow row
+   * @return message on which cells
    */
   List<ExcelCell> getMessageOnCells(ExcelRow excelRow);
 
   /**
    * validate supplied excel row
    *
-   * @param excelRow
-   * @return
+   * @param excelRow row
+   * @return success
    */
   boolean validate(ExcelRow excelRow);
 }

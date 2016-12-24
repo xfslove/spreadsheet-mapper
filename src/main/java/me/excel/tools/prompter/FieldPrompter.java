@@ -7,17 +7,15 @@ package me.excel.tools.prompter;
 public interface FieldPrompter {
 
   /**
-   * get field prompter
-   *
-   * @return
+   * @return field prompter
    */
   String getPrompt();
 
   /**
    * matches which field
    *
-   * @param field
-   * @return
+   * @param field field
+   * @return success
    */
   boolean matches(String field);
 }

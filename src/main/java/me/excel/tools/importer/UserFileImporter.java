@@ -12,19 +12,19 @@ import me.excel.tools.setter.FieldValueSetter;
 public interface UserFileImporter {
 
   /**
-   * @param dataProcessor
+   * @param dataProcessor processor
    * @see DataProcessor
    */
   void process(DataProcessor dataProcessor);
 
   /**
-   * @param setters
+   * @param setters field value setter
    * @see FieldValueSetter
    */
   void addCellValueSetter(FieldValueSetter... setters);
 
   /**
-   * @param modelFactory
+   * @param modelFactory model factory
    * @see ModelFactory
    */
   void setModelFactory(ModelFactory modelFactory);

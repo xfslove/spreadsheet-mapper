@@ -3,30 +3,30 @@ package me.excel.tools.processor;
 import java.util.List;
 
 /**
- * processor java bean data after transfer from excel
+ * processor model data after transfer from excel
  * <p>
  * Created by hanwen on 15-12-16.
  */
 public interface DataProcessor {
 
   /**
-   * before processing set value (value not set)
+   * before processing set value
    *
-   * @param origin
+   * @param origin value not set
    */
   void preProcessing(Object origin);
 
   /**
-   * after processing set value (value set)
+   * after processing set value
    *
-   * @param model
+   * @param model value set
    */
   void postProcessing(Object model);
 
   /**
-   * handle value set data list
+   * handle value set model list
    *
-   * @param models
+   * @param models value set model list
    */
   void handle(List models);
 }

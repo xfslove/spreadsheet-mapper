@@ -11,24 +11,20 @@ import java.util.List;
 public interface ExcelWorkbook extends Serializable {
 
   /**
-   * get sheets of this workbook
-   *
-   * @return
+   * @return sheets of this workbook
    */
   List<ExcelSheet> getSheets();
 
   /**
-   * get sheets size of this workbook
-   *
-   * @return
+   * @return sheets size of this workbook
    */
   int sizeOfSheets();
 
   /**
    * add sheet
    *
-   * @param excelSheet
-   * @return
+   * @param excelSheet sheet
+   * @return success
    */
   boolean addSheet(ExcelSheet excelSheet);
 
@@ -36,21 +32,17 @@ public interface ExcelWorkbook extends Serializable {
    * get sheet by index
    *
    * @param index 1-based
-   * @return
+   * @return sheet
    */
   ExcelSheet getSheet(int index);
 
   /**
-   * get last sheet
-   *
-   * @return
+   * @return last sheet
    */
   ExcelSheet getLastSheet();
 
   /**
-   * get first Sheet
-   *
-   * @return
+   * @return first Sheet
    */
   ExcelSheet getFirstSheet();
 }

@@ -28,42 +28,36 @@ public interface ExcelCell extends Serializable {
   /**
    * cell belong field
    *
-   * @return
+   * @return field
    */
   String getField();
 
   /**
    * cell value
    *
-   * @return
+   * @return value
    */
   String getValue();
 
   /**
-   * sheet of cell at
-   *
-   * @return
+   * @return sheet of cell at
    */
   ExcelSheet getSheet();
 
   /**
-   * row of cell at
-   *
-   * @return
+   * @return row of cell at
    */
   ExcelRow getRow();
 
   /**
-   * cell comment
-   *
-   * @return
+   * @return cell comment
    */
   ExcelCellComment getComment();
 
   /**
    * set comment at the cell
    *
-   * @param comment
+   * @param comment comment
    */
   void setComment(ExcelCellComment comment);
 }

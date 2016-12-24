@@ -28,12 +28,6 @@ public class ExcelFileExporter implements UserFileExporter {
     this.excelWorkbook = excelWorkbook;
   }
 
-  /**
-   * export {@link me.excel.tools.model.excel.ExcelWorkbook} to supplied output stream
-   *
-   * @param outputStream
-   * @throws IOException
-   */
   @Override
   public void export(OutputStream outputStream) throws IOException {
     if (this.excelWorkbook == null) {

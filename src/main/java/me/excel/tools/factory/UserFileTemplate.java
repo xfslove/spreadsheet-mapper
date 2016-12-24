@@ -24,20 +24,20 @@ import java.util.Set;
 public interface UserFileTemplate {
 
   /**
-   * @return
+   * @return userFileValidator
    * @see UserFileValidator
    */
   UserFileValidator getUserFileValidator();
 
   /**
-   * @return
+   * @return userFileImporter
    * @see UserFileImporter
    */
   UserFileImporter getUserFileImporter();
 
   /**
-   * @param field
-   * @return
+   * @param field field
+   * @return distinct values of supplied field
    * @see me.excel.tools.model.excel.ExcelSheet#getDistinctCellValuesByField(String)
    */
   Set<String> getCellValuesOfField(String field);

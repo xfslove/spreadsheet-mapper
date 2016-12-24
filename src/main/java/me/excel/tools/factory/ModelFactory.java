@@ -12,8 +12,8 @@ public interface ModelFactory {
   /**
    * initial one row present model to access cell value.
    *
-   * @param row
-   * @return
+   * @param row which row
+   * @return initialized model
    */
   Object create(ExcelRow row);
 }

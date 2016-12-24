@@ -11,30 +11,22 @@ import java.util.List;
 public interface ExcelRow extends Serializable {
 
   /**
-   * row num
-   *
-   * @return 1-based
+   * @return row num 1-based
    */
   int getRowNum();
 
   /**
-   * sheet of row at
-   *
-   * @return
+   * @return sheet of row at
    */
   ExcelSheet getSheet();
 
   /**
-   * get cells of this row
-   *
-   * @return
+   * @return cells of this row
    */
   List<ExcelCell> getCells();
 
   /**
-   * get cells size of this row
-   *
-   * @return
+   * @return cells size of this row
    */
   int sizeOfCells();
 
@@ -42,37 +34,33 @@ public interface ExcelRow extends Serializable {
    * get cell by index
    *
    * @param index 1-based
-   * @return
+   * @return cell
    */
   ExcelCell getCell(int index);
 
   /**
    * add cell
    *
-   * @param excelCell
-   * @return
+   * @param excelCell cell
+   * @return success
    */
   boolean addCell(ExcelCell excelCell);
 
   /**
-   * get first cell of this row
-   *
-   * @return
+   * @return first cell of this row
    */
   ExcelCell getFirstCell();
 
   /**
-   * get last cell of this row
-   *
-   * @return
+   * @return last cell of this row
    */
   ExcelCell getLastCell();
 
   /**
    * get cell by field (see {@link ExcelCell#getField()})
    *
-   * @param field
-   * @return
+   * @param field field
+   * @return cell
    */
   ExcelCell getCell(String field);
 

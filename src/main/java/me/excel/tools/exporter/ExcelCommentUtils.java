@@ -31,8 +31,8 @@ public abstract class ExcelCommentUtils {
   }
 
   /**
-   * @param errorMessages
-   * @return
+   * @param errorMessages error messages
+   * @return comments
    * @see #transferErrorMessagesToComments(Collection, int, int)
    */
   public static List<ExcelCellComment> transferErrorMessagesToComments(Collection<ErrorMessage> errorMessages) {
@@ -68,10 +68,10 @@ public abstract class ExcelCommentUtils {
   /**
    * transfer validate error messages {@link ErrorMessage} to comment {@link ExcelCellComment}
    *
-   * @param errorMessages
-   * @param commentLength
-   * @param commentHeight
-   * @return
+   * @param errorMessages error messages
+   * @param commentLength {@link ExcelCellComment#getLength()}
+   * @param commentHeight {@link ExcelCellComment#getHeight()}
+   * @return comments
    */
   public static List<ExcelCellComment> transferErrorMessagesToComments(Collection<ErrorMessage> errorMessages, int commentLength, int commentHeight) {
 
@@ -106,8 +106,8 @@ public abstract class ExcelCommentUtils {
   /**
    * write comments
    *
-   * @param file
-   * @param comments
+   * @param file     intend write file
+   * @param comments comments
    * @see #writeComments(InputStream, OutputStream, Collection)
    */
   public static void writeComments(File file, Collection<ExcelCellComment> comments) {
@@ -137,8 +137,8 @@ public abstract class ExcelCommentUtils {
    * write comments
    *
    * @param inputStream  auto close
-   * @param outputStream
-   * @param comments
+   * @param outputStream intend write stream, notice close
+   * @param comments     comments
    */
   public static void writeComments(InputStream inputStream, OutputStream outputStream, Collection<ExcelCellComment> comments) {
 
@@ -165,15 +165,15 @@ public abstract class ExcelCommentUtils {
   /**
    * add one cell comment
    *
-   * @param sheet
-   * @param excelCellComment
+   * @param sheet   comment at sheet
+   * @param comment comment
    */
-  public static void addComment(Sheet sheet, ExcelCellComment excelCellComment) {
-    if (excelCellComment == null) {
+  public static void addComment(Sheet sheet, ExcelCellComment comment) {
+    if (comment == null) {
       return;
     }
-    int rowIndex = excelCellComment.getRowNum();
-    int colIndex = excelCellComment.getColumnNum();
+    int rowIndex = comment.getRowNum();
+    int colIndex = comment.getColumnNum();
 
     Row row = sheet.getRow(rowIndex - 1);
     Cell cell = row.getCell(colIndex - 1);
@@ -187,18 +187,18 @@ public abstract class ExcelCommentUtils {
     ClientAnchor anchor = factory.createClientAnchor();
     // When the comment box is visible, have it show in a 1x3 space
     anchor.setCol1(colIndex - 1);
-    anchor.setCol2(colIndex - 1 + excelCellComment.getHeight());
+    anchor.setCol2(colIndex - 1 + comment.getHeight());
     anchor.setRow1(rowIndex - 1);
-    anchor.setRow2(rowIndex - 1 + excelCellComment.getLength());
+    anchor.setRow2(rowIndex - 1 + comment.getLength());
 
     // Create the comment and set the text
     Drawing drawing = sheet.createDrawingPatriarch();
-    Comment comment = drawing.createCellComment(anchor);
-    RichTextString str = factory.createRichTextString(excelCellComment.getComment());
-    comment.setString(str);
+    Comment poiComment = drawing.createCellComment(anchor);
+    RichTextString str = factory.createRichTextString(comment.getComment());
+    poiComment.setString(str);
 
     // Assign the new comment to the cell
-    cell.setCellComment(comment);
+    cell.setCellComment(poiComment);
 
   }
 }

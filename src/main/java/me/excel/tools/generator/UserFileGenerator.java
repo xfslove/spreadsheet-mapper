@@ -22,39 +22,39 @@ public interface UserFileGenerator {
   /**
    * set titles (first row)
    *
-   * @param titles
+   * @param titles titles
    */
   void setTitles(String... titles);
 
   /**
    * set fields (second row)
    *
-   * @param fields
+   * @param fields fields
    */
   void setFields(String... fields);
 
   /**
    * set data to generate data row (after third row)
    *
-   * @param data
+   * @param data model collection
    */
   void setData(List data);
 
   /**
-   * @param fieldValueExtractors
+   * @param fieldValueExtractors field value extractor
    * @see FieldValueExtractor
    */
   void addValueExtractors(FieldValueExtractor... fieldValueExtractors);
 
   /**
-   * @param fieldPrompters
+   * @param fieldPrompters field prompter
    * @see FieldPrompter
    */
   void addCellPrompters(FieldPrompter... fieldPrompters);
 
   /**
-   * @param file
-   * @throws IOException
+   * @param file intend write file
+   * @throws IOException io exception
    * @see #generate(OutputStream)
    */
   void generate(File file) throws IOException;
@@ -62,26 +62,27 @@ public interface UserFileGenerator {
   /**
    * generate file to supplied output stream
    *
-   * @throws IOException
+   * @param outputStream intend write stream, notice close
+   * @throws IOException io exception
    */
   void generate(OutputStream outputStream) throws IOException;
 
   /**
-   * @param file
-   * @param createTitles
-   * @param createFields
-   * @param createPrompts
-   * @throws IOException
+   * @param file          intend write file
+   * @param createTitles  detect if show titles
+   * @param createFields  detect if show fields
+   * @param createPrompts detect if show prompts
+   * @throws IOException io exception
    * @see #generate(OutputStream, boolean, boolean, boolean)
    */
   void generate(File file, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException;
 
   /**
-   * @param outputStream
+   * @param outputStream  intend write stream, notice close
    * @param createTitles  detect if show titles
    * @param createFields  detect if show fields
    * @param createPrompts detect if show prompts
-   * @throws IOException
+   * @throws IOException io exception
    * @see #generate(OutputStream)
    */
   void generate(OutputStream outputStream, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException;

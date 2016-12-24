@@ -12,7 +12,7 @@ import java.util.List;
  * <pre>
  * field scope validator,
  *
- * it useful when you only want handle some special fields of a java bean, this validator can prevent unexpected things, for security.
+ * it useful when you only want handle some special fields of a model, this validator can prevent unexpected things, for security.
  *
  * eg : class A has fields [A, other fields...].
  * if you only want modify A, you can supplied the {@link FieldScopeValidator#fieldScopes} as [A], when the excel files fields has others,

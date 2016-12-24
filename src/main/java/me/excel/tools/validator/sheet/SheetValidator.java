@@ -13,25 +13,21 @@ import java.util.List;
 public interface SheetValidator {
 
   /**
-   * get error message
-   *
-   * @return
+   * @return error message
    */
   String getErrorMessage();
 
   /**
-   * get caused by which cell
-   *
-   * @param excelSheet
-   * @return
+   * @param excelSheet sheet
+   * @return message on which cells
    */
   List<ExcelCell> getMessageOnCells(ExcelSheet excelSheet);
 
   /**
    * validate supplied excel sheet
    *
-   * @param excelSheet
-   * @return
+   * @param excelSheet sheet
+   * @return success
    */
   boolean validate(ExcelSheet excelSheet);
 }

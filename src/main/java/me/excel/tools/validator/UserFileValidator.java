@@ -16,25 +16,25 @@ import java.util.List;
 public interface UserFileValidator {
 
   /**
-   * @param validators
+   * @param validators workbook validator
    * @see WorkbookValidator
    */
   void addWorkbookValidator(WorkbookValidator... validators);
 
   /**
-   * @param validators
+   * @param validators sheet validator
    * @see SheetValidator
    */
   void addSheetValidator(SheetValidator... validators);
 
   /**
-   * @param validators
+   * @param validators row validator
    * @see RowValidator
    */
   void addRowValidator(RowValidator... validators);
 
   /**
-   * @param validators
+   * @param validators cell validator
    * @see CellValidator
    */
   void addCellValidator(CellValidator... validators);
@@ -42,14 +42,12 @@ public interface UserFileValidator {
   /**
    * execute validate
    *
-   * @return
+   * @return success
    */
   boolean validate();
 
   /**
-   * get validate error messages
-   *
-   * @return
+   * @return validate error messages
    */
   List<ErrorMessage> getErrorMessages();
 

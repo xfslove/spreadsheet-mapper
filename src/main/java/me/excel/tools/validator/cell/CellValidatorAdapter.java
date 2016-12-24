@@ -39,7 +39,7 @@ public abstract class CellValidatorAdapter implements CellValidator {
   /**
    * for customer access errorMessage
    *
-   * @param errorMessage
+   * @param errorMessage error message
    */
   protected void setErrorMessage(String errorMessage) {
     this.errorMessage = errorMessage;

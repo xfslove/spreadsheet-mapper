@@ -11,18 +11,18 @@ import me.excel.tools.model.excel.ExcelCell;
 public interface FieldValueSetter {
 
   /**
-   * set object field from cell value
+   * set model field from cell value
    *
-   * @param data
-   * @param excelCell
+   * @param data      supplied model
+   * @param excelCell cell
    */
   void set(Object data, ExcelCell excelCell);
 
   /**
    * matches which field
    *
-   * @param field
-   * @return
+   * @param field field
+   * @return success
    */
   boolean matches(String field);
 }
