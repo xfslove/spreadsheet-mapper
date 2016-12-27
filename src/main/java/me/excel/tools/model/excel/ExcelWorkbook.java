@@ -11,6 +11,20 @@ import java.util.List;
 public interface ExcelWorkbook extends Serializable {
 
   /**
+   * is xlsx or xls
+   *
+   * @return true if xlsx
+   */
+  boolean isAfter97();
+
+  /**
+   * set xlsx or xls
+   *
+   * @param after97 true if xlsx
+   */
+  void setAfter97(boolean after97);
+
+  /**
    * @return sheets of this workbook
    */
   List<ExcelSheet> getSheets();

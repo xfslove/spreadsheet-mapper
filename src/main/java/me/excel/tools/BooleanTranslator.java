@@ -4,7 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * translate human boolean to model value.
+ * translate human boolean to object value.
  * <p>
  * Created by hanwen on 15-12-18.
  */

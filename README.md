@@ -75,7 +75,7 @@
 - 构建一个Excel模板
 
 ```
-UserFileTemplate excelTemplate = new ExcelFileTemplate(excel);
+UserFileTemplate excelSheetTemplate = new ExcelFileTemplate(excel);
 ```
 
 - 生成导入文件
@@ -98,7 +98,7 @@ userFileGenerator.generate(excel);
 - 校验
 
 ```
-excelTemplate.getUserFileValidator();
+excelSheetTemplate.getUserFileValidator();
 // 添加校验器
 userFileValidator.addCellValidator(
 		new RequiredValidator("person.name"),
@@ -118,15 +118,15 @@ if (!passed) {
 - Java Bean赋值
 
 ```
-excelTemplate.getUserFileImporter();
+excelSheetTemplate.getUserFileImporter();
 // 添加赋值器
-userFileImporter.addCellValueSetter(
+sheetToObjectsProcessor.addCellValueSetter(
         new LocalDateValueSetter("person.birthday", "yyyy-MM-dd")
     );
 // 设置Java Bean对象工厂
-userFileImporter.setModelFactory(new PersonModelFactory());
+sheetToObjectsProcessor.setModelFactory(new PersonModelFactory());
 // 设置转换后的对象处理器
-userFileImporter.process(new PersonListProcessor());
+sheetToObjectsProcessor.process(new PersonListProcessor());
 ```
 
 - 导出数据

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * support date format when excel value transfer to model field
+ * support date format when excel value read to object field
  * <p>
  * Created by hanwen on 5/3/16.
  */
@@ -46,7 +46,7 @@ public class ExcelSupportedDateFormat {
    * register customer format
    *
    * @param excelDateFormat date format of excel cell
-   * @param dateFormat      date format of model
+   * @param dateFormat      date format of object
    */
   public static void registerFormat(String excelDateFormat, String dateFormat) {
     EXCEL_SUPPORTED_DATE_FORMAT.put(excelDateFormat, dateFormat);

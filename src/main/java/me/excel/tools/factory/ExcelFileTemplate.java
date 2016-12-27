@@ -1,10 +1,10 @@
 package me.excel.tools.factory;
 
-import me.excel.tools.importer.ExcelFileImporter;
-import me.excel.tools.importer.UserFileImporter;
+import me.excel.tools.exception.ExcelReadException;
+import me.excel.tools.helper.ExcelToWorkbookHelper;
 import me.excel.tools.model.excel.ExcelWorkbook;
-import me.excel.tools.transfer.ExcelFileTransfer;
-import me.excel.tools.transfer.ExcelFileTransferImpl;
+import me.excel.tools.model.template.ExcelSheetHeaderInfo;
+import me.excel.tools.processor.SheetToObjectsProcessor;
 import me.excel.tools.validator.ExcelFileValidator;
 import me.excel.tools.validator.UserFileValidator;
 
@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -24,7 +23,7 @@ public class ExcelFileTemplate implements UserFileTemplate {
 
   private UserFileValidator userFileValidator;
 
-  private UserFileImporter userFileImporter;
+  private SheetToObjectsProcessor sheetToObjectsProcessor;
 
   private ExcelWorkbook excelWorkbook;
 
@@ -34,32 +33,30 @@ public class ExcelFileTemplate implements UserFileTemplate {
 
   public ExcelFileTemplate(InputStream inputStream) throws IOException {
 
-    ExcelFileTransfer excelFileTransfer = new ExcelFileTransferImpl();
+    excelWorkbook = ExcelToWorkbookHelper.read(inputStream, ExcelSheetHeaderInfo.SINGLE_SHEET_DEFAULT);
 
-    this.excelWorkbook = excelFileTransfer.transfer(inputStream);
+    sheetToObjectsProcessor = new SheetToObjectsProcessor(excelWorkbook.getFirstSheet());
 
-    this.userFileImporter = new ExcelFileImporter(excelWorkbook);
-
-    this.userFileValidator = new ExcelFileValidator(excelWorkbook);
+    userFileValidator = new ExcelFileValidator(excelWorkbook);
   }
 
   @Override
   public UserFileValidator getUserFileValidator() {
-    return this.userFileValidator;
+    return userFileValidator;
+  }
+
+  public SheetToObjectsProcessor getSheetToObjectsProcessor() {
+    return sheetToObjectsProcessor;
   }
 
   @Override
-  public UserFileImporter getUserFileImporter() {
-    return this.userFileImporter;
-  }
+  public Set<String> getDistinctValuesOfField(String field) {
 
-  @Override
-  public Set<String> getCellValuesOfField(String field) {
     if (excelWorkbook == null) {
-      return Collections.emptySet();
+      throw new ExcelReadException("workbook is null");
     }
 
-    return excelWorkbook.getFirstSheet().getDistinctCellValuesByField(field);
+    return excelWorkbook.getFirstSheet().getDistinctValuesOfField(field);
   }
 
 }

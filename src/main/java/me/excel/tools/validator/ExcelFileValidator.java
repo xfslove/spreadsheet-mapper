@@ -1,35 +1,47 @@
 package me.excel.tools.validator;
 
-import me.excel.tools.model.excel.ExcelCell;
+import me.excel.tools.exception.ExcelReadException;
 import me.excel.tools.model.excel.ExcelRow;
 import me.excel.tools.model.excel.ExcelSheet;
 import me.excel.tools.model.excel.ExcelWorkbook;
-import me.excel.tools.model.message.ErrorMessage;
-import me.excel.tools.validator.cell.CellValidator;
-import me.excel.tools.validator.row.RowValidator;
-import me.excel.tools.validator.sheet.SheetValidator;
-import me.excel.tools.validator.workbook.WorkbookValidator;
+import me.excel.tools.model.message.DataValidateMessage;
+import me.excel.tools.model.message.TemplateValidateMessage;
+import me.excel.tools.model.message.ValidateResult;
+import me.excel.tools.validator.data.DataValidator;
+import me.excel.tools.validator.data.cell.CellValidator;
+import me.excel.tools.validator.data.row.RowValidator;
+import me.excel.tools.validator.data.sheet.SheetValidator;
+import me.excel.tools.validator.data.workbook.WorkbookValidator;
+import me.excel.tools.validator.template.sheet.SheetTemplateValidator;
+import me.excel.tools.validator.template.workbook.WorkbookTemplateValidator;
+import org.apache.commons.collections.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * Created by hanwen on 15-12-16.
  */
 public class ExcelFileValidator implements UserFileValidator {
 
+  /*===================
+    template validators
+   ====================*/
+  private List<WorkbookTemplateValidator> workbookTemplateValidators = new ArrayList<>();
+  private List<SheetTemplateValidator> sheetTemplateValidators = new ArrayList<>();
+
+  /*===============
+    data validators
+   ================*/
+  private List<WorkbookValidator> workbookValidators = new ArrayList<>();
+  private List<SheetValidator> sheetValidators = new ArrayList<>();
+  private List<RowValidator> rowValidators = new ArrayList<>();
   private List<CellValidator> cellValidators = new ArrayList<>();
 
-  private List<RowValidator> rowValidators = new ArrayList<>();
-
-  private List<SheetValidator> sheetValidators = new ArrayList<>();
-
-  private List<WorkbookValidator> workbookValidators = new ArrayList<>();
-
-  private List<ErrorMessage> errorMessages = new ArrayList<>();
+  /*==============
+    error messages
+   ===============*/
+  private List<TemplateValidateMessage> templateErrorMessages = new ArrayList<>();
+  private List<DataValidateMessage> dataErrorMessages = new ArrayList<>();
 
   private ExcelWorkbook excelWorkbook;
 
@@ -38,27 +50,19 @@ public class ExcelFileValidator implements UserFileValidator {
   }
 
   @Override
-  public void addCellValidator(CellValidator... validators) {
+  public void addWorkbookTemplateValidator(WorkbookTemplateValidator... validators) {
     if (validators == null) {
       return;
     }
-    Collections.addAll(this.cellValidators, validators);
+    Collections.addAll(this.workbookTemplateValidators, validators);
   }
 
   @Override
-  public void addRowValidator(RowValidator... validators) {
+  public void addSheetTemplateValidator(SheetTemplateValidator... validators) {
     if (validators == null) {
       return;
     }
-    Collections.addAll(this.rowValidators, validators);
-  }
-
-  @Override
-  public void addSheetValidator(SheetValidator... validators) {
-    if (validators == null) {
-      return;
-    }
-    Collections.addAll(this.sheetValidators, validators);
+    Collections.addAll(this.sheetTemplateValidators, validators);
   }
 
   @Override
@@ -70,102 +74,292 @@ public class ExcelFileValidator implements UserFileValidator {
   }
 
   @Override
-  public boolean validate() {
+  public void addSheetValidator(SheetValidator... validators) {
+    if (validators == null) {
+      return;
+    }
+    Collections.addAll(this.sheetValidators, validators);
+  }
 
+  @Override
+  public void addRowValidator(RowValidator... validators) {
+    if (validators == null) {
+      return;
+    }
+    Collections.addAll(this.rowValidators, validators);
+  }
+
+  @Override
+  public void addCellValidator(CellValidator... validators) {
+    if (validators == null) {
+      return;
+    }
+    Collections.addAll(this.cellValidators, validators);
+  }
+
+  @Override
+  public List<TemplateValidateMessage> getTemplateErrorMessages() {
+    return templateErrorMessages;
+  }
+
+  @Override
+  public List<DataValidateMessage> getDataErrorMessages() {
+    return dataErrorMessages;
+  }
+
+  @Override
+  public boolean validate() {
     if (excelWorkbook == null) {
-      throw new IllegalArgumentException("excel workbook is null");
+      throw new ExcelReadException("workbook is null");
     }
 
-    validateWorkbook(excelWorkbook);
-    if (!errorMessages.isEmpty()) {
+    // check dependency
+    checkValidatorKeyDependency();
+
+    // valid template
+    validWorkbookTemplate(excelWorkbook);
+    if (CollectionUtils.isNotEmpty(templateErrorMessages)) {
       return false;
     }
 
     for (ExcelSheet excelSheet : excelWorkbook.getSheets()) {
-      validateSheet(excelSheet);
-      if (!errorMessages.isEmpty()) {
+      validSheetTemplate(excelSheet);
+
+      if (CollectionUtils.isNotEmpty(templateErrorMessages)) {
         return false;
       }
     }
 
-    excelWorkbook.getSheet(1).getDataRows()
-        .forEach(row -> row.getCells()
-            .forEach(this::validateCell));
+    // valid data
+    validWorkbook(excelWorkbook);
 
-    if (!errorMessages.isEmpty()) {
-      return false;
+    for (ExcelSheet excelSheet : excelWorkbook.getSheets()) {
+
+      validSheet(excelSheet);
+
+      for (ExcelRow excelRow : excelSheet.getRows()) {
+
+        validRowCells(excelRow);
+      }
     }
 
-    excelWorkbook.getSheet(1).getDataRows().forEach(this::validateRow);
 
-    return errorMessages.isEmpty();
+    return CollectionUtils.isEmpty(dataErrorMessages);
   }
 
-  @Override
-  public List<ErrorMessage> getErrorMessages() {
-    return errorMessages;
+  /**
+   * check if dependency correct
+   */
+  private void checkValidatorKeyDependency() {
+
+    Map<String, Set<String>> dependsOnHierarchy = new HashMap<>();
+
+    dependsOnHierarchy.putAll(buildDependsOnHierarchy(rowValidators));
+    dependsOnHierarchy.putAll(buildDependsOnHierarchy(cellValidators));
+
+    Set<String> satisfiedKeys = new HashSet<>();
+    for (String key : dependsOnHierarchy.keySet()) {
+      Set<String> dependencyKeys = new HashSet<>();
+      checkValidatorKeyDependencyHierarchy(dependsOnHierarchy, satisfiedKeys, dependencyKeys, key);
+      satisfiedKeys.addAll(dependencyKeys);
+    }
   }
 
+  private void checkValidatorKeyDependencyHierarchy(
+      Map<String, Set<String>> dependsOnHierarchy,
+      Set<String> satisfiedKeys,
+      Set<String> dependencyKeys,
+      String key
+  ) {
 
-  /*==================
+    if (satisfiedKeys.contains(key)) {
+      return;
+    }
+
+    dependencyKeys.add(key);
+    for (String dependsOn : dependsOnHierarchy.get(key)) {
+
+      if (!dependsOnHierarchy.containsKey(dependsOn)) {
+        throw new IllegalArgumentException("dependency missing key [" + dependsOn + "]");
+      }
+
+      if (dependencyKeys.contains(dependsOn)) {
+        throw new IllegalArgumentException("dependency cycling on [" + key + "] and [" + dependsOn + "]");
+      }
+
+      checkValidatorKeyDependencyHierarchy(dependsOnHierarchy, satisfiedKeys, dependencyKeys, dependsOn);
+    }
+  }
+
+  /*=========================
    below is internal validate
-   ===================*/
-  private void validateWorkbook(ExcelWorkbook workbook) {
+   ==========================*/
+  private void validWorkbookTemplate(ExcelWorkbook excelWorkbook) {
 
-    for (WorkbookValidator workbookValidator : workbookValidators) {
+    for (WorkbookTemplateValidator validator : workbookTemplateValidators) {
 
-      if (!workbookValidator.validate(workbook)) {
+      if (!validator.validate(excelWorkbook)) {
 
-        for (ExcelCell excelCell : workbookValidator.getMessageOnCells(workbook)) {
-          errorMessages.add(new ErrorMessage(excelCell, workbookValidator.getErrorMessage()));
-        }
+        templateErrorMessages.add(validator.getErrorMessage());
+
+      }
+
+    }
+  }
+
+  private void validSheetTemplate(ExcelSheetTemplate excelSheet) {
+
+    for (SheetTemplateValidator validator : sheetTemplateValidators) {
+
+      if (!validator.validate(excelSheet)) {
+
+        templateErrorMessages.add(validator.getErrorMessage());
       }
     }
   }
 
-  private void validateSheet(ExcelSheet sheet) {
+  private void validWorkbook(ExcelWorkbook excelWorkbook) {
 
-    for (SheetValidator sheetValidator : sheetValidators) {
+    for (WorkbookValidator validator : workbookValidators) {
 
-      if (!sheetValidator.validate(sheet)) {
+      DataValidateMessage result = validator.validate(excelWorkbook);
+      if (!ValidateResult.SUCCESS.equals(result.getResult())) {
 
-        for (ExcelCell excelCell : sheetValidator.getMessageOnCells(sheet)) {
-          errorMessages.add(new ErrorMessage(excelCell, sheetValidator.getErrorMessage()));
-        }
+        dataErrorMessages.add(result);
       }
+    }
+
+  }
+
+  private void validSheet(ExcelSheet excelSheet) {
+
+    for (SheetValidator validator : sheetValidators) {
+
+      DataValidateMessage result = validator.validate(excelSheet);
+      if (!ValidateResult.SUCCESS.equals(result.getResult())) {
+
+        dataErrorMessages.add(result);
+      }
+    }
+
+  }
+
+  private void validRowCells(ExcelRow excelRow) {
+
+    Map<String, Set<String>> dependsOnHierarchy = new HashMap<>();
+
+    dependsOnHierarchy.putAll(buildDependsOnHierarchy(rowValidators));
+    dependsOnHierarchy.putAll(buildDependsOnHierarchy(cellValidators));
+
+    Map<String, List<DataValidator>> validatorMap = new HashMap<>();
+
+    validatorMap.putAll(buildValidatorMap(rowValidators));
+    validatorMap.putAll(buildValidatorMap(cellValidators));
+
+    Map<String, Set<ValidateResult>> result = new HashMap<>();
+
+    for (RowValidator validator : rowValidators) {
+      result.putAll(validRowCellsHierarchy(validatorMap, result, dependsOnHierarchy, excelRow, validator.getKey()));
+    }
+    for (CellValidator validator : cellValidators) {
+      result.putAll(validRowCellsHierarchy(validatorMap, result, dependsOnHierarchy, excelRow, validator.getKey()));
+    }
+
+  }
+
+  private Map<String, Set<ValidateResult>> validRowCellsHierarchy(
+      Map<String, List<DataValidator>> validatorMap,
+      Map<String, Set<ValidateResult>> allResult,
+      Map<String, Set<String>> dependsOnHierarchy,
+      ExcelRow excelRow,
+      String key
+  ) {
+    Map<String, Set<ValidateResult>> result = new HashMap<>();
+
+    if (allResult.containsKey(key)) {
+      result.put(key, allResult.get(key));
+      return result;
+    }
+
+    Set<String> dependsOns = dependsOnHierarchy.get(key);
+
+    if (CollectionUtils.isNotEmpty(dependsOns)) {
+
+      for (String dependsOn : dependsOns) {
+
+        result.putAll(validRowCellsHierarchy(validatorMap, result, dependsOnHierarchy, excelRow, dependsOn));
+      }
+
+    }
+
+    boolean skip = ifSkip(result);
+
+    Set<ValidateResult> vrs = new HashSet<>();
+    for (DataValidator dataValidator : validatorMap.get(key)) {
+
+      if (skip) {
+
+        vrs.add(ValidateResult.SKIP);
+      } else {
+
+        vrs.add(doRowCellsValid(dataValidator, excelRow));
+      }
+    }
+    result.put(key, vrs);
+
+    return result;
+  }
+
+  private boolean ifSkip(Map<String, Set<ValidateResult>> result) {
+
+    Set<ValidateResult> dependsOnVrs = new HashSet<>();
+    for (Set<ValidateResult> vr : result.values()) {
+      dependsOnVrs.addAll(vr);
+    }
+
+    return dependsOnVrs.contains(ValidateResult.FAILURE) || dependsOnVrs.contains(ValidateResult.SKIP);
+  }
+
+  private ValidateResult doRowCellsValid(DataValidator dataValidator, ExcelRow excelRow) {
+
+    if (dataValidator instanceof RowValidator) {
+
+      return ((RowValidator) dataValidator).validate(excelRow);
+    } else {
+
+      return ((CellValidator) dataValidator).validate(excelRow)
     }
   }
 
-  private void validateRow(ExcelRow row) {
-    if (row == null) {
-      return;
-    }
+  private <VALIDATOR extends DataValidator> Map<String, Set<String>> buildDependsOnHierarchy(List<VALIDATOR> dataValidators) {
+    Map<String, Set<String>> dependsOnHierarchy = new HashMap<>();
 
-    for (RowValidator rowValidator : rowValidators) {
+    for (VALIDATOR validator : dataValidators) {
+      String key = validator.getKey();
+      Set<String> dependsOn = validator.getDependsOn();
 
-      if (!rowValidator.validate(row)) {
-
-        errorMessages.addAll(rowValidator.getMessageOnCells(row).stream()
-            .filter(Objects::nonNull)
-            .map(excelCell -> new ErrorMessage(excelCell, rowValidator.getErrorMessage())).collect(Collectors.toList()));
+      if (!dependsOnHierarchy.containsKey(key)) {
+        dependsOnHierarchy.put(key, dependsOn);
       }
+      dependsOnHierarchy.get(key).addAll(dependsOn);
     }
+
+    return dependsOnHierarchy;
   }
 
-  private void validateCell(ExcelCell cell) {
-    if (cell == null) {
-      return;
+  private <VALIDATOR extends DataValidator> Map<String, List<DataValidator>> buildValidatorMap(List<VALIDATOR> validators) {
+
+    Map<String, List<DataValidator>> validatorMap = new HashMap<>();
+
+    for (VALIDATOR validator : validators) {
+      String key = validator.getKey();
+      if (!validatorMap.containsKey(key)) {
+        validatorMap.put(key, new ArrayList<>());
+      }
+      validatorMap.get(key).add(validator);
     }
 
-    for (CellValidator cellValidator : cellValidators) {
-
-      if (!cellValidator.matches(cell.getField())) {
-        continue;
-      }
-
-      if (!cellValidator.validate(cell)) {
-        errorMessages.add(new ErrorMessage(cell, cellValidator.getErrorMessage()));
-      }
-    }
+    return validatorMap;
   }
+
 }

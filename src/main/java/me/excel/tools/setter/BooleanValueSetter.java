@@ -1,7 +1,7 @@
 package me.excel.tools.setter;
 
 import me.excel.tools.BooleanTranslator;
-import me.excel.tools.importer.ExcelImportException;
+import me.excel.tools.exception.ExcelProcessException;
 import me.excel.tools.model.excel.ExcelCell;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -26,10 +26,10 @@ public class BooleanValueSetter extends FieldValueSetterAdapter {
   @Override
   public void set(Object data, ExcelCell excelCell) {
     try {
-      BeanUtils.setProperty(data, detectRealField(excelCell.getField()), BooleanTranslator.parseBoolean(excelCell.getValue()));
+      BeanUtils.setProperty(data, detectRealField(getMatchField()), BooleanTranslator.parseBoolean(excelCell.getValue()));
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
-      throw new ExcelImportException(e);
+      throw new ExcelProcessException(e);
     }
   }
 }

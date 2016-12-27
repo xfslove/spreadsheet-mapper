@@ -10,7 +10,7 @@ public interface FieldValueExtractor {
   /**
    * get human readable value to shown on cell
    *
-   * @param data supplied model
+   * @param data supplied object
    * @return human readable value
    */
   String getStringValue(Object data);

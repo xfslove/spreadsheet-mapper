@@ -1,6 +1,6 @@
 package me.excel.tools.setter;
 
-import me.excel.tools.importer.ExcelImportException;
+import me.excel.tools.exception.ExcelProcessException;
 import me.excel.tools.model.excel.ExcelCell;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -32,10 +32,10 @@ public class LocalDateValueSetter extends FieldValueSetterAdapter {
     try {
       DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(pattern);
       String value = excelCell.getValue();
-      PropertyUtils.setProperty(data, detectRealField(excelCell.getField()), value == null ? null : dateTimeFormatter.parseLocalDate(value));
+      PropertyUtils.setProperty(data, detectRealField(getMatchField()), value == null ? null : dateTimeFormatter.parseLocalDate(value));
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
-      throw new ExcelImportException(e);
+      throw new ExcelProcessException(e);
     }
   }
 }

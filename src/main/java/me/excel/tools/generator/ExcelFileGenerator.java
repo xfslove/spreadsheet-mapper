@@ -1,10 +1,9 @@
 package me.excel.tools.generator;
 
 import me.excel.tools.ExcelConstants;
-import me.excel.tools.exporter.ExcelFileExporter;
-import me.excel.tools.exporter.UserFileExporter;
-import me.excel.tools.extractor.FieldValueExtractor;
 import me.excel.tools.extractor.DefaultValueExtractor;
+import me.excel.tools.extractor.FieldValueExtractor;
+import me.excel.tools.helper.WorkbookToExcelHelper;
 import me.excel.tools.model.excel.*;
 import me.excel.tools.prompter.FieldPrompter;
 import org.apache.commons.lang3.StringUtils;
@@ -95,8 +94,7 @@ public class ExcelFileGenerator implements UserFileGenerator {
       throw new IllegalArgumentException("workbook is null");
     }
 
-    UserFileExporter excelFileExporter = new ExcelFileExporter(excelWorkbook);
-    excelFileExporter.export(outputStream);
+    WorkbookToExcelHelper.write(excelWorkbook, outputStream);
   }
 
   private ExcelWorkbook createWorkbook(boolean createTitles, boolean createFields, boolean createPrompts) {
@@ -134,7 +132,7 @@ public class ExcelFileGenerator implements UserFileGenerator {
     sheet.addRow(row);
 
     for (int i = 0; i < titles.size(); i++) {
-      ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, null, titles.get(i));
+      ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, titles.get(i));
       row.addCell(cell);
     }
     return row;
@@ -145,7 +143,7 @@ public class ExcelFileGenerator implements UserFileGenerator {
     sheet.addRow(row);
 
     for (int i = 0; i < fields.size(); i++) {
-      ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, null, fields.get(i));
+      ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, fields.get(i));
       row.addCell(cell);
     }
     return row;
@@ -157,7 +155,7 @@ public class ExcelFileGenerator implements UserFileGenerator {
 
     for (int i = 0; i < fields.size(); i++) {
       String field = fields.get(i);
-      ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, field, getPrompts(field));
+      ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, getPrompts(field));
       row.addCell(cell);
     }
     return row;
@@ -170,7 +168,7 @@ public class ExcelFileGenerator implements UserFileGenerator {
     for (int i = 0; i < fields.size(); i++) {
       String field = fields.get(i);
       String fieldValue = getFieldValue(data, field);
-      ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, field, fieldValue);
+      ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, fieldValue);
       row.addCell(cell);
     }
     return row;

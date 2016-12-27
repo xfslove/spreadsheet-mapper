@@ -13,7 +13,7 @@ public interface ExcelRow extends Serializable {
   /**
    * @return row num 1-based
    */
-  int getRowNum();
+  int getIndex();
 
   /**
    * @return sheet of row at
@@ -39,6 +39,14 @@ public interface ExcelRow extends Serializable {
   ExcelCell getCell(int index);
 
   /**
+   * get cell by field
+   *
+   * @param field field
+   * @return cell
+   */
+  ExcelCell getCell(String field);
+
+  /**
    * add cell
    *
    * @param excelCell cell
@@ -55,13 +63,5 @@ public interface ExcelRow extends Serializable {
    * @return last cell of this row
    */
   ExcelCell getLastCell();
-
-  /**
-   * get cell by field (see {@link ExcelCell#getField()})
-   *
-   * @param field field
-   * @return cell
-   */
-  ExcelCell getCell(String field);
 
 }

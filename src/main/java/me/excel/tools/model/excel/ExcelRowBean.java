@@ -11,23 +11,23 @@ import java.util.List;
  */
 public class ExcelRowBean implements ExcelRow {
 
-  private int rowNum;
+  private int index;
 
   private List<ExcelCell> excelCells = new ArrayList<>();
 
   private ExcelSheet excelSheet;
 
-  public ExcelRowBean(int rowNum) {
-    this.rowNum = rowNum;
+  public ExcelRowBean(int index) {
+    this.index = index;
   }
 
   public ExcelRowBean(Row row) {
-    this.rowNum = row.getRowNum() + 1;
+    this.index = row.getRowNum() + 1;
   }
 
   @Override
-  public int getRowNum() {
-    return rowNum;
+  public int getIndex() {
+    return index;
   }
 
   @Override
@@ -45,12 +45,34 @@ public class ExcelRowBean implements ExcelRow {
     if (index < 1) {
       throw new IllegalArgumentException("index must greater than zero");
     }
+
+    if (index > sizeOfCells()) {
+      throw new IllegalArgumentException("index overflow size of cells");
+    }
+
     return excelCells.get(index - 1);
   }
 
   @Override
+  public ExcelCell getCell(String field) {
+
+    if (StringUtils.isBlank(field)) {
+      throw new IllegalArgumentException("field can not be blank");
+    }
+
+    for (ExcelCell excelCell : excelCells) {
+
+      if (StringUtils.equals(excelCell.getField(), field)) {
+        return excelCell;
+      }
+    }
+
+    throw new IllegalArgumentException("missing field " + field);
+  }
+
+  @Override
   public boolean addCell(ExcelCell excelCell) {
-    ((ExcelCellBean)excelCell).setRow(this);
+    ((ExcelCellBean) excelCell).setRow(this);
     return excelCells.add(excelCell);
   }
 
@@ -71,21 +93,11 @@ public class ExcelRowBean implements ExcelRow {
   }
 
   @Override
-  public ExcelCell getCell(String field) {
-    for (ExcelCell excelCell : excelCells) {
-      if (StringUtils.equals(excelCell.getField(), field)) {
-        return excelCell;
-      }
-    }
-    return null;
-  }
-
-  @Override
   public ExcelSheet getSheet() {
     return excelSheet;
   }
 
-  public void setSheet(ExcelSheet excelSheet) {
+  void setSheet(ExcelSheet excelSheet) {
     this.excelSheet = excelSheet;
   }
 

@@ -1,19 +1,23 @@
 package me.excel.tools.model.excel;
 
-import me.excel.tools.FieldUtils;
-import org.apache.commons.lang3.StringUtils;
+import me.excel.tools.model.template.ExcelSheetHeaderInfo;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by hanwen on 15-12-16.
  */
 public class ExcelSheetBean implements ExcelSheet {
 
+  private int index;
+
   private String sheetName;
 
-  private int index;
+  private ExcelSheetHeaderInfo headerInfo = ExcelSheetHeaderInfo.SINGLE_SHEET_DEFAULT;
 
   private List<ExcelRow> excelRows = new ArrayList<>();
 
@@ -29,6 +33,25 @@ public class ExcelSheetBean implements ExcelSheet {
 
   public ExcelSheetBean(Sheet sheet) {
     this.sheetName = sheet.getSheetName();
+  }
+
+  @Override
+  public ExcelSheetHeaderInfo getHeaderInfo() {
+    return headerInfo;
+  }
+
+  @Override
+  public void setHeaderInfo(ExcelSheetHeaderInfo headerInfo) {
+    this.headerInfo = headerInfo;
+  }
+
+  @Override
+  public int getIndex() {
+    return index;
+  }
+
+  void setIndex(int index) {
+    this.index = index;
   }
 
   @Override
@@ -57,19 +80,10 @@ public class ExcelSheetBean implements ExcelSheet {
   @Override
   public List<ExcelRow> getDataRows() {
     List<ExcelRow> dataRows = new ArrayList<>();
-
-    for (int i = 0; i < excelRows.size(); i++) {
-      if (i == 0 || i == 1 || i == 2) {
-        continue;
-      }
-      dataRows.add(excelRows.get(i));
+    for (int i = headerInfo.getDataStartAt(); i <= sizeOfRows(); i++) {
+      dataRows.add(getRow(i));
     }
     return dataRows;
-  }
-
-  @Override
-  public int sizeOfData() {
-    return getDataRows().size();
   }
 
   @Override
@@ -104,46 +118,13 @@ public class ExcelSheetBean implements ExcelSheet {
   }
 
   @Override
-  public int getIndex() {
-    return index;
-  }
-
-  public void setIndex(int index) {
-    this.index = index;
-  }
-
-  @Override
-  public boolean hasComments() {
-    for (ExcelRow excelRow : excelRows) {
-      for (ExcelCell excelCell : excelRow.getCells()) {
-        if (excelCell.getComment() != null) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  @Override
-  public Set<String> getDistinctCellValuesByField(String field) {
-
-    if (StringUtils.isBlank(field)) {
-      return Collections.emptySet();
-    }
-
-    Set<String> cellValuesOfField = new HashSet<>();
+  public Set<String> getDistinctValuesOfField(String field) {
+    Set<String> distinctValues = new HashSet<>();
 
     for (ExcelRow excelRow : getDataRows()) {
-      for (ExcelCell excelCell : excelRow.getCells()) {
-
-        String f = excelCell.getField();
-        String v = excelCell.getValue();
-
-        if (FieldUtils.detectRealField(f).equals(FieldUtils.detectRealField(field)) && v != null) {
-          cellValuesOfField.add(v);
-        }
-      }
+      distinctValues.add(excelRow.getCell(field).getValue());
     }
-    return cellValuesOfField;
+
+    return distinctValues;
   }
 }

@@ -1,5 +1,7 @@
 package me.excel.tools.model.excel;
 
+import me.excel.tools.model.template.ExcelSheetHeaderInfo;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +12,28 @@ import java.util.Set;
  * Created by hanwen on 15-12-16.
  */
 public interface ExcelSheet extends Serializable {
+
+  /**
+   * excel sheet header info
+   *
+   * @return header info
+   * @see ExcelSheetHeaderInfo
+   */
+  ExcelSheetHeaderInfo getHeaderInfo();
+
+  /**
+   * set header info
+   *
+   * @param headerInfo header info
+   */
+  void setHeaderInfo(ExcelSheetHeaderInfo headerInfo);
+
+  /**
+   * get sheet index
+   *
+   * @return 1-based
+   */
+  int getIndex();
 
   /**
    * @return sheet name
@@ -35,14 +59,9 @@ public interface ExcelSheet extends Serializable {
   ExcelRow getRow(int index);
 
   /**
-   * @return data rows of this sheet (exclude first, second, third rows)
+   * @return data rows
    */
   List<ExcelRow> getDataRows();
-
-  /**
-   * @return data size of this sheet
-   */
-  int sizeOfData();
 
   /**
    * add row
@@ -68,22 +87,9 @@ public interface ExcelSheet extends Serializable {
   ExcelWorkbook getWorkbook();
 
   /**
-   * get sheet index
-   *
-   * @return 1-based
-   */
-  int getIndex();
-
-  /**
-   * @return has comment
-   */
-  boolean hasComments();
-
-  /**
-   * collect all values of supplied field (distinct)
-   *
    * @param field field
-   * @return values of field
+   * @return distinct values of supplied field
    */
-  Set<String> getDistinctCellValuesByField(String field);
+  Set<String> getDistinctValuesOfField(String field);
+
 }

@@ -1,7 +1,5 @@
 package me.excel.tools.model.excel;
 
-import me.excel.tools.model.comment.ExcelCellComment;
-
 import java.io.Serializable;
 
 /**
@@ -11,26 +9,23 @@ import java.io.Serializable;
  */
 public interface ExcelCell extends Serializable {
 
-  /**
-   * cell row num
-   *
-   * @return 1-based
-   */
-  int getRowNum();
-
-  /**
-   * cell column num
-   *
-   * @return 1-based
-   */
-  int getColumnNum();
-
-  /**
-   * cell belong field
-   *
-   * @return field
-   */
   String getField();
+
+  void setField(String field);
+
+  /**
+   * cell row index
+   *
+   * @return 1-based
+   */
+  int getRowIndex();
+
+  /**
+   * cell column index
+   *
+   * @return 1-based
+   */
+  int getColumnIndex();
 
   /**
    * cell value
@@ -48,16 +43,4 @@ public interface ExcelCell extends Serializable {
    * @return row of cell at
    */
   ExcelRow getRow();
-
-  /**
-   * @return cell comment
-   */
-  ExcelCellComment getComment();
-
-  /**
-   * set comment at the cell
-   *
-   * @param comment comment
-   */
-  void setComment(ExcelCellComment comment);
 }

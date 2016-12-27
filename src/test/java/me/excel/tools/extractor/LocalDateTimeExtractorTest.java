@@ -1,10 +1,9 @@
 package me.excel.tools.extractor;
 
 import me.excel.tools.factory.TestPersonModel;
-import org.joda.time.LocalDateTime;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 /**
  * Created by hanwen on 2016/12/22.

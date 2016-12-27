@@ -4,17 +4,19 @@ import me.excel.tools.ExcelConstants;
 import me.excel.tools.extractor.BooleanZhExtractor;
 import me.excel.tools.generator.ExcelFileGenerator;
 import me.excel.tools.generator.UserFileGenerator;
-import me.excel.tools.importer.UserFileImporter;
 import me.excel.tools.model.excel.ExcelRow;
-import me.excel.tools.processor.DataProcessor;
+import me.excel.tools.processor.DataProcessorListener;
+import me.excel.tools.processor.SheetToObjectsProcessor;
 import me.excel.tools.prompter.DefaultZhPromptConstants;
 import me.excel.tools.prompter.PromptBuilder;
 import me.excel.tools.setter.BooleanValueSetter;
 import me.excel.tools.setter.LocalDateValueSetter;
 import me.excel.tools.validator.UserFileValidator;
-import me.excel.tools.validator.cell.BooleanValidator;
-import me.excel.tools.validator.cell.IntValidator;
-import me.excel.tools.validator.cell.LocalDateValidator;
+import me.excel.tools.validator.data.cell.BooleanValidator;
+import me.excel.tools.validator.data.cell.IntValidator;
+import me.excel.tools.validator.data.cell.LocalDateValidator;
+import me.excel.tools.validator.template.sheet.FieldScopeValidator;
+import me.excel.tools.validator.template.sheet.RequireFieldValidator;
 import org.apache.poi.util.TempFile;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
@@ -44,8 +46,8 @@ public class ExcelFileTemplateTest {
 
     UserFileValidator userFileValidator = excelFileTemplate.getUserFileValidator();
 
-//    userFileValidator.setFieldScope("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
-//    userFileValidator.setRequiredFields("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
+    userFileValidator.addSheetValidator(new FieldScopeValidator(new String[]{"student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool"}));
+    userFileValidator.addSheetValidator(new RequireFieldValidator(new String[]{"student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool"}));
 
     userFileValidator.addCellValidator(
         new LocalDateValidator("student.enrollDate", "yyyy-MM-dd"),
@@ -55,15 +57,15 @@ public class ExcelFileTemplateTest {
 
     assertTrue(userFileValidator.validate());
 
-    UserFileImporter userFileImporter = excelFileTemplate.getUserFileImporter();
+    SheetToObjectsProcessor sheetToObjectsProcessor = excelFileTemplate.getSheetToObjectsProcessor();
 
-    userFileImporter.addCellValueSetter(
+    sheetToObjectsProcessor.addCellValueSetter(
         new LocalDateValueSetter("student.enrollDate", "yyyy-MM-dd"),
         new BooleanValueSetter("student.inSchool")
     );
 
-    userFileImporter.setModelFactory(new StudentModelFactoryTest());
-    userFileImporter.process(new StudentDataProcessorTest());
+    sheetToObjectsProcessor.setModelFactory(new StudentModelFactoryTest());
+    sheetToObjectsProcessor.process(new StudentDataProcessorListenerTest());
   }
 
   @Test
@@ -112,20 +114,20 @@ public class ExcelFileTemplateTest {
     userFileGenerator.generate(file);
   }
 
-  public class StudentDataProcessorTest implements DataProcessor {
+  public class StudentDataProcessorListenerTest implements DataProcessorListener {
 
     @Override
-    public void preProcessing(Object model) {
+    public void beforeRow(Object model) {
 
     }
 
     @Override
-    public void postProcessing(Object model) {
+    public void afterRow(Object model) {
 
     }
 
     @Override
-    public void handle(List models) {
+    public void afterSheet(List models) {
 
       assertEquals(models.size(), 2);
 

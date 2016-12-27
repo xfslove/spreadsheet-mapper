@@ -1,0 +1,37 @@
+package me.excel.tools.validator.template.sheet;
+
+import me.excel.tools.model.excel.ExcelCellBean;
+import me.excel.tools.model.excel.ExcelRowBean;
+import me.excel.tools.model.excel.ExcelSheetBean;
+import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertTrue;
+
+/**
+ * Created by hanwen on 2016/12/22.
+ */
+public class RequireFieldValidatorTest {
+
+  @Test
+  public void testValidate() throws Exception {
+
+    RequireFieldValidator requireFieldValidator = new RequireFieldValidator(new String[]{"person.name", "person.age", "person.birthday"});
+
+    ExcelSheetBean sheet = new ExcelSheetBean();
+    ExcelRowBean row = new ExcelRowBean(1);
+    ExcelRowBean row1 = new ExcelRowBean(2);
+    sheet.addRow(row);
+    sheet.addRow(row1);
+
+    row.addCell(new ExcelCellBean(1, 1, "person.name"));
+    row.addCell(new ExcelCellBean(1, 2, "person.age"));
+    row.addCell(new ExcelCellBean(1, 3, "person.birthday"));
+
+    row1.addCell(new ExcelCellBean(2, 1, "person.name"));
+    row1.addCell(new ExcelCellBean(2, 2, "person.age"));
+    row1.addCell(new ExcelCellBean(2, 3, "person.birthday"));
+
+    assertTrue(requireFieldValidator.validate(new ExcelSheetTemplateBean(sheet)));
+  }
+
+}

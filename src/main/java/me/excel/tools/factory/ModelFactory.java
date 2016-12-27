@@ -7,13 +7,13 @@ import me.excel.tools.model.excel.ExcelRow;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface ModelFactory {
+public interface ModelFactory<OBJECT> {
 
   /**
-   * initial one row present model to access cell value.
+   * initial one row present object to access cell value.
    *
    * @param row which row
-   * @return initialized model
+   * @return initialized object
    */
-  Object create(ExcelRow row);
+  OBJECT create(ExcelRow row);
 }

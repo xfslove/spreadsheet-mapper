@@ -8,10 +8,20 @@ import java.util.List;
  */
 public class ExcelWorkbookBean implements ExcelWorkbook {
 
+  private boolean after97 = true;
+
   private final List<ExcelSheet> excelSheets = new ArrayList<>();
 
   public ExcelWorkbookBean() {
     // default constructor
+  }
+
+  public boolean isAfter97() {
+    return after97;
+  }
+
+  public void setAfter97(boolean after97) {
+    this.after97 = after97;
   }
 
   @Override
@@ -27,7 +37,7 @@ public class ExcelWorkbookBean implements ExcelWorkbook {
   @Override
   public boolean addSheet(ExcelSheet excelSheet) {
     boolean success = excelSheets.add(excelSheet);
-    ((ExcelSheetBean) excelSheet).setIndex(sizeOfSheets());
+    ((ExcelSheetBean) excelSheet).setIndex(sizeOfSheets() + 1);
     ((ExcelSheetBean) excelSheet).setWorkbook(this);
     return success;
   }

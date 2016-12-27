@@ -1,6 +1,6 @@
 package me.excel.tools.factory;
 
-import me.excel.tools.importer.UserFileImporter;
+import me.excel.tools.processor.SheetToObjectsProcessor;
 import me.excel.tools.validator.UserFileValidator;
 
 import java.util.Set;
@@ -31,14 +31,13 @@ public interface UserFileTemplate {
 
   /**
    * @return userFileImporter
-   * @see UserFileImporter
+   * @see SheetToObjectsProcessor
    */
-  UserFileImporter getUserFileImporter();
+  SheetToObjectsProcessor getSheetToObjectsProcessor();
 
   /**
    * @param field field
    * @return distinct values of supplied field
-   * @see me.excel.tools.model.excel.ExcelSheet#getDistinctCellValuesByField(String)
    */
-  Set<String> getCellValuesOfField(String field);
+  Set<String> getDistinctValuesOfField(String field);
 }

@@ -36,7 +36,7 @@ public interface UserFileGenerator {
   /**
    * set data to generate data row (after third row)
    *
-   * @param data model collection
+   * @param data object collection
    */
   void setData(List data);
 

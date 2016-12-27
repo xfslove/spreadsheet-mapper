@@ -11,8 +11,8 @@ public class ExcelConstants {
 
   /**
    * <pre>
-   * the business key present a domain model, it can identified a domain model.
-   * it useful where update a domain model using excel template.
+   * the business key present a domain object, it can identified a domain object.
+   * it useful where update a domain object using excel template.
    * </pre>
    */
   public static final String BUSINESS_KEY_PREFIX = "businessKey.";

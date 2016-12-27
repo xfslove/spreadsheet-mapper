@@ -11,7 +11,7 @@ import static me.excel.tools.ExcelConstants.BUSINESS_KEY_PREFIX;
 import static me.excel.tools.ExcelConstants.DOT_SEPARATOR;
 
 /**
- * model field utils
+ * object field utils
  * <p>
  * Created by hanwen on 15-12-18.
  */
@@ -38,12 +38,12 @@ public class FieldUtils {
    * <pre>
    * get field name without prefix
    * eg:
-   * model.name -&gt; name
-   * model.nested.name -&gt; nested.name
+   * object.name -&gt; name
+   * object.nested.name -&gt; nested.name
    * </pre>
    *
    * @param field field
-   * @return field name of model
+   * @return field name of object
    */
   public static String detectRealField(String field) {
 
@@ -69,7 +69,7 @@ public class FieldUtils {
    * </pre>
    *
    * @param clazz clazz
-   * @param field field name of model
+   * @param field field name of object
    * @return {@link Field}
    */
   public static Field getField(Class clazz, String field) {
@@ -104,7 +104,7 @@ public class FieldUtils {
 
   /**
    * @param clazz     clazz
-   * @param fieldName field name of model
+   * @param fieldName field name of object
    * @return {@link Field#getType()}
    * @see #getFieldType(Class, String[])
    */

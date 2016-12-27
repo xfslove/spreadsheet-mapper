@@ -1,7 +1,7 @@
 package me.excel.tools.setter;
 
 import me.excel.tools.FieldUtils;
-import me.excel.tools.importer.ExcelImportException;
+import me.excel.tools.exception.ExcelProcessException;
 import me.excel.tools.model.excel.ExcelCell;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
@@ -39,19 +39,19 @@ public class DefaultValueSetter {
 
   public void set(Object data, List<ExcelCell> excelCells) {
 
-    excelCells.forEach(cell -> {
+    for (ExcelCell excelCell : excelCells) {
       try {
-        BeanUtils.setProperty(data, detectRealField(cell.getField()), matches(data, cell) ? cell.getValue() : null);
+        BeanUtils.setProperty(data, detectRealField(excelCell.getField()), matches(data, excelCell.getField()) ? excelCell.getValue() : null);
       } catch (Exception e) {
         LOGGER.error(ExceptionUtils.getStackTrace(e));
-        throw new ExcelImportException(e);
+        throw new ExcelProcessException(e);
       }
-    });
+    }
 
   }
 
-  private boolean matches(Object data, ExcelCell cell) {
-    Class fieldType = FieldUtils.getFieldType(data.getClass(), detectRealField(cell.getField()).split("\\."));
+  private boolean matches(Object data, String field) {
+    Class fieldType = FieldUtils.getFieldType(data.getClass(), detectRealField(field).split("\\."));
 
     return fieldType != null &&
         (Integer.class.equals(fieldType) || int.class.equals(fieldType) ||
