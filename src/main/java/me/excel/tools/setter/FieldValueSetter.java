@@ -1,7 +1,7 @@
 package me.excel.tools.setter;
 
 
-import me.excel.tools.model.excel.ExcelCell;
+import me.excel.tools.model.excel.Cell;
 
 /**
  * object field value setter
@@ -14,17 +14,12 @@ public interface FieldValueSetter {
    * set object field from cell value
    *
    * @param data      supplied object
-   * @param excelCell cell
+   * @param cell cell
    */
-  void set(Object data, ExcelCell excelCell);
+  void set(Object data, Cell cell);
 
   /**
-   * matches which field
-   *
-   * @param field field
-   * @return success
+   * @return which field this setter matched
    */
-  boolean matches(String field);
-
   String getMatchField();
 }

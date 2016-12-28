@@ -2,7 +2,7 @@ package me.excel.tools.setter;
 
 import me.excel.tools.BooleanTranslator;
 import me.excel.tools.exception.ExcelProcessException;
-import me.excel.tools.model.excel.ExcelCell;
+import me.excel.tools.model.excel.Cell;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -24,9 +24,9 @@ public class BooleanValueSetter extends FieldValueSetterAdapter {
   }
 
   @Override
-  public void set(Object data, ExcelCell excelCell) {
+  public void set(Object data, Cell cell) {
     try {
-      BeanUtils.setProperty(data, detectRealField(getMatchField()), BooleanTranslator.parseBoolean(excelCell.getValue()));
+      BeanUtils.setProperty(data, detectRealField(getMatchField()), BooleanTranslator.parseBoolean(cell.getValue()));
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new ExcelProcessException(e);

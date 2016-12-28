@@ -4,19 +4,18 @@ import me.excel.tools.ExcelConstants;
 import me.excel.tools.extractor.BooleanZhExtractor;
 import me.excel.tools.generator.ExcelFileGenerator;
 import me.excel.tools.generator.UserFileGenerator;
-import me.excel.tools.model.excel.ExcelRow;
-import me.excel.tools.processor.DataProcessorListener;
+import me.excel.tools.model.excel.Row;
+import me.excel.tools.processor.ObjectProcessorListener;
 import me.excel.tools.processor.SheetToObjectsProcessor;
-import me.excel.tools.prompter.DefaultZhPromptConstants;
-import me.excel.tools.prompter.PromptBuilder;
+import me.excel.tools.DefaultZhPromptConstants;
 import me.excel.tools.setter.BooleanValueSetter;
 import me.excel.tools.setter.LocalDateValueSetter;
 import me.excel.tools.validator.UserFileValidator;
-import me.excel.tools.validator.data.cell.BooleanValidator;
-import me.excel.tools.validator.data.cell.IntValidator;
-import me.excel.tools.validator.data.cell.LocalDateValidator;
-import me.excel.tools.validator.template.sheet.FieldScopeValidator;
-import me.excel.tools.validator.template.sheet.RequireFieldValidator;
+import me.excel.tools.validator.cell.BooleanValidator;
+import me.excel.tools.validator.cell.IntValidator;
+import me.excel.tools.validator.cell.LocalDateValidator;
+import me.excel.tools.validator.sheet.FieldScopeValidator;
+import me.excel.tools.validator.sheet.RequireFieldValidator;
 import org.apache.poi.util.TempFile;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
@@ -55,7 +54,7 @@ public class ExcelFileTemplateTest {
         new IntValidator("student.age")
     );
 
-    assertTrue(userFileValidator.validate());
+    assertTrue(userFileValidator.valid());
 
     SheetToObjectsProcessor sheetToObjectsProcessor = excelFileTemplate.getSheetToObjectsProcessor();
 
@@ -65,7 +64,7 @@ public class ExcelFileTemplateTest {
     );
 
     sheetToObjectsProcessor.setModelFactory(new StudentModelFactoryTest());
-    sheetToObjectsProcessor.process(new StudentDataProcessorListenerTest());
+    sheetToObjectsProcessor.process(new StudentObjectProcessorListenerTest());
   }
 
   @Test
@@ -114,7 +113,7 @@ public class ExcelFileTemplateTest {
     userFileGenerator.generate(file);
   }
 
-  public class StudentDataProcessorListenerTest implements DataProcessorListener {
+  public class StudentObjectProcessorListenerTest implements ObjectProcessorListener {
 
     @Override
     public void beforeRow(Object model) {
@@ -155,7 +154,7 @@ public class ExcelFileTemplateTest {
   public class StudentModelFactoryTest implements ModelFactory {
 
     @Override
-    public Object create(ExcelRow row) {
+    public Object create(Row row) {
       return new StudentTest();
     }
   }

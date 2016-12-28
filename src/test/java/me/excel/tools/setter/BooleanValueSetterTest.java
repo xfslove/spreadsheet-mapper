@@ -1,7 +1,7 @@
 package me.excel.tools.setter;
 
 import me.excel.tools.factory.TestPersonModel;
-import me.excel.tools.model.excel.ExcelCellBean;
+import me.excel.tools.model.excel.CellBean;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -17,7 +17,7 @@ public class BooleanValueSetterTest {
     TestPersonModel model = new TestPersonModel();
 
     BooleanValueSetter booleanValueSetter = new BooleanValueSetter("person.male");
-    ExcelCellBean cell = new ExcelCellBean(1, 1, "person.male", "0");
+    CellBean cell = new CellBean(1, 1, "person.male", "0");
     booleanValueSetter.set(model, cell);
 
     assertEquals(model.isMale(), false);

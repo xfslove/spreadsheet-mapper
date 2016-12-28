@@ -2,7 +2,11 @@ package me.excel.tools.helper;
 
 import me.excel.tools.exception.ExcelReadException;
 import me.excel.tools.model.excel.*;
-import me.excel.tools.model.template.ExcelSheetHeaderInfo;
+import me.excel.tools.model.excel.Cell;
+import me.excel.tools.model.excel.Row;
+import me.excel.tools.model.excel.Sheet;
+import me.excel.tools.model.excel.Workbook;
+import me.excel.tools.model.template.SheetHeader;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
@@ -25,15 +29,16 @@ public class ExcelToWorkbookHelper {
   }
 
   /**
-   * read supplied excel stream to {@link ExcelWorkbook}
+   * read supplied excel stream to {@link Workbook}
    *
-   * @param inputStream auto close
+   * @param inputStream  auto close
+   * @param sheetHeaders sheet header infos, null means using default header
    * @return workbook
    * @throws IOException io exception
    */
-  public static ExcelWorkbook read(InputStream inputStream, ExcelSheetHeaderInfo... headerInfos) throws IOException {
+  public static Workbook read(InputStream inputStream, SheetHeader... sheetHeaders) throws IOException {
 
-    ExcelWorkbook excelWorkbook = new ExcelWorkbookBean();
+    Workbook excelWorkbook = new WorkbookBean();
 
     try {
 
@@ -41,7 +46,7 @@ public class ExcelToWorkbookHelper {
         return excelWorkbook;
       }
 
-      Workbook workbook = WorkbookFactory.create(inputStream);
+      org.apache.poi.ss.usermodel.Workbook workbook = WorkbookFactory.create(inputStream);
 
       if (workbook instanceof HSSFWorkbook) {
         excelWorkbook.setAfter97(false);
@@ -49,38 +54,46 @@ public class ExcelToWorkbookHelper {
 
       int sheetCount = workbook.getNumberOfSheets();
 
-      Map<Integer, ExcelSheetHeaderInfo> sheetIndex2headerInfo = buildHeaderInfoMap(headerInfos);
+      Map<Integer, SheetHeader> sheetIndex2header = buildHeaderMap(sheetHeaders);
       for (int i = 0; i < sheetCount; i++) {
 
-        Sheet sheet = workbook.getSheetAt(i);
+        org.apache.poi.ss.usermodel.Sheet sheet = workbook.getSheetAt(i);
 
         if (sheet == null) {
           continue;
         }
 
-        ExcelSheet excelSheet = transferSheet(sheet);
-        ExcelSheetHeaderInfo headerInfo = sheetIndex2headerInfo.get(excelSheet.getIndex());
-        if (headerInfo != null) {
-          excelSheet.setHeaderInfo(headerInfo);
-        }
+        Sheet excelSheet = createSheet(sheet);
         excelWorkbook.addSheet(excelSheet);
 
-        Map<Integer, String> columnIndex2field = buildColumnIndex2fieldMap(sheet.getRow(excelSheet.getHeaderInfo().getFieldAt() - 1));
+        SheetHeader header = sheetIndex2header.get(excelSheet.getIndex());
+        if (header != null) {
+
+          if (!header.isHasField()) {
+            LOGGER.error("sheet header error, not has field row");
+            throw new ExcelReadException("sheet header error, not has field row");
+          }
+
+          excelSheet.setHeader(header);
+        }
+
+        org.apache.poi.ss.usermodel.Row fieldRow = sheet.getRow(excelSheet.getHeader().getFieldRowIndex() - 1);
+        Map<Integer, String> columnIndex2field = buildColumnIndex2fieldMap(fieldRow);
 
         int lastRowNum = sheet.getLastRowNum();
-        for (int j = 0; j <= lastRowNum; j++) {
+        for (int j = 0; j < lastRowNum; j++) {
 
-          Row row = sheet.getRow(j);
+          org.apache.poi.ss.usermodel.Row row = sheet.getRow(j);
 
-          ExcelRow excelRow = transferRow(row);
+          Row excelRow = createRow(row);
           excelSheet.addRow(excelRow);
 
-          List<ExcelCell> excelCells = transferRowCells(row);
+          List<Cell> cells = createRowCells(row);
 
-          for (ExcelCell excelCell : excelCells) {
+          for (Cell cell : cells) {
 
-            excelCell.setField(columnIndex2field.get(excelCell.getColumnIndex()));
-            excelRow.addCell(excelCell);
+            cell.setField(columnIndex2field.get(cell.getColumnIndex()));
+            excelRow.addCell(cell);
           }
 
         }
@@ -88,66 +101,64 @@ public class ExcelToWorkbookHelper {
 
       return excelWorkbook;
     } catch (Exception e) {
-
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new ExcelReadException(e);
-
     } finally {
       inputStream.close();
     }
   }
 
-  private static ExcelSheet transferSheet(Sheet sheet) {
-    return new ExcelSheetBean(sheet);
+  private static Sheet createSheet(org.apache.poi.ss.usermodel.Sheet sheet) {
+    return new SheetBean(sheet);
   }
 
-  private static ExcelRow transferRow(Row row) {
-    return new ExcelRowBean(row);
+  private static Row createRow(org.apache.poi.ss.usermodel.Row row) {
+    return new RowBean(row);
   }
 
-  private static List<ExcelCell> transferRowCells(Row row) {
-    List<ExcelCell> excelCells = new ArrayList<>();
+  private static List<Cell> createRowCells(org.apache.poi.ss.usermodel.Row row) {
+    List<Cell> cells = new ArrayList<>();
 
     int maxColNum = row.getLastCellNum() > 0 ? row.getLastCellNum() : 0;
 
     for (int k = 0; k < maxColNum; k++) {
 
-      Cell cell = row.getCell(k);
+      org.apache.poi.ss.usermodel.Cell cell = row.getCell(k);
 
-      ExcelCellBean excelCell;
+      CellBean excelCell;
       if (cell == null) {
 
-        excelCell = ExcelCellBean.EMPTY_CELL(k + 1, row.getRowNum() + 1);
+        excelCell = CellBean.EMPTY_CELL(k + 1, row.getRowNum() + 1);
       } else {
 
-        excelCell = new ExcelCellBean(cell);
+        excelCell = new CellBean(cell);
       }
 
-      excelCells.add(excelCell);
+      cells.add(excelCell);
     }
 
-    return excelCells;
+    return cells;
   }
 
-  private static Map<Integer, ExcelSheetHeaderInfo> buildHeaderInfoMap(ExcelSheetHeaderInfo[] sheetHeaderInfos) {
-    Map<Integer, ExcelSheetHeaderInfo> sheetIndex2headerInfo = new HashMap<>();
+  private static Map<Integer, SheetHeader> buildHeaderMap(SheetHeader[] sheetHeaders) {
+    Map<Integer, SheetHeader> sheetIndex2header = new HashMap<>();
 
-    if (sheetHeaderInfos != null) {
-      for (ExcelSheetHeaderInfo headerInfo : sheetHeaderInfos) {
-        sheetIndex2headerInfo.put(headerInfo.getSheetIndex(), headerInfo);
+    if (sheetHeaders != null) {
+      for (SheetHeader header : sheetHeaders) {
+        sheetIndex2header.put(header.getSheetIndex(), header);
       }
     }
 
-    return sheetIndex2headerInfo;
+    return sheetIndex2header;
   }
 
-  private static Map<Integer, String> buildColumnIndex2fieldMap(Row row) {
+  private static Map<Integer, String> buildColumnIndex2fieldMap(org.apache.poi.ss.usermodel.Row row) {
     Map<Integer, String> columnIndex2field = new HashMap<>();
 
-    List<ExcelCell> excelCells = transferRowCells(row);
+    List<Cell> cells = createRowCells(row);
 
-    for (ExcelCell excelCell : excelCells) {
-      columnIndex2field.put(excelCell.getColumnIndex(), excelCell.getValue());
+    for (Cell cell : cells) {
+      columnIndex2field.put(cell.getColumnIndex(), cell.getValue());
     }
 
     return columnIndex2field;

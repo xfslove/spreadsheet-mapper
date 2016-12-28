@@ -1,6 +1,6 @@
 package me.excel.tools.factory;
 
-import me.excel.tools.model.excel.ExcelRow;
+import me.excel.tools.model.excel.Row;
 
 /**
  * model factory
@@ -15,5 +15,5 @@ public interface ModelFactory<OBJECT> {
    * @param row which row
    * @return initialized object
    */
-  OBJECT create(ExcelRow row);
+  OBJECT create(Row row);
 }

@@ -2,8 +2,7 @@ package me.excel.tools.factory;
 
 import me.excel.tools.exception.ExcelReadException;
 import me.excel.tools.helper.ExcelToWorkbookHelper;
-import me.excel.tools.model.excel.ExcelWorkbook;
-import me.excel.tools.model.template.ExcelSheetHeaderInfo;
+import me.excel.tools.model.excel.Workbook;
 import me.excel.tools.processor.SheetToObjectsProcessor;
 import me.excel.tools.validator.ExcelFileValidator;
 import me.excel.tools.validator.UserFileValidator;
@@ -25,7 +24,7 @@ public class ExcelFileTemplate implements UserFileTemplate {
 
   private SheetToObjectsProcessor sheetToObjectsProcessor;
 
-  private ExcelWorkbook excelWorkbook;
+  private Workbook workbook;
 
   public ExcelFileTemplate(File excel) throws IOException {
     this(new FileInputStream(excel));
@@ -33,11 +32,11 @@ public class ExcelFileTemplate implements UserFileTemplate {
 
   public ExcelFileTemplate(InputStream inputStream) throws IOException {
 
-    excelWorkbook = ExcelToWorkbookHelper.read(inputStream, ExcelSheetHeaderInfo.SINGLE_SHEET_DEFAULT);
+    workbook = ExcelToWorkbookHelper.read(inputStream);
 
-    sheetToObjectsProcessor = new SheetToObjectsProcessor(excelWorkbook.getFirstSheet());
+    sheetToObjectsProcessor = new SheetToObjectsProcessor(workbook.getFirstSheet());
 
-    userFileValidator = new ExcelFileValidator(excelWorkbook);
+    userFileValidator = new ExcelFileValidator(workbook);
   }
 
   @Override
@@ -52,11 +51,11 @@ public class ExcelFileTemplate implements UserFileTemplate {
   @Override
   public Set<String> getDistinctValuesOfField(String field) {
 
-    if (excelWorkbook == null) {
+    if (workbook == null) {
       throw new ExcelReadException("workbook is null");
     }
 
-    return excelWorkbook.getFirstSheet().getDistinctValuesOfField(field);
+    return workbook.getFirstSheet().getDistinctValuesOfField(field);
   }
 
 }

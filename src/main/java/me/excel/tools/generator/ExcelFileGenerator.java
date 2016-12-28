@@ -1,193 +1,184 @@
 package me.excel.tools.generator;
 
-import me.excel.tools.ExcelConstants;
 import me.excel.tools.extractor.DefaultValueExtractor;
 import me.excel.tools.extractor.FieldValueExtractor;
 import me.excel.tools.helper.WorkbookToExcelHelper;
 import me.excel.tools.model.excel.*;
-import me.excel.tools.prompter.FieldPrompter;
+import me.excel.tools.model.template.HeaderDetail;
+import me.excel.tools.model.template.SheetHeader;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 /**
  * Created by hanwen on 15-12-16.
  */
 public class ExcelFileGenerator implements UserFileGenerator {
 
-  private List data = new ArrayList<>();
-
-  private List<String> fields = new ArrayList<>();
-
-  private List<String> titles = new ArrayList<>();
-
   private DefaultValueExtractor defaultValueExtractor = new DefaultValueExtractor();
 
-  private List<FieldValueExtractor> fieldValueExtractors = new ArrayList<>();
-
-  private List<FieldPrompter> fieldPrompters = new ArrayList<>();
-
-  @Override
-  public void setTitles(String... titles) {
-    if (titles == null) {
-      throw new IllegalArgumentException("title is null");
-    }
-    Collections.addAll(this.titles, titles);
-  }
-
-  @Override
-  public void setFields(String... fields) {
-    if (fields == null) {
-      throw new IllegalArgumentException("field is null");
-    }
-    Collections.addAll(this.fields, fields);
-  }
+  private Map<String, FieldValueExtractor> key2fieldValueExtractor = new HashMap<>();
 
   @Override
   public void addValueExtractors(FieldValueExtractor... fieldValueExtractors) {
     if (fieldValueExtractors == null) {
       return;
     }
-    Collections.addAll(this.fieldValueExtractors, fieldValueExtractors);
-  }
-
-  @Override
-  public void addCellPrompters(FieldPrompter... fieldPrompters) {
-    if (fieldPrompters == null) {
-      return;
+    for (FieldValueExtractor extractor : fieldValueExtractors) {
+      key2fieldValueExtractor.put(extractor.getMatchField(), extractor);
     }
-    Collections.addAll(this.fieldPrompters, fieldPrompters);
   }
 
   @Override
-  public void setData(List data) {
-    this.data = data;
+  public void generate(File excel, SheetContext... contexts) throws IOException {
+    generate(new FileOutputStream(excel), contexts);
   }
 
   @Override
-  public void generate(File excel) throws IOException {
-    generate(new FileOutputStream(excel));
-  }
+  public void generate(OutputStream outputStream, SheetContext... contexts) throws IOException {
 
-  @Override
-  public void generate(OutputStream outputStream) throws IOException {
-    generate(outputStream, true, true, true);
-  }
-
-  @Override
-  public void generate(File excel, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException {
-    generate(new FileOutputStream(excel), createTitles, createFields, createPrompts);
-  }
-
-  @Override
-  public void generate(OutputStream outputStream, boolean createTitles, boolean createFields, boolean createPrompts) throws IOException {
-
-    ExcelWorkbook excelWorkbook = createWorkbook(createTitles, createFields, createPrompts);
-    if (excelWorkbook == null) {
-      throw new IllegalArgumentException("workbook is null");
+    if (contexts == null) {
+      throw new IllegalArgumentException("context is null");
     }
 
-    WorkbookToExcelHelper.write(excelWorkbook, outputStream);
+    Workbook workbook = createWorkbook(contexts);
+    WorkbookToExcelHelper.write(outputStream, workbook);
   }
 
-  private ExcelWorkbook createWorkbook(boolean createTitles, boolean createFields, boolean createPrompts) {
-    ExcelWorkbookBean workbook = new ExcelWorkbookBean();
+  private Workbook createWorkbook(SheetContext[] contexts) {
 
-    ExcelSheetBean sheet = new ExcelSheetBean();
-    sheet.setWorkbook(workbook);
-    workbook.addSheet(sheet);
+    Map<Integer, SheetContext> sheetIndex2context = buildContextMap(contexts);
 
-    int rowIndex = 1;
-    if (createTitles) {
-      createTitleRow(sheet, rowIndex);
-      rowIndex++;
-    }
-    if (createFields) {
-      createFieldRow(sheet, rowIndex);
-      rowIndex++;
-    }
+    WorkbookBean workbook = new WorkbookBean();
 
-    if (createPrompts) {
-      createPromptRow(sheet, rowIndex);
-      rowIndex++;
-    }
+    for (int i = 1; i <= sheetIndex2context.size(); i++) {
 
-    for (Object data : this.data) {
-      createDataRow(sheet, data, rowIndex);
-      rowIndex++;
+      SheetContext context = sheetIndex2context.get(i);
+
+      Sheet sheet = createSheet(context.getSheetName());
+      workbook.addSheet(sheet);
+
+      if (context.getHeader() != null) {
+        sheet.setHeader(context.getHeader());
+      }
+
+      List<HeaderDetail> headerDetails = context.getHeaderDetails();
+
+      List data = context.getData();
+      int lastRowNum = sheet.getHeader().getDataStartRowIndex() + data.size() - 1;
+
+      for (int j = 1; j <= lastRowNum; j++) {
+
+        Row row = createRow(j);
+        sheet.addRow(row);
+
+        createHeaderIfNecessary(row, sheet.getHeader(), headerDetails);
+        createDataRowCells(row, data.get(j - 1), headerDetails);
+      }
+
     }
 
     return workbook;
   }
 
-  private ExcelRow createTitleRow(ExcelSheetBean sheet, int rowIndex) {
-    ExcelRowBean row = new ExcelRowBean(rowIndex);
-    sheet.addRow(row);
-
-    for (int i = 0; i < titles.size(); i++) {
-      ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, titles.get(i));
-      row.addCell(cell);
+  private Sheet createSheet(String sheetName) {
+    if (StringUtils.isBlank(sheetName)) {
+      return new SheetBean();
     }
-    return row;
+    return new SheetBean(sheetName);
   }
 
-  private ExcelRow createFieldRow(ExcelSheetBean sheet, int rowIndex) {
-    ExcelRowBean row = new ExcelRowBean(rowIndex);
-    sheet.addRow(row);
-
-    for (int i = 0; i < fields.size(); i++) {
-      ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, fields.get(i));
-      row.addCell(cell);
-    }
-    return row;
+  private Row createRow(int rowIndex) {
+    return new RowBean(rowIndex);
   }
 
-  private ExcelRow createPromptRow(ExcelSheetBean sheet, int rowIndex) {
-    ExcelRowBean row = new ExcelRowBean(rowIndex);
-    sheet.addRow(row);
+  private void createHeaderIfNecessary(Row row, SheetHeader header, List<HeaderDetail> details) {
+    int rowIndex = row.getIndex();
 
-    for (int i = 0; i < fields.size(); i++) {
-      String field = fields.get(i);
-      ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, getPrompts(field));
-      row.addCell(cell);
+    if (header.isHasTitle() && rowIndex == header.getTitleRowIndex()) {
+
+      createTitleRowCells(row, details);
+    } else if (header.isHasField() && rowIndex == header.getFieldRowIndex()) {
+
+      createFieldRowCells(row, details);
+    } else if (header.isHasPrompt() && rowIndex == header.getPromptRowIndex()) {
+
+      createPromptRowCells(row, details);
     }
-    return row;
   }
 
-  private ExcelRow createDataRow(ExcelSheetBean sheet, Object data, int rowIndex) {
-    ExcelRowBean row = new ExcelRowBean(rowIndex);
-    sheet.addRow(row);
+  private void createDataRowCells(Row row, Object object, List<HeaderDetail> details) {
+    for (int i = 1; i <= details.size(); i++) {
 
-    for (int i = 0; i < fields.size(); i++) {
-      String field = fields.get(i);
-      String fieldValue = getFieldValue(data, field);
-      ExcelCellBean cell = new ExcelCellBean(rowIndex, i + 1, fieldValue);
-      row.addCell(cell);
-    }
-    return row;
-  }
+      HeaderDetail detail = details.get(i - 1);
+      String value = getFieldValue(object, detail.getField());
+      CellBean dataCell = new CellBean(row.getIndex(), i, value);
+      dataCell.setField(detail.getField());
 
-  private String getPrompts(String field) {
-
-    List<String> prompts = fieldPrompters.stream().filter(fieldPrompter -> fieldPrompter.matches(field)).map(FieldPrompter::getPrompt).collect(Collectors.toList());
-    return prompts.isEmpty() ? ExcelConstants.EMPTY_VALUE : StringUtils.join(prompts, ExcelConstants.COMMA_SEPARATOR);
-  }
-
-  private String getFieldValue(Object data, String field) {
-
-    for (FieldValueExtractor fieldValueExtractor : fieldValueExtractors) {
-      if (fieldValueExtractor.matches(field)) {
-        return fieldValueExtractor.getStringValue(data);
-      }
+      row.addCell(dataCell);
     }
 
-    return defaultValueExtractor.getStringValue(data, field);
+  }
+
+  private void createTitleRowCells(Row row, List<HeaderDetail> details) {
+    for (int i = 1; i <= details.size(); i++) {
+
+      HeaderDetail detail = details.get(i - 1);
+      CellBean titleCell = new CellBean(row.getIndex(), i, detail.getTitle());
+      titleCell.setField(detail.getField());
+
+      row.addCell(titleCell);
+    }
+
+  }
+
+
+  private void createFieldRowCells(Row row, List<HeaderDetail> details) {
+    for (int i = 1; i <= details.size(); i++) {
+
+      HeaderDetail detail = details.get(i - 1);
+      CellBean fieldCell = new CellBean(row.getIndex(), i, detail.getField());
+      fieldCell.setField(detail.getField());
+
+      row.addCell(fieldCell);
+    }
+  }
+
+  private void createPromptRowCells(Row row, List<HeaderDetail> details) {
+    for (int i = 1; i <= details.size(); i++) {
+
+      HeaderDetail detail = details.get(i - 1);
+      CellBean promptCell = new CellBean(row.getIndex(), i, detail.getPrompt());
+      promptCell.setField(detail.getField());
+
+      row.addCell(promptCell);
+    }
+  }
+
+  private Map<Integer, SheetContext> buildContextMap(SheetContext[] contexts) {
+    Map<Integer, SheetContext> sheetIndex2context = new HashMap<>();
+
+    for (SheetContext context : contexts) {
+      sheetIndex2context.put(context.getSheetIndex(), context);
+    }
+
+    return sheetIndex2context;
+  }
+
+  private String getFieldValue(Object object, String field) {
+
+    FieldValueExtractor extractor = key2fieldValueExtractor.get(field);
+
+    if (extractor != null) {
+      return extractor.getStringValue(object);
+    }
+
+    return defaultValueExtractor.getStringValue(object, field);
   }
 }

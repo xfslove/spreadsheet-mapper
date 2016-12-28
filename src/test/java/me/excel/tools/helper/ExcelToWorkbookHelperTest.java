@@ -2,10 +2,9 @@ package me.excel.tools.helper;
 
 import me.excel.tools.ExcelConstants;
 import me.excel.tools.ExcelSupportedDateFormat;
-import me.excel.tools.helper.ExcelToWorkbookHelper;
-import me.excel.tools.model.excel.ExcelRow;
-import me.excel.tools.model.excel.ExcelSheet;
-import me.excel.tools.model.excel.ExcelWorkbook;
+import me.excel.tools.model.excel.Row;
+import me.excel.tools.model.excel.Sheet;
+import me.excel.tools.model.excel.Workbook;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;
@@ -25,15 +24,15 @@ public class ExcelToWorkbookHelperTest {
 
     ExcelSupportedDateFormat.registerFormat("[$-409]d\\-mmm\\-yy;@", "yyyy-MM-dd");
 
-    ExcelWorkbook excelWorkbook = ExcelToWorkbookHelper.read(excelIs);
+    Workbook workbook = ExcelToWorkbookHelper.read(excelIs);
 
-    assertEquals(excelWorkbook.sizeOfSheets(), 1);
-    ExcelSheet sheet = excelWorkbook.getSheet(1);
-    assertEquals(sheet.getSheetName(), "Sheet0");
+    assertEquals(workbook.sizeOfSheets(), 1);
+    Sheet sheet = workbook.getSheet(1);
+    assertEquals(sheet.getName(), "Sheet0");
 
     assertEquals(sheet.sizeOfRows(), 2);
     for (int i = 0; i < 2; i++) {
-      ExcelRow row = sheet.getRow(i + 1);
+      Row row = sheet.getRow(i + 1);
       assertEquals(row.sizeOfCells(), 4);
       if (i == 0) {
         assertEquals(row.getCells().stream()

@@ -1,15 +1,9 @@
 package me.excel.tools.validator;
 
-import me.excel.tools.model.message.DataValidateMessage;
-import me.excel.tools.model.message.TemplateValidateMessage;
-import me.excel.tools.validator.data.cell.CellValidator;
-import me.excel.tools.validator.data.row.RowValidator;
-import me.excel.tools.validator.data.sheet.SheetValidator;
-import me.excel.tools.validator.data.workbook.WorkbookValidator;
-import me.excel.tools.validator.template.sheet.SheetTemplateValidator;
-import me.excel.tools.validator.template.workbook.WorkbookTemplateValidator;
-
-import java.util.List;
+import me.excel.tools.validator.cell.CellValidator;
+import me.excel.tools.validator.row.RowValidator;
+import me.excel.tools.validator.sheet.SheetValidator;
+import me.excel.tools.validator.workbook.WorkbookValidator;
 
 /**
  * excel file validator
@@ -19,26 +13,14 @@ import java.util.List;
 public interface UserFileValidator {
 
   /**
-   * @param validators workbook template validator
-   * @see WorkbookTemplateValidator
-   */
-  void addWorkbookTemplateValidator(WorkbookTemplateValidator... validators);
-
-  /**
-   * @param validators sheet template validator
-   * @see SheetTemplateValidator
-   */
-  void addSheetTemplateValidator(SheetTemplateValidator... validators);
-
-  /**
    * @param validators workbook validator
-   * @see WorkbookTemplateValidator
+   * @see WorkbookValidator
    */
   void addWorkbookValidator(WorkbookValidator... validators);
 
   /**
    * @param validators sheet validator
-   * @see SheetTemplateValidator
+   * @see SheetValidator
    */
   void addSheetValidator(SheetValidator... validators);
 
@@ -55,19 +37,9 @@ public interface UserFileValidator {
   void addCellValidator(CellValidator... validators);
 
   /**
-   * @return data validate error messages
-   */
-  List<TemplateValidateMessage> getTemplateErrorMessages();
-
-  /**
-   * @return template validate error messages
-   */
-  List<DataValidateMessage> getDataErrorMessages();
-
-  /**
-   * execute validate
+   * execute valid
    *
    * @return success
    */
-  boolean validate();
+  boolean valid();
 }

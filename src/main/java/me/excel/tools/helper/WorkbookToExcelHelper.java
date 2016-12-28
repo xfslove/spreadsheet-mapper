@@ -1,17 +1,13 @@
 package me.excel.tools.helper;
 
 import me.excel.tools.ExcelConstants;
-import me.excel.tools.exception.ExcelReadException;
-import me.excel.tools.model.excel.ExcelCell;
-import me.excel.tools.model.excel.ExcelRow;
-import me.excel.tools.model.excel.ExcelSheet;
-import me.excel.tools.model.excel.ExcelWorkbook;
+import me.excel.tools.exception.ExcelWriteException;
+import me.excel.tools.model.excel.Cell;
+import me.excel.tools.model.excel.Row;
+import me.excel.tools.model.excel.Sheet;
+import me.excel.tools.model.excel.Workbook;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,24 +31,26 @@ public class WorkbookToExcelHelper {
   /**
    * write workbook to supplied output stream
    *
-   * @param excelWorkbook intend to write workbook
    * @param outputStream  notice close the stream
+   * @param excelWorkbook intend to write workbook
    * @throws IOException io exception
    */
-  public static void write(ExcelWorkbook excelWorkbook, OutputStream outputStream) throws IOException {
+  public static void write(OutputStream outputStream, Workbook excelWorkbook) throws IOException {
     if (excelWorkbook == null) {
       LOGGER.error("workbook is null");
-      throw new ExcelReadException("workbook is null");
+      throw new ExcelWriteException("workbook is null");
     }
 
-    Workbook workbook = createWorkbook(excelWorkbook);
+    org.apache.poi.ss.usermodel.Workbook workbook = createWorkbook(excelWorkbook);
 
-    for (ExcelSheet excelSheet : excelWorkbook.getSheets()) {
+    for (Sheet excelSheet : excelWorkbook.getSheets()) {
 
-      Sheet sheet = createSheet(workbook, excelSheet);
+      org.apache.poi.ss.usermodel.Sheet sheet = createSheet(workbook, excelSheet);
 
-      for (ExcelRow excelRow : excelSheet.getRows()) {
-        createRowAndCells(sheet, excelRow);
+      for (Row excelRow : excelSheet.getRows()) {
+
+        org.apache.poi.ss.usermodel.Row row = createRow(sheet);
+        createRowCells(row, excelRow);
       }
     }
 
@@ -62,8 +60,8 @@ public class WorkbookToExcelHelper {
     }
   }
 
-  private static Workbook createWorkbook(ExcelWorkbook excelWorkbook) {
-    if (excelWorkbook.isAfter97()) {
+  private static org.apache.poi.ss.usermodel.Workbook createWorkbook(Workbook workbook) {
+    if (workbook.isAfter97()) {
       return new HSSFWorkbook();
     } else {
       // keep 100 rows in memory, exceeding rows will be flushed to disk
@@ -71,8 +69,8 @@ public class WorkbookToExcelHelper {
     }
   }
 
-  private static Sheet createSheet(Workbook workbook, ExcelSheet excelSheet) {
-    String sheetName = excelSheet.getSheetName();
+  private static org.apache.poi.ss.usermodel.Sheet createSheet(org.apache.poi.ss.usermodel.Workbook workbook, Sheet sheet) {
+    String sheetName = sheet.getName();
 
     if (StringUtils.isBlank(sheetName)) {
       workbook.createSheet();
@@ -83,21 +81,23 @@ public class WorkbookToExcelHelper {
     return workbook.getSheetAt(workbook.getNumberOfSheets() - 1);
   }
 
-  private static void createRowAndCells(Sheet sheet, ExcelRow excelRow) {
-
-    Row row;
+  private static org.apache.poi.ss.usermodel.Row createRow(org.apache.poi.ss.usermodel.Sheet sheet) {
+    org.apache.poi.ss.usermodel.Row row;
     if (sheet.getPhysicalNumberOfRows() == 0) {
       row = sheet.createRow(0);
     } else {
       row = sheet.createRow(sheet.getLastRowNum() + 1);
     }
+    return row;
+  }
 
+  private static void createRowCells(org.apache.poi.ss.usermodel.Row row, Row excelRow) {
     for (int i = 0; i < excelRow.sizeOfCells(); i++) {
 
-      ExcelCell excelCell = excelRow.getCell(i + 1);
+      Cell excelCell = excelRow.getCell(i + 1);
       String value = excelCell.getValue();
 
-      Cell cell = row.createCell(i, Cell.CELL_TYPE_STRING);
+      org.apache.poi.ss.usermodel.Cell cell = row.createCell(i, org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING);
       cell.setCellValue(value == null ? ExcelConstants.EMPTY_VALUE : value);
     }
   }

@@ -1,7 +1,7 @@
 package me.excel.tools.helper;
 
 import me.excel.tools.exception.ExcelWriteException;
-import me.excel.tools.model.extra.ExcelTextBox;
+import me.excel.tools.model.extra.TextBox;
 import me.excel.tools.model.extra.TextBoxStyle;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.usermodel.*;
@@ -35,7 +35,7 @@ public class ExcelTextBoxHelper {
    * @param textBoxs text boxs
    * @see #writeTextBox(InputStream, OutputStream, Collection)
    */
-  public static void writeTextBox(File file, Collection<ExcelTextBox> textBoxs) {
+  public static void writeTextBox(File file, Collection<TextBox> textBoxs) {
 
     try (Workbook workbook = WorkbookFactory.create(new FileInputStream(file))) {
 
@@ -57,7 +57,7 @@ public class ExcelTextBoxHelper {
    * @param outputStream intend write stream, notice close
    * @param textBoxs     text boxs
    */
-  public static void writeTextBox(InputStream inputStream, OutputStream outputStream, Collection<ExcelTextBox> textBoxs) {
+  public static void writeTextBox(InputStream inputStream, OutputStream outputStream, Collection<TextBox> textBoxs) {
 
     try (Workbook workbook = WorkbookFactory.create(inputStream)) {
 
@@ -70,11 +70,11 @@ public class ExcelTextBoxHelper {
     }
   }
 
-  private static void addTextBoxs(Workbook workbook, Collection<ExcelTextBox> textBoxs) {
+  private static void addTextBoxs(Workbook workbook, Collection<TextBox> textBoxs) {
 
     int numberOfSheets = workbook.getNumberOfSheets();
 
-    for (ExcelTextBox textBox : textBoxs) {
+    for (TextBox textBox : textBoxs) {
 
       if (numberOfSheets < textBox.getSheetIndex()) {
         throw new IllegalArgumentException("index of sheet text box at are out of bounds");
@@ -92,7 +92,7 @@ public class ExcelTextBoxHelper {
 
   }
 
-  private static void addXSSFTextBox(Sheet sheet, ExcelTextBox textBox) {
+  private static void addXSSFTextBox(Sheet sheet, TextBox textBox) {
     TextBoxStyle style = textBox.getStyle();
 
     XSSFSheet xssfSheet = (XSSFSheet) sheet;
@@ -105,7 +105,7 @@ public class ExcelTextBoxHelper {
 
   }
 
-  private static void addHSSFTextBox(Sheet sheet, ExcelTextBox textBox) {
+  private static void addHSSFTextBox(Sheet sheet, TextBox textBox) {
     TextBoxStyle style = textBox.getStyle();
 
     HSSFSheet hssfSheet = (HSSFSheet) sheet;

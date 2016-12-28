@@ -2,7 +2,7 @@ package me.excel.tools.setter;
 
 import me.excel.tools.FieldUtils;
 import me.excel.tools.exception.ExcelProcessException;
-import me.excel.tools.model.excel.ExcelCell;
+import me.excel.tools.model.excel.Cell;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.*;
@@ -37,11 +37,11 @@ public class DefaultValueSetter {
     ConvertUtils.register(new BigDecimalConverter(null), BigDecimal.class);
   }
 
-  public void set(Object data, List<ExcelCell> excelCells) {
+  public void set(Object data, List<Cell> cells) {
 
-    for (ExcelCell excelCell : excelCells) {
+    for (Cell cell : cells) {
       try {
-        BeanUtils.setProperty(data, detectRealField(excelCell.getField()), matches(data, excelCell.getField()) ? excelCell.getValue() : null);
+        BeanUtils.setProperty(data, detectRealField(cell.getField()), matches(data, cell.getField()) ? cell.getValue() : null);
       } catch (Exception e) {
         LOGGER.error(ExceptionUtils.getStackTrace(e));
         throw new ExcelProcessException(e);

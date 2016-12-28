@@ -1,7 +1,7 @@
 package me.excel.tools.setter;
 
 
-import me.excel.tools.model.excel.ExcelCell;
+import me.excel.tools.model.excel.Cell;
 
 /**
  * field value setter adapter, easy implements customer value setter extends this.
@@ -16,15 +16,11 @@ public abstract class FieldValueSetterAdapter implements FieldValueSetter {
     this.matchField = matchField;
   }
 
-  protected final String getMatchField() {
+  @Override
+  public String getMatchField() {
     return matchField;
   }
 
   @Override
-  public abstract void set(Object data, ExcelCell excelCell);
-
-  @Override
-  public boolean matches(String field) {
-    return matchField.equals(field);
-  }
+  public abstract void set(Object data, Cell cell);
 }

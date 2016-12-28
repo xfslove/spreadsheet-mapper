@@ -1,6 +1,6 @@
 package me.excel.tools.setter;
 
-import me.excel.tools.model.excel.ExcelCell;
+import me.excel.tools.model.excel.Cell;
 
 import java.util.function.BiConsumer;
 
@@ -11,20 +11,20 @@ import java.util.function.BiConsumer;
  */
 public class CommonValueSetter<D> extends FieldValueSetterAdapter {
 
-  private BiConsumer<D, ExcelCell> valueSetter;
+  private BiConsumer<D, Cell> valueSetter;
 
   public CommonValueSetter(String matchField) {
     super(matchField);
   }
 
-  public CommonValueSetter(String matchField, BiConsumer<D, ExcelCell> valueSetter) {
+  public CommonValueSetter(String matchField, BiConsumer<D, Cell> valueSetter) {
     super(matchField);
     this.valueSetter = valueSetter;
   }
 
   @Override
-  public void set(Object data, ExcelCell excelCell) {
-    valueSetter.accept((D) data, excelCell);
+  public void set(Object data, Cell cell) {
+    valueSetter.accept((D) data, cell);
   }
 
 }

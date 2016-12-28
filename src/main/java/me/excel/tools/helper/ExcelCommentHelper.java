@@ -1,7 +1,7 @@
 package me.excel.tools.helper;
 
 import me.excel.tools.exception.ExcelWriteException;
-import me.excel.tools.model.extra.ExcelComment;
+import me.excel.tools.model.extra.Comment;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class ExcelCommentHelper {
    * @param comments comments
    * @see #writeComments(InputStream, OutputStream, Collection)
    */
-  public static void writeComments(File file, Collection<ExcelComment> comments) {
+  public static void writeComments(File file, Collection<Comment> comments) {
 
     try (Workbook workbook = WorkbookFactory.create(new FileInputStream(file))) {
 
@@ -52,7 +52,7 @@ public class ExcelCommentHelper {
    * @param outputStream intend write stream, notice close
    * @param comments     comments
    */
-  public static void writeComments(InputStream inputStream, OutputStream outputStream, Collection<ExcelComment> comments) {
+  public static void writeComments(InputStream inputStream, OutputStream outputStream, Collection<Comment> comments) {
 
     try (Workbook workbook = WorkbookFactory.create(inputStream)) {
 
@@ -66,20 +66,20 @@ public class ExcelCommentHelper {
 
   }
 
-  private static void addComments(Workbook workbook, Collection<ExcelComment> comments) {
+  private static void addComments(Workbook workbook, Collection<Comment> comments) {
     int numberOfSheets = workbook.getNumberOfSheets();
 
-    for (ExcelComment excelComment : comments) {
+    for (Comment comment : comments) {
 
-      if (numberOfSheets < excelComment.getSheetIndex()) {
+      if (numberOfSheets < comment.getSheetIndex()) {
         throw new IllegalArgumentException("index of sheet comment at are out of bounds");
       }
-      addComment(workbook.getSheetAt(excelComment.getSheetIndex() - 1), excelComment);
+      addComment(workbook.getSheetAt(comment.getSheetIndex() - 1), comment);
     }
 
   }
 
-  private static void addComment(Sheet sheet, ExcelComment comment) {
+  private static void addComment(Sheet sheet, Comment comment) {
     if (comment == null) {
       return;
     }
@@ -104,7 +104,7 @@ public class ExcelCommentHelper {
 
     // Create the comment and set the text
     Drawing drawing = sheet.createDrawingPatriarch();
-    Comment poiComment = drawing.createCellComment(anchor);
+    org.apache.poi.ss.usermodel.Comment poiComment = drawing.createCellComment(anchor);
     RichTextString str = factory.createRichTextString(comment.getMessage());
     poiComment.setString(str);
 

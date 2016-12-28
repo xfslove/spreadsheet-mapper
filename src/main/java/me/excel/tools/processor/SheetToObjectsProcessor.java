@@ -2,9 +2,9 @@ package me.excel.tools.processor;
 
 import me.excel.tools.exception.ExcelProcessException;
 import me.excel.tools.factory.ModelFactory;
-import me.excel.tools.model.excel.ExcelCell;
-import me.excel.tools.model.excel.ExcelRow;
-import me.excel.tools.model.excel.ExcelSheet;
+import me.excel.tools.model.excel.Cell;
+import me.excel.tools.model.excel.Row;
+import me.excel.tools.model.excel.Sheet;
 import me.excel.tools.setter.DefaultValueSetter;
 import me.excel.tools.setter.FieldValueSetter;
 
@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class SheetToObjectsProcessor<OBJECT> {
 
-  private ExcelSheet excelSheet;
+  private Sheet sheet;
 
   private ModelFactory<OBJECT> modelFactory;
 
@@ -28,50 +28,50 @@ public class SheetToObjectsProcessor<OBJECT> {
 
   private DefaultValueSetter defaultValueSetter = new DefaultValueSetter();
 
-  public SheetToObjectsProcessor(ExcelSheet excelSheet) {
-    this.excelSheet = excelSheet;
+  public SheetToObjectsProcessor(Sheet sheet) {
+    this.sheet = sheet;
   }
 
   /**
-   * @param dataProcessorListener processor
-   * @see DataProcessorListener
+   * @param objectProcessorListener processor
+   * @see ObjectProcessorListener
    */
-  public void process(DataProcessorListener dataProcessorListener) {
+  public void process(ObjectProcessorListener<OBJECT> objectProcessorListener) {
 
-    if (excelSheet == null) {
+    if (sheet == null) {
       throw new ExcelProcessException("sheet is null");
     }
-    if (dataProcessorListener == null) {
-      throw new ExcelProcessException("dataProcessorListener is null");
+    if (objectProcessorListener == null) {
+      throw new ExcelProcessException("objectProcessorListener is null");
     }
 
     List<OBJECT> models = new ArrayList<>();
 
-    for (ExcelRow excelRow : excelSheet.getDataRows()) {
+    for (Row row : sheet.getDataRows()) {
 
-      OBJECT origin = modelFactory.create(excelRow);
-      dataProcessorListener.beforeRow(origin);
+      OBJECT origin = modelFactory.create(row);
+      objectProcessorListener.beforeRow(origin);
 
-      OBJECT model = modelFactory.create(excelRow);
+      OBJECT model = modelFactory.create(row);
 
-      defaultValueSetter.set(model, excelRow.getCells());
+      defaultValueSetter.set(model, row.getCells());
 
-      for (ExcelCell excelCell : excelRow.getCells()) {
+      for (Cell cell : row.getCells()) {
 
-        FieldValueSetter fieldValueSetter = key2fieldValueSetter.get(excelCell.getField());
+        FieldValueSetter fieldValueSetter = key2fieldValueSetter.get(cell.getField());
 
         if (fieldValueSetter != null) {
-          fieldValueSetter.set(model, excelCell);
+          fieldValueSetter.set(model, cell);
         }
       }
 
-      dataProcessorListener.afterRow(model);
+      objectProcessorListener.afterRow(model);
 
       models.add(model);
 
     }
 
-    dataProcessorListener.afterSheet(models);
+    objectProcessorListener.afterSheet(models);
   }
 
   /**

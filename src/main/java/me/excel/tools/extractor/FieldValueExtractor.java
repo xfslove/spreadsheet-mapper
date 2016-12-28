@@ -16,10 +16,7 @@ public interface FieldValueExtractor {
   String getStringValue(Object data);
 
   /**
-   * matches which field
-   *
-   * @param field field
-   * @return success
+   * @return which field this extractor matched
    */
-  boolean matches(String field);
+  String getMatchField();
 }

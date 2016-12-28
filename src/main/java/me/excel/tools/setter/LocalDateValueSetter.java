@@ -1,7 +1,7 @@
 package me.excel.tools.setter;
 
 import me.excel.tools.exception.ExcelProcessException;
-import me.excel.tools.model.excel.ExcelCell;
+import me.excel.tools.model.excel.Cell;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.joda.time.format.DateTimeFormat;
@@ -28,10 +28,10 @@ public class LocalDateValueSetter extends FieldValueSetterAdapter {
   }
 
   @Override
-  public void set(Object data, ExcelCell excelCell) {
+  public void set(Object data, Cell cell) {
     try {
       DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(pattern);
-      String value = excelCell.getValue();
+      String value = cell.getValue();
       PropertyUtils.setProperty(data, detectRealField(getMatchField()), value == null ? null : dateTimeFormatter.parseLocalDate(value));
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
