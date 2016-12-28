@@ -20,6 +20,8 @@ public interface ExcelGenerator {
   void addSheetContext(SheetContext... sheetContexts);
 
   /**
+   * field value extractor unique with object field in one sheet (one to one), after add will override before add
+   *
    * @param fieldValueExtractors field value extractor
    * @see FieldValueExtractor
    */
