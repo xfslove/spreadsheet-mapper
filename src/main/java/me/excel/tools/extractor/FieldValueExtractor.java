@@ -19,4 +19,9 @@ public interface FieldValueExtractor {
    * @return which field this extractor matched
    */
   String getMatchField();
+
+  /**
+   * @return which sheet this extractor matched
+   */
+  int getSheetIndex();
 }

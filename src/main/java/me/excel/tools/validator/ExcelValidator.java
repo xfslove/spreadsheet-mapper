@@ -10,7 +10,7 @@ import me.excel.tools.validator.workbook.WorkbookValidator;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface UserFileValidator {
+public interface ExcelValidator {
 
   /**
    * @param validators workbook validator

@@ -81,18 +81,18 @@ UserFileTemplate excelSheetTemplate = new ExcelFileTemplate(excel);
 - 生成导入文件
 
 ```
-userFileGenerator = new ExcelFileGenerator();
-userFileGenerator.setTitles("姓名", "年龄", "生日");
-userFileGenerator.setFields("person.name", "person.age", "person.birthday");
+excelGenerator = new ExcelFileGenerator();
+excelGenerator.setTitles("姓名", "年龄", "生日");
+excelGenerator.setFields("person.name", "person.age", "person.birthday");
 // 添加字段提示
-userFileGenerator.addCellPrompters(
+excelGenerator.addCellPrompters(
         new PromptBuilder()
             .prompt("person.age", "整数")
             .prompt("person.birthday", "yyyy-MM-dd")
             .add(new RequiredPrompter("person.name"))
             .build()
     );
-userFileGenerator.generate(excel);
+excelGenerator.generate(excel);
 ```
 
 - 校验
@@ -100,16 +100,16 @@ userFileGenerator.generate(excel);
 ```
 excelSheetTemplate.getUserFileValidator();
 // 添加校验器
-userFileValidator.addCellValidator(
+excelValidator.addCellValidator(
 		new RequiredValidator("person.name"),
 	  	new LocalDateValidator("person.birthday", "yyyy-MM-dd"),
      	new IntValidator("person.age")
     );
 // 得到校验结果
-boolean passed = userFileValidator.validate();
+boolean passed = excelValidator.validate();
 // 如果验证失败，得到错误信息，并写到excel中
 if (!passed) {
-	List<ErrorMessage> errors = userFileValidator.getErrorMessages();
+	List<ErrorMessage> errors = excelValidator.getErrorMessages();
 	List<ExcelCellComment> comments = ExcelCommentUtils.transferErrorMessagesToComments(errors);
 	ExcelCommentUtils.writeComments(excel, comments);
 }  
@@ -120,13 +120,13 @@ if (!passed) {
 ```
 excelSheetTemplate.getUserFileImporter();
 // 添加赋值器
-sheetToObjectsProcessor.addCellValueSetter(
+objectProcessor.addCellValueSetter(
         new LocalDateValueSetter("person.birthday", "yyyy-MM-dd")
     );
 // 设置Java Bean对象工厂
-sheetToObjectsProcessor.setModelFactory(new PersonModelFactory());
+objectProcessor.setModelFactory(new PersonModelFactory());
 // 设置转换后的对象处理器
-sheetToObjectsProcessor.process(new PersonListProcessor());
+objectProcessor.process(new PersonListProcessor());
 ```
 
 - 导出数据
@@ -134,5 +134,5 @@ sheetToObjectsProcessor.process(new PersonListProcessor());
 	和生成导入文件类似，只需要把导出的数据给<code>ExcelFileGenerator</code>即可
 
 ```
-userFileGenerator.setData(data);
+excelGenerator.setData(data);
 ```

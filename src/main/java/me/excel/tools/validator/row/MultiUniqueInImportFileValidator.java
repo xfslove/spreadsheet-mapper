@@ -29,9 +29,9 @@ public class MultiUniqueInImportFileValidator extends RowValidatorAdapter {
     this.matchFields = matchFields;
   }
 
-  public MultiUniqueInImportFileValidator(String errorMessage, String[] matchFields) {
-    super(errorMessage, matchFields);
-    Collections.addAll(this.matchFields, matchFields);
+  public MultiUniqueInImportFileValidator(String errorMessage, Set<String> matchFields) {
+    super("union.unique", errorMessage, matchFields);
+    this.matchFields = matchFields;
   }
 
   @Override

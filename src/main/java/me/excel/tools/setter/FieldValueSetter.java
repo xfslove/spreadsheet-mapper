@@ -13,7 +13,7 @@ public interface FieldValueSetter {
   /**
    * set object field from cell value
    *
-   * @param data      supplied object
+   * @param data supplied object
    * @param cell cell
    */
   void set(Object data, Cell cell);
@@ -22,4 +22,9 @@ public interface FieldValueSetter {
    * @return which field this setter matched
    */
   String getMatchField();
+
+  /**
+   * @return which sheet this setter matched
+   */
+  int getSheetIndex();
 }

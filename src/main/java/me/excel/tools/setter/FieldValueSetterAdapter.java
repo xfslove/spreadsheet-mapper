@@ -10,15 +10,28 @@ import me.excel.tools.model.excel.Cell;
  */
 public abstract class FieldValueSetterAdapter implements FieldValueSetter {
 
+  private int sheetIndex;
+
   private String matchField;
 
   public FieldValueSetterAdapter(String matchField) {
+    this.sheetIndex = 1;
+    this.matchField = matchField;
+  }
+
+  public FieldValueSetterAdapter(int sheetIndex, String matchField) {
+    this.sheetIndex = sheetIndex;
     this.matchField = matchField;
   }
 
   @Override
   public String getMatchField() {
     return matchField;
+  }
+
+  @Override
+  public int getSheetIndex() {
+    return sheetIndex;
   }
 
   @Override

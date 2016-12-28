@@ -3,7 +3,8 @@ package me.excel.tools.validator.cell;
 import me.excel.tools.model.excel.CellBean;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Created by hanwen on 2016/12/22.
@@ -15,13 +16,16 @@ public class RequireValidatorTest {
 
     RequireValidator requireValidator = new RequireValidator("person.name");
 
-    CellBean cell = new CellBean(1, 1, "person.name", "");
+    CellBean cell = new CellBean(1, 1, "");
+    cell.setField("person.name");
     assertFalse(requireValidator.validate(cell));
 
-    CellBean cell1 = new CellBean(1, 1, "person.name", "dasdasd");
+    CellBean cell1 = new CellBean(1, 1, "dasdasd");
+    cell1.setField("person.name");
     assertTrue(requireValidator.validate(cell1));
 
-    CellBean cell2 = new CellBean(1, 1, "person.name", "1");
+    CellBean cell2 = new CellBean(1, 1, "1");
+    cell2.setField("person.name");
     assertTrue(requireValidator.validate(cell2));
 
   }

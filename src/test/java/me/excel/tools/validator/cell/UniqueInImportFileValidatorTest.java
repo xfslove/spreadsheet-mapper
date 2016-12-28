@@ -16,12 +16,18 @@ public class UniqueInImportFileValidatorTest {
 
     UniqueInImportFileValidator uniqueInImportFileValidator = new UniqueInImportFileValidator("person.unique");
 
-    CellBean e1 = new CellBean(1, 1, "person.unique", "1");
-    CellBean e2 = new CellBean(2, 1, "person.unique", "2");
-    CellBean e3 = new CellBean(3, 1, "person.unique", "3");
-    CellBean e4 = new CellBean(4, 1, "person.unique", "4");
-    CellBean e5 = new CellBean(5, 1, "person.unique", "5");
-    CellBean e6 = new CellBean(6, 1, "person.unique", "1");
+    CellBean e1 = new CellBean(1, 1, "1");
+    CellBean e2 = new CellBean(2, 1, "2");
+    CellBean e3 = new CellBean(3, 1, "3");
+    CellBean e4 = new CellBean(4, 1, "4");
+    CellBean e5 = new CellBean(5, 1, "5");
+    CellBean e6 = new CellBean(6, 1, "1");
+    e1.setField("person.unique");
+    e2.setField("person.unique");
+    e3.setField("person.unique");
+    e4.setField("person.unique");
+    e5.setField("person.unique");
+    e6.setField("person.unique");
 
     assertTrue(uniqueInImportFileValidator.validate(e1));
     assertTrue(uniqueInImportFileValidator.validate(e2));

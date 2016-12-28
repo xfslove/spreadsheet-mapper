@@ -1,5 +1,8 @@
 package me.excel.tools.processor;
 
+import me.excel.tools.model.excel.Row;
+import me.excel.tools.model.excel.Sheet;
+
 import java.util.List;
 
 /**
@@ -7,26 +10,39 @@ import java.util.List;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface ObjectProcessorListener<OBJECT> {
+public interface ObjectProcessorListener {
+
+  /**
+   * before model created
+   *
+   * @param sheet   sheet
+   * @param objects empty object list
+   */
+  void beforeSheet(Sheet sheet, List<Object> objects);
 
   /**
    * before object value set
    *
-   * @param model value not set
+   * @param row    row
+   * @param object value not set
    */
-  void beforeRow(OBJECT model);
+  void beforeRow(Row row, Object object);
 
   /**
    * after object value set
    *
-   * @param model value set
+   * @param row    row
+   * @param object value set
    */
-  void afterRow(OBJECT model);
+  void afterRow(Row row, Object object);
 
   /**
    * after all object value set
    *
-   * @param models value set model list
+   * @param sheet   sheet
+   * @param objects value set object list
    */
-  void afterSheet(List<OBJECT> models);
+  void afterSheet(Sheet sheet, List<Object> objects);
+
+  int getSheetIndex();
 }

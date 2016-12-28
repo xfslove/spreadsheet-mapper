@@ -15,13 +15,16 @@ public class BooleanValidatorTest {
   public void testCustomValidate() throws Exception {
 
     DoubleValidator booleanValidator = new DoubleValidator("person.bool");
-    CellBean cell = new CellBean(1, 1, "person.bool", "");
+    CellBean cell = new CellBean(1, 1, "");
+    cell.setField("person.bool");
     assertTrue(booleanValidator.validate(cell));
 
-    CellBean cell2 = new CellBean(1, 1, "person.bool", "asdasd");
+    CellBean cell2 = new CellBean(1, 1, "asdasd");
+    cell2.setField("person.bool");
     assertFalse(booleanValidator.validate(cell2));
 
-    CellBean cell1 = new CellBean(1, 1, "person.bool", "1");
+    CellBean cell1 = new CellBean(1, 1, "1");
+    cell1.setField("person.bool");
     assertTrue(booleanValidator.validate(cell1));
 
   }

@@ -2,7 +2,6 @@ package me.excel.tools.validator.row;
 
 
 import me.excel.tools.model.excel.Row;
-import me.excel.tools.model.message.DataValidateMessage;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,16 +13,19 @@ import java.util.Set;
  */
 public abstract class RowValidatorAdapter implements RowValidator {
 
+  private int sheetIndex;
+
   private String key;
 
   private String errorMessage;
 
-  private Set<String> matchFields = new HashSet<>();
+  private Set<String> dependsOn = new HashSet<>();
 
-  public RowValidatorAdapter(String key, String errorMessage, Set<String> matchFields) {
+  public RowValidatorAdapter(String key, String errorMessage, Set<String> dependsOn) {
+    this.sheetIndex = 1;
     this.key = key;
     this.errorMessage = errorMessage;
-    this.matchFields = matchFields;
+    this.dependsOn = dependsOn;
   }
 
   @Override
@@ -32,9 +34,33 @@ public abstract class RowValidatorAdapter implements RowValidator {
   }
 
   @Override
-  public DataValidateMessage validate(Row row) {
+  public String getErrorMessage() {
+    return errorMessage;
+  }
+
+  @Override
+  public int getSheetIndex() {
+    return sheetIndex;
+  }
+
+  @Override
+  public Set<String> getDependsOn() {
+    return dependsOn;
+  }
+
+  @Override
+  public boolean validate(Row row) {
     return customValidate(row);
   }
 
-  protected abstract DataValidateMessage customValidate(Row row);
+  /**
+   * for customer access error message
+   *
+   * @param errorMessage error message
+   */
+  protected void setErrorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
+  }
+
+  protected abstract boolean customValidate(Row row);
 }

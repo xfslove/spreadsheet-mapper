@@ -3,9 +3,10 @@ package me.excel.tools.factory;
 import me.excel.tools.exception.ExcelReadException;
 import me.excel.tools.helper.ExcelToWorkbookHelper;
 import me.excel.tools.model.excel.Workbook;
-import me.excel.tools.processor.SheetToObjectsProcessor;
-import me.excel.tools.validator.ExcelFileValidator;
-import me.excel.tools.validator.UserFileValidator;
+import me.excel.tools.processor.DefaultObjectProcessor;
+import me.excel.tools.processor.ObjectProcessor;
+import me.excel.tools.validator.DefaultExcelValidator;
+import me.excel.tools.validator.ExcelValidator;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,9 +21,9 @@ import java.util.Set;
  */
 public class ExcelFileTemplate implements UserFileTemplate {
 
-  private UserFileValidator userFileValidator;
+  private ExcelValidator excelValidator;
 
-  private SheetToObjectsProcessor sheetToObjectsProcessor;
+  private ObjectProcessor objectProcessor;
 
   private Workbook workbook;
 
@@ -34,18 +35,19 @@ public class ExcelFileTemplate implements UserFileTemplate {
 
     workbook = ExcelToWorkbookHelper.read(inputStream);
 
-    sheetToObjectsProcessor = new SheetToObjectsProcessor(workbook.getFirstSheet());
+    objectProcessor = new DefaultObjectProcessor(workbook);
 
-    userFileValidator = new ExcelFileValidator(workbook);
+    excelValidator = new DefaultExcelValidator(workbook);
   }
 
   @Override
-  public UserFileValidator getUserFileValidator() {
-    return userFileValidator;
+  public ExcelValidator getExcelValidator() {
+    return excelValidator;
   }
 
-  public SheetToObjectsProcessor getSheetToObjectsProcessor() {
-    return sheetToObjectsProcessor;
+  @Override
+  public ObjectProcessor getObjectProcessor() {
+    return objectProcessor;
   }
 
   @Override

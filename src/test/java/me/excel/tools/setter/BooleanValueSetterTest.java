@@ -17,7 +17,8 @@ public class BooleanValueSetterTest {
     TestPersonModel model = new TestPersonModel();
 
     BooleanValueSetter booleanValueSetter = new BooleanValueSetter("person.male");
-    CellBean cell = new CellBean(1, 1, "person.male", "0");
+    CellBean cell = new CellBean(1, 1, "0");
+    cell.setField("person.male");
     booleanValueSetter.set(model, cell);
 
     assertEquals(model.isMale(), false);

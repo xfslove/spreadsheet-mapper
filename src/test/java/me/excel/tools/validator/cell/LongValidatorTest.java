@@ -16,13 +16,16 @@ public class LongValidatorTest {
 
     LongValidator longValidator = new LongValidator("person.long");
 
-    CellBean cell = new CellBean(1, 1, "person.long", "");
+    CellBean cell = new CellBean(1, 1, "");
+    cell.setField("person.long");
     assertTrue(longValidator.validate(cell));
 
-    CellBean cell1 = new CellBean(1, 1, "person.long", "dasdasd");
+    CellBean cell1 = new CellBean(1, 1, "dasdasd");
+    cell1.setField("person.long");
     assertFalse(longValidator.validate(cell1));
 
-    CellBean cell2 = new CellBean(1, 1, "person.long", "1");
+    CellBean cell2 = new CellBean(1, 1, "1");
+    cell2.setField("person.long");
     assertTrue(longValidator.validate(cell2));
 
   }

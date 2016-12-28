@@ -1,4 +1,4 @@
-package me.excel.tools.factory;
+package me.excel.tools.processor;
 
 import me.excel.tools.model.excel.Row;
 
@@ -7,7 +7,7 @@ import me.excel.tools.model.excel.Row;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface ModelFactory<OBJECT> {
+public interface ObjectFactory {
 
   /**
    * initial one row present object to access cell value.
@@ -15,5 +15,10 @@ public interface ModelFactory<OBJECT> {
    * @param row which row
    * @return initialized object
    */
-  OBJECT create(Row row);
+  Object create(Row row);
+
+  /**
+   * @return which sheet this object factory matched
+   */
+  int getSheetIndex();
 }

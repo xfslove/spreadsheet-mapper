@@ -3,6 +3,9 @@ package me.excel.tools.validator.cell;
 import me.excel.tools.model.excel.Cell;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * <pre>
  * cell value validator adapter, easy implements customer value validator extends this.
@@ -12,24 +15,84 @@ import org.apache.commons.lang3.StringUtils;
  */
 public abstract class CellValidatorAdapter implements CellValidator {
 
+  private int sheetIndex;
+
+  private String key;
+
   private String matchField;
 
   private String errorMessage;
 
+  private Set<String> dependsOn = new HashSet<>();
+
   public CellValidatorAdapter(String matchField, String errorMessage) {
+    this.sheetIndex = 1;
+    this.key = matchField;
     this.matchField = matchField;
     this.errorMessage = errorMessage;
   }
 
-  @Override
-  public int getSheetIndex() {
-    return 1;
+  public CellValidatorAdapter(String key, String matchField, String errorMessage) {
+    this.sheetIndex = 1;
+    this.key = key;
+    this.matchField = matchField;
+    this.errorMessage = errorMessage;
   }
 
+  public CellValidatorAdapter(int sheetIndex, String matchField, String errorMessage) {
+    this.sheetIndex = sheetIndex;
+    this.key = matchField;
+    this.matchField = matchField;
+    this.errorMessage = errorMessage;
+  }
+
+  public CellValidatorAdapter(int sheetIndex, String key, String matchField, String errorMessage) {
+    this.sheetIndex = sheetIndex;
+    this.key = key;
+    this.matchField = matchField;
+    this.errorMessage = errorMessage;
+  }
+
+  public CellValidatorAdapter(String matchField, String errorMessage, Set<String> dependsOn) {
+    this.sheetIndex = 1;
+    this.key = matchField;
+    this.matchField = matchField;
+    this.errorMessage = errorMessage;
+    this.dependsOn = dependsOn;
+  }
+
+  public CellValidatorAdapter(String key, String matchField, String errorMessage, Set<String> dependsOn) {
+    this.sheetIndex = 1;
+    this.key = key;
+    this.matchField = matchField;
+    this.errorMessage = errorMessage;
+    this.dependsOn = dependsOn;
+  }
+
+  public CellValidatorAdapter(int sheetIndex, String matchField, String errorMessage, Set<String> dependsOn) {
+    this.sheetIndex = sheetIndex;
+    this.key = matchField;
+    this.matchField = matchField;
+    this.errorMessage = errorMessage;
+    this.dependsOn = dependsOn;
+  }
+
+  public CellValidatorAdapter(int sheetIndex, String key, String matchField, String errorMessage, Set<String> dependsOn) {
+    this.sheetIndex = sheetIndex;
+    this.key = key;
+    this.matchField = matchField;
+    this.errorMessage = errorMessage;
+    this.dependsOn = dependsOn;
+  }
+
+  @Override
+  public int getSheetIndex() {
+    return sheetIndex;
+  }
 
   @Override
   public String getKey() {
-    return matchField;
+    return key;
   }
 
   @Override
@@ -43,12 +106,17 @@ public abstract class CellValidatorAdapter implements CellValidator {
   }
 
   @Override
+  public Set<String> getDependsOn() {
+    return dependsOn;
+  }
+
+  @Override
   public boolean validate(Cell cell) {
     return StringUtils.isBlank(cell.getValue()) || customValidate(cell);
   }
 
   /**
-   * for customer access errorMessage
+   * for customer access error message
    *
    * @param errorMessage error message
    */

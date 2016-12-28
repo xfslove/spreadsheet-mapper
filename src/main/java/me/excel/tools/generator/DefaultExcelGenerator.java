@@ -6,6 +6,7 @@ import me.excel.tools.helper.WorkbookToExcelHelper;
 import me.excel.tools.model.excel.*;
 import me.excel.tools.model.template.HeaderDetail;
 import me.excel.tools.model.template.SheetHeader;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -19,11 +20,13 @@ import java.util.Map;
 /**
  * Created by hanwen on 15-12-16.
  */
-public class ExcelFileGenerator implements UserFileGenerator {
+public class DefaultExcelGenerator implements ExcelGenerator {
 
   private DefaultValueExtractor defaultValueExtractor = new DefaultValueExtractor();
 
-  private Map<String, FieldValueExtractor> key2fieldValueExtractor = new HashMap<>();
+  private Map<Integer, Map<String, FieldValueExtractor>> key2fieldValueExtractor = new HashMap<>();
+
+  private Map<Integer, SheetContext> contextMap = new HashMap<>();
 
   @Override
   public void addValueExtractors(FieldValueExtractor... fieldValueExtractors) {
@@ -31,35 +34,50 @@ public class ExcelFileGenerator implements UserFileGenerator {
       return;
     }
     for (FieldValueExtractor extractor : fieldValueExtractors) {
-      key2fieldValueExtractor.put(extractor.getMatchField(), extractor);
+      int sheetIndex = extractor.getSheetIndex();
+
+      if (!key2fieldValueExtractor.containsKey(sheetIndex)) {
+        key2fieldValueExtractor.put(sheetIndex, new HashMap<>());
+      }
+
+      key2fieldValueExtractor.get(sheetIndex).put(extractor.getMatchField(), extractor);
     }
   }
 
   @Override
-  public void generate(File excel, SheetContext... contexts) throws IOException {
-    generate(new FileOutputStream(excel), contexts);
+  public void addSheetContext(SheetContext... sheetContexts) {
+    if (sheetContexts == null) {
+      return;
+    }
+
+    for (SheetContext sheetContext : sheetContexts) {
+      contextMap.put(sheetContext.getSheetIndex(), sheetContext);
+    }
   }
 
   @Override
-  public void generate(OutputStream outputStream, SheetContext... contexts) throws IOException {
+  public void write(File excel) throws IOException {
+    write(new FileOutputStream(excel));
+  }
 
-    if (contexts == null) {
+  @Override
+  public void write(OutputStream outputStream) throws IOException {
+
+    if (MapUtils.isEmpty(contextMap)) {
       throw new IllegalArgumentException("context is null");
     }
 
-    Workbook workbook = createWorkbook(contexts);
+    Workbook workbook = createWorkbook();
     WorkbookToExcelHelper.write(outputStream, workbook);
   }
 
-  private Workbook createWorkbook(SheetContext[] contexts) {
-
-    Map<Integer, SheetContext> sheetIndex2context = buildContextMap(contexts);
+  private Workbook createWorkbook() {
 
     WorkbookBean workbook = new WorkbookBean();
 
-    for (int i = 1; i <= sheetIndex2context.size(); i++) {
+    for (int i = 1; i <= contextMap.size(); i++) {
 
-      SheetContext context = sheetIndex2context.get(i);
+      SheetContext context = contextMap.get(i);
 
       Sheet sheet = createSheet(context.getSheetName());
       workbook.addSheet(sheet);
@@ -70,7 +88,7 @@ public class ExcelFileGenerator implements UserFileGenerator {
 
       List<HeaderDetail> headerDetails = context.getHeaderDetails();
 
-      List data = context.getData();
+      List<Object> data = context.getData();
       int lastRowNum = sheet.getHeader().getDataStartRowIndex() + data.size() - 1;
 
       for (int j = 1; j <= lastRowNum; j++) {
@@ -79,7 +97,7 @@ public class ExcelFileGenerator implements UserFileGenerator {
         sheet.addRow(row);
 
         createHeaderIfNecessary(row, sheet.getHeader(), headerDetails);
-        createDataRowCells(row, data.get(j - 1), headerDetails);
+        createDataRowCells(row, data.get(j - 1), headerDetails, sheet.getIndex());
       }
 
     }
@@ -101,6 +119,10 @@ public class ExcelFileGenerator implements UserFileGenerator {
   private void createHeaderIfNecessary(Row row, SheetHeader header, List<HeaderDetail> details) {
     int rowIndex = row.getIndex();
 
+    if (rowIndex >= header.getDataStartRowIndex()) {
+      return;
+    }
+
     if (header.isHasTitle() && rowIndex == header.getTitleRowIndex()) {
 
       createTitleRowCells(row, details);
@@ -113,11 +135,11 @@ public class ExcelFileGenerator implements UserFileGenerator {
     }
   }
 
-  private void createDataRowCells(Row row, Object object, List<HeaderDetail> details) {
+  private void createDataRowCells(Row row, Object object, List<HeaderDetail> details, int sheetIndex) {
     for (int i = 1; i <= details.size(); i++) {
 
       HeaderDetail detail = details.get(i - 1);
-      String value = getFieldValue(object, detail.getField());
+      String value = getFieldValue(object, detail.getField(), sheetIndex);
       CellBean dataCell = new CellBean(row.getIndex(), i, value);
       dataCell.setField(detail.getField());
 
@@ -161,19 +183,15 @@ public class ExcelFileGenerator implements UserFileGenerator {
     }
   }
 
-  private Map<Integer, SheetContext> buildContextMap(SheetContext[] contexts) {
-    Map<Integer, SheetContext> sheetIndex2context = new HashMap<>();
+  private String getFieldValue(Object object, String field, int sheetIndex) {
 
-    for (SheetContext context : contexts) {
-      sheetIndex2context.put(context.getSheetIndex(), context);
+    Map<String, FieldValueExtractor> valueExtractorOfSheet = key2fieldValueExtractor.get(sheetIndex);
+    if (MapUtils.isEmpty(valueExtractorOfSheet)) {
+
+      return defaultValueExtractor.getStringValue(object, field);
     }
 
-    return sheetIndex2context;
-  }
-
-  private String getFieldValue(Object object, String field) {
-
-    FieldValueExtractor extractor = key2fieldValueExtractor.get(field);
+    FieldValueExtractor extractor = valueExtractorOfSheet.get(field);
 
     if (extractor != null) {
       return extractor.getStringValue(object);

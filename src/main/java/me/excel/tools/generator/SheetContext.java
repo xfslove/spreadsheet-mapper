@@ -22,16 +22,16 @@ public class SheetContext {
 
   private List<HeaderDetail> headerDetails;
 
-  private List data;
+  private List<Object> data;
 
-  public SheetContext(List<HeaderDetail> headerDetails, List data) {
+  public SheetContext(List<HeaderDetail> headerDetails, List<Object> data) {
     this.sheetIndex = 1;
     this.header = SheetHeaderBean.DEFAULT(1);
     this.headerDetails = headerDetails;
     this.data = data;
   }
 
-  public SheetContext(int sheetIndex, SheetHeader header, List<HeaderDetail> headerDetails, List data) {
+  public SheetContext(int sheetIndex, SheetHeader header, List<HeaderDetail> headerDetails, List<Object> data) {
 
     if (sheetIndex != header.getSheetIndex()) {
       throw new IllegalArgumentException("sheet index not equals header's sheet index");
@@ -43,7 +43,7 @@ public class SheetContext {
     this.data = data;
   }
 
-  public SheetContext(int sheetIndex, String sheetName, SheetHeader header, List<HeaderDetail> headerDetails, List data) {
+  public SheetContext(int sheetIndex, String sheetName, SheetHeader header, List<HeaderDetail> headerDetails, List<Object> data) {
 
     if (sheetIndex != header.getSheetIndex()) {
       throw new IllegalArgumentException("sheet index not equals header's sheet index");
@@ -91,7 +91,7 @@ public class SheetContext {
   /**
    * @return the supplied object list to write on excel
    */
-  public List getData() {
+  public List<Object> getData() {
     return data;
   }
 }

@@ -3,6 +3,7 @@ package me.excel.tools.validator.row;
 
 import me.excel.tools.model.excel.Row;
 
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -14,13 +15,13 @@ public class CommonRowValidator extends RowValidatorAdapter {
 
   private Function<Row, Boolean> validateResultGetter;
 
-  public CommonRowValidator(Function<Row, Boolean> validateResultGetter, String errorMessage, String[] messageOnFields) {
-    super(errorMessage, messageOnFields);
+  public CommonRowValidator(Function<Row, Boolean> validateResultGetter, String errorMessage, Set<String> messageOnFields) {
+    super(null, errorMessage, messageOnFields);
     this.validateResultGetter = validateResultGetter;
   }
 
-  public CommonRowValidator(Function<Row, Boolean> validateResultGetter, String[] messageOnFields) {
-    super(null, messageOnFields);
+  public CommonRowValidator(Function<Row, Boolean> validateResultGetter, Set<String> messageOnFields) {
+    super(null,null, messageOnFields);
     this.validateResultGetter = validateResultGetter;
   }
 

@@ -2,15 +2,16 @@ package me.excel.tools.factory;
 
 import me.excel.tools.ExcelConstants;
 import me.excel.tools.extractor.BooleanZhExtractor;
-import me.excel.tools.generator.ExcelFileGenerator;
-import me.excel.tools.generator.UserFileGenerator;
+import me.excel.tools.generator.DefaultExcelGenerator;
+import me.excel.tools.generator.ExcelGenerator;
 import me.excel.tools.model.excel.Row;
+import me.excel.tools.model.excel.Sheet;
+import me.excel.tools.processor.ObjectFactory;
+import me.excel.tools.processor.ObjectProcessor;
 import me.excel.tools.processor.ObjectProcessorListener;
-import me.excel.tools.processor.SheetToObjectsProcessor;
-import me.excel.tools.DefaultZhPromptConstants;
 import me.excel.tools.setter.BooleanValueSetter;
 import me.excel.tools.setter.LocalDateValueSetter;
-import me.excel.tools.validator.UserFileValidator;
+import me.excel.tools.validator.ExcelValidator;
 import me.excel.tools.validator.cell.BooleanValidator;
 import me.excel.tools.validator.cell.IntValidator;
 import me.excel.tools.validator.cell.LocalDateValidator;
@@ -43,28 +44,28 @@ public class ExcelFileTemplateTest {
 
     ExcelFileTemplate excelFileTemplate = new ExcelFileTemplate(excel);
 
-    UserFileValidator userFileValidator = excelFileTemplate.getUserFileValidator();
+    ExcelValidator excelValidator = excelFileTemplate.getExcelValidator();
 
-    userFileValidator.addSheetValidator(new FieldScopeValidator(new String[]{"student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool"}));
-    userFileValidator.addSheetValidator(new RequireFieldValidator(new String[]{"student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool"}));
+    excelValidator.addSheetValidator(new FieldScopeValidator(new String[]{"student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool"}));
+    excelValidator.addSheetValidator(new RequireFieldValidator(new String[]{"student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool"}));
 
-    userFileValidator.addCellValidator(
+    excelValidator.addCellValidator(
         new LocalDateValidator("student.enrollDate", "yyyy-MM-dd"),
         new BooleanValidator("student.inSchool"),
         new IntValidator("student.age")
     );
 
-    assertTrue(userFileValidator.valid());
+    assertTrue(excelValidator.valid());
 
-    SheetToObjectsProcessor sheetToObjectsProcessor = excelFileTemplate.getSheetToObjectsProcessor();
+    ObjectProcessor objectProcessor = excelFileTemplate.getObjectProcessor();
 
-    sheetToObjectsProcessor.addCellValueSetter(
+    objectProcessor.addCellValueSetter(
         new LocalDateValueSetter("student.enrollDate", "yyyy-MM-dd"),
         new BooleanValueSetter("student.inSchool")
     );
 
-    sheetToObjectsProcessor.setModelFactory(new StudentModelFactoryTest());
-    sheetToObjectsProcessor.process(new StudentObjectProcessorListenerTest());
+    objectProcessor.addModelFactory(new StudentObjectFactoryTest());
+    objectProcessor.process();
   }
 
   @Test
@@ -91,49 +92,43 @@ public class ExcelFileTemplateTest {
     File file = TempFile.createTempFile("test", ExcelConstants.SUFFIX_XLSX);
 
 
-    UserFileGenerator userFileGenerator = new ExcelFileGenerator();
+    ExcelGenerator excelGenerator = new DefaultExcelGenerator();
 
-    userFileGenerator.addCellPrompters(
-        new PromptBuilder()
-            .prompt("student.age", "整数")
-            .prompt("student.enrollDate", "yyyy-MM-dd")
-            .prompt("student.code", DefaultZhPromptConstants.REQUIRE_FIELD)
-            .prompt("student.age", DefaultZhPromptConstants.REQUIRE_FIELD)
-            .prompt("student.name", DefaultZhPromptConstants.REQUIRE_FIELD)
-            .prompt("student.inSchool", DefaultZhPromptConstants.BOOLEAN_FIELD)
-            .build()
-    );
+    excelGenerator.addValueExtractors(new BooleanZhExtractor("student.inSchool"));
 
-    userFileGenerator.addValueExtractors(new BooleanZhExtractor("student.inSchool"));
+//    excelGenerator.setData(list);
+//    excelGenerator.setFields("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
+//    excelGenerator.setTitles("学号", "年龄", "姓名", "入学日期", "是否在校");
 
-    userFileGenerator.setData(list);
-    userFileGenerator.setFields("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");
-    userFileGenerator.setTitles("学号", "年龄", "姓名", "入学日期", "是否在校");
-
-    userFileGenerator.generate(file);
+    excelGenerator.write(file);
   }
 
   public class StudentObjectProcessorListenerTest implements ObjectProcessorListener {
 
     @Override
-    public void beforeRow(Object model) {
+    public void beforeSheet(Sheet sheet, List<Object> objects) {
 
     }
 
     @Override
-    public void afterRow(Object model) {
+    public void beforeRow(Row row, Object object) {
 
     }
 
     @Override
-    public void afterSheet(List models) {
+    public void afterRow(Row row, Object object) {
 
-      assertEquals(models.size(), 2);
+    }
+
+    @Override
+    public void afterSheet(Sheet sheet, List<Object> objects) {
+
+      assertEquals(objects.size(), 2);
 
       DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
 
-      StudentTest model1 = (StudentTest) models.get(0);
-      StudentTest model2 = (StudentTest) models.get(1);
+      StudentTest model1 = (StudentTest) objects.get(0);
+      StudentTest model2 = (StudentTest) objects.get(1);
       assertEquals(model1.getCode(), "111111");
       assertEquals(model2.getCode(), "2222");
 
@@ -148,14 +143,25 @@ public class ExcelFileTemplateTest {
 
       assertEquals(model1.getEnrollDate(), dateTimeFormatter.parseLocalDate("2015-09-02"));
       assertEquals(model2.getEnrollDate(), dateTimeFormatter.parseLocalDate("2015-09-02"));
+
+    }
+
+    @Override
+    public int getSheetIndex() {
+      return 1;
     }
   }
 
-  public class StudentModelFactoryTest implements ModelFactory {
+  public class StudentObjectFactoryTest implements ObjectFactory {
 
     @Override
     public Object create(Row row) {
       return new StudentTest();
+    }
+
+    @Override
+    public int getSheetIndex() {
+      return 1;
     }
   }
 

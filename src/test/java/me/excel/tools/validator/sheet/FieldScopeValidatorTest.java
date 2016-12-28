@@ -32,7 +32,7 @@ public class FieldScopeValidatorTest {
     row1.addCell(new CellBean(2, 2, "person.age"));
     row1.addCell(new CellBean(2, 3, "person.birthday"));
 
-    assertTrue(fieldScopeValidator.validate(new ExcelSheetTemplateBean(sheet)));
+    assertTrue(fieldScopeValidator.validate(sheet));
 
   }
 

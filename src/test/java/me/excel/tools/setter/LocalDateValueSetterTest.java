@@ -18,7 +18,8 @@ public class LocalDateValueSetterTest {
     TestPersonModel model = new TestPersonModel();
 
     LocalDateTimeValueSetter localDateTimeValueSetter = new LocalDateTimeValueSetter("person.registerTime", "yyyy-MM-dd HH:mm:ss");
-    CellBean cell = new CellBean(1, 1, "person.registerTime", "2000-01-01 00:00:00");
+    CellBean cell = new CellBean(1, 1, "2000-01-01 00:00:00");
+    cell.setField("person.registerTime");
     localDateTimeValueSetter.set(model, cell);
 
     assertEquals(model.getRegisterTime(), new LocalDateTime(2000, 1, 1, 0, 0, 0));

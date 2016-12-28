@@ -3,7 +3,7 @@ package me.excel.tools.validator;
 import java.util.Set;
 
 /**
- * data validator, after workbook and sheet validators, if post validators failure, data validator will skip.
+ * data validator, after workbook and sheet validators, if post validators failure, data validators will skip.
  * <p>
  * Created by hanwen on 2016/12/26.
  */

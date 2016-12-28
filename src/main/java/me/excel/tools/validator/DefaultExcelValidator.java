@@ -17,15 +17,15 @@ import java.util.*;
 /**
  * Created by hanwen on 15-12-16.
  */
-public class ExcelFileValidator implements UserFileValidator {
+public class DefaultExcelValidator implements ExcelValidator {
 
   /*===============
     validators
    ================*/
   private List<WorkbookValidator> workbookValidators = new ArrayList<>();
   private List<SheetValidator> sheetValidators = new ArrayList<>();
-  private List<RowValidator> rowValidators = new ArrayList<>();
-  private List<CellValidator> cellValidators = new ArrayList<>();
+  private Map<Integer, Map<String, List<RowValidator>>> key2rowValidators = new HashMap<>();
+  private Map<Integer, Map<String, List<CellValidator>>> key2cellValidators = new HashMap<>();
 
   /*==============
     error messages TODO
@@ -34,7 +34,7 @@ public class ExcelFileValidator implements UserFileValidator {
 
   private Workbook workbook;
 
-  public ExcelFileValidator(Workbook workbook) {
+  public DefaultExcelValidator(Workbook workbook) {
     this.workbook = workbook;
   }
 
@@ -59,7 +59,21 @@ public class ExcelFileValidator implements UserFileValidator {
     if (validators == null) {
       return;
     }
-    Collections.addAll(this.rowValidators, validators);
+
+    for (RowValidator validator : validators) {
+      String key = validator.getKey();
+      int sheetIndex = validator.getSheetIndex();
+
+      if (!key2rowValidators.containsKey(sheetIndex)) {
+        key2rowValidators.put(sheetIndex, new HashMap<>());
+      }
+
+      Map<String, List<RowValidator>> validatorsOfSheet = key2rowValidators.get(sheetIndex);
+      if (!validatorsOfSheet.containsKey(key)) {
+        validatorsOfSheet.put(key, new ArrayList<>());
+      }
+      validatorsOfSheet.get(key).add(validator);
+    }
   }
 
   @Override
@@ -67,7 +81,20 @@ public class ExcelFileValidator implements UserFileValidator {
     if (validators == null) {
       return;
     }
-    Collections.addAll(this.cellValidators, validators);
+    for (CellValidator validator : validators) {
+      String key = validator.getKey();
+      int sheetIndex = validator.getSheetIndex();
+
+      if (!key2cellValidators.containsKey(sheetIndex)) {
+        key2cellValidators.put(sheetIndex, new HashMap<>());
+      }
+
+      Map<String, List<CellValidator>> validatorsOfSheet = key2cellValidators.get(sheetIndex);
+      if (!validatorsOfSheet.containsKey(key)) {
+        validatorsOfSheet.put(key, new ArrayList<>());
+      }
+      validatorsOfSheet.get(key).add(validator);
+    }
   }
 
   @Override
@@ -75,9 +102,6 @@ public class ExcelFileValidator implements UserFileValidator {
     if (workbook == null) {
       throw new ExcelReadException("workbook is null");
     }
-
-    // check dependency
-    checkValidatorKeyDependency();
 
     // valid data
     validWorkbook(workbook);
@@ -87,6 +111,9 @@ public class ExcelFileValidator implements UserFileValidator {
 
     for (Sheet sheet : workbook.getSheets()) {
 
+      // check dependency of this sheet
+      checkValidatorKeyDependencyOfSheet(sheet.getIndex());
+
       validSheet(sheet);
 
       if (CollectionUtils.isNotEmpty(errorMessages)) {
@@ -95,7 +122,7 @@ public class ExcelFileValidator implements UserFileValidator {
 
       for (Row row : sheet.getRows()) {
 
-        validRowCells(row);
+        validRowCells(row, sheet.getIndex());
       }
     }
 
@@ -105,12 +132,12 @@ public class ExcelFileValidator implements UserFileValidator {
   /**
    * check if dependency correct
    */
-  private void checkValidatorKeyDependency() {
+  private void checkValidatorKeyDependencyOfSheet(int sheetIndex) {
 
     Map<String, Set<String>> dependsOnHierarchy = new HashMap<>();
 
-    dependsOnHierarchy.putAll(buildDependsOnHierarchy(rowValidators));
-    dependsOnHierarchy.putAll(buildDependsOnHierarchy(cellValidators));
+    dependsOnHierarchy.putAll(buildDependsOnHierarchy(key2rowValidators.get(sheetIndex)));
+    dependsOnHierarchy.putAll(buildDependsOnHierarchy(key2cellValidators.get(sheetIndex)));
 
     Set<String> satisfiedKeys = new HashSet<>();
     for (String key : dependsOnHierarchy.keySet()) {
@@ -171,32 +198,38 @@ public class ExcelFileValidator implements UserFileValidator {
 
   }
 
-  private void validRowCells(Row row) {
+  private void validRowCells(Row row, int sheetIndex) {
 
     Map<String, Set<String>> dependsOnHierarchy = new HashMap<>();
 
-    dependsOnHierarchy.putAll(buildDependsOnHierarchy(rowValidators));
-    dependsOnHierarchy.putAll(buildDependsOnHierarchy(cellValidators));
+    dependsOnHierarchy.putAll(buildDependsOnHierarchy(key2rowValidators.get(sheetIndex)));
+    dependsOnHierarchy.putAll(buildDependsOnHierarchy(key2cellValidators.get(sheetIndex)));
 
     // one key corresponding multi validators
-    Map<String, List<DataValidator>> validatorMap = new HashMap<>();
+    Map<String, List<? extends DataValidator>> validatorMap = new HashMap<>();
 
-    validatorMap.putAll(buildValidatorMap(rowValidators));
-    validatorMap.putAll(buildValidatorMap(cellValidators));
+    Map<String, List<RowValidator>> rowValidatorsOfSheet = key2rowValidators.get(sheetIndex);
+    validatorMap.putAll(rowValidatorsOfSheet);
+    Map<String, List<CellValidator>> cellValidatorsOfSheet = key2cellValidators.get(sheetIndex);
+    validatorMap.putAll(cellValidatorsOfSheet);
 
     Map<String, Set<Boolean>> allResult = new HashMap<>();
 
-    for (RowValidator validator : rowValidators) {
-      allResult.putAll(validRowCellsHierarchy(validatorMap, allResult, dependsOnHierarchy, row, validator.getKey()));
+    for (List<RowValidator> validators : rowValidatorsOfSheet.values()) {
+      for (RowValidator validator : validators) {
+        allResult.putAll(validRowCellsHierarchy(validatorMap, allResult, dependsOnHierarchy, row, validator.getKey()));
+      }
     }
-    for (CellValidator validator : cellValidators) {
-      allResult.putAll(validRowCellsHierarchy(validatorMap, allResult, dependsOnHierarchy, row, validator.getKey()));
+    for (List<CellValidator> validators : cellValidatorsOfSheet.values()) {
+      for (CellValidator validator : validators) {
+        allResult.putAll(validRowCellsHierarchy(validatorMap, allResult, dependsOnHierarchy, row, validator.getKey()));
+      }
     }
 
   }
 
   private Map<String, Set<Boolean>> validRowCellsHierarchy(
-      Map<String, List<DataValidator>> validatorMap,
+      Map<String, List<? extends DataValidator>> validatorMap,
       Map<String, Set<Boolean>> allResult,
       Map<String, Set<String>> dependsOnHierarchy,
       Row row,
@@ -256,35 +289,23 @@ public class ExcelFileValidator implements UserFileValidator {
     }
   }
 
-  private <VALIDATOR extends DataValidator> Map<String, Set<String>> buildDependsOnHierarchy(List<VALIDATOR> dataValidators) {
+  private <VALIDATOR extends DataValidator> Map<String, Set<String>> buildDependsOnHierarchy(Map<String, List<VALIDATOR>> key2dataValidator) {
     Map<String, Set<String>> dependsOnHierarchy = new HashMap<>();
 
-    for (VALIDATOR validator : dataValidators) {
-      String key = validator.getKey();
-      Set<String> dependsOn = validator.getDependsOn();
+    for (Map.Entry<String, List<VALIDATOR>> entry : key2dataValidator.entrySet()) {
+      String key = entry.getKey();
+      dependsOnHierarchy.put(key, new HashSet<>());
 
-      if (!dependsOnHierarchy.containsKey(key)) {
-        dependsOnHierarchy.put(key, dependsOn);
+      for (VALIDATOR dataValidator : entry.getValue()) {
+
+        Set<String> dependsOn = dataValidator.getDependsOn();
+        if (CollectionUtils.isNotEmpty(dependsOn)) {
+
+          dependsOnHierarchy.get(key).addAll(dependsOn);
+        }
       }
-      dependsOnHierarchy.get(key).addAll(dependsOn);
     }
 
     return dependsOnHierarchy;
   }
-
-  private <VALIDATOR extends DataValidator> Map<String, List<DataValidator>> buildValidatorMap(List<VALIDATOR> validators) {
-
-    Map<String, List<DataValidator>> validatorMap = new HashMap<>();
-
-    for (VALIDATOR validator : validators) {
-      String key = validator.getKey();
-      if (!validatorMap.containsKey(key)) {
-        validatorMap.put(key, new ArrayList<>());
-      }
-      validatorMap.get(key).add(validator);
-    }
-
-    return validatorMap;
-  }
-
 }

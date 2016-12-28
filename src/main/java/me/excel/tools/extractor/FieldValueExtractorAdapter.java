@@ -7,21 +7,29 @@ package me.excel.tools.extractor;
  */
 public abstract class FieldValueExtractorAdapter implements FieldValueExtractor {
 
+  private int sheetIndex;
+
   private String matchField;
 
   public FieldValueExtractorAdapter(String matchField) {
+    this.sheetIndex = 1;
     this.matchField = matchField;
   }
 
-  protected final String getMatchField() {
+  public FieldValueExtractorAdapter(int sheetIndex, String matchField) {
+    this.sheetIndex = sheetIndex;
+    this.matchField = matchField;
+  }
+
+  public String getMatchField() {
     return matchField;
   }
 
   @Override
-  public abstract String getStringValue(Object data);
+  public int getSheetIndex() {
+    return sheetIndex;
+  }
 
   @Override
-  public boolean matches(String field) {
-    return field.equals(this.matchField);
-  }
+  public abstract String getStringValue(Object data);
 }
