@@ -1,6 +1,6 @@
-# java-excel-tools
+# excel-engine
 
-动态的Excel数据与Java Bean相互转换的工具，Excel中每一行对应一个Java Bean，每一列对应Java Bean中的一个字段，并且提供将Excel数据转换成Java Bean时提供校验，将校验信息以备注形式写到原始文件上
+动态的Excel数据与Java Bean相互转换的工具，Excel中每一行对应一个Java Bean，每一列对应Java Bean中的一个字段，并且提供将Excel数据转换成Java Bean时提供校验，将校验信息写到原始文件上
 
 ## API
 	
@@ -53,13 +53,10 @@
 ```
 <dependency>
   <groupId>com.github.xfslove</groupId>
-  <artifactId>java-excel-tools</artifactId>
-  <version>1.1.1</version>
+  <artifactId>excel-engine</artifactId>
+  <version>1.3.0</version>
 </dependency>
 ```
-
-## Require JDK1.8
-
 
 ### Quick Start
 - 如下Excel文件
