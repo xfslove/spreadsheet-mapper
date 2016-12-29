@@ -1,17 +1,18 @@
 package java.excel.engine.importer.validator;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import java.excel.engine.exception.ExcelReadException;
 import java.excel.engine.exception.ExcelValidateException;
-import java.excel.engine.model.excel.Row;
-import java.excel.engine.model.excel.Sheet;
-import java.excel.engine.model.excel.Workbook;
-import java.excel.engine.model.message.DataValidateMessage;
 import java.excel.engine.importer.validator.cell.CellValidator;
 import java.excel.engine.importer.validator.row.RowValidator;
 import java.excel.engine.importer.validator.sheet.SheetValidator;
 import java.excel.engine.importer.validator.workbook.WorkbookValidator;
-import org.apache.commons.collections.CollectionUtils;
-
+import java.excel.engine.model.excel.ExcelMeta;
+import java.excel.engine.model.excel.Row;
+import java.excel.engine.model.excel.Sheet;
+import java.excel.engine.model.excel.Workbook;
+import java.excel.engine.model.message.DataValidateMessage;
 import java.util.*;
 
 /**
@@ -289,7 +290,7 @@ public class DefaultExcelValidatorEngine implements ExcelValidatorEngine {
     }
   }
 
-  private <VALIDATOR extends DataValidator> Map<String, Set<String>> buildDependsOnHierarchy(Map<String, List<VALIDATOR>> key2dataValidator) {
+  private <META extends ExcelMeta, VALIDATOR extends DataValidator<META>> Map<String, Set<String>> buildDependsOnHierarchy(Map<String, List<VALIDATOR>> key2dataValidator) {
     Map<String, Set<String>> dependsOnHierarchy = new HashMap<>();
 
     for (Map.Entry<String, List<VALIDATOR>> entry : key2dataValidator.entrySet()) {
