@@ -9,7 +9,7 @@ import me.excel.tools.validator.DataValidator;
  * <p>
  * Created by hanwen on 15-12-15.
  */
-public interface CellValidator extends DataValidator {
+public interface CellValidator extends DataValidator<Cell> {
 
   /**
    * valid supplied excel cell value
@@ -17,7 +17,8 @@ public interface CellValidator extends DataValidator {
    * @param cell cell
    * @return result
    */
-  boolean validate(Cell cell);
+  @Override
+  boolean valid(Cell cell);
 
   /**
    * @return which field this validator to valid

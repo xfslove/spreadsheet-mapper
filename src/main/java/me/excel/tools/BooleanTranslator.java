@@ -13,6 +13,7 @@ public class BooleanTranslator {
   private BooleanTranslator() {
   }
 
+  // TODO 有问题
   public static boolean parseBoolean(String value) {
     if (isValidTrue(value)) {
       return Boolean.TRUE;

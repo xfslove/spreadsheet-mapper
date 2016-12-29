@@ -9,7 +9,7 @@ import me.excel.tools.validator.DataValidator;
  * <p>
  * Created by hanwen on 4/26/16.
  */
-public interface RowValidator extends DataValidator {
+public interface RowValidator extends DataValidator<Row> {
 
   /**
    * valid supplied excel row
@@ -17,7 +17,8 @@ public interface RowValidator extends DataValidator {
    * @param row row
    * @return result
    */
-  boolean validate(Row row);
+  @Override
+  boolean valid(Row row);
 
   /**
    * @return which sheet this validator belong to

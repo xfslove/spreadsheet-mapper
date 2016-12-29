@@ -1,6 +1,7 @@
 package me.excel.tools.extractor;
 
 
+import me.excel.tools.exception.ExcelProcessException;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -40,7 +41,7 @@ public class BooleanZhExtractor extends FieldValueExtractorAdapter {
       return null;
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
-      throw new IllegalArgumentException(e);
+      throw new ExcelProcessException(e);
     }
   }
 }

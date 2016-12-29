@@ -1,7 +1,6 @@
 package me.excel.tools.model.excel;
 
-import me.excel.tools.model.template.SheetHeader;
-import me.excel.tools.model.template.SheetHeaderBean;
+import me.excel.tools.model.ext.SheetTemplate;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,7 +16,7 @@ public class SheetBean implements Sheet {
 
   private String name;
 
-  private SheetHeader header;
+  private SheetTemplate template;
 
   private List<Row> rows = new ArrayList<>();
 
@@ -36,13 +35,13 @@ public class SheetBean implements Sheet {
   }
 
   @Override
-  public SheetHeader getHeader() {
-    return header;
+  public SheetTemplate getTemplate() {
+    return template;
   }
 
   @Override
-  public void setHeader(SheetHeader header) {
-    this.header = header;
+  public void setTemplate(SheetTemplate template) {
+    this.template = template;
   }
 
   @Override
@@ -52,7 +51,6 @@ public class SheetBean implements Sheet {
 
   void setIndex(int index) {
     this.index = index;
-    this.header = SheetHeaderBean.DEFAULT(index);
   }
 
   public String getName() {
@@ -66,7 +64,7 @@ public class SheetBean implements Sheet {
 
   @Override
   public int sizeOfRows() {
-    return rows.size();
+    return getRows().size();
   }
 
   @Override
@@ -110,16 +108,21 @@ public class SheetBean implements Sheet {
 
   @Override
   public Row getFieldRow() {
-    return rows.get(header.getFieldRowIndex());
+    return rows.get(template.getFieldHeaderMeta().getRowIndex());
   }
 
   @Override
   public List<Row> getDataRows() {
     List<Row> dataRows = new ArrayList<>();
-    for (int i = header.getDataStartRowIndex(); i <= sizeOfRows(); i++) {
+    for (int i = template.getDataStartRowIndex(); i <= sizeOfRows(); i++) {
       dataRows.add(getRow(i));
     }
     return dataRows;
+  }
+
+  @Override
+  public int sizeOfDataRows() {
+    return getDataRows().size();
   }
 
   @Override

@@ -1,11 +1,16 @@
 package me.excel.tools.processor;
 
-import com.sun.tools.internal.ws.processor.ProcessorException;
 import me.excel.tools.exception.ExcelProcessException;
+import me.excel.tools.model.ext.SheetContext;
+import me.excel.tools.model.ext.SheetContextBean;
 import me.excel.tools.model.excel.Cell;
 import me.excel.tools.model.excel.Row;
 import me.excel.tools.model.excel.Sheet;
 import me.excel.tools.model.excel.Workbook;
+import me.excel.tools.model.ext.HeaderMeta;
+import me.excel.tools.model.ext.SheetHeader;
+import me.excel.tools.model.ext.SheetHeaderBean;
+import me.excel.tools.model.ext.SheetTemplate;
 import me.excel.tools.setter.DefaultValueSetter;
 import me.excel.tools.setter.FieldValueSetter;
 import org.apache.commons.collections.MapUtils;
@@ -24,7 +29,7 @@ public class DefaultObjectProcessor implements ObjectProcessor {
 
   private Workbook workbook;
 
-  private Map<Integer, ObjectFactory> sheetIndex2modelFactory = new HashMap<>();
+  private Map<Integer, ObjectFactory> sheetIndex2objectFactory = new HashMap<>();
 
   private Map<Integer, ObjectProcessorListener> sheetIndex2listener = new HashMap<>();
 
@@ -37,7 +42,7 @@ public class DefaultObjectProcessor implements ObjectProcessor {
   }
 
   @Override
-  public void addCellValueSetter(FieldValueSetter... setters) {
+  public void addFieldValueSetter(FieldValueSetter... setters) {
     if (setters == null) {
       return;
     }
@@ -66,19 +71,19 @@ public class DefaultObjectProcessor implements ObjectProcessor {
   }
 
   @Override
-  public void addModelFactory(ObjectFactory... objectFactories) {
+  public void addObjectFactory(ObjectFactory... objectFactories) {
     if (objectFactories == null) {
       return;
     }
     for (ObjectFactory factory : objectFactories) {
-      sheetIndex2modelFactory.put(factory.getSheetIndex(), factory);
+      sheetIndex2objectFactory.put(factory.getSheetIndex(), factory);
     }
   }
 
   @Override
-  public List<List<Object>> process() {
+  public List<SheetContext> process() {
 
-    if (MapUtils.isEmpty(sheetIndex2modelFactory)) {
+    if (MapUtils.isEmpty(sheetIndex2objectFactory)) {
       throw new ExcelProcessException("no model factory to create object");
     }
 
@@ -86,16 +91,16 @@ public class DefaultObjectProcessor implements ObjectProcessor {
       throw new ExcelProcessException("workbook is null");
     }
 
-    List<List<Object>> objects = new ArrayList<>();
+    List<SheetContext> contexts = new ArrayList<>();
 
     for (Sheet sheet : workbook.getSheets()) {
 
       int sheetIndex = sheet.getIndex();
 
-      ObjectFactory objectFactory = sheetIndex2modelFactory.get(sheetIndex);
+      ObjectFactory objectFactory = sheetIndex2objectFactory.get(sheetIndex);
 
       if (objectFactory == null) {
-        throw new ProcessorException("no model factory to create object of sheet " + sheetIndex);
+        throw new ExcelProcessException("no model factory to create object of sheet " + sheetIndex);
       }
 
       ObjectProcessorListener listener = sheetIndex2listener.get(sheetIndex);
@@ -104,7 +109,6 @@ public class DefaultObjectProcessor implements ObjectProcessor {
       }
 
       List<Object> oneSheetObjects = new ArrayList<>();
-
       listener.beforeSheet(sheet, oneSheetObjects);
 
       for (Row row : sheet.getDataRows()) {
@@ -139,10 +143,37 @@ public class DefaultObjectProcessor implements ObjectProcessor {
 
       listener.afterSheet(sheet, oneSheetObjects);
 
-      objects.add(oneSheetObjects);
+      contexts.add(createContext(sheet, oneSheetObjects));
     }
 
-
-    return objects;
+    return contexts;
   }
+
+  private SheetContext createContext(Sheet sheet, List<Object> data) {
+    SheetTemplate template = sheet.getTemplate();
+
+    List<String> fields = new ArrayList<>();
+    for (Cell cell : sheet.getFieldRow().getCells()) {
+      fields.add(cell.getValue());
+    }
+
+    SheetContext sheetContext = new SheetContextBean(sheet.getIndex(), sheet.getName(), template.getDataStartRowIndex(), data, fields);
+
+    List<SheetHeader> sheetHeaders = new ArrayList<>();
+    for (HeaderMeta headerMeta : template.getHeaderMetas()) {
+      SheetHeader sheetHeader = new SheetHeaderBean(headerMeta);
+
+      Row row = sheet.getRow(headerMeta.getRowIndex());
+      for (Cell cell : row.getCells()) {
+        sheetHeader.addValue(cell.getField(), cell.getValue());
+      }
+
+      sheetHeaders.add(sheetHeader);
+    }
+
+    sheetContext.setSheetHeaders(sheetHeaders);
+
+    return sheetContext;
+  }
+
 }

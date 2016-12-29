@@ -4,8 +4,9 @@ import me.excel.tools.extractor.DefaultValueExtractor;
 import me.excel.tools.extractor.FieldValueExtractor;
 import me.excel.tools.helper.WorkbookToExcelHelper;
 import me.excel.tools.model.excel.*;
-import me.excel.tools.model.template.HeaderDetail;
-import me.excel.tools.model.template.SheetHeader;
+import me.excel.tools.model.ext.HeaderMeta;
+import me.excel.tools.model.ext.SheetContext;
+import me.excel.tools.model.ext.SheetHeader;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -82,22 +83,18 @@ public class DefaultExcelGenerator implements ExcelGenerator {
       Sheet sheet = createSheet(context.getSheetName());
       workbook.addSheet(sheet);
 
-      if (context.getHeader() != null) {
-        sheet.setHeader(context.getHeader());
-      }
-
-      List<HeaderDetail> headerDetails = context.getHeaderDetails();
+      sheet.setTemplate(context.ofTemplate());
 
       List<Object> data = context.getData();
-      int lastRowNum = sheet.getHeader().getDataStartRowIndex() + data.size() - 1;
+      int lastRowNum = sheet.getTemplate().getDataStartRowIndex() + data.size() - 1;
 
       for (int j = 1; j <= lastRowNum; j++) {
 
         Row row = createRow(j);
         sheet.addRow(row);
 
-        createHeaderIfNecessary(row, sheet.getHeader(), headerDetails);
-        createDataRowCells(row, data.get(j - 1), headerDetails, sheet.getIndex());
+        createHeaderIfNecessary(row, context);
+        createDataRowCells(row, data.get(j - 1), context);
       }
 
     }
@@ -116,71 +113,43 @@ public class DefaultExcelGenerator implements ExcelGenerator {
     return new RowBean(rowIndex);
   }
 
-  private void createHeaderIfNecessary(Row row, SheetHeader header, List<HeaderDetail> details) {
+  private void createHeaderIfNecessary(Row row, SheetContext context) {
     int rowIndex = row.getIndex();
 
-    if (rowIndex >= header.getDataStartRowIndex()) {
+    if (rowIndex >= context.getDataStartRowIndex()) {
       return;
     }
 
-    if (header.isHasTitle() && rowIndex == header.getTitleRowIndex()) {
+    List<String> fields = context.getFields();
+    for (SheetHeader sheetHeader : context.getSheetHeaders()) {
+      HeaderMeta headerMeta = sheetHeader.getHeaderMeta();
 
-      createTitleRowCells(row, details);
-    } else if (header.isHasField() && rowIndex == header.getFieldRowIndex()) {
+      if (headerMeta.getRowIndex() == rowIndex) {
 
-      createFieldRowCells(row, details);
-    } else if (header.isHasPrompt() && rowIndex == header.getPromptRowIndex()) {
+        for (int i = 1; i <= fields.size(); i++) {
+          String field = fields.get(i - 1);
+          CellBean headerCell = new CellBean(rowIndex, i, sheetHeader.getValue(field));
+          headerCell.setField(field);
 
-      createPromptRowCells(row, details);
+          row.addCell(headerCell);
+        }
+      }
     }
   }
 
-  private void createDataRowCells(Row row, Object object, List<HeaderDetail> details, int sheetIndex) {
-    for (int i = 1; i <= details.size(); i++) {
+  private void createDataRowCells(Row row, Object object, SheetContext context) {
+    List<String> fields = context.getFields();
 
-      HeaderDetail detail = details.get(i - 1);
-      String value = getFieldValue(object, detail.getField(), sheetIndex);
+    for (int i = 1; i <= fields.size(); i++) {
+
+      String field = fields.get(i - 1);
+      String value = getFieldValue(object, field, context.getSheetIndex());
       CellBean dataCell = new CellBean(row.getIndex(), i, value);
-      dataCell.setField(detail.getField());
+      dataCell.setField(field);
 
       row.addCell(dataCell);
     }
 
-  }
-
-  private void createTitleRowCells(Row row, List<HeaderDetail> details) {
-    for (int i = 1; i <= details.size(); i++) {
-
-      HeaderDetail detail = details.get(i - 1);
-      CellBean titleCell = new CellBean(row.getIndex(), i, detail.getTitle());
-      titleCell.setField(detail.getField());
-
-      row.addCell(titleCell);
-    }
-
-  }
-
-
-  private void createFieldRowCells(Row row, List<HeaderDetail> details) {
-    for (int i = 1; i <= details.size(); i++) {
-
-      HeaderDetail detail = details.get(i - 1);
-      CellBean fieldCell = new CellBean(row.getIndex(), i, detail.getField());
-      fieldCell.setField(detail.getField());
-
-      row.addCell(fieldCell);
-    }
-  }
-
-  private void createPromptRowCells(Row row, List<HeaderDetail> details) {
-    for (int i = 1; i <= details.size(); i++) {
-
-      HeaderDetail detail = details.get(i - 1);
-      CellBean promptCell = new CellBean(row.getIndex(), i, detail.getPrompt());
-      promptCell.setField(detail.getField());
-
-      row.addCell(promptCell);
-    }
   }
 
   private String getFieldValue(Object object, String field, int sheetIndex) {

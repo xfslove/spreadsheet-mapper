@@ -18,19 +18,19 @@ public class NumberScaleRangeValidatorTest {
 
     CellBean cell = new CellBean(1, 1, "");
     cell.setField("person.numberRange");
-    assertTrue(numberValidator.validate(cell));
+    assertTrue(numberValidator.valid(cell));
 
     CellBean cell1 = new CellBean(1, 1, "dasdasd");
     cell1.setField("person.numberRange");
-    assertFalse(numberValidator.validate(cell1));
+    assertFalse(numberValidator.valid(cell1));
 
     CellBean cell2 = new CellBean(1, 1, "1");
     cell2.setField("person.numberRange");
-    assertFalse(numberValidator.validate(cell2));
+    assertFalse(numberValidator.valid(cell2));
 
     CellBean cell3 = new CellBean(1, 1, "1.22");
     cell3.setField("person.numberRange");
-    assertTrue(numberValidator.validate(cell3));
+    assertTrue(numberValidator.valid(cell3));
   }
 
 }

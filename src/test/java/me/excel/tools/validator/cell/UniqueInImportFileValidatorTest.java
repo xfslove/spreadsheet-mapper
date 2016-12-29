@@ -29,12 +29,12 @@ public class UniqueInImportFileValidatorTest {
     e5.setField("person.unique");
     e6.setField("person.unique");
 
-    assertTrue(uniqueInImportFileValidator.validate(e1));
-    assertTrue(uniqueInImportFileValidator.validate(e2));
-    assertTrue(uniqueInImportFileValidator.validate(e3));
-    assertTrue(uniqueInImportFileValidator.validate(e4));
-    assertTrue(uniqueInImportFileValidator.validate(e5));
-    assertFalse(uniqueInImportFileValidator.validate(e6));
+    assertTrue(uniqueInImportFileValidator.valid(e1));
+    assertTrue(uniqueInImportFileValidator.valid(e2));
+    assertTrue(uniqueInImportFileValidator.valid(e3));
+    assertTrue(uniqueInImportFileValidator.valid(e4));
+    assertTrue(uniqueInImportFileValidator.valid(e5));
+    assertFalse(uniqueInImportFileValidator.valid(e6));
 
   }
 

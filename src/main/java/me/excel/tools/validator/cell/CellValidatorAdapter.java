@@ -111,7 +111,7 @@ public abstract class CellValidatorAdapter implements CellValidator {
   }
 
   @Override
-  public boolean validate(Cell cell) {
+  public boolean valid(Cell cell) {
     return StringUtils.isBlank(cell.getValue()) || customValidate(cell);
   }
 

@@ -1,8 +1,7 @@
 package me.excel.tools.model.excel;
 
-import me.excel.tools.model.template.SheetHeader;
+import me.excel.tools.model.ext.SheetTemplate;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -11,22 +10,22 @@ import java.util.Set;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface Sheet extends Serializable {
+public interface Sheet extends ExcelMeta {
 
   /**
-   * excel sheet header
+   * excel sheet template
    *
-   * @return header
-   * @see SheetHeader
+   * @return template
+   * @see SheetTemplate
    */
-  SheetHeader getHeader();
+  SheetTemplate getTemplate();
 
   /**
-   * set header
+   * set template
    *
-   * @param header header
+   * @param template template
    */
-  void setHeader(SheetHeader header);
+  void setTemplate(SheetTemplate template);
 
   /**
    * get sheet index
@@ -90,6 +89,11 @@ public interface Sheet extends Serializable {
    * @return data rows
    */
   List<Row> getDataRows();
+
+  /**
+   * @return size of data rows
+   */
+  int sizeOfDataRows();
 
   /**
    * @param field field

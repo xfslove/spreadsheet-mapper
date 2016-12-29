@@ -1,5 +1,6 @@
 package me.excel.tools.processor;
 
+import me.excel.tools.model.ext.SheetContext;
 import me.excel.tools.setter.FieldValueSetter;
 
 import java.util.List;
@@ -10,12 +11,16 @@ import java.util.List;
 public interface ObjectProcessor {
 
   /**
-   * cell value setter unique with object field in one sheet (one to one), after add will override before add
+   * <pre>
+   * field value setter unique with object field in one sheet (one to one),
+   * if you add setter with same match field({@link FieldValueSetter#getMatchField()}),
+   * after add will override before add
+   * </pre>
    *
    * @param setters field value setter
    * @see FieldValueSetter
    */
-  void addCellValueSetter(FieldValueSetter... setters);
+  void addFieldValueSetter(FieldValueSetter... setters);
 
   /**
    * one sheet, one model factory
@@ -23,7 +28,7 @@ public interface ObjectProcessor {
    * @param objectFactories model factorys
    * @see ObjectFactory
    */
-  void addModelFactory(ObjectFactory... objectFactories);
+  void addObjectFactory(ObjectFactory... objectFactories);
 
   /**
    * one sheet one listener
@@ -35,6 +40,7 @@ public interface ObjectProcessor {
 
   /**
    * @return list of sheets data
+   * @see SheetContext
    */
-  List<List<Object>> process();
+  List<SheetContext> process();
 }

@@ -1,7 +1,7 @@
 package me.excel.tools.helper;
 
 import me.excel.tools.exception.ExcelWriteException;
-import me.excel.tools.model.extra.Comment;
+import me.excel.tools.model.shape.Comment;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;

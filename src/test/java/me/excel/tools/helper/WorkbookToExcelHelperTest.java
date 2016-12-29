@@ -2,8 +2,8 @@ package me.excel.tools.helper;
 
 import me.excel.tools.ExcelConstants;
 import me.excel.tools.model.excel.*;
-import me.excel.tools.model.extra.Comment;
-import me.excel.tools.model.extra.CommentBean;
+import me.excel.tools.model.shape.Comment;
+import me.excel.tools.model.shape.CommentBean;
 import org.apache.poi.util.TempFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

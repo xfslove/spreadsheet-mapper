@@ -180,7 +180,7 @@ public class DefaultExcelValidator implements ExcelValidator {
 
     for (WorkbookValidator validator : workbookValidators) {
 
-      if (!validator.validate(workbook)) {
+      if (!validator.valid(workbook)) {
 
       }
     }
@@ -191,7 +191,7 @@ public class DefaultExcelValidator implements ExcelValidator {
 
     for (SheetValidator validator : sheetValidators) {
 
-      if (!validator.validate(sheet)) {
+      if (!validator.valid(sheet)) {
 
       }
     }
@@ -281,11 +281,11 @@ public class DefaultExcelValidator implements ExcelValidator {
 
     if (dataValidator instanceof RowValidator) {
 
-      return ((RowValidator) dataValidator).validate(row);
+      return ((RowValidator) dataValidator).valid(row);
     } else {
 
       CellValidator cellValidator = (CellValidator) dataValidator;
-      return cellValidator.validate(row.getCell(cellValidator.getMatchField()));
+      return cellValidator.valid(row.getCell(cellValidator.getMatchField()));
     }
   }
 

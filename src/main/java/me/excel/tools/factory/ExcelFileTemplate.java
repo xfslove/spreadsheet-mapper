@@ -51,13 +51,13 @@ public class ExcelFileTemplate implements UserFileTemplate {
   }
 
   @Override
-  public Set<String> getDistinctValuesOfField(String field) {
+  public Set<String> getDistinctValuesOfField(int sheetIndex, String field) {
 
     if (workbook == null) {
       throw new ExcelReadException("workbook is null");
     }
 
-    return workbook.getFirstSheet().getDistinctValuesOfField(field);
+    return workbook.getSheet(sheetIndex).getDistinctValuesOfField(field);
   }
 
 }

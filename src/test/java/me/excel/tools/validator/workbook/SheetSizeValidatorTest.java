@@ -34,7 +34,7 @@ public class SheetSizeValidatorTest {
     row1.addCell(new CellBean(2, 2, "person.age"));
     row1.addCell(new CellBean(2, 3, "person.birthday"));
 
-    assertTrue(sheetSizeValidator.validate(workbook));
+    assertTrue(sheetSizeValidator.valid(workbook));
 
   }
 

@@ -1,5 +1,7 @@
 package me.excel.tools.validator;
 
+import me.excel.tools.model.excel.ExcelMeta;
+
 import java.util.Set;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Set;
  * <p>
  * Created by hanwen on 2016/12/26.
  */
-public interface DataValidator extends Validator {
+public interface DataValidator<META extends ExcelMeta> extends Validator<META> {
 
   /**
    * the validator key to identify unique validator

@@ -42,7 +42,7 @@ public class FieldScopeValidator implements SheetValidator {
   }
 
   @Override
-  public boolean validate(Sheet sheet) {
+  public boolean valid(Sheet sheet) {
     Row fieldRow = sheet.getFieldRow();
 
     for (Cell fieldCell : fieldRow.getCells()) {

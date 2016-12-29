@@ -18,19 +18,19 @@ public class LocalDateTimeValidatorTest {
 
     CellBean cell4 = new CellBean(1, 1, "");
     cell4.setField("person.localDateTime");
-    assertTrue(localDateTimeValidator.validate(cell4));
+    assertTrue(localDateTimeValidator.valid(cell4));
 
     CellBean cell = new CellBean(1, 1, "1988-10-10 09:00:00");
     cell.setField("person.localDateTime");
-    assertFalse(localDateTimeValidator.validate(cell));
+    assertFalse(localDateTimeValidator.valid(cell));
 
     CellBean cell1 = new CellBean(1, 1, "1988-10-10 09:00");
     cell1.setField("person.localDateTime");
-    assertTrue(localDateTimeValidator.validate(cell1));
+    assertTrue(localDateTimeValidator.valid(cell1));
 
     CellBean cell2 = new CellBean(1, 1, "asdasd");
     cell2.setField("person.localDateTime");
-    assertFalse(localDateTimeValidator.validate(cell2));
+    assertFalse(localDateTimeValidator.valid(cell2));
   }
 
 }

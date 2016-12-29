@@ -18,15 +18,15 @@ public class IntValidatorTest {
 
     CellBean cell = new CellBean(1, 1, "");
     cell.setField("person.int");
-    assertTrue(intValidator.validate(cell));
+    assertTrue(intValidator.valid(cell));
 
     CellBean cell2 = new CellBean(1, 1, "asdasd");
     cell.setField("person.int");
-    assertFalse(intValidator.validate(cell2));
+    assertFalse(intValidator.valid(cell2));
 
     CellBean cell1 = new CellBean(1, 1, "1");
     cell.setField("person.int");
-    assertTrue(intValidator.validate(cell1));
+    assertTrue(intValidator.valid(cell1));
   }
 
 }

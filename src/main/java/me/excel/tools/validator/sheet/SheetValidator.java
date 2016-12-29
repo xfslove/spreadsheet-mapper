@@ -8,7 +8,7 @@ import me.excel.tools.validator.Validator;
  * <p>
  * Created by hanwen on 2016/12/23.
  */
-public interface SheetValidator extends Validator {
+public interface SheetValidator extends Validator<Sheet> {
 
   /**
    * valid supplied excel sheet
@@ -16,5 +16,6 @@ public interface SheetValidator extends Validator {
    * @param sheet sheet
    * @return result
    */
-  boolean validate(Sheet sheet);
+  @Override
+  boolean valid(Sheet sheet);
 }

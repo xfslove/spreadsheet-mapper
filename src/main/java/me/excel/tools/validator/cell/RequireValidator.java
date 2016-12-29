@@ -19,7 +19,7 @@ public class RequireValidator extends CellValidatorAdapter {
   }
 
   @Override
-  public boolean validate(Cell cell) {
+  public boolean valid(Cell cell) {
     return customValidate(cell);
   }
 

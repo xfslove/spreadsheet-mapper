@@ -59,12 +59,12 @@ public class ExcelFileTemplateTest {
 
     ObjectProcessor objectProcessor = excelFileTemplate.getObjectProcessor();
 
-    objectProcessor.addCellValueSetter(
+    objectProcessor.addFieldValueSetter(
         new LocalDateValueSetter("student.enrollDate", "yyyy-MM-dd"),
         new BooleanValueSetter("student.inSchool")
     );
 
-    objectProcessor.addModelFactory(new StudentObjectFactoryTest());
+    objectProcessor.addObjectFactory(new StudentObjectFactoryTest());
     objectProcessor.process();
   }
 

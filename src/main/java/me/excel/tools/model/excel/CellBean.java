@@ -29,16 +29,6 @@ public class CellBean implements Cell {
     this.value = value;
   }
 
-  @Override
-  public String getField() {
-    return field;
-  }
-
-  @Override
-  public void setField(String field) {
-    this.field = field;
-  }
-
   public CellBean(org.apache.poi.ss.usermodel.Cell cell) {
 
     this.rowIndex = cell.getRowIndex() + 1;
@@ -90,6 +80,16 @@ public class CellBean implements Cell {
 
   public static CellBean EMPTY_CELL(int rowIndex, int columnIndex) {
     return new CellBean(rowIndex, columnIndex, null);
+  }
+
+  @Override
+  public String getField() {
+    return field;
+  }
+
+  @Override
+  public void setField(String field) {
+    this.field = field;
   }
 
   @Override

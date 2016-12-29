@@ -1,8 +1,8 @@
 package me.excel.tools.helper;
 
 import me.excel.tools.exception.ExcelWriteException;
-import me.excel.tools.model.extra.TextBox;
-import me.excel.tools.model.extra.TextBoxStyle;
+import me.excel.tools.model.shape.TextBox;
+import me.excel.tools.model.shape.TextBoxStyle;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Sheet;

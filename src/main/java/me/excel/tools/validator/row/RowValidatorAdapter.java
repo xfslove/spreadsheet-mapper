@@ -49,7 +49,7 @@ public abstract class RowValidatorAdapter implements RowValidator {
   }
 
   @Override
-  public boolean validate(Row row) {
+  public boolean valid(Row row) {
     return customValidate(row);
   }
 

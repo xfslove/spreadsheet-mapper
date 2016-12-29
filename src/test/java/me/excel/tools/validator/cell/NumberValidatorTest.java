@@ -18,15 +18,15 @@ public class NumberValidatorTest {
 
     CellBean cell = new CellBean(1, 1, "");
     cell.setField("person.number");
-    assertTrue(numberValidator.validate(cell));
+    assertTrue(numberValidator.valid(cell));
 
     CellBean cell1 = new CellBean(1, 1, "dasdasd");
     cell1.setField("person.number");
-    assertFalse(numberValidator.validate(cell1));
+    assertFalse(numberValidator.valid(cell1));
 
     CellBean cell2 = new CellBean(1, 1, "1");
     cell2.setField("person.number");
-    assertTrue(numberValidator.validate(cell2));
+    assertTrue(numberValidator.valid(cell2));
   }
 
 }

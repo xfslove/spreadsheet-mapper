@@ -45,9 +45,9 @@ public class MultiUniqueInImportFileValidatorTest {
     r3.addCell(e5);
     r3.addCell(e6);
 
-    assertTrue(multiUniqueInImportFileValidator.validate(r1));
-    assertTrue(multiUniqueInImportFileValidator.validate(r2));
-    assertFalse(multiUniqueInImportFileValidator.validate(r3));
+    assertTrue(multiUniqueInImportFileValidator.valid(r1));
+    assertTrue(multiUniqueInImportFileValidator.valid(r2));
+    assertFalse(multiUniqueInImportFileValidator.valid(r3));
   }
 
 }

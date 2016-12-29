@@ -44,5 +44,8 @@ public interface ObjectProcessorListener {
    */
   void afterSheet(Sheet sheet, List<Object> objects);
 
+  /**
+   * @return which sheet this listener matched
+   */
   int getSheetIndex();
 }

@@ -1,6 +1,5 @@
 package me.excel.tools.model.excel;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +7,7 @@ import java.util.List;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface Row extends Serializable {
+public interface Row extends ExcelMeta {
 
   /**
    * @return row num 1-based

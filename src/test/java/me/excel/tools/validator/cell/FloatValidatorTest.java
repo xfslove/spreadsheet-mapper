@@ -18,15 +18,15 @@ public class FloatValidatorTest {
 
     CellBean cell = new CellBean(1, 1, "");
     cell.setField("person.float");
-    assertTrue(floatValidator.validate(cell));
+    assertTrue(floatValidator.valid(cell));
 
     CellBean cell2 = new CellBean(1, 1, "asdasd");
     cell2.setField("person.float");
-    assertFalse(floatValidator.validate(cell2));
+    assertFalse(floatValidator.valid(cell2));
 
     CellBean cell1 = new CellBean(1, 1, "1");
     cell1.setField("person.float");
-    assertTrue(floatValidator.validate(cell1));
+    assertTrue(floatValidator.valid(cell1));
   }
 
 }

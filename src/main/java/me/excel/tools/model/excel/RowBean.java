@@ -41,12 +41,8 @@ public class RowBean implements Row {
 
   @Override
   public Cell getCell(int index) {
-    if (index < 1) {
-      throw new IllegalArgumentException("index must greater than zero");
-    }
-
-    if (index > sizeOfCells()) {
-      throw new IllegalArgumentException("index overflow size of cells");
+    if (index < 1 || index > sizeOfCells()) {
+      return null;
     }
 
     return cells.get(index - 1);
@@ -54,11 +50,6 @@ public class RowBean implements Row {
 
   @Override
   public Cell getCell(String field) {
-
-    if (StringUtils.isBlank(field)) {
-      throw new IllegalArgumentException("field can not be blank");
-    }
-
     for (Cell cell : cells) {
 
       if (StringUtils.equals(cell.getField(), field)) {
@@ -66,7 +57,7 @@ public class RowBean implements Row {
       }
     }
 
-    throw new IllegalArgumentException("missing field " + field);
+    return null;
   }
 
   @Override

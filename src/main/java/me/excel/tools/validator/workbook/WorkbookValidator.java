@@ -9,7 +9,7 @@ import me.excel.tools.validator.Validator;
  * <p>
  * Created by hanwen on 4/26/16.
  */
-public interface WorkbookValidator extends Validator {
+public interface WorkbookValidator extends Validator<Workbook> {
 
   /**
    * valid supplied excel workbook
@@ -17,5 +17,6 @@ public interface WorkbookValidator extends Validator {
    * @param workbook workbook
    * @return success
    */
-  boolean validate(Workbook workbook);
+  @Override
+  boolean valid(Workbook workbook);
 }

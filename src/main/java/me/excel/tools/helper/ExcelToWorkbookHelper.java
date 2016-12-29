@@ -1,15 +1,13 @@
 package me.excel.tools.helper;
 
 import me.excel.tools.exception.ExcelReadException;
+import me.excel.tools.exception.ExcelTemplateException;
 import me.excel.tools.model.excel.*;
-import me.excel.tools.model.excel.Cell;
-import me.excel.tools.model.excel.Row;
-import me.excel.tools.model.excel.Sheet;
-import me.excel.tools.model.excel.Workbook;
-import me.excel.tools.model.template.SheetHeader;
+import me.excel.tools.model.ext.SheetTemplate;
+import me.excel.tools.model.ext.SheetTemplateBean;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,12 +29,12 @@ public class ExcelToWorkbookHelper {
   /**
    * read supplied excel stream to {@link Workbook}
    *
-   * @param inputStream  auto close
-   * @param sheetHeaders sheet header infos, null means using default header
+   * @param inputStream    auto close
+   * @param sheetTemplates sheet templates, null means using default template
    * @return workbook
    * @throws IOException io exception
    */
-  public static Workbook read(InputStream inputStream, SheetHeader... sheetHeaders) throws IOException {
+  public static Workbook read(InputStream inputStream, SheetTemplate... sheetTemplates) throws IOException {
 
     Workbook excelWorkbook = new WorkbookBean();
 
@@ -54,7 +52,7 @@ public class ExcelToWorkbookHelper {
 
       int sheetCount = workbook.getNumberOfSheets();
 
-      Map<Integer, SheetHeader> sheetIndex2header = buildHeaderMap(sheetHeaders);
+      Map<Integer, SheetTemplate> sheetIndex2template = buildTemplateMap(sheetTemplates);
       for (int i = 0; i < sheetCount; i++) {
 
         org.apache.poi.ss.usermodel.Sheet sheet = workbook.getSheetAt(i);
@@ -64,20 +62,24 @@ public class ExcelToWorkbookHelper {
         }
 
         Sheet excelSheet = createSheet(sheet);
-        excelWorkbook.addSheet(excelSheet);
 
-        SheetHeader header = sheetIndex2header.get(excelSheet.getIndex());
-        if (header != null) {
+        SheetTemplate template = sheetIndex2template.get(excelSheet.getIndex());
+        if (template != null) {
 
-          if (!header.isHasField()) {
-            LOGGER.error("sheet header error, not has field row");
-            throw new ExcelReadException("sheet header error, not has field row");
+          if (template.getFieldHeaderMeta() == null) {
+            LOGGER.error("sheet template error, not has field row");
+            throw new ExcelTemplateException("not has field row");
           }
 
-          excelSheet.setHeader(header);
+        } else {
+
+          template = SheetTemplateBean.DEFAULT(excelSheet.getIndex());
         }
 
-        org.apache.poi.ss.usermodel.Row fieldRow = sheet.getRow(excelSheet.getHeader().getFieldRowIndex() - 1);
+        excelSheet.setTemplate(template);
+        excelWorkbook.addSheet(excelSheet);
+
+        org.apache.poi.ss.usermodel.Row fieldRow = sheet.getRow(excelSheet.getTemplate().getFieldHeaderMeta().getRowIndex() - 1);
         Map<Integer, String> columnIndex2field = buildColumnIndex2fieldMap(fieldRow);
 
         int lastRowNum = sheet.getLastRowNum();
@@ -140,16 +142,16 @@ public class ExcelToWorkbookHelper {
     return cells;
   }
 
-  private static Map<Integer, SheetHeader> buildHeaderMap(SheetHeader[] sheetHeaders) {
-    Map<Integer, SheetHeader> sheetIndex2header = new HashMap<>();
+  private static Map<Integer, SheetTemplate> buildTemplateMap(SheetTemplate[] sheetTemplates) {
+    Map<Integer, SheetTemplate> sheetIndex2template = new HashMap<>();
 
-    if (sheetHeaders != null) {
-      for (SheetHeader header : sheetHeaders) {
-        sheetIndex2header.put(header.getSheetIndex(), header);
+    if (sheetTemplates != null) {
+      for (SheetTemplate template : sheetTemplates) {
+        sheetIndex2template.put(template.getSheetIndex(), template);
       }
     }
 
-    return sheetIndex2header;
+    return sheetIndex2template;
   }
 
   private static Map<Integer, String> buildColumnIndex2fieldMap(org.apache.poi.ss.usermodel.Row row) {

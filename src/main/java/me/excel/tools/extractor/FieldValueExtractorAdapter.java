@@ -21,6 +21,7 @@ public abstract class FieldValueExtractorAdapter implements FieldValueExtractor 
     this.matchField = matchField;
   }
 
+  @Override
   public String getMatchField() {
     return matchField;
   }

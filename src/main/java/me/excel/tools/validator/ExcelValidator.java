@@ -25,12 +25,22 @@ public interface ExcelValidator {
   void addSheetValidator(SheetValidator... validators);
 
   /**
+   * <pre>
+   * multi validators can hold same key({@link DataValidator#getKey()}),
+   * if validators has same key, dependsOn({@link DataValidator#getDependsOn()}) will valid all the validators with same key.
+   * </pre>
+   *
    * @param validators row validator
    * @see RowValidator
    */
   void addRowValidator(RowValidator... validators);
 
   /**
+   * <pre>
+   * multi validators can hold same key({@link DataValidator#getKey()}),
+   * if validators has same key, dependsOn({@link DataValidator#getDependsOn()}) will valid all the validators with same key.
+   * </pre>
+   *
    * @param validators cell validator
    * @see CellValidator
    */
@@ -39,7 +49,7 @@ public interface ExcelValidator {
   /**
    * execute valid
    *
-   * @return success
+   * @return true if passed all validator
    */
   boolean valid();
 }

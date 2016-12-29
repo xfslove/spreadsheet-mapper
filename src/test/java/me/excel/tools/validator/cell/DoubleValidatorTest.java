@@ -18,15 +18,15 @@ public class DoubleValidatorTest {
 
     CellBean cell = new CellBean(1, 1, "");
     cell.setField("person.double");
-    assertTrue(doubleValidator.validate(cell));
+    assertTrue(doubleValidator.valid(cell));
 
     CellBean cell2 = new CellBean(1, 1, "asdasd");
     cell2.setField("person.double");
-    assertFalse(doubleValidator.validate(cell2));
+    assertFalse(doubleValidator.valid(cell2));
 
     CellBean cell1 = new CellBean(1, 1, "1");
     cell1.setField("person.double");
-    assertTrue(doubleValidator.validate(cell1));
+    assertTrue(doubleValidator.valid(cell1));
   }
 
 }

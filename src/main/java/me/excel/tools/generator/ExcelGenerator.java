@@ -1,6 +1,7 @@
 package me.excel.tools.generator;
 
 import me.excel.tools.extractor.FieldValueExtractor;
+import me.excel.tools.model.ext.SheetContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +21,11 @@ public interface ExcelGenerator {
   void addSheetContext(SheetContext... sheetContexts);
 
   /**
-   * field value extractor unique with object field in one sheet (one to one), after add will override before add
+   * <pre>
+   * field value extractor unique with object field in one sheet (one to one),
+   * if you add extractor with same match field({@link FieldValueExtractor#getMatchField()}),
+   * after add will override before add
+   * </pre>
    *
    * @param fieldValueExtractors field value extractor
    * @see FieldValueExtractor

@@ -30,7 +30,7 @@ public class SheetSizeValidator implements WorkbookValidator {
   }
 
   @Override
-  public boolean validate(Workbook workbook) {
+  public boolean valid(Workbook workbook) {
     return workbook.sizeOfSheets() == size;
   }
 }

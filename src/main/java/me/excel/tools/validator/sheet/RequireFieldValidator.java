@@ -45,7 +45,7 @@ public class RequireFieldValidator implements SheetValidator {
   }
 
   @Override
-  public boolean validate(Sheet sheet) {
+  public boolean valid(Sheet sheet) {
     Row fieldRow = sheet.getFieldRow();
 
     List<String> fields = new ArrayList<>();

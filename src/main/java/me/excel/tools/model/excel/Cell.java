@@ -1,17 +1,30 @@
 package me.excel.tools.model.excel;
 
-import java.io.Serializable;
-
 /**
  * excel cell
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface Cell extends Serializable {
+public interface Cell extends ExcelMeta {
 
+  /**
+   *
+   * @return the cell corresponding field
+   */
   String getField();
 
+  /**
+   *
+   * @param field
+   */
   void setField(String field);
+
+  /**
+   * cell value
+   *
+   * @return value
+   */
+  String getValue();
 
   /**
    * cell row index
@@ -26,13 +39,6 @@ public interface Cell extends Serializable {
    * @return 1-based
    */
   int getColumnIndex();
-
-  /**
-   * cell value
-   *
-   * @return value
-   */
-  String getValue();
 
   /**
    * @return sheet of cell at

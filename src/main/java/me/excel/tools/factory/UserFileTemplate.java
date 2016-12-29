@@ -25,8 +25,9 @@ public interface UserFileTemplate {
   ObjectProcessor getObjectProcessor();
 
   /**
-   * @param field field
+   * @param sheetIndex which sheet
+   * @param field      field
    * @return distinct values of supplied field
    */
-  Set<String> getDistinctValuesOfField(String field);
+  Set<String> getDistinctValuesOfField(int sheetIndex, String field);
 }
