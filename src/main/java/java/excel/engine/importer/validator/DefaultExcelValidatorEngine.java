@@ -268,6 +268,12 @@ public class DefaultExcelValidatorEngine implements ExcelValidatorEngine {
     return result;
   }
 
+  /**
+   * if result is not empty and result set not only has true skip the valid
+   *
+   * @param result dependsOn result
+   * @return true if skip
+   */
   private boolean ifSkip(Map<String, Set<Boolean>> result) {
 
     Set<Boolean> dependsOnVrs = new HashSet<>();
@@ -275,7 +281,7 @@ public class DefaultExcelValidatorEngine implements ExcelValidatorEngine {
       dependsOnVrs.addAll(vr);
     }
 
-    return dependsOnVrs.contains(Boolean.FALSE) || dependsOnVrs.contains(null);
+    return !dependsOnVrs.isEmpty() && (dependsOnVrs.size() > 1 || !dependsOnVrs.iterator().next());
   }
 
   private boolean doRowCellsValid(DataValidator dataValidator, Row row) {

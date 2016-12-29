@@ -82,7 +82,7 @@ public class SheetContextBean implements SheetContext {
   @Override
   public void setSheetHeaders(List<SheetHeader> sheetHeaders) {
     for (SheetHeader sheetHeader : sheetHeaders) {
-      rowIndex2sheetHeader.put(sheetHeader.getHeaderMeta().getRowIndex(), sheetHeader);
+      addHeader(sheetHeader);
     }
   }
 
