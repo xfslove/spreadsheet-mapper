@@ -27,14 +27,14 @@ public class ExcelReadHelper {
   }
 
   /**
-   * read supplied excel stream to {@link Workbook} according to template
+   * read supplied excel stream to {@link Workbook} according to sheet templates
    *
-   * @param inputStream         auto close
-   * @param sheetIndex2template sheet index 2 sheet template
+   * @param inputStream    auto close
+   * @param sheetTemplates sheet templates
    * @return workbook
    * @throws IOException io exception
    */
-  public static Workbook read(InputStream inputStream, Map<Integer, SheetTemplate> sheetIndex2template) throws IOException {
+  public static Workbook read(InputStream inputStream, SheetTemplate... sheetTemplates) throws IOException {
 
     Workbook excelWorkbook = new WorkbookBean();
 
@@ -52,6 +52,7 @@ public class ExcelReadHelper {
 
       int sheetCount = workbook.getNumberOfSheets();
 
+      Map<Integer, SheetTemplate> sheetIndex2template = buildTemplateMap(sheetTemplates);
       for (int i = 0; i < sheetCount; i++) {
 
         org.apache.poi.ss.usermodel.Sheet sheet = workbook.getSheetAt(i);
@@ -139,6 +140,18 @@ public class ExcelReadHelper {
     }
 
     return cells;
+  }
+
+  private static Map<Integer, SheetTemplate> buildTemplateMap(SheetTemplate[] sheetTemplates) {
+    Map<Integer, SheetTemplate> sheetIndex2template = new HashMap<>();
+
+    if (sheetTemplates != null) {
+      for (SheetTemplate template : sheetTemplates) {
+        sheetIndex2template.put(template.getSheetIndex(), template);
+      }
+    }
+
+    return sheetIndex2template;
   }
 
   private static Map<Integer, String> buildColumnIndex2fieldMap(org.apache.poi.ss.usermodel.Row row) {

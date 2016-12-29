@@ -6,7 +6,7 @@ import java.excel.engine.importer.validator.sheet.SheetValidator;
 import java.excel.engine.importer.validator.workbook.WorkbookValidator;
 
 /**
- * excel file validator
+ * excel validator
  * <p>
  * Created by hanwen on 15-12-16.
  */

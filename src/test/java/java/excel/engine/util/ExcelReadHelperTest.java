@@ -1,12 +1,15 @@
 package java.excel.engine.util;
 
 import java.excel.engine.ExcelConstants;
+import java.excel.engine.model.excel.Cell;
 import java.excel.engine.model.excel.Row;
 import java.excel.engine.model.excel.Sheet;
 import java.excel.engine.model.excel.Workbook;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.testng.Assert.assertEquals;
@@ -34,11 +37,17 @@ public class ExcelReadHelperTest {
       Row row = sheet.getRow(i + 1);
       assertEquals(row.sizeOfCells(), 4);
       if (i == 0) {
-        assertEquals(row.getCells().stream()
-            .map(cell -> cell.getValue()).collect(Collectors.toList()).toString(), "[111111, std1, 18, 2015-10-01]");
+        List<String> values = new ArrayList<>();
+        for (Cell cell : row.getCells()) {
+          values.add(cell.getValue());
+        }
+        assertEquals(values.toString(), "[111111, std1, 18, 2015-10-01]");
       } else {
-        assertEquals(row.getCells().stream()
-            .map(cell -> cell.getValue()).collect(Collectors.toList()).toString(), "[2222, std2, 18, 2015-10-01]");
+        List<String> values = new ArrayList<>();
+        for (Cell cell : row.getCells()) {
+          values.add(cell.getValue());
+        }
+        assertEquals(values.toString(), "[2222, std2, 18, 2015-10-01]");
       }
     }
 

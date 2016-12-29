@@ -30,7 +30,7 @@ public interface ExcelComposerEngine {
    * @param fieldValueExtractors field value extractor
    * @see FieldValueExtractor
    */
-  void addValueExtractor(FieldValueExtractor... fieldValueExtractors);
+  void addFieldValueExtractor(FieldValueExtractor... fieldValueExtractors);
 
   /**
    * @param file intend write file

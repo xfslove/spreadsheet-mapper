@@ -94,7 +94,7 @@ public class DefaultExcelTemplateEngineTest {
 
     ExcelComposerEngine excelComposerEngine = new DefaultExcelComposerEngine();
 
-    excelComposerEngine.addValueExtractor(new BooleanZhExtractor("student.inSchool"));
+    excelComposerEngine.addFieldValueExtractor(new BooleanZhExtractor("student.inSchool"));
 
 //    excelComposerEngine.setData(list);
 //    excelComposerEngine.setFields("student.code", "student.age", "student.name", "student.enrollDate", "student.inSchool");

@@ -44,8 +44,8 @@ public class WorkbookBean implements Workbook {
 
   @Override
   public Sheet getSheet(int index) {
-    if (index < 1) {
-      throw new IllegalArgumentException("index must greater than zero");
+    if (index < 1 || index > sizeOfSheets()) {
+      return null;
     }
     return sheets.get(index - 1);
   }

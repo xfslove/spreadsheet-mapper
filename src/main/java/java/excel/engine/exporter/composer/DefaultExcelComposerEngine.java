@@ -30,7 +30,18 @@ public class DefaultExcelComposerEngine implements ExcelComposerEngine {
   private Map<Integer, SheetContext> contextMap = new HashMap<>();
 
   @Override
-  public void addValueExtractor(FieldValueExtractor... fieldValueExtractors) {
+  public void addSheetContext(SheetContext... sheetContexts) {
+    if (sheetContexts == null) {
+      return;
+    }
+
+    for (SheetContext sheetContext : sheetContexts) {
+      contextMap.put(sheetContext.getSheetIndex(), sheetContext);
+    }
+  }
+
+  @Override
+  public void addFieldValueExtractor(FieldValueExtractor... fieldValueExtractors) {
     if (fieldValueExtractors == null) {
       return;
     }
@@ -42,17 +53,6 @@ public class DefaultExcelComposerEngine implements ExcelComposerEngine {
       }
 
       key2fieldValueExtractor.get(sheetIndex).put(extractor.getMatchField(), extractor);
-    }
-  }
-
-  @Override
-  public void addSheetContext(SheetContext... sheetContexts) {
-    if (sheetContexts == null) {
-      return;
-    }
-
-    for (SheetContext sheetContext : sheetContexts) {
-      contextMap.put(sheetContext.getSheetIndex(), sheetContext);
     }
   }
 

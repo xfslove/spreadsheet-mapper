@@ -2,10 +2,11 @@ package java.excel.engine.importer.processor;
 
 import java.excel.engine.importer.setter.FieldValueSetter;
 import java.excel.engine.model.ext.SheetContext;
-
 import java.util.List;
 
 /**
+ * object processor
+ * <p>
  * Created by hanwen on 2016/12/28.
  */
 public interface ObjectProcessorEngine {
@@ -25,17 +26,21 @@ public interface ObjectProcessorEngine {
   /**
    * <pre>
    * one sheet one object template
-   * if you add object template with same sheet index({@link ObjectFactory#getSheetIndex()}),
+   * if you add object factory with same sheet index({@link ObjectFactory#getSheetIndex()}),
    * after add will override before add
    * </pre>
    *
-   * @param objectFactories model factorys
+   * @param objectFactories object factories
    * @see ObjectFactory
    */
   void addObjectFactory(ObjectFactory... objectFactories);
 
   /**
+   * <pre>
    * one sheet one listener
+   * if you add listener with same sheet index({@link ObjectProcessorListener#getSheetIndex()}),
+   * after add will override before add
+   * </pre>
    *
    * @param objectProcessorListeners listeners
    * @see ObjectProcessorListener

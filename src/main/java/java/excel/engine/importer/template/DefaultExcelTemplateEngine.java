@@ -5,15 +5,15 @@ import java.excel.engine.importer.processor.DefaultObjectProcessorEngine;
 import java.excel.engine.importer.processor.ObjectProcessorEngine;
 import java.excel.engine.importer.validator.DefaultExcelValidatorEngine;
 import java.excel.engine.importer.validator.ExcelValidatorEngine;
+import java.excel.engine.model.excel.Sheet;
 import java.excel.engine.model.excel.Workbook;
 import java.excel.engine.model.ext.SheetTemplate;
+import java.excel.engine.model.ext.SheetTemplateBean;
 import java.excel.engine.util.ExcelReadHelper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -27,30 +27,29 @@ public class DefaultExcelTemplateEngine implements ExcelTemplateEngine {
 
   private ObjectProcessorEngine objectProcessorEngine;
 
-  private Map<Integer, SheetTemplate> sheetIndex2sheetTemplate = new HashMap<>();
-
-  public DefaultExcelTemplateEngine(File excel) throws IOException {
-    this(new FileInputStream(excel));
+  public DefaultExcelTemplateEngine(File excel, SheetTemplate... sheetTemplates) throws IOException {
+    this(new FileInputStream(excel), sheetTemplates);
   }
 
-  public DefaultExcelTemplateEngine(InputStream inputStream) throws IOException {
+  /**
+   * <pre>
+   * one sheet one template (one to one),
+   * if you pass templates with same sheet index ({@link SheetTemplate#getSheetIndex()}),
+   * after add will override before add
+   * if you pass templates null means using default template {@link SheetTemplateBean#DEFAULT(int)}
+   * </pre>
+   *
+   * @param inputStream    read file stream
+   * @param sheetTemplates sheet templates
+   * @throws IOException io exception
+   */
+  public DefaultExcelTemplateEngine(InputStream inputStream, SheetTemplate... sheetTemplates) throws IOException {
 
-    workbook = ExcelReadHelper.read(inputStream, sheetIndex2sheetTemplate);
+    workbook = ExcelReadHelper.read(inputStream, sheetTemplates);
 
     objectProcessorEngine = new DefaultObjectProcessorEngine(workbook);
 
     excelValidatorEngine = new DefaultExcelValidatorEngine(workbook);
-  }
-
-  @Override
-  public void addSheetTemplate(SheetTemplate... sheetTemplates) {
-    if (sheetTemplates == null) {
-      return;
-    }
-
-    for (SheetTemplate sheetTemplate : sheetTemplates) {
-      sheetIndex2sheetTemplate.put(sheetTemplate.getSheetIndex(), sheetTemplate);
-    }
   }
 
   @Override
@@ -70,7 +69,13 @@ public class DefaultExcelTemplateEngine implements ExcelTemplateEngine {
       throw new ExcelReadException("workbook is null");
     }
 
-    return workbook.getSheet(sheetIndex).getDistinctValuesOfField(field);
+    Sheet sheet = workbook.getSheet(sheetIndex);
+
+    if (sheet == null) {
+      throw new ExcelReadException("sheet index out of bounds");
+    }
+
+    return sheet.getDistinctValuesOfField(field);
   }
 
 }
