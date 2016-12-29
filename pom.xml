@@ -6,8 +6,8 @@
 	<groupId>com.github.xfslove</groupId>
 	<artifactId>java-excel-tools</artifactId>
 	<version>1.1.1</version>
-  <name>Java Excel Tools</name>
-  <description>powerful and convenient excel tools</description>
+  <name>Java Excel Engine</name>
+  <description>powerful and convenient excel engine</description>
 	<packaging>jar</packaging>
   <url>https://github.com/xfslove/java-excel-tools</url>
 

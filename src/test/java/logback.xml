@@ -7,7 +7,7 @@
     </encoder>
   </appender>
 
-  <logger name="me.excel.tools"/>
+  <logger name="java.excel.engine"/>
 
   <root level="debug">
     <appender-ref ref="consoleAppender" />
