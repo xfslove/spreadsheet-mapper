@@ -9,7 +9,7 @@
   <name>Java Excel Engine</name>
   <description>powerful and convenient excel engine</description>
 	<packaging>jar</packaging>
-  <url>https://github.com/xfslove/java-excel-tools</url>
+  <url>https://github.com/xfslove/excel-engine</url>
 
   <licenses>
     <license>
@@ -26,9 +26,9 @@
   </developers>
 
   <scm>             
-    <connection>scm:git:https://github.com/xfslove/java-excel-tools.git</connection>
-    <developerConnection>scm:git:git@github.com:xfslove/java-excel-tools.git</developerConnection>
-    <url>https://github.com/xfslove/java-excel-tools</url>
+    <connection>scm:git:https://github.com/xfslove/excel-engine.git</connection>
+    <developerConnection>scm:git:git@github.com:xfslove/excel-engine.git</developerConnection>
+    <url>https://github.com/xfslove/excel-engine</url>
   </scm>
 
   <profiles>
