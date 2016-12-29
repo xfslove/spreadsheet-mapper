@@ -39,16 +39,19 @@ public interface SheetContext extends Serializable {
   void addHeader(SheetHeader sheetHeader);
 
   /**
-   * <pre>
-   * set sheet headers.
-   * header meta unique with row index in one sheet (one to one),
-   * if you add meta with same row index ({@link HeaderMeta#getRowIndex()}),
-   * after add will override before add
-   * </pre>
+   * set the object list data, the data start row index use max header row index plus 1
    *
-   * @param sheetHeaders headers
+   * @param data data
    */
-  void setSheetHeaders(List<SheetHeader> sheetHeaders);
+  void setData(List<Object> data);
+
+  /**
+   * set the object list data and start row index
+   *
+   * @param dataStartRowIndex data start row index
+   * @param data              data
+   */
+  void setData(int dataStartRowIndex, List<Object> data);
 
   /**
    * @return sheet index
@@ -63,6 +66,15 @@ public interface SheetContext extends Serializable {
   String getSheetName();
 
   /**
+   * the fields sequence present cell sequence in row (include data of field and header of field)
+   *
+   * @return current context supplied which fields value of data ({@link #getData()})
+   */
+  List<String> getFields();
+
+  /**
+   * if data empty, this get max header row index plus 1
+   *
    * @return data start row index
    * @see SheetTemplate#getDataStartRowIndex()
    */
@@ -74,19 +86,14 @@ public interface SheetContext extends Serializable {
   List<Object> getData();
 
   /**
-   * @return sheet template
-   * @see SheetTemplate
-   */
-  SheetTemplate ofTemplate();
-
-  /**
-   * @return current context supplied which fields value of data ({@link #getData()})
-   */
-  List<String> getFields();
-
-  /**
    * @return sheet header
    * @see SheetHeader
    */
   List<SheetHeader> getSheetHeaders();
+
+  /**
+   * @return sheet template
+   * @see SheetTemplate
+   */
+  SheetTemplate ofTemplate();
 }

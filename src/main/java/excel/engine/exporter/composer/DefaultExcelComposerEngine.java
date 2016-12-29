@@ -47,7 +47,7 @@ public class DefaultExcelComposerEngine implements ExcelComposerEngine {
       int sheetIndex = extractor.getSheetIndex();
 
       if (!key2fieldValueExtractor.containsKey(sheetIndex)) {
-        key2fieldValueExtractor.put(sheetIndex, new HashMap<>());
+        key2fieldValueExtractor.put(sheetIndex, new HashMap<String, FieldValueExtractor>());
       }
 
       key2fieldValueExtractor.get(sheetIndex).put(extractor.getMatchField(), extractor);

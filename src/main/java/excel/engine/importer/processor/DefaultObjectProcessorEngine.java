@@ -45,7 +45,7 @@ public class DefaultObjectProcessorEngine implements ObjectProcessorEngine {
       int sheetIndex = setter.getSheetIndex();
 
       if (!key2fieldValueSetter.containsKey(sheetIndex)) {
-        key2fieldValueSetter.put(sheetIndex, new HashMap<>());
+        key2fieldValueSetter.put(sheetIndex, new HashMap<String, FieldValueSetter>());
       }
 
       key2fieldValueSetter.get(sheetIndex).put(setter.getMatchField(), setter);
@@ -149,9 +149,8 @@ public class DefaultObjectProcessorEngine implements ObjectProcessorEngine {
       fields.add(cell.getValue());
     }
 
-    SheetContext sheetContext = new SheetContextBean(sheet.getIndex(), sheet.getName(), template.getDataStartRowIndex(), data, fields);
+    SheetContext sheetContext = new SheetContextBean(sheet.getIndex(), sheet.getName(), fields.toArray(new String[0]));
 
-    List<SheetHeader> sheetHeaders = new ArrayList<>();
     for (HeaderMeta headerMeta : template.getHeaderMetas()) {
       SheetHeader sheetHeader = new SheetHeaderBean(headerMeta);
 
@@ -160,10 +159,10 @@ public class DefaultObjectProcessorEngine implements ObjectProcessorEngine {
         sheetHeader.addValue(cell.getField(), cell.getValue());
       }
 
-      sheetHeaders.add(sheetHeader);
+      sheetContext.addHeader(sheetHeader);
     }
 
-    sheetContext.setSheetHeaders(sheetHeaders);
+    sheetContext.setData(template.getDataStartRowIndex(), data);
 
     return sheetContext;
   }

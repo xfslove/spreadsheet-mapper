@@ -1,18 +1,17 @@
 package excel.engine.importer.validator;
 
-import excel.engine.exception.ExcelValidateException;
-import excel.engine.importer.validator.sheet.SheetValidator;
-import excel.engine.model.message.DataValidateMessage;
-import org.apache.commons.collections.CollectionUtils;
-
 import excel.engine.exception.ExcelReadException;
+import excel.engine.exception.ExcelValidateException;
 import excel.engine.importer.validator.cell.CellValidator;
 import excel.engine.importer.validator.row.RowValidator;
+import excel.engine.importer.validator.sheet.SheetValidator;
 import excel.engine.importer.validator.workbook.WorkbookValidator;
 import excel.engine.model.excel.ExcelMeta;
 import excel.engine.model.excel.Row;
 import excel.engine.model.excel.Sheet;
 import excel.engine.model.excel.Workbook;
+import excel.engine.model.message.DataValidateMessage;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.*;
 
@@ -67,12 +66,12 @@ public class DefaultExcelValidatorEngine implements ExcelValidatorEngine {
       int sheetIndex = validator.getSheetIndex();
 
       if (!key2rowValidators.containsKey(sheetIndex)) {
-        key2rowValidators.put(sheetIndex, new HashMap<>());
+        key2rowValidators.put(sheetIndex, new HashMap<String, List<RowValidator>>());
       }
 
       Map<String, List<RowValidator>> validatorsOfSheet = key2rowValidators.get(sheetIndex);
       if (!validatorsOfSheet.containsKey(key)) {
-        validatorsOfSheet.put(key, new ArrayList<>());
+        validatorsOfSheet.put(key, new ArrayList<RowValidator>());
       }
       validatorsOfSheet.get(key).add(validator);
     }
@@ -88,12 +87,12 @@ public class DefaultExcelValidatorEngine implements ExcelValidatorEngine {
       int sheetIndex = validator.getSheetIndex();
 
       if (!key2cellValidators.containsKey(sheetIndex)) {
-        key2cellValidators.put(sheetIndex, new HashMap<>());
+        key2cellValidators.put(sheetIndex, new HashMap<String, List<CellValidator>>());
       }
 
       Map<String, List<CellValidator>> validatorsOfSheet = key2cellValidators.get(sheetIndex);
       if (!validatorsOfSheet.containsKey(key)) {
-        validatorsOfSheet.put(key, new ArrayList<>());
+        validatorsOfSheet.put(key, new ArrayList<CellValidator>());
       }
       validatorsOfSheet.get(key).add(validator);
     }
@@ -257,7 +256,7 @@ public class DefaultExcelValidatorEngine implements ExcelValidatorEngine {
     }
 
     if (ifSkip(result)) {
-      result.put(key, Collections.singleton(null));
+      result.put(key, Collections.singleton((Boolean) null));
       return result;
     }
 
@@ -300,7 +299,7 @@ public class DefaultExcelValidatorEngine implements ExcelValidatorEngine {
 
     for (Map.Entry<String, List<VALIDATOR>> entry : key2dataValidator.entrySet()) {
       String key = entry.getKey();
-      dependsOnHierarchy.put(key, new HashSet<>());
+      dependsOnHierarchy.put(key, new HashSet<String>());
 
       for (VALIDATOR dataValidator : entry.getValue()) {
 
