@@ -1,6 +1,6 @@
 package excel.engine.util;
 
-import excel.engine.exception.ExcelWriteException;
+import excel.engine.w2f.ExcelWriteException;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.Collection;
 
 /**
- * write comment to excel util
+ * write comment to excel w2f
  * <p>
  * Created by hanwen on 15-12-20.
  */

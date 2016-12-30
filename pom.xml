@@ -4,23 +4,23 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.github.xfslove</groupId>
-	<artifactId>excel-engine</artifactId>
+	<artifactId>dynamic-excel-engine</artifactId>
 	<version>1.3.0</version>
-  <name>Java Excel Engine</name>
+  <value>Java Excel Engine</value>
   <description>powerful and convenient excel engine</description>
 	<packaging>jar</packaging>
   <url>https://github.com/xfslove/excel-engine</url>
 
   <licenses>
     <license>
-      <name>The Apache License, Version 2.0</name>
+      <value>The Apache License, Version 2.0</value>
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
   </licenses>
   
   <developers>
     <developer>
-      <name>hanwen.huang</name>
+      <value>hanwen.huang</value>
       <email>xfslove@gmail.com</email>
     </developer>
   </developers>

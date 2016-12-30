@@ -63,7 +63,7 @@
 
 <table>
 <tr><td>姓名</td><td>年龄</td><td>生日</td></tr>
-<td>person.name</td><td>person.age</td><td>person.birthday</td>
+<td>person.value</td><td>person.age</td><td>person.birthday</td>
 <tr><td>必填，姓名</td><td>必填，数字</td><td>必填，yyyy-MM-dd</td></tr>
 <tr><td>Scarlett</td><td>18</td><td>1984-11-22</td></tr>
 <tr><td>...</td><td>...</td><td>...</td></tr>
@@ -78,18 +78,18 @@ UserFileTemplate excelSheetTemplate = new ExcelFileTemplate(excel);
 - 生成导入文件
 
 ```
-excelComposerEngine = new ExcelFileGenerator();
-excelComposerEngine.setTitles("姓名", "年龄", "生日");
-excelComposerEngine.setFields("person.name", "person.age", "person.birthday");
+sheetComposer = new ExcelFileGenerator();
+sheetComposer.setTitles("姓名", "年龄", "生日");
+sheetComposer.setFields("person.value", "person.age", "person.birthday");
 // 添加字段提示
-excelComposerEngine.addCellPrompters(
+sheetComposer.addCellPrompters(
         new PromptBuilder()
             .prompt("person.age", "整数")
             .prompt("person.birthday", "yyyy-MM-dd")
-            .add(new RequiredPrompter("person.name"))
+            .add(new RequiredPrompter("person.value"))
             .build()
     );
-excelComposerEngine.generate(excel);
+sheetComposer.generate(excel);
 ```
 
 - 校验
@@ -98,7 +98,7 @@ excelComposerEngine.generate(excel);
 excelSheetTemplate.getUserFileValidator();
 // 添加校验器
 excelValidatorEngine.addCellValidator(
-		new RequiredValidator("person.name"),
+		new RequiredValidator("person.value"),
 	  	new LocalDateValidator("person.birthday", "yyyy-MM-dd"),
      	new IntValidator("person.age")
     );
@@ -131,5 +131,5 @@ objectProcessorEngine.process(new PersonListProcessor());
 	和生成导入文件类似，只需要把导出的数据给<code>ExcelFileGenerator</code>即可
 
 ```
-excelComposerEngine.setData(data);
+sheetComposer.setData(data);
 ```

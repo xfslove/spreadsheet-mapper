@@ -1,6 +1,6 @@
 package excel.engine.util;
 
-import excel.engine.exception.ExcelWriteException;
+import excel.engine.w2f.ExcelWriteException;
 import excel.engine.model.shapes.TextBox;
 import excel.engine.model.shapes.TextBoxStyle;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -16,7 +16,7 @@ import java.io.*;
 import java.util.Collection;
 
 /**
- * write text box to excel util
+ * write text box to excel w2f
  * <p>
  * Created by hanwen on 2016/12/27.
  */

@@ -1,0 +1,48 @@
+package excel.engine.model.core;
+
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * excel workbook
+ * <p>
+ * Created by hanwen on 15-12-16.
+ */
+public interface Workbook extends Serializable {
+
+  /**
+   * @return sheets of this workbook
+   */
+  List<Sheet> getSheets();
+
+  /**
+   * @return sheets size of this workbook
+   */
+  int sizeOfSheets();
+
+  /**
+   * add sheet
+   *
+   * @param sheet sheet
+   * @return true if success
+   */
+  boolean addSheet(Sheet sheet);
+
+  /**
+   * get sheet by index
+   *
+   * @param index 1-based
+   * @return sheet
+   */
+  Sheet getSheet(int index);
+
+  /**
+   * @return last sheet
+   */
+  Sheet getLastSheet();
+
+  /**
+   * @return first Sheet
+   */
+  Sheet getFirstSheet();
+}

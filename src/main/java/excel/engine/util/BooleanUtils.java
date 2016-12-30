@@ -4,7 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * excel engine use boolean util
+ * excel engine use boolean w2f
  * <p>
  * Created by hanwen on 15-12-18.
  */
