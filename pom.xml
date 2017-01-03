@@ -4,12 +4,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.github.xfslove</groupId>
-  <artifactId>extensible-sheet</artifactId>
+  <artifactId>spread-sheet</artifactId>
   <version>1.3.0</version>
-  <name>Extensible Sheet</name>
-  <description>powerful and convenient extensible sheet</description>
+  <name>Java Spread Sheet</name>
+  <description>powerful and convenient sheet process engine</description>
   <packaging>jar</packaging>
-  <url>https://github.com/xfslove/extensible-sheet</url>
+  <url>https://github.com/xfslove/spread-sheet</url>
 
   <licenses>
     <license>
@@ -26,9 +26,9 @@
   </developers>
 
   <scm>
-    <connection>scm:git:https://github.com/xfslove/extensible-sheet.git</connection>
-    <developerConnection>scm:git:git@github.com:xfslove/extensible-sheet.git</developerConnection>
-    <url>https://github.com/xfslove/extensible-sheet</url>
+    <connection>scm:git:https://github.com/xfslove/spread-sheet.git</connection>
+    <developerConnection>scm:git:git@github.com:xfslove/spread-sheet.git</developerConnection>
+    <url>https://github.com/xfslove/spread-sheet</url>
   </scm>
 
   <profiles>
