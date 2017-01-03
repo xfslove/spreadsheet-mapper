@@ -3,7 +3,7 @@ package excel.engine.w2o.setter;
 import excel.engine.model.core.Cell;
 import excel.engine.model.meta.FieldMeta;
 import excel.engine.util.FieldUtils;
-import excel.engine.w2o.processor.ExcelProcessException;
+import excel.engine.w2o.processor.WorkbookProcessException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.*;
@@ -41,7 +41,7 @@ public class BeanUtilValueSetter implements ValueSetter {
       BeanUtils.setProperty(data, FieldUtils.detectRealField(fieldMeta.getName()), matches(data, fieldMeta.getName()) ? cell.getValue() : null);
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
-      throw new ExcelProcessException(e);
+      throw new WorkbookProcessException(e);
     }
   }
 

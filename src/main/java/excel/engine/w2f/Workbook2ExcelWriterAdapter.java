@@ -1,11 +1,14 @@
 package excel.engine.w2f;
 
-import excel.engine.ExcelConstants;
+import excel.engine.Constants;
 import excel.engine.model.core.Cell;
 import excel.engine.model.core.Row;
 import excel.engine.model.core.Sheet;
 import excel.engine.model.core.Workbook;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,7 +20,9 @@ import java.io.OutputStream;
  */
 public abstract class Workbook2ExcelWriterAdapter implements WorkbookWriter {
 
-  public void write(Workbook workbook, OutputStream outputStream) throws IOException {
+  private static final Logger LOGGER = LoggerFactory.getLogger(Workbook2ExcelWriterAdapter.class);
+
+  public void write(Workbook workbook, OutputStream outputStream) {
     if (workbook == null) {
       return;
     }
@@ -32,25 +37,33 @@ public abstract class Workbook2ExcelWriterAdapter implements WorkbookWriter {
 
       for (Row excelRow : excelSheet.getRows()) {
 
-        org.apache.poi.ss.usermodel.Row row = createRow(sheet);
-        createRowCells(row, excelRow);
+        org.apache.poi.ss.usermodel.Row row = createRow(sheet, excelRow);
+
+        for (Cell excelCell : excelRow.getCells()) {
+          createCell(row, excelCell);
+        }
       }
     }
 
-    poiWorkbook.write(outputStream);
+    try {
+      poiWorkbook.write(outputStream);
+    } catch (IOException e) {
+      LOGGER.error(ExceptionUtils.getStackTrace(e));
+      throw new WorkbookWriteException(e);
+    }
 
     afterWrite(poiWorkbook);
   }
 
-  protected abstract org.apache.poi.ss.usermodel.Workbook createWorkbook(Workbook workbook);
-
   protected void afterWrite(org.apache.poi.ss.usermodel.Workbook workbook) {
-    // no thing
+    // nothing
   }
 
   protected void beforeWrite() {
-    // no thing
+    // nothing
   }
+
+  protected abstract org.apache.poi.ss.usermodel.Workbook createWorkbook(Workbook workbook);
 
   private org.apache.poi.ss.usermodel.Sheet createSheet(org.apache.poi.ss.usermodel.Workbook workbook, Sheet sheet) {
     String sheetName = sheet.getName();
@@ -64,25 +77,14 @@ public abstract class Workbook2ExcelWriterAdapter implements WorkbookWriter {
     return workbook.getSheetAt(workbook.getNumberOfSheets() - 1);
   }
 
-  private static org.apache.poi.ss.usermodel.Row createRow(org.apache.poi.ss.usermodel.Sheet sheet) {
-    org.apache.poi.ss.usermodel.Row row;
-    if (sheet.getPhysicalNumberOfRows() == 0) {
-      row = sheet.createRow(0);
-    } else {
-      row = sheet.createRow(sheet.getLastRowNum() + 1);
-    }
-    return row;
+  private org.apache.poi.ss.usermodel.Row createRow(org.apache.poi.ss.usermodel.Sheet sheet, Row excelRow) {
+    return sheet.createRow(excelRow.getIndex() - 1);
   }
 
-  private void createRowCells(org.apache.poi.ss.usermodel.Row row, Row excelRow) {
-    for (int i = 0; i < excelRow.sizeOfCells(); i++) {
-
-      Cell excelCell = excelRow.getCell(i + 1);
-      String value = excelCell.getValue();
-
-      org.apache.poi.ss.usermodel.Cell cell = row.createCell(i, org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING);
-      cell.setCellValue(value == null ? ExcelConstants.EMPTY_VALUE : value);
-    }
+  private void createCell(org.apache.poi.ss.usermodel.Row row, Cell excelCell) {
+    String value = excelCell.getValue();
+    org.apache.poi.ss.usermodel.Cell cell = row.createCell(excelCell.getColumnIndex() - 1, org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING);
+    cell.setCellValue(value == null ? Constants.EMPTY_VALUE : value);
   }
 
 }

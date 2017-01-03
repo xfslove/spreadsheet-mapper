@@ -25,6 +25,14 @@ public class UniqueInImportFileValidator extends CellValidatorAdapter {
     super(matchField, errorMessage);
   }
 
+  public UniqueInImportFileValidator(String matchField, String errorMessage, String[] dependsOn) {
+    super(matchField, errorMessage, dependsOn);
+  }
+
+  public UniqueInImportFileValidator(String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {
+    super(group, matchField, errorMessage, messageOnField, dependsOn);
+  }
+
   @Override
   protected boolean customValidate(Cell cell, FieldMeta fieldMeta) {
 

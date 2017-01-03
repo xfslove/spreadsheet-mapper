@@ -3,7 +3,7 @@ package excel.engine.w2o.setter;
 import excel.engine.model.core.Cell;
 import excel.engine.model.meta.FieldMeta;
 import excel.engine.util.FieldUtils;
-import excel.engine.w2o.processor.ExcelProcessException;
+import excel.engine.w2o.processor.WorkbookProcessException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.joda.time.format.DateTimeFormat;
@@ -22,7 +22,7 @@ public class LocalDateValueSetter extends FieldValueSetterAdapter {
 
   private String pattern;
 
-  public LocalDateValueSetter(String matchField, String pattern) {
+  public LocalDateValueSetter(String pattern, String matchField) {
     super(matchField);
     this.pattern = pattern;
   }
@@ -35,7 +35,7 @@ public class LocalDateValueSetter extends FieldValueSetterAdapter {
       PropertyUtils.setProperty(data, FieldUtils.detectRealField(fieldMeta.getName()), value == null ? null : dateTimeFormatter.parseLocalDate(value));
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
-      throw new ExcelProcessException(e);
+      throw new WorkbookProcessException(e);
     }
   }
 }

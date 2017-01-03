@@ -12,7 +12,7 @@ import java.util.List;
  * <pre>
  * field scope validator,
  *
- * it useful when you only want afterSheet some special fields of a object, this validator can prevent unexpected things, for security.
+ * it useful when you only want after some special fields of a object, this validator can prevent unexpected things, for security.
  *
  * eg : class A has fields [A, other fields...].
  * if you only want modify A, you can supplied the {@link FieldScopeValidator#fieldScopes} as [A], when the excel files fields has others,
@@ -26,9 +26,11 @@ public class FieldScopeValidator implements SheetValidator {
 
   private String errorMessage;
 
-  public FieldScopeValidator(String errorMessage, String... fieldScopes) {
-    Collections.addAll(this.fieldScopes, fieldScopes);
+  public FieldScopeValidator(String errorMessage, String[] fieldScopes) {
     this.errorMessage = errorMessage;
+    if (fieldScopes != null) {
+      Collections.addAll(this.fieldScopes, fieldScopes);
+    }
   }
 
   @Override

@@ -6,7 +6,7 @@ import excel.engine.model.meta.FieldMeta;
 import excel.engine.w2o.validator.RelationValidator;
 
 /**
- * excel cell value validator, after row validators.
+ * cell value validator, general(no dependency) after row validators.
  * <p>
  * Created by hanwen on 15-12-15.
  */
@@ -25,4 +25,9 @@ public interface CellValidator extends RelationValidator {
    * @return which field this validator to valid
    */
   String getMatchField();
+
+  /**
+   * @return message on which field
+   */
+  String getMessageOnField();
 }

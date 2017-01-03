@@ -59,7 +59,7 @@ public interface Sheet extends Serializable {
   Row getLastRow();
 
   /**
-   * @return workbook
+   * @return the workbook of this
    */
   Workbook getWorkbook();
 }

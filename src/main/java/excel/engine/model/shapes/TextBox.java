@@ -15,13 +15,13 @@ public interface TextBox extends Serializable {
   String getMessage();
 
   /**
-   * @return sheet index of text box at
-   */
-  int getSheetIndex();
-
-  /**
    * @return style
    * @see TextBoxStyle
    */
   TextBoxStyle getStyle();
+
+  /**
+   * @return sheet index of text box at
+   */
+  int getSheetIndex();
 }

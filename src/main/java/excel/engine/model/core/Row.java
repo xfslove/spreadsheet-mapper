@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * excel row
+ * row
  * <p>
  * Created by hanwen on 15-12-16.
  */
@@ -14,11 +14,6 @@ public interface Row extends Serializable {
    * @return row num 1-based
    */
   int getIndex();
-
-  /**
-   * @return sheet of row at
-   */
-  Sheet getSheet();
 
   /**
    * @return cells of this row
@@ -55,5 +50,10 @@ public interface Row extends Serializable {
    * @return last cell of this row
    */
   Cell getLastCell();
+
+  /**
+   * @return the sheet of this
+   */
+  Sheet getSheet();
 
 }

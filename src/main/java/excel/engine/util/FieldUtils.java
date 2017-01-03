@@ -1,6 +1,6 @@
 package excel.engine.util;
 
-import excel.engine.ExcelConstants;
+import excel.engine.Constants;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
@@ -26,10 +26,10 @@ public class FieldUtils {
    * @return field without business key
    */
   public static String subtractBusinessKey(String field) {
-    if (!StringUtils.contains(field, ExcelConstants.BUSINESS_KEY_PREFIX)) {
+    if (!StringUtils.contains(field, Constants.BUSINESS_KEY_PREFIX)) {
       throw new IllegalStateException("field is not business key");
     }
-    return field.substring(ExcelConstants.BUSINESS_KEY_PREFIX.length());
+    return field.substring(Constants.BUSINESS_KEY_PREFIX.length());
   }
 
   /**
@@ -47,7 +47,7 @@ public class FieldUtils {
 
     String realField = field;
 
-    if (field.contains(ExcelConstants.BUSINESS_KEY_PREFIX)) {
+    if (field.contains(Constants.BUSINESS_KEY_PREFIX)) {
       realField = FieldUtils.subtractBusinessKey(field);
     }
 
@@ -56,7 +56,7 @@ public class FieldUtils {
       throw new IllegalArgumentException("field not has prefix");
     } else {
       splitFields.remove(0);
-      return StringUtils.join(splitFields, ExcelConstants.DOT_SEPARATOR);
+      return StringUtils.join(splitFields, Constants.DOT_SEPARATOR);
     }
   }
 

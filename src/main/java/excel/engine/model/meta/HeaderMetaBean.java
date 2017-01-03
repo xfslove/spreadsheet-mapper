@@ -1,7 +1,5 @@
 package excel.engine.model.meta;
 
-import org.apache.commons.lang3.builder.CompareToBuilder;
-
 import java.util.Objects;
 
 /**
@@ -51,10 +49,5 @@ public class HeaderMetaBean implements HeaderMeta {
   @Override
   public int hashCode() {
     return Objects.hash(rowIndex, value);
-  }
-
-  @Override
-  public int compareTo(HeaderMeta o) {
-    return new CompareToBuilder().append(rowIndex, o.getRowIndex()).toComparison();
   }
 }

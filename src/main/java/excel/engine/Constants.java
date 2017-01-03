@@ -3,16 +3,16 @@ package excel.engine;
 /**
  * Created by hanwen on 16-1-18.
  */
-public class ExcelConstants {
+public class Constants {
 
-  private ExcelConstants() {
+  private Constants() {
     // default constructor
   }
 
   /**
    * <pre>
    * the business key present a domain object, it can identified a domain object.
-   * it useful where update a domain object using excel template.
+   * it useful where update a domain object.
    * </pre>
    */
   public static final String BUSINESS_KEY_PREFIX = "businessKey.";

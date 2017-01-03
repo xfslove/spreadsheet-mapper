@@ -1,7 +1,8 @@
 package excel.engine.o2w.extractor;
 
 import excel.engine.model.meta.FieldMeta;
-import excel.engine.w2o.processor.ExcelProcessException;
+import excel.engine.o2w.composer.WorkbookComposeException;
+import excel.engine.util.FieldUtils;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -9,11 +10,9 @@ import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import excel.engine.util.FieldUtils;
-
 /**
  * local date readable value extractor
- *
+ * <p>
  * Created by hanwen on 5/3/16.
  */
 public class LocalDateExtractor extends FieldValueExtractorAdapter {
@@ -40,7 +39,7 @@ public class LocalDateExtractor extends FieldValueExtractorAdapter {
       return null;
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
-      throw new ExcelProcessException(e);
+      throw new WorkbookComposeException(e);
     }
   }
 }

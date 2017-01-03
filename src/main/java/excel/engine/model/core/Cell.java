@@ -3,7 +3,7 @@ package excel.engine.model.core;
 import java.io.Serializable;
 
 /**
- * excel cell
+ * cell
  * <p>
  * Created by hanwen on 15-12-16.
  */
@@ -31,12 +31,7 @@ public interface Cell extends Serializable {
   int getColumnIndex();
 
   /**
-   * @return sheet of cell at
-   */
-  Sheet getSheet();
-
-  /**
-   * @return row of cell at
+   * @return the row of this
    */
   Row getRow();
 }

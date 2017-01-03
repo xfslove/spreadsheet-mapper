@@ -8,9 +8,8 @@ import java.util.List;
 /**
  * <pre>
  * sheet meta include:
- * list of field metas (see {@link FieldMeta})
+ * list of field meta (see {@link FieldMeta})
  * data start at which row ({@link #getDataStartRowIndex()})
- * sheet index ({@link Sheet#getIndex()})
  * sheet name ({@link Sheet#getName()})
  * </pre>
  * Created by hanwen on 2016/12/27.
@@ -18,9 +17,14 @@ import java.util.List;
 public interface SheetMeta extends Serializable {
 
   /**
+   * @return sheet index
+   */
+  int getSheetIndex();
+
+  /**
    * @return sheet name
    */
-  String getName();
+  String getSheetName();
 
   /**
    * <pre>
@@ -33,7 +37,7 @@ public interface SheetMeta extends Serializable {
   int getDataStartRowIndex();
 
   /**
-   * @return field metas sort by {@link FieldMeta#getColumnIndex()}
+   * @return list of field meta
    */
   List<FieldMeta> getFieldMetas();
 

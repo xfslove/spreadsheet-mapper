@@ -11,18 +11,6 @@ public class TextBoxBean implements TextBox {
 
   private TextBoxStyle style;
 
-  public TextBoxBean(String message) {
-    this.sheetIndex = 1;
-    this.message = message;
-    this.style = TextBoxStyle.DEFAULT;
-  }
-
-  public TextBoxBean(String message, TextBoxStyle style) {
-    this.sheetIndex = 1;
-    this.message = message;
-    this.style = style;
-  }
-
   public TextBoxBean(String message, int sheetIndex) {
     this.sheetIndex = sheetIndex;
     this.message = message;

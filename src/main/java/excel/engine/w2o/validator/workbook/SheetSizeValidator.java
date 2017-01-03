@@ -14,12 +14,7 @@ public class SheetSizeValidator implements WorkbookValidator {
 
   private String errorMessage;
 
-  public SheetSizeValidator(int size) {
-    this.size = size;
-    this.errorMessage = "工作表数量不是" + size + "个";
-  }
-
-  public SheetSizeValidator(String errorMessage, int size) {
+  public SheetSizeValidator(int size, String errorMessage) {
     this.size = size;
     this.errorMessage = errorMessage;
   }

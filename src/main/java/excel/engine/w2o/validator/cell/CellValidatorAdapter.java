@@ -4,55 +4,64 @@ import excel.engine.model.core.Cell;
 import excel.engine.model.meta.FieldMeta;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * <pre>
  * cell value validator adapter, easy implements customer value validator extends this.
- * extends this validator will skip valid when cell value is blank.
+ * extends this validator will skip custom valid when cell value is blank (default blank value means no need valid).
  * </pre>
  * Created by hanwen on 15-12-16.
  */
 public abstract class CellValidatorAdapter implements CellValidator {
 
-  private String key;
+  private String group;
 
   private String matchField;
 
   private String errorMessage;
 
+  private String messageOnField;
+
   private Set<String> dependsOn = new HashSet<>();
 
   public CellValidatorAdapter(String matchField, String errorMessage) {
-    this.key = matchField;
+    this.group = matchField;
     this.matchField = matchField;
     this.errorMessage = errorMessage;
+    this.messageOnField = matchField;
   }
 
-  public CellValidatorAdapter(String key, String matchField, String errorMessage) {
-    this.key = key;
+  public CellValidatorAdapter(String matchField, String errorMessage, String[] dependsOn) {
+    this.group = matchField;
     this.matchField = matchField;
     this.errorMessage = errorMessage;
+    this.messageOnField = matchField;
+    if (dependsOn != null) {
+      Collections.addAll(this.dependsOn, dependsOn);
+    }
   }
 
-  public CellValidatorAdapter(String matchField, String errorMessage, Set<String> dependsOn) {
-    this.key = matchField;
+  public CellValidatorAdapter(String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {
+    this.group = group;
     this.matchField = matchField;
     this.errorMessage = errorMessage;
-    this.dependsOn = dependsOn;
-  }
-
-  public CellValidatorAdapter(String key, String matchField, String errorMessage, Set<String> dependsOn) {
-    this.key = key;
-    this.matchField = matchField;
-    this.errorMessage = errorMessage;
-    this.dependsOn = dependsOn;
+    this.messageOnField = messageOnField;
+    if (dependsOn != null) {
+      Collections.addAll(this.dependsOn, dependsOn);
+    }
   }
 
   @Override
   public String getGroup() {
-    return key;
+    return group;
+  }
+
+  @Override
+  public Set<String> getDependsOn() {
+    return dependsOn;
   }
 
   @Override
@@ -66,8 +75,8 @@ public abstract class CellValidatorAdapter implements CellValidator {
   }
 
   @Override
-  public Set<String> getDependsOnGroups() {
-    return dependsOn;
+  public String getMessageOnField() {
+    return messageOnField;
   }
 
   @Override

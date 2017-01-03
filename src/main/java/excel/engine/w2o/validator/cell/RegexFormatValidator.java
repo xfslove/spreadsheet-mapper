@@ -14,10 +14,20 @@ public class RegexFormatValidator extends CellValidatorAdapter {
   /**
    * regex statement
    */
-  protected String regex;
+  private String regex;
 
-  public RegexFormatValidator(String matchField, String regex, String errorMessage) {
+  public RegexFormatValidator(String regex, String matchField, String errorMessage) {
     super(matchField, errorMessage);
+    this.regex = regex;
+  }
+
+  public RegexFormatValidator(String regex, String matchField, String errorMessage, String[] dependsOn) {
+    super(matchField, errorMessage, dependsOn);
+    this.regex = regex;
+  }
+
+  public RegexFormatValidator(String regex, String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {
+    super(group, matchField, errorMessage, messageOnField, dependsOn);
     this.regex = regex;
   }
 

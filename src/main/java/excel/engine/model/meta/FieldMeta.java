@@ -5,14 +5,14 @@ import java.util.List;
 
 /**
  * <pre>
- * the field meta include:
- * field name
- * field at column index
- * list of header meta of this field (see {@link HeaderMeta})
+ * field meta include:
+ * 1. field name (this is importance, is determined all cell value of the same column index corresponding which field of object)
+ * 2. field at column index
+ * 3. list of header meta of this field (see {@link HeaderMeta})
  * </pre>
  * Created by hanwen on 2016/12/30.
  */
-public interface FieldMeta extends Serializable, Comparable<FieldMeta> {
+public interface FieldMeta extends Serializable {
 
   /**
    * @return field name
@@ -27,7 +27,7 @@ public interface FieldMeta extends Serializable, Comparable<FieldMeta> {
   int getColumnIndex();
 
   /**
-   * @return header metas sort by {@link HeaderMeta#getRowIndex()}
+   * @return list of header meta
    */
   List<HeaderMeta> getHeaderMetas();
 

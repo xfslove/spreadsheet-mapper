@@ -25,7 +25,7 @@ public interface RelationValidator extends Validator {
    * 2. all depends on group valid passed will do this validator.
    * </pre>
    *
-   * @return depends on keys
+   * @return depends on groups
    */
-  Set<String> getDependsOnGroups();
+  Set<String> getDependsOn();
 }

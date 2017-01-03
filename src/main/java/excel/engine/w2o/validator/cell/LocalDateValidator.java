@@ -14,8 +14,18 @@ public class LocalDateValidator extends CellValidatorAdapter {
 
   private String format;
 
-  public LocalDateValidator(String matchField, String format, String errorMessage) {
+  public LocalDateValidator(String format, String matchField, String errorMessage) {
     super(matchField, errorMessage);
+    this.format = format;
+  }
+
+  public LocalDateValidator(String format, String matchField, String errorMessage, String[] dependsOn) {
+    super(matchField, errorMessage, dependsOn);
+    this.format = format;
+  }
+
+  public LocalDateValidator(String format, String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {
+    super(group, matchField, errorMessage, messageOnField, dependsOn);
     this.format = format;
   }
 

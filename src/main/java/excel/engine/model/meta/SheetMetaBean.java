@@ -3,7 +3,6 @@ package excel.engine.model.meta;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,24 +10,32 @@ import java.util.List;
  */
 public class SheetMetaBean implements SheetMeta {
 
-  private String name;
+  private int sheetIndex;
+
+  private String sheetName;
 
   private int dataStartRowIndex;
 
   private List<FieldMeta> fieldMetas = new ArrayList<>();
 
-  public SheetMetaBean(int dataStartRowIndex) {
+  public SheetMetaBean(int sheetIndex, int dataStartRowIndex) {
+    this.sheetIndex = sheetIndex;
     this.dataStartRowIndex = dataStartRowIndex;
   }
 
-  public SheetMetaBean(String name, int dataStartRowIndex) {
-    this.name = name;
+  public SheetMetaBean(int sheetIndex, String sheetName, int dataStartRowIndex) {
+    this.sheetIndex = sheetIndex;
+    this.sheetName = sheetName;
     this.dataStartRowIndex = dataStartRowIndex;
   }
 
   @Override
-  public String getName() {
-    return name;
+  public int getSheetIndex() {
+    return sheetIndex;
+  }
+
+  public String getSheetName() {
+    return sheetName;
   }
 
   @Override
@@ -38,7 +45,6 @@ public class SheetMetaBean implements SheetMeta {
 
   @Override
   public List<FieldMeta> getFieldMetas() {
-    Collections.sort(fieldMetas);
     return fieldMetas;
   }
 

@@ -9,11 +9,14 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Created by hanwen on 2017/1/3.
+ */
 public class Excel2WorkbookReader implements WorkbookReader {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Excel2WorkbookReader.class);
 
-  public Workbook read(InputStream inputStream) throws IOException {
+  public Workbook read(InputStream inputStream) {
 
     Workbook excelWorkbook = new WorkbookBean();
 
@@ -46,44 +49,48 @@ public class Excel2WorkbookReader implements WorkbookReader {
           Row excelRow = createRow(row);
           excelSheet.addRow(excelRow);
 
-          createRowCells(row, excelRow);
+          int maxColNum = row.getLastCellNum() > 0 ? row.getLastCellNum() : 0;
+          for (int k = 0; k < maxColNum; k++) {
+
+            createCell(row, excelRow, k);
+          }
         }
       }
 
       return excelWorkbook;
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
-      throw new ExcelReadException(e);
+      throw new WorkbookReadException(e);
     } finally {
-      inputStream.close();
+
+      try {
+        inputStream.close();
+      } catch (IOException e) {
+        LOGGER.error(ExceptionUtils.getStackTrace(e));
+      }
     }
   }
 
-  private static Sheet createSheet(org.apache.poi.ss.usermodel.Sheet sheet) {
+  private Sheet createSheet(org.apache.poi.ss.usermodel.Sheet sheet) {
     return new SheetBean(sheet);
   }
 
-  private static Row createRow(org.apache.poi.ss.usermodel.Row row) {
+  private Row createRow(org.apache.poi.ss.usermodel.Row row) {
     return new RowBean(row);
   }
 
-  private static void createRowCells(org.apache.poi.ss.usermodel.Row row, Row excelRow) {
-    int maxColNum = row.getLastCellNum() > 0 ? row.getLastCellNum() : 0;
+  private void createCell(org.apache.poi.ss.usermodel.Row row, Row excelRow, int columnIndex) {
+    org.apache.poi.ss.usermodel.Cell cell = row.getCell(columnIndex);
 
-    for (int k = 0; k < maxColNum; k++) {
+    CellBean excelCell;
+    if (cell == null) {
 
-      org.apache.poi.ss.usermodel.Cell cell = row.getCell(k);
+      excelCell = CellBean.EMPTY_CELL(columnIndex + 1, row.getRowNum() + 1);
+    } else {
 
-      CellBean excelCell;
-      if (cell == null) {
-
-        excelCell = CellBean.EMPTY_CELL(k + 1, row.getRowNum() + 1);
-      } else {
-
-        excelCell = new CellBean(cell);
-      }
-
-      excelRow.addCell(excelCell);
+      excelCell = new CellBean(cell);
     }
+
+    excelRow.addCell(excelCell);
   }
 }

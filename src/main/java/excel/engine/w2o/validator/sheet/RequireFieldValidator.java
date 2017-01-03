@@ -17,7 +17,7 @@ import java.util.List;
  *
  * all validators matches by field,
  * if field lost means all the ({@link CellValidator} and {@link FieldValueSetter}) of this field will skip.
- * this validator useful to detect if excel files contains all the fields you want afterSheet.
+ * this validator useful to detect if excel files contains all the fields you want after.
  *
  * eg: class A has fields [A, B...].
  * if you want modify A, B, supplied the {@link RequireFieldValidator#requireFields} as [A, B]. when the excel files lost A or B,
@@ -31,9 +31,11 @@ public class RequireFieldValidator implements SheetValidator {
 
   private String errorMessage;
 
-  public RequireFieldValidator(String errorMessage, String... requireFields) {
-    Collections.addAll(this.requireFields, requireFields);
+  public RequireFieldValidator(String errorMessage, String[] requireFields) {
     this.errorMessage = errorMessage;
+    if (requireFields != null) {
+      Collections.addAll(this.requireFields, requireFields);
+    }
   }
 
   @Override

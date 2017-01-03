@@ -11,12 +11,16 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class RequireValidator extends CellValidatorAdapter {
 
-  public RequireValidator(String matchField) {
-    super(matchField, "应该为必填");
-  }
-
   public RequireValidator(String matchField, String errorMessage) {
     super(matchField, errorMessage);
+  }
+
+  public RequireValidator(String matchField, String errorMessage, String[] dependsOn) {
+    super(matchField, errorMessage, dependsOn);
+  }
+
+  public RequireValidator(String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {
+    super(group, matchField, errorMessage, messageOnField, dependsOn);
   }
 
   @Override

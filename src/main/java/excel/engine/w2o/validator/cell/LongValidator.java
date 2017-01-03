@@ -14,6 +14,14 @@ public class LongValidator extends CellValidatorAdapter {
     super(matchField, errorMessage);
   }
 
+  public LongValidator(String matchField, String errorMessage, String[] dependsOn) {
+    super(matchField, errorMessage, dependsOn);
+  }
+
+  public LongValidator(String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {
+    super(group, matchField, errorMessage, messageOnField, dependsOn);
+  }
+
   @Override
   protected boolean customValidate(Cell cell, FieldMeta fieldMeta) {
     try {

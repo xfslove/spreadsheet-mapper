@@ -15,8 +15,8 @@ public interface SheetComposer {
 
   /**
    * <pre>
-   * field value extractor unique with object field in one sheet (one to one),
-   * if you add extractor with same match field({@link FieldValueExtractor#getMatchField()}),
+   * {@link FieldValueExtractor} unique with {@link FieldValueExtractor#getMatchField()} in one sheet (one to one),
+   * if you add {@link FieldValueExtractor} with same {@link FieldValueExtractor#getMatchField()},
    * after add will override before add
    * </pre>
    *

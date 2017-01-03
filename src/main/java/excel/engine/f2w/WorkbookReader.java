@@ -2,7 +2,6 @@ package excel.engine.f2w;
 
 import excel.engine.model.core.Workbook;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -15,7 +14,6 @@ public interface WorkbookReader {
    *
    * @param inputStream auto close
    * @return workbook
-   * @throws IOException io exception
    */
-  Workbook read(InputStream inputStream) throws IOException;
+  Workbook read(InputStream inputStream);
 }

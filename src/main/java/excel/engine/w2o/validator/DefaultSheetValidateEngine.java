@@ -1,11 +1,14 @@
 package excel.engine.w2o.validator;
 
+import excel.engine.model.core.Cell;
 import excel.engine.model.core.Row;
 import excel.engine.model.core.Sheet;
-import excel.engine.model.message.ValidateMessage;
+import excel.engine.model.message.ErrorMessage;
+import excel.engine.model.message.ErrorMessageBean;
+import excel.engine.model.message.MessageWriteStrategies;
 import excel.engine.model.meta.FieldMeta;
 import excel.engine.model.meta.SheetMeta;
-import excel.engine.w2o.processor.ExcelProcessException;
+import excel.engine.w2o.processor.WorkbookProcessException;
 import excel.engine.w2o.validator.cell.CellValidator;
 import excel.engine.w2o.validator.row.RowValidator;
 import excel.engine.w2o.validator.sheet.SheetValidator;
@@ -26,13 +29,13 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
     validators
    ================*/
   private List<SheetValidator> sheetValidators = new ArrayList<>();
-  private Map<String, List<RowValidator>> key2rowValidators = new HashMap<>();
-  private Map<String, List<CellValidator>> key2cellValidators = new HashMap<>();
+  private Map<String, List<RowValidator>> group2rowValidators = new HashMap<>();
+  private Map<String, List<CellValidator>> group2cellValidators = new HashMap<>();
 
   /*==============
-    error messages TODO
+    error messages
    ===============*/
-  private List<ValidateMessage> errorMessages = new ArrayList<>();
+  private List<ErrorMessage> errorMessages = new ArrayList<>();
 
   @Override
   public SheetValidateEngine sheetValidator(SheetValidator... validators) {
@@ -50,12 +53,12 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
     }
 
     for (RowValidator validator : validators) {
-      String key = validator.getGroup();
+      String group = validator.getGroup();
 
-      if (!key2rowValidators.containsKey(key)) {
-        key2rowValidators.put(key, new ArrayList<RowValidator>());
+      if (!group2rowValidators.containsKey(group)) {
+        group2rowValidators.put(group, new ArrayList<RowValidator>());
       }
-      key2rowValidators.get(key).add(validator);
+      group2rowValidators.get(group).add(validator);
     }
     return this;
   }
@@ -66,12 +69,12 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
       return this;
     }
     for (CellValidator validator : validators) {
-      String key = validator.getGroup();
+      String group = validator.getGroup();
 
-      if (!key2cellValidators.containsKey(key)) {
-        key2cellValidators.put(key, new ArrayList<CellValidator>());
+      if (!group2cellValidators.containsKey(group)) {
+        group2cellValidators.put(group, new ArrayList<CellValidator>());
       }
-      key2cellValidators.get(key).add(validator);
+      group2cellValidators.get(group).add(validator);
     }
     return this;
   }
@@ -88,14 +91,18 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
     return this;
   }
 
+  public List<ErrorMessage> getErrorMessages() {
+    return errorMessages;
+  }
+
   @Override
   public boolean valid() {
     if (sheet == null) {
-      throw new ExcelValidateException("sheet is null");
+      throw new WorkbookValidateException("sheet is null");
     }
 
     if (sheetMeta == null) {
-      throw new ExcelProcessException("set sheet meta first");
+      throw new WorkbookProcessException("set sheet meta first");
     }
 
     // check dependency of this sheet
@@ -122,42 +129,42 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
 
     // one key corresponding multi validators
     Map<String, List<? extends RelationValidator>> validatorMap = new HashMap<>();
-    validatorMap.putAll(key2rowValidators);
-    validatorMap.putAll(key2cellValidators);
+    validatorMap.putAll(group2rowValidators);
+    validatorMap.putAll(group2cellValidators);
 
     Map<String, Set<String>> dependsOnHierarchy = buildDependsOnHierarchy(validatorMap);
 
-    Set<String> satisfiedKeys = new HashSet<>();
-    for (String key : dependsOnHierarchy.keySet()) {
-      Set<String> dependencyKeys = new HashSet<>();
-      checkValidatorKeyDependencyHierarchy(dependsOnHierarchy, satisfiedKeys, dependencyKeys, key);
-      satisfiedKeys.addAll(dependencyKeys);
+    Set<String> satisfiedGroups = new HashSet<>();
+    for (String group : dependsOnHierarchy.keySet()) {
+      Set<String> dependencyGroups = new HashSet<>();
+      checkValidatorKeyDependencyHierarchy(dependsOnHierarchy, satisfiedGroups, dependencyGroups, group);
+      satisfiedGroups.addAll(dependencyGroups);
     }
   }
 
   private void checkValidatorKeyDependencyHierarchy(
       Map<String, Set<String>> dependsOnHierarchy,
-      Set<String> satisfiedKeys,
-      Set<String> dependencyKeys,
-      String key
+      Set<String> satisfiedGroups,
+      Set<String> dependencyGroups,
+      String group
   ) {
 
-    if (satisfiedKeys.contains(key)) {
+    if (satisfiedGroups.contains(group)) {
       return;
     }
 
-    dependencyKeys.add(key);
-    for (String dependsOn : dependsOnHierarchy.get(key)) {
+    dependencyGroups.add(group);
+    for (String dependsOn : dependsOnHierarchy.get(group)) {
 
       if (!dependsOnHierarchy.containsKey(dependsOn)) {
-        throw new ExcelValidateException("dependency missing key [" + dependsOn + "]");
+        throw new WorkbookValidateException("dependency missing group [" + dependsOn + "]");
       }
 
-      if (dependencyKeys.contains(dependsOn)) {
-        throw new ExcelValidateException("dependency cycling on [" + key + "] and [" + dependsOn + "]");
+      if (dependencyGroups.contains(dependsOn)) {
+        throw new WorkbookValidateException("dependency cycling on [" + group + "] and [" + dependsOn + "]");
       }
 
-      checkValidatorKeyDependencyHierarchy(dependsOnHierarchy, satisfiedKeys, dependencyKeys, dependsOn);
+      checkValidatorKeyDependencyHierarchy(dependsOnHierarchy, satisfiedGroups, dependencyGroups, dependsOn);
     }
   }
 
@@ -169,7 +176,8 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
     for (SheetValidator validator : sheetValidators) {
 
       if (!validator.valid(sheet, sheetMeta)) {
-
+        String errorMessage = validator.getErrorMessage();
+        this.errorMessages.add(new ErrorMessageBean(MessageWriteStrategies.TEXT_BOX, errorMessage, sheet.getIndex()));
       }
     }
 
@@ -178,19 +186,19 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
   private void validRowCells(Row row) {
     // one key corresponding multi validators
     Map<String, List<? extends RelationValidator>> validatorMap = new HashMap<>();
-    validatorMap.putAll(key2rowValidators);
-    validatorMap.putAll(key2cellValidators);
+    validatorMap.putAll(group2rowValidators);
+    validatorMap.putAll(group2cellValidators);
 
     Map<String, Set<String>> dependsOnHierarchy = buildDependsOnHierarchy(validatorMap);
 
     Map<String, Set<Boolean>> allResult = new HashMap<>();
 
-    for (List<RowValidator> validators : key2rowValidators.values()) {
+    for (List<RowValidator> validators : group2rowValidators.values()) {
       for (RowValidator validator : validators) {
         allResult.putAll(validRowCellsHierarchy(validatorMap, allResult, dependsOnHierarchy, row, validator.getGroup()));
       }
     }
-    for (List<CellValidator> validators : key2cellValidators.values()) {
+    for (List<CellValidator> validators : group2cellValidators.values()) {
       for (CellValidator validator : validators) {
         allResult.putAll(validRowCellsHierarchy(validatorMap, allResult, dependsOnHierarchy, row, validator.getGroup()));
       }
@@ -203,17 +211,17 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
       Map<String, Set<Boolean>> allResult,
       Map<String, Set<String>> dependsOnHierarchy,
       Row row,
-      String key
+      String group
   ) {
 
     Map<String, Set<Boolean>> dependsOnGroupResult = new HashMap<>();
 
-    if (allResult.containsKey(key)) {
-      dependsOnGroupResult.put(key, allResult.get(key));
+    if (allResult.containsKey(group)) {
+      dependsOnGroupResult.put(group, allResult.get(group));
       return dependsOnGroupResult;
     }
 
-    Set<String> dependsOns = dependsOnHierarchy.get(key);
+    Set<String> dependsOns = dependsOnHierarchy.get(group);
 
     if (CollectionUtils.isNotEmpty(dependsOns)) {
 
@@ -225,12 +233,12 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
     }
 
     if (ifSkip(dependsOnGroupResult)) {
-      dependsOnGroupResult.put(key, Collections.singleton((Boolean) null));
+      dependsOnGroupResult.put(group, Collections.singleton((Boolean) null));
       return dependsOnGroupResult;
     }
 
     Set<Boolean> vrs = new HashSet<>();
-    for (RelationValidator relationValidator : validatorMap.get(key)) {
+    for (RelationValidator relationValidator : validatorMap.get(group)) {
       boolean result = doRowCellsValid(relationValidator, row);
       vrs.add(result);
       // if one of the group valid failure skip rest validator
@@ -238,7 +246,7 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
         break;
       }
     }
-    dependsOnGroupResult.put(key, vrs);
+    dependsOnGroupResult.put(group, vrs);
     return dependsOnGroupResult;
   }
 
@@ -260,13 +268,35 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
   private boolean doRowCellsValid(RelationValidator relationValidator, Row row) {
     if (relationValidator instanceof RowValidator) {
 
-      return ((RowValidator) relationValidator).valid(row, sheetMeta);
+      RowValidator rowValidator = (RowValidator) relationValidator;
+      boolean result = rowValidator.valid(row, sheetMeta);
+
+      if (!result) {
+        for (String messageOnField : rowValidator.getMessageOnFields()) {
+          FieldMeta fieldMeta = sheetMeta.getFieldMeta(messageOnField);
+
+          errorMessages.add(new ErrorMessageBean(MessageWriteStrategies.COMMENT, rowValidator.getErrorMessage(), row.getSheet().getIndex(), row.getIndex(), fieldMeta.getColumnIndex()));
+        }
+      }
+
+      return result;
     } else {
 
       CellValidator cellValidator = (CellValidator) relationValidator;
       FieldMeta fieldMeta = sheetMeta.getFieldMeta(cellValidator.getMatchField());
 
-      return cellValidator.valid(row.getCell(fieldMeta.getColumnIndex()), fieldMeta);
+      Cell cell = row.getCell(fieldMeta.getColumnIndex());
+      boolean result = cellValidator.valid(cell, fieldMeta);
+
+      if (!result) {
+        String messageOnField = cellValidator.getMessageOnField();
+        FieldMeta messageOnFieldMeta = sheetMeta.getFieldMeta(messageOnField);
+        Cell messageOnCell = row.getCell(messageOnFieldMeta.getColumnIndex());
+
+        errorMessages.add(new ErrorMessageBean(MessageWriteStrategies.COMMENT, cellValidator.getErrorMessage(), row.getSheet().getIndex(), messageOnCell.getRowIndex(), messageOnCell.getColumnIndex()));
+      }
+
+      return result;
     }
   }
 
@@ -279,7 +309,7 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
 
       for (RelationValidator dataValidator : entry.getValue()) {
 
-        Set<String> dependsOn = dataValidator.getDependsOnGroups();
+        Set<String> dependsOn = dataValidator.getDependsOn();
         if (CollectionUtils.isNotEmpty(dependsOn)) {
 
           dependsOnHierarchy.get(key).addAll(dependsOn);

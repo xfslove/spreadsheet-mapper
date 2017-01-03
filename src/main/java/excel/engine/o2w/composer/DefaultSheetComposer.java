@@ -53,7 +53,11 @@ public class DefaultSheetComposer implements SheetComposer {
 
   @Override
   public Sheet compose() {
-    Sheet sheet = createSheet(sheetMeta.getName());
+    if (sheetMeta == null) {
+      throw new WorkbookComposeException("set sheet meta first");
+    }
+
+    Sheet sheet = createSheet(sheetMeta.getSheetName());
 
     int lastRowNum = sheetMeta.getDataStartRowIndex() + data.size() - 1;
 

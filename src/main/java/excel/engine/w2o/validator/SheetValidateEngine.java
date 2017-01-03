@@ -1,10 +1,13 @@
 package excel.engine.w2o.validator;
 
 import excel.engine.model.core.Sheet;
+import excel.engine.model.message.ErrorMessage;
 import excel.engine.model.meta.SheetMeta;
 import excel.engine.w2o.validator.cell.CellValidator;
 import excel.engine.w2o.validator.row.RowValidator;
 import excel.engine.w2o.validator.sheet.SheetValidator;
+
+import java.util.List;
 
 /**
  * sheet validate engine
@@ -23,7 +26,7 @@ public interface SheetValidateEngine {
    * @param validators row validator
    * @see RowValidator
    * @see RelationValidator#getGroup()
-   * @see RelationValidator#getDependsOnGroups()
+   * @see RelationValidator#getDependsOn()
    */
   SheetValidateEngine rowValidator(RowValidator... validators);
 
@@ -31,7 +34,7 @@ public interface SheetValidateEngine {
    * @param validators cell validator
    * @see CellValidator
    * @see RelationValidator#getGroup()
-   * @see RelationValidator#getDependsOnGroups()
+   * @see RelationValidator#getDependsOn()
    */
   SheetValidateEngine cellValidator(CellValidator... validators);
 
@@ -51,4 +54,14 @@ public interface SheetValidateEngine {
    * @return true if passed all validators
    */
   boolean valid();
+
+  /**
+   * <pre>
+   * message write strategy of {@link SheetValidator#getErrorMessage()} is {@link excel.engine.model.message.MessageWriteStrategies#TEXT_BOX}
+   * message write strategy of {@link RowValidator#getErrorMessage()} &amp; {@link CellValidator#getErrorMessage()} is {@link excel.engine.model.message.MessageWriteStrategies#COMMENT}
+   * </pre>
+   *
+   * @return list of valid error messages
+   */
+  List<ErrorMessage> getErrorMessages();
 }

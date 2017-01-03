@@ -5,12 +5,12 @@ import java.io.Serializable;
 /**
  * <pre>
  * header meta include:
- * row index
- * text value
+ * 1. header at row index
+ * 2. header value
  * </pre>
  * Created by hanwen on 2016/12/29.
  */
-public interface HeaderMeta extends Serializable, Comparable<HeaderMeta> {
+public interface HeaderMeta extends Serializable {
 
   /**
    * header at which row

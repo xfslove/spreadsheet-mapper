@@ -4,6 +4,7 @@ package excel.engine.w2o.validator.row;
 import excel.engine.model.core.Row;
 import excel.engine.model.meta.SheetMeta;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,21 +15,36 @@ import java.util.Set;
  */
 public abstract class RowValidatorAdapter implements RowValidator {
 
-  private String key;
+  private String group;
 
   private String errorMessage;
 
   private Set<String> dependsOn = new HashSet<>();
 
-  public RowValidatorAdapter(String key, String errorMessage, Set<String> dependsOn) {
-    this.key = key;
+  private Set<String> messageOnFields = new HashSet<>();
+
+  public RowValidatorAdapter(String group, String errorMessage, String[] messageOnFields) {
+    this.group = group;
     this.errorMessage = errorMessage;
-    this.dependsOn = dependsOn;
+    if (messageOnFields != null) {
+      Collections.addAll(this.messageOnFields, messageOnFields);
+    }
+  }
+
+  public RowValidatorAdapter(String group, String errorMessage, String[] messageOnFields, String[] dependsOn) {
+    this.group = group;
+    this.errorMessage = errorMessage;
+    if (messageOnFields != null) {
+      Collections.addAll(this.messageOnFields, messageOnFields);
+    }
+    if (dependsOn != null) {
+      Collections.addAll(this.dependsOn, dependsOn);
+    }
   }
 
   @Override
   public String getGroup() {
-    return key;
+    return group;
   }
 
   @Override
@@ -37,7 +53,12 @@ public abstract class RowValidatorAdapter implements RowValidator {
   }
 
   @Override
-  public Set<String> getDependsOnGroups() {
+  public Set<String> getMessageOnFields() {
+    return messageOnFields;
+  }
+
+  @Override
+  public Set<String> getDependsOn() {
     return dependsOn;
   }
 

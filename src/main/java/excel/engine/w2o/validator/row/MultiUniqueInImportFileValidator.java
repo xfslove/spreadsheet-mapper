@@ -1,20 +1,17 @@
 package excel.engine.w2o.validator.row;
 
-import excel.engine.ExcelConstants;
+import excel.engine.Constants;
 import excel.engine.model.core.Cell;
 import excel.engine.model.core.Row;
 import excel.engine.model.meta.FieldMeta;
 import excel.engine.model.meta.SheetMeta;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <pre>
- * value union unique in template validator, it useful when you want valid some cells value union unique.
+ * value union unique validator, it useful when you want valid some cells value union unique.
  *
  * eg:
  * if you excel files has person.idCardNumber and person.idCardType, you will want check if person's identify unique,
@@ -29,14 +26,11 @@ public class MultiUniqueInImportFileValidator extends RowValidatorAdapter {
 
   private Set<String> matchFields = new HashSet<>();
 
-  public MultiUniqueInImportFileValidator(Set<String> matchFields) {
-    super("union.unique", "导入文件中存在重复数据", matchFields);
-    this.matchFields = matchFields;
-  }
-
-  public MultiUniqueInImportFileValidator(String errorMessage, Set<String> matchFields) {
-    super("union.unique", errorMessage, matchFields);
-    this.matchFields = matchFields;
+  public MultiUniqueInImportFileValidator(String errorMessage, String[] matchFields) {
+    super("row.union.unique", errorMessage, matchFields);
+    if (matchFields != null) {
+      Collections.addAll(this.matchFields, matchFields);
+    }
   }
 
   @Override
@@ -44,14 +38,13 @@ public class MultiUniqueInImportFileValidator extends RowValidatorAdapter {
 
     List<String> holdStringList = new ArrayList<>();
 
-
     for (String field : matchFields) {
       FieldMeta fieldMeta = sheetMeta.getFieldMeta(field);
       Cell cell = row.getCell(fieldMeta.getColumnIndex());
       holdStringList.add(buildHoldString(fieldMeta, cell));
     }
 
-    String holdValue = StringUtils.join(holdStringList, ExcelConstants.COMMA_SEPARATOR);
+    String holdValue = StringUtils.join(holdStringList, Constants.COMMA_SEPARATOR);
 
     if (rowValueHolder.contains(holdValue)) {
       return false;
@@ -68,6 +61,6 @@ public class MultiUniqueInImportFileValidator extends RowValidatorAdapter {
    * @return
    */
   private String buildHoldString(FieldMeta fieldMeta, Cell cell) {
-    return fieldMeta.getName() + ExcelConstants.SEMICOLON_SEPARATOR + cell.getValue();
+    return fieldMeta.getName() + Constants.SEMICOLON_SEPARATOR + cell.getValue();
   }
 }

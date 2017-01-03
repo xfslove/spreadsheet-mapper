@@ -2,7 +2,6 @@ package excel.engine.w2f;
 
 import excel.engine.model.core.Workbook;
 
-import java.io.IOException;
 import java.io.OutputStream;
 
 /**
@@ -15,7 +14,6 @@ public interface WorkbookWriter {
    *
    * @param workbook     write workbook
    * @param outputStream notice close the stream
-   * @throws IOException io exception
    */
-  void write(Workbook workbook, OutputStream outputStream) throws IOException;
+  void write(Workbook workbook, OutputStream outputStream);
 }

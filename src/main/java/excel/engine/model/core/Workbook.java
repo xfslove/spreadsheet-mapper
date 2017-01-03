@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * excel workbook
+ * workbook
  * <p>
  * Created by hanwen on 15-12-16.
  */

@@ -5,9 +5,10 @@ import excel.engine.model.core.Row;
 import excel.engine.model.core.Sheet;
 import excel.engine.model.meta.FieldMeta;
 import excel.engine.model.meta.SheetMeta;
+import excel.engine.w2o.processor.listener.*;
 import excel.engine.w2o.setter.BeanUtilValueSetter;
-import excel.engine.w2o.setter.ValueSetter;
 import excel.engine.w2o.setter.FieldValueSetter;
+import excel.engine.w2o.setter.ValueSetter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +30,10 @@ public class DefaultSheetProcessor implements SheetProcessor {
 
   private SheetProcessorListener sheetProcessorListener = new NoopSheetProcessorListener();
 
+  private RowProcessorListener rowProcessorListener = new NoopRowProcessorListener();
+
+  private CellProcessorListener cellProcessorListener = new NoopCellProcessorListener();
+
   private Map<String, FieldValueSetter> key2fieldValueSetter = new HashMap<>();
 
   private ValueSetter defaultValueSetter = new BeanUtilValueSetter();
@@ -46,14 +51,26 @@ public class DefaultSheetProcessor implements SheetProcessor {
   }
 
   @Override
+  public SheetProcessor objectFactory(ObjectFactory objectFactory) {
+    this.objectFactory = objectFactory;
+    return this;
+  }
+
+  @Override
   public SheetProcessor sheetProcessorListener(SheetProcessorListener sheetProcessorListener) {
     this.sheetProcessorListener = sheetProcessorListener;
     return this;
   }
 
   @Override
-  public SheetProcessor objectFactory(ObjectFactory objectFactory) {
-    this.objectFactory = objectFactory;
+  public SheetProcessor rowProcessorListener(RowProcessorListener rowProcessorListener) {
+    this.rowProcessorListener = rowProcessorListener;
+    return this;
+  }
+
+  @Override
+  public SheetProcessor cellProcessorListener(CellProcessorListener cellProcessorListener) {
+    this.cellProcessorListener = cellProcessorListener;
     return this;
   }
 
@@ -72,53 +89,58 @@ public class DefaultSheetProcessor implements SheetProcessor {
   @Override
   public List<Object> process() {
     if (sheet == null) {
-      throw new ExcelProcessException("set sheet first");
+      throw new WorkbookProcessException("set sheet first");
     }
 
     if (sheetMeta == null) {
-      throw new ExcelProcessException("set sheet meta first");
+      throw new WorkbookProcessException("set sheet meta first");
     }
 
     if (objectFactory == null) {
-      throw new ExcelProcessException("set object factory first");
+      throw new WorkbookProcessException("set object factory first");
     }
 
     List<FieldMeta> fieldMetas = sheetMeta.getFieldMetas();
+    Map<Integer, FieldMeta> columnIndex2fieldMeta = new HashMap<>();
+    for (FieldMeta fieldMeta : fieldMetas) {
+      columnIndex2fieldMeta.put(fieldMeta.getColumnIndex(), fieldMeta);
+    }
 
     List<Object> oneSheetObjects = new ArrayList<>();
-    sheetProcessorListener.beforeSheet(sheet);
+    sheetProcessorListener.before(sheet, sheetMeta);
 
     for (int i = sheetMeta.getDataStartRowIndex(); i <= sheet.sizeOfRows(); i++) {
       Row row = sheet.getRow(i);
 
-      Object origin = objectFactory.create(row);
-      sheetProcessorListener.beforeRow(row, origin);
+      Object object = objectFactory.create(row);
 
-      Object model = objectFactory.create(row);
+      rowProcessorListener.before(row, sheetMeta, object);
 
       for (int j = 1; j <= row.sizeOfCells(); j++) {
 
-        FieldMeta fieldMeta = fieldMetas.get(i);
-
+        FieldMeta fieldMeta = columnIndex2fieldMeta.get(i);
         Cell cell = row.getCell(j);
 
         FieldValueSetter fieldValueSetter = key2fieldValueSetter.get(fieldMeta.getName());
 
+        cellProcessorListener.before(cell, fieldMeta, object);
+
         if (fieldValueSetter != null) {
-          fieldValueSetter.set(model, cell, fieldMeta);
+          fieldValueSetter.set(object, cell, fieldMeta);
         } else {
 
-          defaultValueSetter.set(model, cell, fieldMeta);
+          defaultValueSetter.set(object, cell, fieldMeta);
         }
 
+        cellProcessorListener.after(cell, fieldMeta, object);
       }
 
-      sheetProcessorListener.afterRow(row, model);
+      rowProcessorListener.after(row, sheetMeta, object);
 
-      oneSheetObjects.add(model);
+      oneSheetObjects.add(object);
     }
 
-    sheetProcessorListener.afterSheet(sheet, oneSheetObjects);
+    sheetProcessorListener.after(sheet, sheetMeta, oneSheetObjects);
 
     return oneSheetObjects;
   }

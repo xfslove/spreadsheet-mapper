@@ -1,8 +1,8 @@
 package excel.engine.o2w.extractor;
 
 import excel.engine.model.meta.FieldMeta;
+import excel.engine.o2w.composer.WorkbookComposeException;
 import excel.engine.util.FieldUtils;
-import excel.engine.w2o.processor.ExcelProcessException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -28,7 +28,7 @@ public class BeanUtilValueExtractor implements ValueExtractor {
       return null;
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
-      throw new ExcelProcessException(e);
+      throw new WorkbookComposeException(e);
     }
   }
 

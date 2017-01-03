@@ -1,6 +1,6 @@
 package excel.engine.model.core;
 
-import excel.engine.util.ExcelDateFormatRegister;
+import excel.engine.util.DateFormatRegister;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.util.NumberToTextConverter;
@@ -51,10 +51,10 @@ public class CellBean implements Cell {
     } else if (cell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC) {
 
       if (DateUtil.isCellDateFormatted(cell)) {
-        String dateFormat = ExcelDateFormatRegister.getDateFormat(cell.getCellStyle().getDataFormatString());
+        String dateFormat = DateFormatRegister.get(cell.getCellStyle().getDataFormatString());
 
         if (dateFormat == null) {
-          value = ExcelDateFormatRegister.ERROR_PATTERN;
+          value = DateFormatRegister.ERROR_PATTERN;
         } else {
           SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
           value = simpleDateFormat.format(cell.getDateCellValue());
@@ -98,11 +98,6 @@ public class CellBean implements Cell {
   @Override
   public Row getRow() {
     return row;
-  }
-
-  @Override
-  public Sheet getSheet() {
-    return row.getSheet();
   }
 
   void setRow(Row row) {

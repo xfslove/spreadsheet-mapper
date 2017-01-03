@@ -19,6 +19,16 @@ public class LocalDateTimeValidator extends CellValidatorAdapter {
     this.format = format;
   }
 
+  public LocalDateTimeValidator(String format, String matchField, String errorMessage, String[] dependsOn) {
+    super(matchField, errorMessage, dependsOn);
+    this.format = format;
+  }
+
+  public LocalDateTimeValidator(String format, String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {
+    super(group, matchField, errorMessage, messageOnField, dependsOn);
+    this.format = format;
+  }
+
   @Override
   protected boolean customValidate(Cell cell, FieldMeta fieldMeta) {
     DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(format);
