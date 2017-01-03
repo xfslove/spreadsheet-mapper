@@ -6,21 +6,21 @@
   <groupId>com.github.xfslove</groupId>
   <artifactId>extensible-sheet</artifactId>
   <version>1.3.0</version>
-  <value>Extensible Sheet</value>
+  <name>Extensible Sheet</name>
   <description>powerful and convenient extensible sheet</description>
   <packaging>jar</packaging>
   <url>https://github.com/xfslove/extensible-sheet</url>
 
   <licenses>
     <license>
-      <value>The Apache License, Version 2.0</value>
+      <name>The Apache License, Version 2.0</name>
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
   </licenses>
 
   <developers>
     <developer>
-      <value>hanwen.huang</value>
+      <name>hanwen.huang</name>
       <email>xfslove@gmail.com</email>
     </developer>
   </developers>
