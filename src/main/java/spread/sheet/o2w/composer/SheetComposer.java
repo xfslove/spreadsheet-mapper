@@ -1,13 +1,12 @@
 package spread.sheet.o2w.composer;
 
+import spread.sheet.model.core.SheetList;
 import spread.sheet.model.core.Sheet;
 import spread.sheet.model.meta.SheetMeta;
 import spread.sheet.o2w.extractor.FieldValueExtractor;
 
-import java.util.List;
-
 /**
- * excel composer, generated all cell type is string (include number, date ...).
+ * sheet composer, generated all cell type is string (include number, date ...).
  * <p>
  * Created by hanwen on 15-12-16.
  */
@@ -33,7 +32,7 @@ public interface SheetComposer {
   /**
    * @param data list of data
    */
-  SheetComposer data(List<Object> data);
+  SheetComposer data(SheetList<Object> data);
 
   Sheet compose();
 }

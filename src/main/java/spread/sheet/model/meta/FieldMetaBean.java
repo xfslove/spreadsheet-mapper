@@ -46,6 +46,7 @@ public class FieldMetaBean implements FieldMeta {
 
   @Override
   public HeaderMeta getHeaderMeta(int rowIndex) {
+    // maybe some row index not has field meta
     for (HeaderMeta headerMeta : headerMetas) {
       if (headerMeta.getRowIndex() == rowIndex) {
         return headerMeta;

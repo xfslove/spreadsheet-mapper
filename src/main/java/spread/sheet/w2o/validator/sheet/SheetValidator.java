@@ -5,7 +5,7 @@ import spread.sheet.w2o.validator.Validator;
 import spread.sheet.model.core.Sheet;
 
 /**
- * excel sheet validator, after workbook validators, if workbook validators failure, sheet validators will skip.
+ * sheet validator, after workbook validators, if workbook validators failure, sheet validators will skip.
  * <p>
  * Created by hanwen on 2016/12/23.
  */

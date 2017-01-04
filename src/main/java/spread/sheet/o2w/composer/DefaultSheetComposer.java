@@ -1,6 +1,8 @@
 package spread.sheet.o2w.composer;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import spread.sheet.model.core.SheetList;
 import spread.sheet.model.core.*;
 import spread.sheet.model.meta.FieldMeta;
 import spread.sheet.model.meta.HeaderMeta;
@@ -8,8 +10,8 @@ import spread.sheet.model.meta.SheetMeta;
 import spread.sheet.o2w.extractor.BeanUtilValueExtractor;
 import spread.sheet.o2w.extractor.FieldValueExtractor;
 import spread.sheet.o2w.extractor.ValueExtractor;
+import spread.sheet.w2o.processor.WorkbookProcessException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +23,7 @@ public class DefaultSheetComposer implements SheetComposer {
 
   private SheetMeta sheetMeta;
 
-  private List<Object> data = new ArrayList<>();
+  private SheetList<Object> data;
 
   private Map<String, FieldValueExtractor> key2fieldValueExtractor = new HashMap<>();
 
@@ -45,7 +47,7 @@ public class DefaultSheetComposer implements SheetComposer {
   }
 
   @Override
-  public SheetComposer data(List<Object> data) {
+  public SheetComposer data(SheetList<Object> data) {
     this.data = data;
     return this;
   }
@@ -58,20 +60,27 @@ public class DefaultSheetComposer implements SheetComposer {
 
     Sheet sheet = createSheet(sheetMeta);
 
-    int lastRowNum = sheetMeta.getDataStartRowIndex() + data.size() - 1;
-
-    for (int i = 1; i <= lastRowNum; i++) {
+    int dataStartRowIndex = sheetMeta.getDataStartRowIndex();
+    for (int i = 1; i < dataStartRowIndex; i++) {
 
       Row row = createRow(i);
       sheet.addRow(row);
+      createHeaderCellsIfNecessary(row, sheetMeta);
+    }
 
-      if (row.getIndex() < sheetMeta.getDataStartRowIndex()) {
+    if (CollectionUtils.isEmpty(data)) {
+      return sheet;
+    }
 
-        createHeaderCellsIfNecessary(row, sheetMeta);
-      } else {
+    if (data.getSheetIndex() != sheetMeta.getSheetIndex()) {
+      throw new WorkbookProcessException("data[sheet index:" + data.getSheetIndex() + "] not corresponding the sheet meta[sheet index:" + sheetMeta.getSheetIndex() + "]");
+    }
 
-        createDataCells(row, data.get(i - 1), sheetMeta);
-      }
+    for (int i = 0; i < data.size(); i++) {
+
+      Row row = createRow(i + dataStartRowIndex);
+      sheet.addRow(row);
+      createDataCells(row, data.get(i), sheetMeta);
     }
 
     return sheet;

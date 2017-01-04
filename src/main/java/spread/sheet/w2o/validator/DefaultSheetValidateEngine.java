@@ -98,7 +98,7 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
   @Override
   public boolean valid() {
     if (sheet == null) {
-      throw new WorkbookValidateException("sheet is null");
+      throw new WorkbookValidateException("set sheet first");
     }
 
     if (sheetMeta == null) {

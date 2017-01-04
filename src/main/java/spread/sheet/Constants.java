@@ -17,6 +17,8 @@ public class Constants {
    */
   public static final String BUSINESS_KEY_PREFIX = "businessKey.";
 
+  public static final String ENTER_SEPARATOR = "\n";
+
   public static final String DOT_SEPARATOR = ".";
 
   public static final String COMMA_SEPARATOR = ",";

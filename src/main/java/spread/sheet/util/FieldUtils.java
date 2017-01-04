@@ -1,7 +1,7 @@
 package spread.sheet.util;
 
-import spread.sheet.Constants;
 import org.apache.commons.lang3.StringUtils;
+import spread.sheet.Constants;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class FieldUtils {
   }
 
   /**
-   * get field with out business key
+   * get field with out business key({@link Constants#BUSINESS_KEY_PREFIX})
    *
    * @param field field
    * @return field without business key

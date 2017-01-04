@@ -45,6 +45,7 @@ public class SheetBean implements Sheet {
 
   @Override
   public List<Row> getRows() {
+    Collections.sort(rows);
     return rows;
   }
 

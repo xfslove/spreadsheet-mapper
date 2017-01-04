@@ -5,7 +5,7 @@ import spread.sheet.model.core.Workbook;
 import spread.sheet.w2o.validator.Validator;
 
 /**
- * excel workbook template validator
+ * workbook template validator
  * <p>
  * Created by hanwen on 4/26/16.
  */

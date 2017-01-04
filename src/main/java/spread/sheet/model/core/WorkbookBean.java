@@ -32,8 +32,9 @@ public class WorkbookBean implements Workbook {
   @Override
   public Sheet getSheet(int index) {
     if (index < 1 || index > sizeOfSheets()) {
-      return null;
+      throw new IllegalArgumentException("index out of bounds");
     }
+    Collections.sort(sheets);
     return sheets.get(index - 1);
   }
 

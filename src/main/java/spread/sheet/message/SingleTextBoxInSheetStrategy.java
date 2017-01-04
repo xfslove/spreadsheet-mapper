@@ -1,12 +1,5 @@
 package spread.sheet.message;
 
-import spread.sheet.Constants;
-import spread.sheet.model.message.ErrorMessage;
-import spread.sheet.model.message.MessageWriteStrategies;
-import spread.sheet.model.shapes.TextBox;
-import spread.sheet.model.shapes.TextBoxBean;
-import spread.sheet.model.shapes.TextBoxStyle;
-import spread.sheet.w2f.WorkbookWriteException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.usermodel.*;
@@ -15,6 +8,13 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import spread.sheet.Constants;
+import spread.sheet.model.message.ErrorMessage;
+import spread.sheet.model.message.MessageWriteStrategies;
+import spread.sheet.model.shapes.TextBox;
+import spread.sheet.model.shapes.TextBoxBean;
+import spread.sheet.model.shapes.TextBoxStyle;
+import spread.sheet.w2f.WorkbookWriteException;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -86,7 +86,7 @@ public class SingleTextBoxInSheetStrategy implements MessageWriteStrategy {
 
     List<TextBox> textBoxes = new ArrayList<>();
     for (Map.Entry<Integer, List<String>> entry : textBoxMessageMap.entrySet()) {
-      textBoxes.add(new TextBoxBean(StringUtils.join(entry.getValue(), Constants.COMMA_SEPARATOR), entry.getKey()));
+      textBoxes.add(new TextBoxBean(StringUtils.join(entry.getValue(), Constants.ENTER_SEPARATOR), entry.getKey()));
     }
 
     return textBoxes;

@@ -32,6 +32,7 @@ public class RowBean implements Row {
 
   @Override
   public List<Cell> getCells() {
+    Collections.sort(cells);
     return cells;
   }
 
