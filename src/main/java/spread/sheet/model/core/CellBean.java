@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.util.NumberToTextConverter;
-import spread.sheet.util.DateFormatRegister;
+import spread.sheet.utils.DateFormatRegister;
 
 import java.text.SimpleDateFormat;
 import java.util.Objects;

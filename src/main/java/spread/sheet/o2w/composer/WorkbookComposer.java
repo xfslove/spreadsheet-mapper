@@ -16,7 +16,7 @@ public interface WorkbookComposer {
   WorkbookComposer sheetComposer(SheetComposer... sheetComposers);
 
   /**
-   * @return workbook
+   * @return composed workbook
    * @see SheetComposer#compose()
    */
   Workbook compose();

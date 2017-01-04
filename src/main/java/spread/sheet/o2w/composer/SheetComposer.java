@@ -1,7 +1,7 @@
 package spread.sheet.o2w.composer;
 
-import spread.sheet.model.core.SheetList;
 import spread.sheet.model.core.Sheet;
+import spread.sheet.model.core.SheetList;
 import spread.sheet.model.meta.SheetMeta;
 import spread.sheet.o2w.extractor.FieldValueExtractor;
 
@@ -34,5 +34,8 @@ public interface SheetComposer {
    */
   SheetComposer data(SheetList<Object> data);
 
+  /**
+   * @return composed sheet
+   */
   Sheet compose();
 }

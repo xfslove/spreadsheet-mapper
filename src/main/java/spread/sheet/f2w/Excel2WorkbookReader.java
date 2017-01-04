@@ -42,7 +42,7 @@ public class Excel2WorkbookReader implements WorkbookReader {
         excelWorkbook.addSheet(excelSheet);
 
         int lastRowNum = sheet.getLastRowNum();
-        for (int j = 0; j < lastRowNum; j++) {
+        for (int j = 0; j <= lastRowNum; j++) {
 
           org.apache.poi.ss.usermodel.Row row = sheet.getRow(j);
 

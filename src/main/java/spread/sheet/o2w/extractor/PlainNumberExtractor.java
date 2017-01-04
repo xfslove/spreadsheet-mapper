@@ -3,27 +3,25 @@ package spread.sheet.o2w.extractor;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spread.sheet.model.meta.FieldMeta;
 import spread.sheet.o2w.composer.WorkbookComposeException;
 import spread.sheet.utils.FieldUtils;
 
+import java.math.BigDecimal;
+
 /**
- * local date time text value with supplied pattern extractor
+ * plain number text value extractor
  * <p>
- * Created by hanwen on 5/3/16.
+ * Created by hanwen on 2017/1/4.
  */
-public class LocalDateTimeExtractor extends FieldValueExtractorAdapter {
+public class PlainNumberExtractor extends FieldValueExtractorAdapter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(LocalDateTimeExtractor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PlainNumberExtractor.class);
 
-  private String pattern;
-
-  public LocalDateTimeExtractor(String matchField, String pattern) {
+  public PlainNumberExtractor(String matchField) {
     super(matchField);
-    this.pattern = pattern;
   }
 
   @Override
@@ -32,10 +30,18 @@ public class LocalDateTimeExtractor extends FieldValueExtractorAdapter {
     try {
       Object value = PropertyUtils.getProperty(data, FieldUtils.detectRealField(fieldMeta.getName()));
 
-      if (!(value instanceof LocalDateTime)) {
+      if (!(value instanceof Number)) {
         return null;
       }
-      return ((LocalDateTime) value).toString(pattern);
+
+      if (value instanceof BigDecimal) {
+        return ((BigDecimal) value).stripTrailingZeros().toPlainString();
+      } else if (value instanceof Double) {
+        return BigDecimal.valueOf((Double) value).stripTrailingZeros().toPlainString();
+      } else if (value instanceof Float) {
+        return new BigDecimal(Float.toString((Float) value)).stripTrailingZeros().toPlainString();
+      }
+      return value.toString();
 
     } catch (NestedNullException e) {
       LOGGER.trace(ExceptionUtils.getStackTrace(e));

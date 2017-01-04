@@ -1,17 +1,17 @@
 package spread.sheet.o2w.extractor;
 
-import spread.sheet.model.meta.FieldMeta;
-import spread.sheet.o2w.composer.WorkbookComposeException;
-import spread.sheet.util.FieldUtils;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import spread.sheet.model.meta.FieldMeta;
+import spread.sheet.o2w.composer.WorkbookComposeException;
+import spread.sheet.utils.FieldUtils;
 
 /**
- * local date readable value extractor
+ * local date text value with supplied pattern extractor
  * <p>
  * Created by hanwen on 5/3/16.
  */
@@ -30,9 +30,13 @@ public class LocalDateExtractor extends FieldValueExtractorAdapter {
   public String getStringValue(Object data, FieldMeta fieldMeta) {
 
     try {
-      LocalDate value = (LocalDate) PropertyUtils.getProperty(data, FieldUtils.detectRealField(fieldMeta.getName()));
+      Object value = PropertyUtils.getProperty(data, FieldUtils.detectRealField(fieldMeta.getName()));
 
-      return value == null ? null : value.toString(pattern);
+      if (!(value instanceof LocalDate)) {
+        return null;
+      }
+
+      return ((LocalDate) value).toString(pattern);
 
     } catch (NestedNullException e) {
       LOGGER.trace(ExceptionUtils.getStackTrace(e));

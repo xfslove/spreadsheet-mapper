@@ -3,7 +3,7 @@ package spread.sheet.w2o.setter;
 import spread.sheet.model.meta.FieldMeta;
 import spread.sheet.w2o.processor.WorkbookProcessException;
 import spread.sheet.model.core.Cell;
-import spread.sheet.util.FieldUtils;
+import spread.sheet.utils.FieldUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;

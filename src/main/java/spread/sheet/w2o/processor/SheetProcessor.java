@@ -22,10 +22,10 @@ public interface SheetProcessor {
    * after add will override before add
    * </pre>
    *
-   * @param setters field value setter
+   * @param fieldValueSetters field value setter
    * @see FieldValueSetter
    */
-  SheetProcessor fieldValueSetter(FieldValueSetter... setters);
+  SheetProcessor fieldValueSetter(FieldValueSetter... fieldValueSetters);
 
   /**
    * @param objectFactory object factory

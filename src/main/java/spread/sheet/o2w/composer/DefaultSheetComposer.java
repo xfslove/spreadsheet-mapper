@@ -7,7 +7,7 @@ import spread.sheet.model.core.*;
 import spread.sheet.model.meta.FieldMeta;
 import spread.sheet.model.meta.HeaderMeta;
 import spread.sheet.model.meta.SheetMeta;
-import spread.sheet.o2w.extractor.BeanUtilValueExtractor;
+import spread.sheet.o2w.extractor.BeanUtilsValueExtractor;
 import spread.sheet.o2w.extractor.FieldValueExtractor;
 import spread.sheet.o2w.extractor.ValueExtractor;
 import spread.sheet.w2o.processor.WorkbookProcessException;
@@ -27,7 +27,7 @@ public class DefaultSheetComposer implements SheetComposer {
 
   private Map<String, FieldValueExtractor> key2fieldValueExtractor = new HashMap<>();
 
-  private ValueExtractor defaultValueExtractor = new BeanUtilValueExtractor();
+  private ValueExtractor defaultValueExtractor = new BeanUtilsValueExtractor();
 
   @Override
   public SheetComposer fieldValueExtractor(FieldValueExtractor... fieldValueExtractors) {

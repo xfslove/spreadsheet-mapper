@@ -23,7 +23,7 @@ public interface Sheet extends Serializable, Comparable<Sheet> {
   String getName();
 
   /**
-   * @return rows of this sheet
+   * @return rows of this sheet ordered by row index
    */
   List<Row> getRows();
 

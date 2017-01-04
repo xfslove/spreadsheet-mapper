@@ -23,7 +23,7 @@ public class Constants {
 
   public static final String COMMA_SEPARATOR = ",";
 
-  public static final String SEMICOLON_SEPARATOR = ":";
+  public static final String NEGATIVE_SEPARATOR = "-";
 
   public static final String EMPTY_VALUE = "";
 

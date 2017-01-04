@@ -1,4 +1,4 @@
-package spread.sheet.util;
+package spread.sheet.utils;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

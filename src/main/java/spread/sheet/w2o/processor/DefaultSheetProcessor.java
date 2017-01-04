@@ -7,7 +7,7 @@ import spread.sheet.model.core.Sheet;
 import spread.sheet.model.meta.FieldMeta;
 import spread.sheet.model.meta.SheetMeta;
 import spread.sheet.w2o.processor.listener.*;
-import spread.sheet.w2o.setter.BeanUtilValueSetter;
+import spread.sheet.w2o.setter.BeanUtilsValueSetter;
 import spread.sheet.w2o.setter.FieldValueSetter;
 import spread.sheet.w2o.setter.ValueSetter;
 
@@ -36,15 +36,15 @@ public class DefaultSheetProcessor implements SheetProcessor {
 
   private Map<String, FieldValueSetter> key2fieldValueSetter = new HashMap<>();
 
-  private ValueSetter defaultValueSetter = new BeanUtilValueSetter();
+  private ValueSetter defaultValueSetter = new BeanUtilsValueSetter();
 
   @Override
-  public SheetProcessor fieldValueSetter(FieldValueSetter... setters) {
-    if (setters == null) {
+  public SheetProcessor fieldValueSetter(FieldValueSetter... fieldValueSetters) {
+    if (fieldValueSetters == null) {
       return this;
     }
 
-    for (FieldValueSetter setter : setters) {
+    for (FieldValueSetter setter : fieldValueSetters) {
       key2fieldValueSetter.put(setter.getMatchField(), setter);
     }
     return this;

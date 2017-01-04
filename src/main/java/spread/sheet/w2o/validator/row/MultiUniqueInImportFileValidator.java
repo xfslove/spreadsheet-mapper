@@ -1,11 +1,11 @@
 package spread.sheet.w2o.validator.row;
 
-import spread.sheet.model.meta.FieldMeta;
+import org.apache.commons.lang3.StringUtils;
 import spread.sheet.Constants;
 import spread.sheet.model.core.Cell;
 import spread.sheet.model.core.Row;
+import spread.sheet.model.meta.FieldMeta;
 import spread.sheet.model.meta.SheetMeta;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -21,7 +21,7 @@ import java.util.*;
  */
 public class MultiUniqueInImportFileValidator extends RowValidatorAdapter {
 
-  // format: "field1:value1,field2:value2,..."
+  // format: "field1-value1,field2-value2,..."
   private Set<String> rowValueHolder = new HashSet<>();
 
   private Set<String> matchFields = new HashSet<>();
@@ -55,12 +55,12 @@ public class MultiUniqueInImportFileValidator extends RowValidatorAdapter {
   }
 
   /**
-   * build cache string as "field:value"
+   * build cache string as "field-value"
    *
    * @param cell
    * @return
    */
   private String buildHoldString(FieldMeta fieldMeta, Cell cell) {
-    return fieldMeta.getName() + Constants.SEMICOLON_SEPARATOR + cell.getValue();
+    return fieldMeta.getName() + Constants.NEGATIVE_SEPARATOR + cell.getValue();
   }
 }

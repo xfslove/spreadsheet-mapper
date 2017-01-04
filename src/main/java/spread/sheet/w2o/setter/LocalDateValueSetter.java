@@ -1,15 +1,16 @@
 package spread.sheet.w2o.setter;
 
-import spread.sheet.model.meta.FieldMeta;
-import spread.sheet.model.core.Cell;
-import spread.sheet.util.FieldUtils;
-import spread.sheet.w2o.processor.WorkbookProcessException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import spread.sheet.model.core.Cell;
+import spread.sheet.model.meta.FieldMeta;
+import spread.sheet.utils.FieldUtils;
+import spread.sheet.w2o.processor.WorkbookProcessException;
 
 /**
  * local date field value setter
@@ -32,7 +33,21 @@ public class LocalDateValueSetter extends FieldValueSetterAdapter {
     try {
       DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(pattern);
       String value = cell.getValue();
-      PropertyUtils.setProperty(data, FieldUtils.detectRealField(fieldMeta.getName()), value == null ? null : dateTimeFormatter.parseLocalDate(value));
+      String fieldName = FieldUtils.detectRealField(fieldMeta.getName());
+
+      if (value == null) {
+        PropertyUtils.setProperty(data, fieldName, null);
+        return;
+      }
+
+      LocalDate localDate = null;
+      try {
+        localDate = dateTimeFormatter.parseLocalDate(value);
+      } catch (IllegalArgumentException e) {
+        LOGGER.debug("value format not valid", ExceptionUtils.getStackTrace(e));
+      }
+
+      PropertyUtils.setProperty(data, fieldName, localDate);
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new WorkbookProcessException(e);

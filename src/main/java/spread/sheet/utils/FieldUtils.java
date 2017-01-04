@@ -1,4 +1,4 @@
-package spread.sheet.util;
+package spread.sheet.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import spread.sheet.Constants;
