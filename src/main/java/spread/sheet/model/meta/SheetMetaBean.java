@@ -3,6 +3,7 @@ package spread.sheet.model.meta;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,6 +46,7 @@ public class SheetMetaBean implements SheetMeta {
 
   @Override
   public List<FieldMeta> getFieldMetas() {
+    Collections.sort(fieldMetas);
     return fieldMetas;
   }
 

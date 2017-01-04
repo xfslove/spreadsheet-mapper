@@ -1,6 +1,9 @@
 package spread.sheet.model.core;
 
+import org.apache.commons.lang3.builder.CompareToBuilder;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,25 +19,23 @@ public class SheetBean implements Sheet {
 
   private Workbook workbook;
 
-  public SheetBean() {
-    // default constructor
+  public SheetBean(int index) {
+    this.index = index;
   }
 
-  public SheetBean(String name) {
+  public SheetBean(int index, String name) {
+    this.index = index;
     this.name = name;
   }
 
   public SheetBean(org.apache.poi.ss.usermodel.Sheet sheet) {
+    this.index = sheet.getWorkbook().getSheetIndex(sheet);
     this.name = sheet.getSheetName();
   }
 
   @Override
   public int getIndex() {
     return index;
-  }
-
-  void setIndex(int index) {
-    this.index = index;
   }
 
   @Override
@@ -54,9 +55,10 @@ public class SheetBean implements Sheet {
 
   @Override
   public Row getRow(int index) {
-    if (index < 1) {
-      throw new IllegalArgumentException("index must greater than zero");
+    if (index < 1 || index > sizeOfRows()) {
+      throw new IllegalArgumentException("index out of bounds");
     }
+    Collections.sort(rows);
     return rows.get(index - 1);
   }
 
@@ -89,5 +91,10 @@ public class SheetBean implements Sheet {
   @Override
   public Workbook getWorkbook() {
     return workbook;
+  }
+
+  @Override
+  public int compareTo(Sheet o) {
+    return new CompareToBuilder().append(index, o.getIndex()).toComparison();
   }
 }

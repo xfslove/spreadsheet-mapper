@@ -8,7 +8,7 @@ import java.util.List;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface Row extends Serializable {
+public interface Row extends Serializable, Comparable<Row> {
 
   /**
    * @return row num 1-based
@@ -16,7 +16,7 @@ public interface Row extends Serializable {
   int getIndex();
 
   /**
-   * @return cells of this row
+   * @return cells of this row ordered by column index
    */
   List<Cell> getCells();
 

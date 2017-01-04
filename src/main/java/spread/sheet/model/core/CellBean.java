@@ -1,9 +1,10 @@
 package spread.sheet.model.core;
 
-import spread.sheet.util.DateFormatRegister;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.util.NumberToTextConverter;
+import spread.sheet.util.DateFormatRegister;
 
 import java.text.SimpleDateFormat;
 import java.util.Objects;
@@ -15,21 +16,17 @@ public class CellBean implements Cell {
 
   private Row row;
 
-  private int rowIndex;
-
   private int columnIndex;
 
   private String value;
 
-  public CellBean(int rowIndex, int columnIndex, String value) {
-    this.rowIndex = rowIndex;
+  public CellBean(int columnIndex, String value) {
     this.columnIndex = columnIndex;
     this.value = value;
   }
 
   public CellBean(org.apache.poi.ss.usermodel.Cell cell) {
 
-    this.rowIndex = cell.getRowIndex() + 1;
     this.columnIndex = cell.getColumnIndex() + 1;
 
     if (cell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BLANK) {
@@ -76,13 +73,8 @@ public class CellBean implements Cell {
 
   }
 
-  public static CellBean EMPTY_CELL(int rowIndex, int columnIndex) {
-    return new CellBean(rowIndex, columnIndex, null);
-  }
-
-  @Override
-  public int getRowIndex() {
-    return rowIndex;
+  public static CellBean EMPTY_CELL(int columnIndex) {
+    return new CellBean(columnIndex, null);
   }
 
   @Override
@@ -113,13 +105,18 @@ public class CellBean implements Cell {
       return false;
     }
     CellBean cell = (CellBean) obj;
-    return Objects.equals(rowIndex, cell.rowIndex) &&
-        Objects.equals(columnIndex, cell.columnIndex) &&
+    return Objects.equals(columnIndex, cell.columnIndex) &&
         Objects.equals(value, cell.value);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(rowIndex, columnIndex, value);
+    return Objects.hash(columnIndex, value);
+  }
+
+  @Override
+  public int compareTo(Cell o) {
+    return new CompareToBuilder()
+        .append(columnIndex, o.getColumnIndex()).toComparison();
   }
 }

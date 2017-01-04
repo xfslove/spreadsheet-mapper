@@ -1,14 +1,14 @@
 package spread.sheet.w2f;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spread.sheet.Constants;
 import spread.sheet.model.core.Cell;
 import spread.sheet.model.core.Row;
 import spread.sheet.model.core.Sheet;
 import spread.sheet.model.core.Workbook;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -68,13 +68,14 @@ public abstract class Workbook2ExcelWriterAdapter implements WorkbookWriter {
   private org.apache.poi.ss.usermodel.Sheet createSheet(org.apache.poi.ss.usermodel.Workbook workbook, Sheet sheet) {
     String sheetName = sheet.getName();
 
+    org.apache.poi.ss.usermodel.Sheet poiSheet;
     if (StringUtils.isBlank(sheetName)) {
-      workbook.createSheet();
+      poiSheet = workbook.createSheet();
     } else {
-      workbook.createSheet(sheetName);
+      poiSheet = workbook.createSheet(sheetName);
     }
 
-    return workbook.getSheetAt(workbook.getNumberOfSheets() - 1);
+    return poiSheet;
   }
 
   private org.apache.poi.ss.usermodel.Row createRow(org.apache.poi.ss.usermodel.Sheet sheet, Row excelRow) {

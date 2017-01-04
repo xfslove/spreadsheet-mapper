@@ -10,7 +10,7 @@ import java.io.Serializable;
  * </pre>
  * Created by hanwen on 2016/12/29.
  */
-public interface HeaderMeta extends Serializable {
+public interface HeaderMeta extends Serializable, Comparable<HeaderMeta> {
 
   /**
    * header at which row

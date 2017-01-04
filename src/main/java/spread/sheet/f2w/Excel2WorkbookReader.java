@@ -49,8 +49,8 @@ public class Excel2WorkbookReader implements WorkbookReader {
           Row excelRow = createRow(row);
           excelSheet.addRow(excelRow);
 
-          int maxColNum = row.getLastCellNum() > 0 ? row.getLastCellNum() : 0;
-          for (int k = 0; k < maxColNum; k++) {
+          int lastColumnNum = row.getLastCellNum() > 0 ? row.getLastCellNum() : 0;
+          for (int k = 0; k < lastColumnNum; k++) {
 
             createCell(row, excelRow, k);
           }
@@ -85,7 +85,7 @@ public class Excel2WorkbookReader implements WorkbookReader {
     CellBean excelCell;
     if (cell == null) {
 
-      excelCell = CellBean.EMPTY_CELL(columnIndex + 1, row.getRowNum() + 1);
+      excelCell = CellBean.EMPTY_CELL(columnIndex + 1);
     } else {
 
       excelCell = new CellBean(cell);

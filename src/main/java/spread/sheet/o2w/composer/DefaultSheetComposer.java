@@ -1,5 +1,6 @@
 package spread.sheet.o2w.composer;
 
+import org.apache.commons.lang3.StringUtils;
 import spread.sheet.model.core.*;
 import spread.sheet.model.meta.FieldMeta;
 import spread.sheet.model.meta.HeaderMeta;
@@ -7,8 +8,6 @@ import spread.sheet.model.meta.SheetMeta;
 import spread.sheet.o2w.extractor.BeanUtilValueExtractor;
 import spread.sheet.o2w.extractor.FieldValueExtractor;
 import spread.sheet.o2w.extractor.ValueExtractor;
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,86 +56,115 @@ public class DefaultSheetComposer implements SheetComposer {
       throw new WorkbookComposeException("set sheet meta first");
     }
 
-    Sheet sheet = createSheet(sheetMeta.getSheetName());
+    Sheet sheet = createSheet(sheetMeta);
 
     int lastRowNum = sheetMeta.getDataStartRowIndex() + data.size() - 1;
 
-    for (int j = 1; j <= lastRowNum; j++) {
+    for (int i = 1; i <= lastRowNum; i++) {
 
-      Row row = createRow(j);
+      Row row = createRow(i);
       sheet.addRow(row);
 
       if (row.getIndex() < sheetMeta.getDataStartRowIndex()) {
 
-        createHeaderIfNecessary(row, sheetMeta);
+        createHeaderCellsIfNecessary(row, sheetMeta);
       } else {
 
-        createDataRowCells(row, data.get(j - 1), sheetMeta);
+        createDataCells(row, data.get(i - 1), sheetMeta);
       }
     }
 
     return sheet;
   }
 
-  private Sheet createSheet(String sheetName) {
+  private Sheet createSheet(SheetMeta sheetMeta) {
+    int sheetIndex = sheetMeta.getSheetIndex();
+    String sheetName = sheetMeta.getSheetName();
+
     if (StringUtils.isBlank(sheetName)) {
-      return new SheetBean();
+      return new SheetBean(sheetIndex);
     }
-    return new SheetBean(sheetName);
+    return new SheetBean(sheetIndex, sheetName);
   }
 
   private Row createRow(int rowIndex) {
     return new RowBean(rowIndex);
   }
 
-  private void createHeaderIfNecessary(Row row, SheetMeta sheetMeta) {
-    int rowIndex = row.getIndex();
-
+  private void createHeaderCellsIfNecessary(Row row, SheetMeta sheetMeta) {
     List<FieldMeta> fieldMetas = sheetMeta.getFieldMetas();
 
-    for (FieldMeta fieldMeta : fieldMetas) {
+    int lastColumnNum = getLastColumnNum(fieldMetas);
+    Map<Integer, FieldMeta> columnIndex2fieldMeta = buildFieldMetaMap(fieldMetas);
 
-      HeaderMeta headerMeta = fieldMeta.getHeaderMeta(rowIndex);
+    for (int i = 1; i <= lastColumnNum; i++) {
+      Cell cell;
+      FieldMeta fieldMeta = columnIndex2fieldMeta.get(i);
 
-      int columnIndex = fieldMeta.getColumnIndex();
+      if (fieldMeta == null) {
 
-      CellBean headerCell;
-      if (headerMeta == null) {
-
-        headerCell = CellBean.EMPTY_CELL(rowIndex, columnIndex);
-      } else {
-
-        headerCell = new CellBean(rowIndex, columnIndex, headerMeta.getValue());
+        cell = CellBean.EMPTY_CELL(i);
+        row.addCell(cell);
+        continue;
       }
 
-      row.addCell(headerCell);
+      HeaderMeta headerMeta = fieldMeta.getHeaderMeta(row.getIndex());
+      if (headerMeta == null) {
+
+        cell = CellBean.EMPTY_CELL(i);
+        row.addCell(cell);
+        continue;
+      }
+
+      cell = new CellBean(i, headerMeta.getValue());
+      row.addCell(cell);
     }
 
   }
 
-  private void createDataRowCells(Row row, Object object, SheetMeta sheetMeta) {
+  private void createDataCells(Row row, Object object, SheetMeta sheetMeta) {
 
     List<FieldMeta> fieldMetas = sheetMeta.getFieldMetas();
+    int lastColumnNum = getLastColumnNum(fieldMetas);
+    Map<Integer, FieldMeta> columnIndex2fieldMeta = buildFieldMetaMap(fieldMetas);
 
-    for (FieldMeta fieldMeta : fieldMetas) {
+    for (int i = 1; i <= lastColumnNum; i++) {
+      Cell cell;
+      FieldMeta fieldMeta = columnIndex2fieldMeta.get(i);
+
+      if (fieldMeta == null) {
+
+        cell = CellBean.EMPTY_CELL(i);
+        row.addCell(cell);
+        continue;
+      }
 
       String value = getFieldStringValue(object, fieldMeta);
-      CellBean dataCell = new CellBean(row.getIndex(), fieldMeta.getColumnIndex(), value);
-
-      row.addCell(dataCell);
-
+      cell = new CellBean(i, value);
+      row.addCell(cell);
     }
   }
 
   private String getFieldStringValue(Object object, FieldMeta fieldMeta) {
-    if (MapUtils.isNotEmpty(key2fieldValueExtractor)) {
+    FieldValueExtractor extractor = key2fieldValueExtractor.get(fieldMeta.getName());
 
-      FieldValueExtractor extractor = key2fieldValueExtractor.get(fieldMeta.getName());
-      if (extractor != null) {
-        return extractor.getStringValue(object, fieldMeta);
-      }
+    if (extractor != null) {
+      return extractor.getStringValue(object, fieldMeta);
     }
 
     return defaultValueExtractor.getStringValue(object, fieldMeta);
+  }
+
+  private int getLastColumnNum(List<FieldMeta> fieldMetas) {
+    FieldMeta lastFieldMeta = fieldMetas.get(fieldMetas.size() - 1);
+    return lastFieldMeta.getColumnIndex();
+  }
+
+  private Map<Integer, FieldMeta> buildFieldMetaMap(List<FieldMeta> fieldMetas) {
+    Map<Integer, FieldMeta> columnIndex2fieldMeta = new HashMap<>();
+    for (FieldMeta fieldMeta : fieldMetas) {
+      columnIndex2fieldMeta.put(fieldMeta.getColumnIndex(), fieldMeta);
+    }
+    return columnIndex2fieldMeta;
   }
 }

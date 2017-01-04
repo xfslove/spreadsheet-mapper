@@ -7,7 +7,7 @@ import java.io.Serializable;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface Cell extends Serializable {
+public interface Cell extends Serializable, Comparable<Cell> {
 
   /**
    * cell value
@@ -15,13 +15,6 @@ public interface Cell extends Serializable {
    * @return value
    */
   String getValue();
-
-  /**
-   * cell row index
-   *
-   * @return 1-based
-   */
-  int getRowIndex();
 
   /**
    * cell column index

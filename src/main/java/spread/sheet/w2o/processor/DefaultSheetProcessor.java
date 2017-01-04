@@ -101,10 +101,7 @@ public class DefaultSheetProcessor implements SheetProcessor {
     }
 
     List<FieldMeta> fieldMetas = sheetMeta.getFieldMetas();
-    Map<Integer, FieldMeta> columnIndex2fieldMeta = new HashMap<>();
-    for (FieldMeta fieldMeta : fieldMetas) {
-      columnIndex2fieldMeta.put(fieldMeta.getColumnIndex(), fieldMeta);
-    }
+    Map<Integer, FieldMeta> columnIndex2fieldMeta = buildFieldMetaMap(fieldMetas);
 
     List<Object> oneSheetObjects = new ArrayList<>();
     sheetProcessorListener.before(sheet, sheetMeta);
@@ -116,14 +113,18 @@ public class DefaultSheetProcessor implements SheetProcessor {
 
       rowProcessorListener.before(row, sheetMeta, object);
 
-      for (int j = 1; j <= row.sizeOfCells(); j++) {
+      for (Cell cell : row.getCells()) {
 
-        FieldMeta fieldMeta = columnIndex2fieldMeta.get(i);
-        Cell cell = row.getCell(j);
+        FieldMeta fieldMeta = columnIndex2fieldMeta.get(cell.getColumnIndex());
 
-        FieldValueSetter fieldValueSetter = key2fieldValueSetter.get(fieldMeta.getName());
+        if (fieldMeta == null) {
+          // if missing field meta skip the cell(same column index with field meta)
+          continue;
+        }
 
         cellProcessorListener.before(cell, fieldMeta, object);
+
+        FieldValueSetter fieldValueSetter = key2fieldValueSetter.get(fieldMeta.getName());
 
         if (fieldValueSetter != null) {
           fieldValueSetter.set(object, cell, fieldMeta);
@@ -133,6 +134,7 @@ public class DefaultSheetProcessor implements SheetProcessor {
         }
 
         cellProcessorListener.after(cell, fieldMeta, object);
+
       }
 
       rowProcessorListener.after(row, sheetMeta, object);
@@ -145,4 +147,11 @@ public class DefaultSheetProcessor implements SheetProcessor {
     return oneSheetObjects;
   }
 
+  private Map<Integer, FieldMeta> buildFieldMetaMap(List<FieldMeta> fieldMetas) {
+    Map<Integer, FieldMeta> columnIndex2fieldMeta = new HashMap<>();
+    for (FieldMeta fieldMeta : fieldMetas) {
+      columnIndex2fieldMeta.put(fieldMeta.getColumnIndex(), fieldMeta);
+    }
+    return columnIndex2fieldMeta;
+  }
 }

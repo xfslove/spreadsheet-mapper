@@ -11,7 +11,7 @@ import java.util.List;
 public interface Workbook extends Serializable {
 
   /**
-   * @return sheets of this workbook
+   * @return sheets of this workbook ordered by sheet index
    */
   List<Sheet> getSheets();
 

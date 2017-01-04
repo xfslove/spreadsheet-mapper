@@ -12,7 +12,7 @@ import java.util.List;
  * </pre>
  * Created by hanwen on 2016/12/30.
  */
-public interface FieldMeta extends Serializable {
+public interface FieldMeta extends Serializable, Comparable<FieldMeta> {
 
   /**
    * @return field name
@@ -27,7 +27,7 @@ public interface FieldMeta extends Serializable {
   int getColumnIndex();
 
   /**
-   * @return list of header meta
+   * @return list of header meta ordered by header meta row index
    */
   List<HeaderMeta> getHeaderMetas();
 

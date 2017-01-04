@@ -1,6 +1,10 @@
 package spread.sheet.model.meta;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.CompareToBuilder;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,6 +21,9 @@ public class FieldMetaBean implements FieldMeta {
   private SheetMeta sheetMeta;
 
   public FieldMetaBean(String name, int columnIndex) {
+    if (StringUtils.isBlank(name)) {
+      throw new IllegalArgumentException("name can not be null");
+    }
     this.name = name;
     this.columnIndex = columnIndex;
   }
@@ -33,6 +40,7 @@ public class FieldMetaBean implements FieldMeta {
 
   @Override
   public List<HeaderMeta> getHeaderMetas() {
+    Collections.sort(headerMetas);
     return headerMetas;
   }
 
@@ -59,6 +67,11 @@ public class FieldMetaBean implements FieldMeta {
 
   void setSheetMeta(SheetMeta sheetMeta) {
     this.sheetMeta = sheetMeta;
+  }
+
+  @Override
+  public int compareTo(FieldMeta o) {
+    return new CompareToBuilder().append(columnIndex, o.getColumnIndex()).toComparison();
   }
 }
 

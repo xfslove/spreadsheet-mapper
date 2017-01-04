@@ -37,7 +37,7 @@ public interface SheetMeta extends Serializable {
   int getDataStartRowIndex();
 
   /**
-   * @return list of field meta
+   * @return list of field meta ordered by field meta column index
    */
   List<FieldMeta> getFieldMetas();
 

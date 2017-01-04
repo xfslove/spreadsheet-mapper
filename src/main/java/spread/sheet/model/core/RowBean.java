@@ -1,6 +1,9 @@
 package spread.sheet.model.core;
 
+import org.apache.commons.lang3.builder.CompareToBuilder;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,9 +43,9 @@ public class RowBean implements Row {
   @Override
   public Cell getCell(int index) {
     if (index < 1 || index > sizeOfCells()) {
-      return null;
+      throw new IllegalArgumentException("index out of bounds");
     }
-
+    Collections.sort(cells);
     return cells.get(index - 1);
   }
 
@@ -77,5 +80,8 @@ public class RowBean implements Row {
     this.sheet = sheet;
   }
 
-
+  @Override
+  public int compareTo(Row o) {
+    return new CompareToBuilder().append(index, o.getIndex()).toComparison();
+  }
 }

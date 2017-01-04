@@ -1,6 +1,7 @@
 package spread.sheet.model.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -12,6 +13,7 @@ public class WorkbookBean implements Workbook {
 
   @Override
   public List<Sheet> getSheets() {
+    Collections.sort(sheets);
     return sheets;
   }
 
@@ -23,7 +25,6 @@ public class WorkbookBean implements Workbook {
   @Override
   public boolean addSheet(Sheet sheet) {
     boolean success = sheets.add(sheet);
-    ((SheetBean) sheet).setIndex(sizeOfSheets() + 1);
     ((SheetBean) sheet).setWorkbook(this);
     return success;
   }

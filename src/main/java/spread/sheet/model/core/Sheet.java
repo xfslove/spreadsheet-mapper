@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * excel sheet
+ * sheet
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface Sheet extends Serializable {
+public interface Sheet extends Serializable, Comparable<Sheet> {
 
   /**
    * get sheet index
