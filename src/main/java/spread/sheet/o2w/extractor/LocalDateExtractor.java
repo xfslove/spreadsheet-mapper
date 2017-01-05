@@ -15,7 +15,7 @@ import spread.sheet.utils.FieldUtils;
  * <p>
  * Created by hanwen on 5/3/16.
  */
-public class LocalDateExtractor extends FieldValueExtractorAdapter {
+public class LocalDateExtractor<T> extends FieldValueExtractorAdapter<T> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(LocalDateExtractor.class);
 
@@ -27,10 +27,10 @@ public class LocalDateExtractor extends FieldValueExtractorAdapter {
   }
 
   @Override
-  public String getStringValue(Object data, FieldMeta fieldMeta) {
+  public String getStringValue(T object, FieldMeta fieldMeta) {
 
     try {
-      Object value = PropertyUtils.getProperty(data, FieldUtils.detectRealField(fieldMeta.getName()));
+      Object value = PropertyUtils.getProperty(object, FieldUtils.detectRealField(fieldMeta.getName()));
 
       if (!(value instanceof LocalDate)) {
         return null;

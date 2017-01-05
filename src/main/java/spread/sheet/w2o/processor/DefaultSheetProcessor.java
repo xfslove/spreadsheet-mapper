@@ -34,17 +34,18 @@ public class DefaultSheetProcessor<T> implements SheetProcessor<T> {
 
   private CellProcessorListener<T> cellProcessorListener = new NoopCellProcessorListener<>();
 
-  private Map<String, FieldValueSetter> key2fieldValueSetter = new HashMap<>();
+  private Map<String, FieldValueSetter<T>> key2fieldValueSetter = new HashMap<>();
 
-  private ValueSetter defaultValueSetter = new BeanUtilsValueSetter();
+  private ValueSetter<T> defaultValueSetter = new BeanUtilsValueSetter<>();
 
   @Override
-  public SheetProcessor<T> fieldValueSetter(FieldValueSetter... fieldValueSetters) {
+  @SuppressWarnings("unchecked")
+  public SheetProcessor<T> fieldValueSetter(FieldValueSetter<T>... fieldValueSetters) {
     if (fieldValueSetters == null) {
       return this;
     }
 
-    for (FieldValueSetter setter : fieldValueSetters) {
+    for (FieldValueSetter<T> setter : fieldValueSetters) {
       key2fieldValueSetter.put(setter.getMatchField(), setter);
     }
     return this;
@@ -124,7 +125,7 @@ public class DefaultSheetProcessor<T> implements SheetProcessor<T> {
 
         cellProcessorListener.before(cell, fieldMeta, object);
 
-        FieldValueSetter fieldValueSetter = key2fieldValueSetter.get(fieldMeta.getName());
+        FieldValueSetter<T> fieldValueSetter = key2fieldValueSetter.get(fieldMeta.getName());
 
         if (fieldValueSetter != null) {
           fieldValueSetter.set(object, cell, fieldMeta);

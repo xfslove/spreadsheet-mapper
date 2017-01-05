@@ -33,8 +33,8 @@ public class DefaultSheetProcessorTest {
     processor1.fieldValueSetter(
         new LocalDateTimeValueSetter("yyyy-MM-dd HH:mm:ss", "test.localDateTime"),
         new LocalDateValueSetter("yyyy-MM-dd", "test.localDate"),
-        new BooleanValueSetter(new String[] {"pass"}, new String[] {"failure"}, "test.boolean1"),
-        new BooleanValueSetter(new String[] {"pass"}, new String[] {"failure"}, "test.boolean2")
+        new BooleanValueSetter(new String[]{"pass"}, new String[]{"failure"}, "test.boolean1"),
+        new BooleanValueSetter(new String[]{"pass"}, new String[]{"failure"}, "test.boolean2")
     );
 
     List<TestBean> list1 = processor1.process();

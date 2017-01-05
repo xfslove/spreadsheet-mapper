@@ -24,16 +24,17 @@ public class DefaultSheetComposer<T> implements SheetComposer<T> {
 
   private List<T> data = new ArrayList<>();
 
-  private Map<String, FieldValueExtractor> key2fieldValueExtractor = new HashMap<>();
+  private Map<String, FieldValueExtractor<T>> key2fieldValueExtractor = new HashMap<>();
 
-  private ValueExtractor defaultValueExtractor = new BeanUtilsValueExtractor();
+  private ValueExtractor<T> defaultValueExtractor = new BeanUtilsValueExtractor<>();
 
   @Override
-  public SheetComposer<T> fieldValueExtractor(FieldValueExtractor... fieldValueExtractors) {
+  @SuppressWarnings("unchecked")
+  public SheetComposer<T> fieldValueExtractor(FieldValueExtractor<T>... fieldValueExtractors) {
     if (fieldValueExtractors == null) {
       return this;
     }
-    for (FieldValueExtractor extractor : fieldValueExtractors) {
+    for (FieldValueExtractor<T> extractor : fieldValueExtractors) {
       key2fieldValueExtractor.put(extractor.getMatchField(), extractor);
     }
     return this;
@@ -148,7 +149,7 @@ public class DefaultSheetComposer<T> implements SheetComposer<T> {
   }
 
   private String getFieldStringValue(T object, FieldMeta fieldMeta) {
-    FieldValueExtractor extractor = key2fieldValueExtractor.get(fieldMeta.getName());
+    FieldValueExtractor<T> extractor = key2fieldValueExtractor.get(fieldMeta.getName());
 
     if (extractor != null) {
       return extractor.getStringValue(object, fieldMeta);

@@ -17,7 +17,7 @@ import spread.sheet.w2o.processor.WorkbookProcessException;
  * <p>
  * Created by hanwen on 5/3/16.
  */
-public class LocalDateTimeValueSetter extends FieldValueSetterAdapter {
+public class LocalDateTimeValueSetter<T> extends FieldValueSetterAdapter<T> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(LocalDateTimeValueSetter.class);
 
@@ -29,14 +29,14 @@ public class LocalDateTimeValueSetter extends FieldValueSetterAdapter {
   }
 
   @Override
-  public void set(Object data, Cell cell, FieldMeta fieldMeta) {
+  public void set(T object, Cell cell, FieldMeta fieldMeta) {
     try {
       DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(pattern);
       String value = cell.getValue();
       String fieldName = FieldUtils.detectRealField(fieldMeta.getName());
 
       if (value == null) {
-        PropertyUtils.setProperty(data, fieldName, null);
+        PropertyUtils.setProperty(object, fieldName, null);
         return;
       }
 
@@ -46,7 +46,7 @@ public class LocalDateTimeValueSetter extends FieldValueSetterAdapter {
       } catch (IllegalArgumentException e) {
         LOGGER.debug("value format not valid", ExceptionUtils.getStackTrace(e));
       }
-      PropertyUtils.setProperty(data, fieldName, localDateTime);
+      PropertyUtils.setProperty(object, fieldName, localDateTime);
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new WorkbookProcessException(e);

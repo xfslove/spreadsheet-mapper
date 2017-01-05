@@ -9,7 +9,7 @@ import spread.sheet.model.core.Cell;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public abstract class FieldValueSetterAdapter implements FieldValueSetter {
+public abstract class FieldValueSetterAdapter<T> implements FieldValueSetter<T> {
 
   private String matchField;
 
@@ -23,5 +23,5 @@ public abstract class FieldValueSetterAdapter implements FieldValueSetter {
   }
 
   @Override
-  public abstract void set(Object data, Cell cell, FieldMeta fieldMeta);
+  public abstract void set(T object, Cell cell, FieldMeta fieldMeta);
 }

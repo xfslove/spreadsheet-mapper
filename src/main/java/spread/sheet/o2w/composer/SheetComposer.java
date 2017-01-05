@@ -23,7 +23,8 @@ public interface SheetComposer<T> {
    * @param fieldValueExtractors field value extractor
    * @see FieldValueExtractor
    */
-  SheetComposer<T> fieldValueExtractor(FieldValueExtractor... fieldValueExtractors);
+  @SuppressWarnings("unchecked")
+  SheetComposer<T> fieldValueExtractor(FieldValueExtractor<T>... fieldValueExtractors);
 
   /**
    * @param sheetMeta sheet meta

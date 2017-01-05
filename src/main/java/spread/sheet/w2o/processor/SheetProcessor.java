@@ -26,7 +26,8 @@ public interface SheetProcessor<T> {
    * @param fieldValueSetters field value setter
    * @see FieldValueSetter
    */
-  SheetProcessor<T> fieldValueSetter(FieldValueSetter... fieldValueSetters);
+  @SuppressWarnings("unchecked")
+  SheetProcessor<T> fieldValueSetter(FieldValueSetter<T>... fieldValueSetters);
 
   /**
    * @param objectFactory object factory

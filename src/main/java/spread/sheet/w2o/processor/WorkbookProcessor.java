@@ -3,7 +3,7 @@ package spread.sheet.w2o.processor;
 import java.util.List;
 
 /**
- * workbook processor
+ * workbook processor, simply adapter of sheet processor
  * <p>
  * Created by hanwen on 2017/1/4.
  */
@@ -19,5 +19,5 @@ public interface WorkbookProcessor {
    * @return list of sheet list data
    * @see SheetProcessor#process()
    */
-  List<List<Object>> process();
+  List<List> process();
 }

@@ -8,14 +8,14 @@ import spread.sheet.model.meta.FieldMeta;
  * <p>
  * Created by hanwen on 2016/12/30.
  */
-public interface ValueSetter {
+public interface ValueSetter<T> {
 
   /**
    * set object field from cell value
    *
-   * @param data      supplied object
+   * @param object      supplied object
    * @param cell      cell
    * @param fieldMeta field meta
    */
-  void set(Object data, Cell cell, FieldMeta fieldMeta);
+  void set(T object, Cell cell, FieldMeta fieldMeta);
 }

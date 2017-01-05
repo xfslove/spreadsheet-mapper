@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  * <p>
  * Created by hanwen on 2017/1/4.
  */
-public class PlainNumberExtractor extends FieldValueExtractorAdapter {
+public class PlainNumberExtractor<T> extends FieldValueExtractorAdapter<T> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PlainNumberExtractor.class);
 
@@ -25,10 +25,10 @@ public class PlainNumberExtractor extends FieldValueExtractorAdapter {
   }
 
   @Override
-  public String getStringValue(Object data, FieldMeta fieldMeta) {
+  public String getStringValue(T object, FieldMeta fieldMeta) {
 
     try {
-      Object value = PropertyUtils.getProperty(data, FieldUtils.detectRealField(fieldMeta.getName()));
+      Object value = PropertyUtils.getProperty(object, FieldUtils.detectRealField(fieldMeta.getName()));
 
       if (!(value instanceof Number)) {
         return null;

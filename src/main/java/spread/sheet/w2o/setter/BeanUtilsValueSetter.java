@@ -23,7 +23,7 @@ import java.util.Calendar;
  * <p>
  * Created by hanwen on 15-12-18.
  */
-public class BeanUtilsValueSetter implements ValueSetter {
+public class BeanUtilsValueSetter<T> implements ValueSetter<T> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BeanUtilsValueSetter.class);
 
@@ -32,17 +32,17 @@ public class BeanUtilsValueSetter implements ValueSetter {
   }
 
   @Override
-  public void set(Object data, Cell cell, FieldMeta fieldMeta) {
+  public void set(T object, Cell cell, FieldMeta fieldMeta) {
     try {
-      BeanUtils.setProperty(data, FieldUtils.detectRealField(fieldMeta.getName()), lookup(data, fieldMeta.getName()) ? cell.getValue() : null);
+      BeanUtils.setProperty(object, FieldUtils.detectRealField(fieldMeta.getName()), lookup(object, fieldMeta.getName()) ? cell.getValue() : null);
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new WorkbookProcessException(e);
     }
   }
 
-  private boolean lookup(Object data, String field) {
-    Class fieldType = FieldUtils.getFieldType(data.getClass(), FieldUtils.detectRealField(field).split("\\."));
+  private boolean lookup(T object, String field) {
+    Class fieldType = FieldUtils.getFieldType(object.getClass(), FieldUtils.detectRealField(field).split("\\."));
     return ConvertUtils.lookup(fieldType) != null;
   }
 

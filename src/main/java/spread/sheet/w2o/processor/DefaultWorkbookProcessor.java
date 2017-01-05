@@ -21,8 +21,8 @@ public class DefaultWorkbookProcessor implements WorkbookProcessor {
   }
 
   @Override
-  public List<List<Object>> process() {
-    List<List<Object>> objects = new ArrayList<>();
+  public List<List> process() {
+    List<List> objects = new ArrayList<>();
 
     for (SheetProcessor sheetProcessor : sheetProcessors) {
 

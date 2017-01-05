@@ -18,7 +18,7 @@ import java.util.Set;
  * <p>
  * Created by hanwen on 5/3/16.
  */
-public class BooleanValueSetter extends FieldValueSetterAdapter {
+public class BooleanValueSetter<T> extends FieldValueSetterAdapter<T> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BooleanValueSetter.class);
 
@@ -37,7 +37,7 @@ public class BooleanValueSetter extends FieldValueSetterAdapter {
   }
 
   @Override
-  public void set(Object data, Cell cell, FieldMeta fieldMeta) {
+  public void set(T object, Cell cell, FieldMeta fieldMeta) {
     try {
       String stringValue = cell.getValue();
       Boolean booleanValue = null;
@@ -48,7 +48,7 @@ public class BooleanValueSetter extends FieldValueSetterAdapter {
         booleanValue = Boolean.FALSE;
       }
 
-      BeanUtils.setProperty(data, FieldUtils.detectRealField(fieldMeta.getName()), booleanValue);
+      BeanUtils.setProperty(object, FieldUtils.detectRealField(fieldMeta.getName()), booleanValue);
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new WorkbookProcessException(e);

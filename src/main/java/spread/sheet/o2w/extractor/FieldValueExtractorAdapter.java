@@ -7,7 +7,7 @@ import spread.sheet.model.meta.FieldMeta;
  * <p>
  * Created by hanwen on 5/3/16.
  */
-public abstract class FieldValueExtractorAdapter implements FieldValueExtractor {
+public abstract class FieldValueExtractorAdapter<T> implements FieldValueExtractor<T> {
 
   private String matchField;
 
@@ -21,5 +21,5 @@ public abstract class FieldValueExtractorAdapter implements FieldValueExtractor 
   }
 
   @Override
-  public abstract String getStringValue(Object data, FieldMeta fieldMeta);
+  public abstract String getStringValue(T object, FieldMeta fieldMeta);
 }
