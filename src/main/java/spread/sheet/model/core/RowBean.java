@@ -1,9 +1,6 @@
 package spread.sheet.model.core;
 
-import org.apache.commons.lang3.builder.CompareToBuilder;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,14 +14,6 @@ public class RowBean implements Row {
 
   private Sheet sheet;
 
-  public RowBean(int index) {
-    this.index = index;
-  }
-
-  public RowBean(org.apache.poi.ss.usermodel.Row row) {
-    this.index = row.getRowNum() + 1;
-  }
-
   @Override
   public int getIndex() {
     return index;
@@ -32,7 +21,6 @@ public class RowBean implements Row {
 
   @Override
   public List<Cell> getCells() {
-    Collections.sort(cells);
     return cells;
   }
 
@@ -42,17 +30,17 @@ public class RowBean implements Row {
   }
 
   @Override
-  public Cell getCell(int index) {
-    if (index < 1 || index > sizeOfCells()) {
-      throw new IllegalArgumentException("index out of bounds");
+  public Cell getCell(int columnIndex) {
+    if (columnIndex < 1 || columnIndex > sizeOfCells()) {
+      throw new IllegalArgumentException("column index out of bounds");
     }
-    Collections.sort(cells);
-    return cells.get(index - 1);
+    return cells.get(columnIndex - 1);
   }
 
   @Override
   public boolean addCell(Cell cell) {
     ((CellBean) cell).setRow(this);
+    ((CellBean) cell).setIndex(sizeOfCells() + 1);
     return cells.add(cell);
   }
 
@@ -81,8 +69,7 @@ public class RowBean implements Row {
     this.sheet = sheet;
   }
 
-  @Override
-  public int compareTo(Row o) {
-    return new CompareToBuilder().append(index, o.getIndex()).toComparison();
+  void setIndex(int index) {
+    this.index = index;
   }
 }

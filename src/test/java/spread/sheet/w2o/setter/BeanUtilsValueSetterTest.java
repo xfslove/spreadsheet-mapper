@@ -84,7 +84,7 @@ public class BeanUtilsValueSetterTest {
     assertNull(testBean1.getFloat2());
     assertEquals(testBean1.getDouble1(), 0.0D);
     assertNull(testBean1.getDouble2());
-    assertEquals(testBean1.getString(), "");
+    assertEquals(testBean1.getString(), "Scarlett Johansson");
     assertNull(testBean1.getLocalDate());
     assertNull(testBean1.getLocalDate());
     assertEquals(testBean1.getBigDecimal(), BigDecimal.valueOf(0.00000000000000000001).stripTrailingZeros());

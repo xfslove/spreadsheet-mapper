@@ -1,6 +1,5 @@
 package spread.sheet.w2o.processor;
 
-import spread.sheet.model.core.SheetList;
 import spread.sheet.model.core.Cell;
 import spread.sheet.model.core.Row;
 import spread.sheet.model.core.Sheet;
@@ -11,6 +10,7 @@ import spread.sheet.w2o.setter.BeanUtilsValueSetter;
 import spread.sheet.w2o.setter.FieldValueSetter;
 import spread.sheet.w2o.setter.ValueSetter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +87,7 @@ public class DefaultSheetProcessor implements SheetProcessor {
   }
 
   @Override
-  public SheetList<Object> process() {
+  public List<Object> process() {
     if (sheet == null) {
       throw new WorkbookProcessException("set sheet first");
     }
@@ -100,14 +100,10 @@ public class DefaultSheetProcessor implements SheetProcessor {
       throw new WorkbookProcessException("set object factory first");
     }
 
-    if (sheet.getIndex() != sheetMeta.getSheetIndex()) {
-      throw new WorkbookProcessException("sheet meta[sheet index:" + sheetMeta.getSheetIndex() + "] not belong to the sheet[index:" + sheet.getIndex() + "]");
-    }
-
     List<FieldMeta> fieldMetas = sheetMeta.getFieldMetas();
     Map<Integer, FieldMeta> columnIndex2fieldMeta = buildFieldMetaMap(fieldMetas);
 
-    SheetList<Object> oneSheetObjects = new SheetList<>(sheet.getIndex());
+    List<Object> oneSheetObjects = new ArrayList<>();
     sheetProcessorListener.before(sheet, sheetMeta);
 
     for (int i = sheetMeta.getDataStartRowIndex(); i <= sheet.sizeOfRows(); i++) {
@@ -119,7 +115,7 @@ public class DefaultSheetProcessor implements SheetProcessor {
 
       for (Cell cell : row.getCells()) {
 
-        FieldMeta fieldMeta = columnIndex2fieldMeta.get(cell.getColumnIndex());
+        FieldMeta fieldMeta = columnIndex2fieldMeta.get(cell.getIndex());
 
         if (fieldMeta == null) {
           // if missing field meta skip the cell(same column index with field meta)

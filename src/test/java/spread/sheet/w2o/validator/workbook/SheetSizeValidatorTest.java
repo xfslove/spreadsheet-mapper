@@ -22,7 +22,7 @@ public class SheetSizeValidatorTest {
 
     assertFalse(sheetSizeValidator.valid(workbook));
 
-    workbook.addSheet(new SheetBean(2));
+    workbook.addSheet(new SheetBean());
 
     assertTrue(sheetSizeValidator.valid(workbook));
 

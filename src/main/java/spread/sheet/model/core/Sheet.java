@@ -8,7 +8,7 @@ import java.util.List;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface Sheet extends Serializable, Comparable<Sheet> {
+public interface Sheet extends Serializable {
 
   /**
    * get sheet index
@@ -33,12 +33,12 @@ public interface Sheet extends Serializable, Comparable<Sheet> {
   int sizeOfRows();
 
   /**
-   * get row by index
+   * get row by row index
    *
-   * @param index 1-based
+   * @param rowIndex 1-based
    * @return row
    */
-  Row getRow(int index);
+  Row getRow(int rowIndex);
 
   /**
    * add row

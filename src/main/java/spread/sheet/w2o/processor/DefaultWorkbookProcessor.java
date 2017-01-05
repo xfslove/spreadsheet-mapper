@@ -1,7 +1,5 @@
 package spread.sheet.w2o.processor;
 
-import spread.sheet.model.core.SheetList;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,10 +21,11 @@ public class DefaultWorkbookProcessor implements WorkbookProcessor {
   }
 
   @Override
-  public List<SheetList<Object>> process() {
-    List<SheetList<Object>> objects = new ArrayList<>();
+  public List<List<Object>> process() {
+    List<List<Object>> objects = new ArrayList<>();
 
     for (SheetProcessor sheetProcessor : sheetProcessors) {
+
       objects.add(sheetProcessor.process());
     }
 

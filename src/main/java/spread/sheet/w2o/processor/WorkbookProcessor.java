@@ -1,7 +1,5 @@
 package spread.sheet.w2o.processor;
 
-import spread.sheet.model.core.SheetList;
-
 import java.util.List;
 
 /**
@@ -21,5 +19,5 @@ public interface WorkbookProcessor {
    * @return list of sheet list data
    * @see SheetProcessor#process()
    */
-  List<SheetList<Object>> process();
+  List<List<Object>> process();
 }

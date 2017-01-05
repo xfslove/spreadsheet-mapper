@@ -1,12 +1,13 @@
 package spread.sheet.w2o.processor;
 
-import spread.sheet.model.core.SheetList;
 import spread.sheet.model.core.Sheet;
 import spread.sheet.model.meta.SheetMeta;
 import spread.sheet.w2o.processor.listener.CellProcessorListener;
 import spread.sheet.w2o.processor.listener.RowProcessorListener;
 import spread.sheet.w2o.processor.listener.SheetProcessorListener;
 import spread.sheet.w2o.setter.FieldValueSetter;
+
+import java.util.List;
 
 /**
  * sheet processor
@@ -62,7 +63,7 @@ public interface SheetProcessor {
   SheetProcessor sheetMeta(SheetMeta sheetMeta);
 
   /**
-   * @return list of sheets data
+   * @return list of data
    */
-  SheetList<Object> process();
+  List<Object> process();
 }

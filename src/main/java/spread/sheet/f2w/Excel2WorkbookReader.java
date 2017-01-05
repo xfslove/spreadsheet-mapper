@@ -1,13 +1,18 @@
 package spread.sheet.f2w;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.NumberToTextConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spread.sheet.model.core.*;
+import spread.sheet.utils.DateFormatRegister;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by hanwen on 2017/1/3.
@@ -45,14 +50,14 @@ public class Excel2WorkbookReader implements WorkbookReader {
         for (int j = 0; j <= lastRowNum; j++) {
 
           org.apache.poi.ss.usermodel.Row row = sheet.getRow(j);
-
-          Row excelRow = createRow(row);
+          Row excelRow = createRow();
           excelSheet.addRow(excelRow);
 
           int lastColumnNum = row.getLastCellNum() > 0 ? row.getLastCellNum() : 0;
           for (int k = 0; k < lastColumnNum; k++) {
 
-            createCell(row, excelRow, k);
+            org.apache.poi.ss.usermodel.Cell cell = row.getCell(k);
+            excelRow.addCell(createCell(cell));
           }
         }
       }
@@ -72,25 +77,72 @@ public class Excel2WorkbookReader implements WorkbookReader {
   }
 
   private Sheet createSheet(org.apache.poi.ss.usermodel.Sheet sheet) {
-    return new SheetBean(sheet);
-  }
+    String sheetName = sheet.getSheetName();
 
-  private Row createRow(org.apache.poi.ss.usermodel.Row row) {
-    return new RowBean(row);
-  }
+    if (StringUtils.isBlank(sheetName)) {
 
-  private void createCell(org.apache.poi.ss.usermodel.Row row, Row excelRow, int columnIndex) {
-    org.apache.poi.ss.usermodel.Cell cell = row.getCell(columnIndex);
-
-    CellBean excelCell;
-    if (cell == null) {
-
-      excelCell = CellBean.EMPTY_CELL(columnIndex + 1);
-    } else {
-
-      excelCell = new CellBean(cell);
+      return new SheetBean();
     }
 
-    excelRow.addCell(excelCell);
+    return new SheetBean(sheetName);
   }
+
+  private Row createRow() {
+    return new RowBean();
+  }
+
+  private Cell createCell(org.apache.poi.ss.usermodel.Cell cell) {
+    if (cell == null) {
+
+      return new CellBean();
+    }
+
+    String value;
+
+    if (cell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BLANK) {
+
+      value = null;
+
+    } else if (cell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BOOLEAN) {
+
+      value = Boolean.toString(cell.getBooleanCellValue());
+
+    } else if (cell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_ERROR) {
+
+      value = null;
+
+    } else if (cell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_FORMULA) {
+
+      value = null;
+
+    } else if (cell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC) {
+
+      if (DateUtil.isCellDateFormatted(cell)) {
+        String dateFormat = DateFormatRegister.get(cell.getCellStyle().getDataFormatString());
+
+        if (dateFormat == null) {
+          value = DateFormatRegister.ERROR_PATTERN;
+        } else {
+          SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+          value = simpleDateFormat.format(cell.getDateCellValue());
+        }
+      } else {
+        value = NumberToTextConverter.toText(cell.getNumericCellValue());
+      }
+
+    } else if (cell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING) {
+
+      String cellValue = cell.getStringCellValue();
+      value = StringUtils.isBlank(cellValue) ? null : cellValue.trim();
+
+    } else {
+
+      value = null;
+
+    }
+
+    return new CellBean(value);
+
+  }
+
 }

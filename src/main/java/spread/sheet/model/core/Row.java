@@ -8,10 +8,10 @@ import java.util.List;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface Row extends Serializable, Comparable<Row> {
+public interface Row extends Serializable {
 
   /**
-   * @return row num 1-based
+   * @return row index 1-based
    */
   int getIndex();
 
@@ -26,12 +26,12 @@ public interface Row extends Serializable, Comparable<Row> {
   int sizeOfCells();
 
   /**
-   * get cell by index
+   * get cell by column index
    *
-   * @param index 1-based
+   * @param columnIndex 1-based
    * @return cell
    */
-  Cell getCell(int index);
+  Cell getCell(int columnIndex);
 
   /**
    * add cell

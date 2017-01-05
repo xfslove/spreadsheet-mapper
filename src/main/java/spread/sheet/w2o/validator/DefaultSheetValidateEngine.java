@@ -293,7 +293,7 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
         FieldMeta messageOnFieldMeta = sheetMeta.getFieldMeta(messageOnField);
         Cell messageOnCell = row.getCell(messageOnFieldMeta.getColumnIndex());
 
-        errorMessages.add(new ErrorMessageBean(MessageWriteStrategies.COMMENT, cellValidator.getErrorMessage(), row.getSheet().getIndex(), row.getIndex(), messageOnCell.getColumnIndex()));
+        errorMessages.add(new ErrorMessageBean(MessageWriteStrategies.COMMENT, cellValidator.getErrorMessage(), row.getSheet().getIndex(), row.getIndex(), messageOnCell.getIndex()));
       }
 
       return result;

@@ -11,28 +11,19 @@ import java.util.List;
  */
 public class SheetMetaBean implements SheetMeta {
 
-  private int sheetIndex;
-
   private String sheetName;
 
   private int dataStartRowIndex;
 
   private List<FieldMeta> fieldMetas = new ArrayList<>();
 
-  public SheetMetaBean(int sheetIndex, int dataStartRowIndex) {
-    this.sheetIndex = sheetIndex;
+  public SheetMetaBean(int dataStartRowIndex) {
     this.dataStartRowIndex = dataStartRowIndex;
   }
 
-  public SheetMetaBean(int sheetIndex, String sheetName, int dataStartRowIndex) {
-    this.sheetIndex = sheetIndex;
+  public SheetMetaBean(String sheetName, int dataStartRowIndex) {
     this.sheetName = sheetName;
     this.dataStartRowIndex = dataStartRowIndex;
-  }
-
-  @Override
-  public int getSheetIndex() {
-    return sheetIndex;
   }
 
   public String getSheetName() {

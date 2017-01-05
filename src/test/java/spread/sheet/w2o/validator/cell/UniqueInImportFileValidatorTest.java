@@ -24,10 +24,10 @@ public class UniqueInImportFileValidatorTest {
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
     Map<String, Cell> cellMap2 = TestFactory.createCellMap2();
 
-    UniqueInImportFileValidator validator = new UniqueInImportFileValidator("test.bigDecimal", "");
+    UniqueInImportFileValidator validator = new UniqueInImportFileValidator("test.string", "");
 
-    assertTrue(validator.valid(cellMap1.get("test.bigDecimal"), fieldMetaMap.get("test.bigDecimal")));
-    assertFalse(validator.valid(cellMap2.get("test.bigDecimal"), fieldMetaMap.get("test.bigDecimal")));
+    assertTrue(validator.valid(cellMap1.get("test.string"), fieldMetaMap.get("test.string")));
+    assertFalse(validator.valid(cellMap2.get("test.string"), fieldMetaMap.get("test.string")));
 
     assertTrue(validator.valid(cellMap1.get("test.int1"), fieldMetaMap.get("test.int1")));
     assertTrue(validator.valid(cellMap2.get("test.int1"), fieldMetaMap.get("test.int1")));
@@ -35,8 +35,8 @@ public class UniqueInImportFileValidatorTest {
     assertTrue(validator.valid(cellMap1.get("test.int2"), fieldMetaMap.get("test.int2")));
     assertTrue(validator.valid(cellMap2.get("test.int2"), fieldMetaMap.get("test.int2")));
 
-    assertTrue(validator.valid(cellMap1.get("test.string"), fieldMetaMap.get("test.string")));
-    assertTrue(validator.valid(cellMap2.get("test.string"), fieldMetaMap.get("test.string")));
+    assertTrue(validator.valid(cellMap1.get("test.bigDecimal"), fieldMetaMap.get("test.bigDecimal")));
+    assertTrue(validator.valid(cellMap2.get("test.bigDecimal"), fieldMetaMap.get("test.bigDecimal")));
 
     assertTrue(validator.valid(cellMap1.get("test.localDate"), fieldMetaMap.get("test.localDate")));
     assertTrue(validator.valid(cellMap2.get("test.localDate"), fieldMetaMap.get("test.localDate")));

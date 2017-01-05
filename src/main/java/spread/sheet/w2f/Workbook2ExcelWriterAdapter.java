@@ -84,7 +84,7 @@ public abstract class Workbook2ExcelWriterAdapter implements WorkbookWriter {
 
   private void createCell(org.apache.poi.ss.usermodel.Row row, Cell excelCell) {
     String value = excelCell.getValue();
-    org.apache.poi.ss.usermodel.Cell cell = row.createCell(excelCell.getColumnIndex() - 1, org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING);
+    org.apache.poi.ss.usermodel.Cell cell = row.createCell(excelCell.getIndex() - 1, org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING);
     cell.setCellValue(value == null ? Constants.EMPTY_VALUE : value);
   }
 

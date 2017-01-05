@@ -10,6 +10,7 @@ import spread.sheet.model.meta.SheetMetaBean;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -59,6 +60,8 @@ public class TestFactory {
 
     testBean.setDouble1(0.00001D);
 
+    testBean.setString("Scarlett Johansson");
+
     testBean.setBoolean1(false);
 
     return testBean;
@@ -66,7 +69,7 @@ public class TestFactory {
 
   public static Map<String, FieldMeta> createFieldMetaMap() {
 
-    Map<String, FieldMeta> fieldMetaMap = new HashMap<>();
+    Map<String, FieldMeta> fieldMetaMap = new LinkedHashMap<>();
 
     fieldMetaMap.put("test.int1", new FieldMetaBean("test.int1", 1));
     fieldMetaMap.put("test.int2", new FieldMetaBean("test.int2", 2));
@@ -88,62 +91,62 @@ public class TestFactory {
 
   public static Map<String, Cell> createCellMap1() {
 
-    Map<String, Cell> cellMap = new HashMap<>();
+    Map<String, Cell> cellMap = new LinkedHashMap<>();
 
-    cellMap.put("test.int1", new CellBean(1, "10000"));
-    cellMap.put("test.int2", new CellBean(2, "-20000"));
-    cellMap.put("test.long1", new CellBean(3, "10000000000000"));
-    cellMap.put("test.long2", new CellBean(4, "20000000000000"));
-    cellMap.put("test.float1", new CellBean(5, "0.001"));
-    cellMap.put("test.float2", new CellBean(6, "0.00000002"));
-    cellMap.put("test.double1", new CellBean(7, "0.00000000000000000001"));
-    cellMap.put("test.double2", new CellBean(8, "0.00000000000000000002"));
-    cellMap.put("test.boolean1", new CellBean(9, "pass"));
-    cellMap.put("test.boolean2", new CellBean(10, "failure"));
-    cellMap.put("test.string", new CellBean(11, "Scarlett Johansson"));
-    cellMap.put("test.bigDecimal", new CellBean(12, "1E-20"));
-    cellMap.put("test.localDate", new CellBean(13, "1984-11-22"));
-    cellMap.put("test.localDateTime", new CellBean(14, "1984-11-22 00:00:00"));
+    cellMap.put("test.int1", new CellBean("10000"));
+    cellMap.put("test.int2", new CellBean("-20000"));
+    cellMap.put("test.long1", new CellBean("10000000000000"));
+    cellMap.put("test.long2", new CellBean("20000000000000"));
+    cellMap.put("test.float1", new CellBean("0.001"));
+    cellMap.put("test.float2", new CellBean("0.00000002"));
+    cellMap.put("test.double1", new CellBean("0.00000000000000000001"));
+    cellMap.put("test.double2", new CellBean("0.00000000000000000002"));
+    cellMap.put("test.boolean1", new CellBean("pass"));
+    cellMap.put("test.boolean2", new CellBean("failure"));
+    cellMap.put("test.string", new CellBean("Scarlett Johansson"));
+    cellMap.put("test.bigDecimal", new CellBean("1E-20"));
+    cellMap.put("test.localDate", new CellBean("1984-11-22"));
+    cellMap.put("test.localDateTime", new CellBean("1984-11-22 00:00:00"));
 
     return cellMap;
   }
 
   public static Map<String, Cell> createCellMap2() {
 
-    Map<String, Cell> cellMap = new HashMap<>();
+    Map<String, Cell> cellMap = new LinkedHashMap<>();
 
-    cellMap.put("test.int1", new CellBean(1, "dasdasd"));
-    cellMap.put("test.int2", new CellBean(2, ""));
-    cellMap.put("test.long1", new CellBean(3, "afsdfasdf"));
-    cellMap.put("test.long2", new CellBean(4, ""));
-    cellMap.put("test.float1", new CellBean(5, "0.asfadsf"));
-    cellMap.put("test.float2", new CellBean(6, ""));
-    cellMap.put("test.double1", new CellBean(7, "0.345dfasd"));
-    cellMap.put("test.double2", new CellBean(8, ""));
-    cellMap.put("test.boolean1", new CellBean(9, "t"));
-    cellMap.put("test.boolean2", new CellBean(10, ""));
-    cellMap.put("test.string", new CellBean(11, ""));
-    cellMap.put("test.bigDecimal", new CellBean(12, "0.00000000000000000001"));
-    cellMap.put("test.localDate", new CellBean(13, "1984/11/22"));
-    cellMap.put("test.localDateTime", new CellBean(14, "fsadfsadf"));
+    cellMap.put("test.int1", new CellBean("dasdasd"));
+    cellMap.put("test.int2", new CellBean(""));
+    cellMap.put("test.long1", new CellBean("afsdfasdf"));
+    cellMap.put("test.long2", new CellBean(""));
+    cellMap.put("test.float1", new CellBean("0.asfadsf"));
+    cellMap.put("test.float2", new CellBean(""));
+    cellMap.put("test.double1", new CellBean("0.345dfasd"));
+    cellMap.put("test.double2", new CellBean(""));
+    cellMap.put("test.boolean1", new CellBean("t"));
+    cellMap.put("test.boolean2", new CellBean(""));
+    cellMap.put("test.string", new CellBean("Scarlett Johansson"));
+    cellMap.put("test.bigDecimal", new CellBean("0.00000000000000000001"));
+    cellMap.put("test.localDate", new CellBean("1984/11/22"));
+    cellMap.put("test.localDateTime", new CellBean("fsadfsadf"));
 
     return cellMap;
   }
 
   public static Sheet createSheet() {
 
-    Sheet sheet = new SheetBean(1);
+    Sheet sheet = new SheetBean();
 
-    Row r1 = new RowBean(1);
-    Row r2 = new RowBean(2);
-    Row r3 = new RowBean(3);
+    Row r1 = new RowBean();
+    Row r2 = new RowBean();
+    Row r3 = new RowBean();
     sheet.addRow(r1);
     sheet.addRow(r2);
     sheet.addRow(r3);
 
     Map<String, FieldMeta> fieldMetaMap = createFieldMetaMap();
     for (FieldMeta fieldMeta : fieldMetaMap.values()) {
-      r1.addCell(new CellBean(fieldMeta.getColumnIndex(), fieldMeta.getName()));
+      r1.addCell(new CellBean(fieldMeta.getName()));
     }
 
     Map<String, Cell> cellMap1 = createCellMap1();
@@ -168,7 +171,7 @@ public class TestFactory {
 
   public static SheetMeta createSheetMeta() {
 
-    SheetMeta sheetMeta = new SheetMetaBean(1, 2);
+    SheetMeta sheetMeta = new SheetMetaBean(2);
     Map<String, FieldMeta> fieldMetaMap = createFieldMetaMap();
     for (FieldMeta fieldMeta : fieldMetaMap.values()) {
       sheetMeta.addFieldMeta(fieldMeta);

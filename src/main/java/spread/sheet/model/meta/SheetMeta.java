@@ -17,11 +17,6 @@ import java.util.List;
 public interface SheetMeta extends Serializable {
 
   /**
-   * @return sheet index
-   */
-  int getSheetIndex();
-
-  /**
    * @return sheet name
    */
   String getSheetName();

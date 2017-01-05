@@ -31,10 +31,10 @@ public interface Workbook extends Serializable {
   /**
    * get sheet by index
    *
-   * @param index 1-based
+   * @param sheetIndex 1-based
    * @return sheet
    */
-  Sheet getSheet(int index);
+  Sheet getSheet(int sheetIndex);
 
   /**
    * @return last sheet

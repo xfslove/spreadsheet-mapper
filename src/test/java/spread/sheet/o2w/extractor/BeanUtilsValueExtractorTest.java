@@ -7,7 +7,8 @@ import spread.sheet.model.meta.FieldMeta;
 
 import java.util.Map;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 /**
  * Created by hanwen on 2017/1/4.
@@ -52,7 +53,7 @@ public class BeanUtilsValueExtractorTest {
     assertNull(extractor.getStringValue(testBean2, fieldMetaMap.get("test.boolean2")));
 
     assertNull(extractor.getStringValue(testBean2, fieldMetaMap.get("test.bigDecimal")));
-    assertNull(extractor.getStringValue(testBean2, fieldMetaMap.get("test.string")));
+    assertEquals(extractor.getStringValue(testBean2, fieldMetaMap.get("test.string")), "Scarlett Johansson");
     assertNull(extractor.getStringValue(testBean2, fieldMetaMap.get("test.localDate")));
     assertNull(extractor.getStringValue(testBean2, fieldMetaMap.get("test.localDateTime")));
   }

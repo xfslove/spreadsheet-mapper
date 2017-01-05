@@ -2,7 +2,6 @@ package spread.sheet.o2w.composer;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import spread.sheet.model.core.SheetList;
 import spread.sheet.model.core.*;
 import spread.sheet.model.meta.FieldMeta;
 import spread.sheet.model.meta.HeaderMeta;
@@ -10,7 +9,6 @@ import spread.sheet.model.meta.SheetMeta;
 import spread.sheet.o2w.extractor.BeanUtilsValueExtractor;
 import spread.sheet.o2w.extractor.FieldValueExtractor;
 import spread.sheet.o2w.extractor.ValueExtractor;
-import spread.sheet.w2o.processor.WorkbookProcessException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +21,7 @@ public class DefaultSheetComposer implements SheetComposer {
 
   private SheetMeta sheetMeta;
 
-  private SheetList<Object> data;
+  private List<Object> data;
 
   private Map<String, FieldValueExtractor> key2fieldValueExtractor = new HashMap<>();
 
@@ -47,7 +45,7 @@ public class DefaultSheetComposer implements SheetComposer {
   }
 
   @Override
-  public SheetComposer data(SheetList<Object> data) {
+  public SheetComposer data(List<Object> data) {
     this.data = data;
     return this;
   }
@@ -63,7 +61,7 @@ public class DefaultSheetComposer implements SheetComposer {
     int dataStartRowIndex = sheetMeta.getDataStartRowIndex();
     for (int i = 1; i < dataStartRowIndex; i++) {
 
-      Row row = createRow(i);
+      Row row = createRow();
       sheet.addRow(row);
       createHeaderCellsIfNecessary(row, sheetMeta);
     }
@@ -72,32 +70,26 @@ public class DefaultSheetComposer implements SheetComposer {
       return sheet;
     }
 
-    if (data.getSheetIndex() != sheetMeta.getSheetIndex()) {
-      throw new WorkbookProcessException("data[sheet index:" + data.getSheetIndex() + "] not corresponding the sheet meta[sheet index:" + sheetMeta.getSheetIndex() + "]");
-    }
-
-    for (int i = 0; i < data.size(); i++) {
-
-      Row row = createRow(i + dataStartRowIndex);
+    for (Object object : data) {
+      Row row = createRow();
       sheet.addRow(row);
-      createDataCells(row, data.get(i), sheetMeta);
+      createDataCells(row, object, sheetMeta);
     }
 
     return sheet;
   }
 
   private Sheet createSheet(SheetMeta sheetMeta) {
-    int sheetIndex = sheetMeta.getSheetIndex();
     String sheetName = sheetMeta.getSheetName();
 
     if (StringUtils.isBlank(sheetName)) {
-      return new SheetBean(sheetIndex);
+      return new SheetBean();
     }
-    return new SheetBean(sheetIndex, sheetName);
+    return new SheetBean(sheetName);
   }
 
-  private Row createRow(int rowIndex) {
-    return new RowBean(rowIndex);
+  private Row createRow() {
+    return new RowBean();
   }
 
   private void createHeaderCellsIfNecessary(Row row, SheetMeta sheetMeta) {
@@ -112,7 +104,7 @@ public class DefaultSheetComposer implements SheetComposer {
 
       if (fieldMeta == null) {
 
-        cell = CellBean.EMPTY_CELL(i);
+        cell = new CellBean();
         row.addCell(cell);
         continue;
       }
@@ -120,12 +112,12 @@ public class DefaultSheetComposer implements SheetComposer {
       HeaderMeta headerMeta = fieldMeta.getHeaderMeta(row.getIndex());
       if (headerMeta == null) {
 
-        cell = CellBean.EMPTY_CELL(i);
+        cell = new CellBean();
         row.addCell(cell);
         continue;
       }
 
-      cell = new CellBean(i, headerMeta.getValue());
+      cell = new CellBean(headerMeta.getValue());
       row.addCell(cell);
     }
 
@@ -143,13 +135,13 @@ public class DefaultSheetComposer implements SheetComposer {
 
       if (fieldMeta == null) {
 
-        cell = CellBean.EMPTY_CELL(i);
+        cell = new CellBean();
         row.addCell(cell);
         continue;
       }
 
       String value = getFieldStringValue(object, fieldMeta);
-      cell = new CellBean(i, value);
+      cell = new CellBean(value);
       row.addCell(cell);
     }
   }
