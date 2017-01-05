@@ -21,10 +21,10 @@ public class BeanUtilsValueExtractorTest {
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
     BeanUtilsValueExtractor extractor = new BeanUtilsValueExtractor();
 
-    TestBean testBean1 = TestFactory.create1();
+    TestBean testBean1 = TestFactory.createBean1();
 
     assertEquals(extractor.getStringValue(testBean1, fieldMetaMap.get("test.int1")), "10000");
-    assertEquals(extractor.getStringValue(testBean1, fieldMetaMap.get("test.int2")), "20000");
+    assertEquals(extractor.getStringValue(testBean1, fieldMetaMap.get("test.int2")), "-20000");
     assertEquals(extractor.getStringValue(testBean1, fieldMetaMap.get("test.long1")), "10000000000000");
     assertEquals(extractor.getStringValue(testBean1, fieldMetaMap.get("test.long2")), "20000000000000");
     assertEquals(extractor.getStringValue(testBean1, fieldMetaMap.get("test.float1")), "0.001");
@@ -39,7 +39,7 @@ public class BeanUtilsValueExtractorTest {
     assertEquals(extractor.getStringValue(testBean1, fieldMetaMap.get("test.localDate")), "1984-11-22");
     assertEquals(extractor.getStringValue(testBean1, fieldMetaMap.get("test.localDateTime")), "1984-11-22T00:00:00.000");
 
-    TestBean testBean2 = TestFactory.create2();
+    TestBean testBean2 = TestFactory.createBean2();
 
     assertEquals(extractor.getStringValue(testBean2, fieldMetaMap.get("test.int1")), "1");
     assertNull(extractor.getStringValue(testBean2, fieldMetaMap.get("test.int2")));

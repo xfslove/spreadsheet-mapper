@@ -6,15 +6,15 @@ import spread.sheet.model.meta.SheetMeta;
 /**
  * Created by hanwen on 2017/1/3.
  */
-public final class NoopRowProcessorListener implements RowProcessorListener {
+public final class NoopRowProcessorListener<T> implements RowProcessorListener<T> {
 
   @Override
-  public void before(Row row, SheetMeta sheetMeta, Object object) {
+  public void before(Row row, SheetMeta sheetMeta, T object) {
     // nothing
   }
 
   @Override
-  public void after(Row row, SheetMeta sheetMeta, Object object) {
+  public void after(Row row, SheetMeta sheetMeta, T object) {
     // nothing
   }
 }

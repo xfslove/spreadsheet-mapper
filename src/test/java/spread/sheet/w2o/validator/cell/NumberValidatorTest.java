@@ -38,7 +38,7 @@ public class NumberValidatorTest {
     assertTrue(validator7.valid(cellMap1.get("test.double1"), fieldMetaMap.get("test.double1")));
     assertTrue(validator8.valid(cellMap1.get("test.double2"), fieldMetaMap.get("test.double2")));
 
-    Map<String, Cell> cellMap2 = TestFactory.createCellMap2();
+    Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
     assertFalse(validator1.valid(cellMap2.get("test.int1"), fieldMetaMap.get("test.int1")));
     assertTrue(validator2.valid(cellMap2.get("test.int2"), fieldMetaMap.get("test.int2")));
     assertFalse(validator3.valid(cellMap2.get("test.long1"), fieldMetaMap.get("test.long1")));

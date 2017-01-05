@@ -10,7 +10,7 @@ import java.util.List;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface SheetProcessorListener {
+public interface SheetProcessorListener<T> {
 
   /**
    * before model created
@@ -27,5 +27,5 @@ public interface SheetProcessorListener {
    * @param sheetMeta sheet meta
    * @param objects   value set object list
    */
-  void after(Sheet sheet, SheetMeta sheetMeta, List<Object> objects);
+  void after(Sheet sheet, SheetMeta sheetMeta, List<T> objects);
 }

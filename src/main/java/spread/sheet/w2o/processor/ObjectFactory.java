@@ -3,11 +3,11 @@ package spread.sheet.w2o.processor;
 import spread.sheet.model.core.Row;
 
 /**
- * model template
+ * object factory
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface ObjectFactory {
+public interface ObjectFactory<T> {
 
   /**
    * initial one row present object to access cell value.
@@ -15,5 +15,5 @@ public interface ObjectFactory {
    * @param row which row
    * @return initialized object
    */
-  Object create(Row row);
+  T create(Row row);
 }

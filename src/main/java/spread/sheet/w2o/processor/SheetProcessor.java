@@ -14,7 +14,7 @@ import java.util.List;
  * <p>
  * Created by hanwen on 2016/12/28.
  */
-public interface SheetProcessor {
+public interface SheetProcessor<T> {
 
   /**
    * <pre>
@@ -26,44 +26,44 @@ public interface SheetProcessor {
    * @param fieldValueSetters field value setter
    * @see FieldValueSetter
    */
-  SheetProcessor fieldValueSetter(FieldValueSetter... fieldValueSetters);
+  SheetProcessor<T> fieldValueSetter(FieldValueSetter... fieldValueSetters);
 
   /**
    * @param objectFactory object factory
    * @see ObjectFactory
    */
-  SheetProcessor objectFactory(ObjectFactory objectFactory);
+  SheetProcessor<T> objectFactory(ObjectFactory<T> objectFactory);
 
   /**
    * @param sheetProcessorListener sheet listener
    * @see SheetProcessorListener
    */
-  SheetProcessor sheetProcessorListener(SheetProcessorListener sheetProcessorListener);
+  SheetProcessor<T> sheetProcessorListener(SheetProcessorListener<T> sheetProcessorListener);
 
   /**
    * @param rowProcessorListener row listener
    * @see RowProcessorListener
    */
-  SheetProcessor rowProcessorListener(RowProcessorListener rowProcessorListener);
+  SheetProcessor<T> rowProcessorListener(RowProcessorListener<T> rowProcessorListener);
 
   /**
    * @param cellProcessorListener cell listener
    * @see CellProcessorListener
    */
-  SheetProcessor cellProcessorListener(CellProcessorListener cellProcessorListener);
+  SheetProcessor<T> cellProcessorListener(CellProcessorListener<T> cellProcessorListener);
 
   /**
    * @param sheet sheet
    */
-  SheetProcessor sheet(Sheet sheet);
+  SheetProcessor<T> sheet(Sheet sheet);
 
   /**
    * @param sheetMeta sheet meta
    */
-  SheetProcessor sheetMeta(SheetMeta sheetMeta);
+  SheetProcessor<T> sheetMeta(SheetMeta sheetMeta);
 
   /**
    * @return list of data
    */
-  List<Object> process();
+  List<T> process();
 }

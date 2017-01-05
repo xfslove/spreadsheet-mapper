@@ -10,6 +10,7 @@ import spread.sheet.o2w.extractor.BeanUtilsValueExtractor;
 import spread.sheet.o2w.extractor.FieldValueExtractor;
 import spread.sheet.o2w.extractor.ValueExtractor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,18 +18,18 @@ import java.util.Map;
 /**
  * Created by hanwen on 15-12-16.
  */
-public class DefaultSheetComposer implements SheetComposer {
+public class DefaultSheetComposer<T> implements SheetComposer<T> {
 
   private SheetMeta sheetMeta;
 
-  private List<Object> data;
+  private List<T> data = new ArrayList<>();
 
   private Map<String, FieldValueExtractor> key2fieldValueExtractor = new HashMap<>();
 
   private ValueExtractor defaultValueExtractor = new BeanUtilsValueExtractor();
 
   @Override
-  public SheetComposer fieldValueExtractor(FieldValueExtractor... fieldValueExtractors) {
+  public SheetComposer<T> fieldValueExtractor(FieldValueExtractor... fieldValueExtractors) {
     if (fieldValueExtractors == null) {
       return this;
     }
@@ -39,13 +40,13 @@ public class DefaultSheetComposer implements SheetComposer {
   }
 
   @Override
-  public SheetComposer sheetMeta(SheetMeta sheetMeta) {
+  public SheetComposer<T> sheetMeta(SheetMeta sheetMeta) {
     this.sheetMeta = sheetMeta;
     return this;
   }
 
   @Override
-  public SheetComposer data(List<Object> data) {
+  public SheetComposer<T> data(List<T> data) {
     this.data = data;
     return this;
   }
@@ -70,7 +71,7 @@ public class DefaultSheetComposer implements SheetComposer {
       return sheet;
     }
 
-    for (Object object : data) {
+    for (T object : data) {
       Row row = createRow();
       sheet.addRow(row);
       createDataCells(row, object, sheetMeta);
@@ -123,7 +124,7 @@ public class DefaultSheetComposer implements SheetComposer {
 
   }
 
-  private void createDataCells(Row row, Object object, SheetMeta sheetMeta) {
+  private void createDataCells(Row row, T object, SheetMeta sheetMeta) {
 
     List<FieldMeta> fieldMetas = sheetMeta.getFieldMetas();
     int lastColumnNum = getLastColumnNum(fieldMetas);
@@ -146,7 +147,7 @@ public class DefaultSheetComposer implements SheetComposer {
     }
   }
 
-  private String getFieldStringValue(Object object, FieldMeta fieldMeta) {
+  private String getFieldStringValue(T object, FieldMeta fieldMeta) {
     FieldValueExtractor extractor = key2fieldValueExtractor.get(fieldMeta.getName());
 
     if (extractor != null) {
@@ -157,6 +158,9 @@ public class DefaultSheetComposer implements SheetComposer {
   }
 
   private int getLastColumnNum(List<FieldMeta> fieldMetas) {
+    if (CollectionUtils.isEmpty(fieldMetas)) {
+      return 0;
+    }
     FieldMeta lastFieldMeta = fieldMetas.get(fieldMetas.size() - 1);
     return lastFieldMeta.getColumnIndex();
   }

@@ -19,7 +19,6 @@ public class BeanUtilsValueSetterTest {
   @Test
   public void testSet() throws Exception {
 
-
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
 
     BeanUtilsValueSetter setter = new BeanUtilsValueSetter();
@@ -53,14 +52,14 @@ public class BeanUtilsValueSetterTest {
     assertEquals(testBean.getDouble2(), 0.00000000000000000002D);
     assertEquals(testBean.getString(), "Scarlett Johansson");
     assertNull(testBean.getLocalDate());
-    assertNull(testBean.getLocalDate());
-    assertEquals(testBean.getBigDecimal(), BigDecimal.valueOf(0.00000000000000000001).stripTrailingZeros());
+    assertNull(testBean.getLocalDateTime());
+    assertEquals(testBean.getBigDecimal(), BigDecimal.valueOf(0.00000000000000000001));
     assertFalse(testBean.isBoolean1());
     assertNull(testBean.getBoolean2());
 
 
     TestBean testBean1 = new TestBean();
-    Map<String, Cell> cellMap2 = TestFactory.createCellMap2();
+    Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
     setter.set(testBean1, cellMap2.get("test.int1"), fieldMetaMap.get("test.int1"));
     setter.set(testBean1, cellMap2.get("test.int2"), fieldMetaMap.get("test.int2"));
     setter.set(testBean1, cellMap2.get("test.long1"), fieldMetaMap.get("test.long1"));
@@ -86,7 +85,7 @@ public class BeanUtilsValueSetterTest {
     assertNull(testBean1.getDouble2());
     assertEquals(testBean1.getString(), "Scarlett Johansson");
     assertNull(testBean1.getLocalDate());
-    assertNull(testBean1.getLocalDate());
+    assertNull(testBean1.getLocalDateTime());
     assertEquals(testBean1.getBigDecimal(), BigDecimal.valueOf(0.00000000000000000001).stripTrailingZeros());
     assertFalse(testBean1.isBoolean1());
     assertNull(testBean1.getBoolean2());

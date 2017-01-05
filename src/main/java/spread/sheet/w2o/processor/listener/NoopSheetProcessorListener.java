@@ -1,7 +1,7 @@
 package spread.sheet.w2o.processor.listener;
 
-import spread.sheet.model.meta.SheetMeta;
 import spread.sheet.model.core.Sheet;
+import spread.sheet.model.meta.SheetMeta;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * <p>
  * Created by hanwen on 2016/12/28.
  */
-public final class NoopSheetProcessorListener implements SheetProcessorListener {
+public final class NoopSheetProcessorListener<T> implements SheetProcessorListener<T> {
 
   @Override
   public void before(Sheet sheet, SheetMeta sheetMeta) {
@@ -18,7 +18,7 @@ public final class NoopSheetProcessorListener implements SheetProcessorListener 
   }
 
   @Override
-  public void after(Sheet sheet, SheetMeta sheetMeta, List<Object> objects) {
+  public void after(Sheet sheet, SheetMeta sheetMeta, List<T> objects) {
     // nothing
   }
 }

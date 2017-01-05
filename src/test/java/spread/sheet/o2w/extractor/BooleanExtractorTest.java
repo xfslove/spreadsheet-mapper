@@ -25,14 +25,14 @@ public class BooleanExtractorTest {
     BooleanExtractor extractor1 = new BooleanExtractor("test.boolean1", "pass", "failure");
     BooleanExtractor extractor2 = new BooleanExtractor("test.boolean2", "pass", "failure");
 
-    TestBean testBean1 = TestFactory.create1();
+    TestBean testBean1 = TestFactory.createBean1();
     String s11 = extractor1.getStringValue(testBean1, fieldMeta1);
     assertEquals(s11, "pass");
 
     String s12 = extractor2.getStringValue(testBean1, fieldMeta2);
     assertEquals(s12, "failure");
 
-    TestBean testBean2 = TestFactory.create2();
+    TestBean testBean2 = TestFactory.createBean2();
     String s21 = extractor1.getStringValue(testBean2, fieldMeta1);
     assertEquals(s21, "failure");
 

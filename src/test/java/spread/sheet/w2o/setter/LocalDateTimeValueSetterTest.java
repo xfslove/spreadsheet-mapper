@@ -23,7 +23,7 @@ public class LocalDateTimeValueSetterTest {
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
 
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
-    Map<String, Cell> cellMap2 = TestFactory.createCellMap2();
+    Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
 
     LocalDateTimeValueSetter setter = new LocalDateTimeValueSetter("yyyy-MM-dd HH:mm:ss", "test.localDateTime");
 

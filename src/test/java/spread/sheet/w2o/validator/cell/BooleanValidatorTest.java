@@ -25,7 +25,7 @@ public class BooleanValidatorTest {
     assertTrue(validator.valid(cellMap1.get("test.boolean1"), fieldMetaMap.get("test.boolean1")));
     assertTrue(validator.valid(cellMap1.get("test.boolean2"), fieldMetaMap.get("test.boolean2")));
 
-    Map<String, Cell> cellMap2 = TestFactory.createCellMap2();
+    Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
     assertFalse(validator.valid(cellMap2.get("test.boolean1"), fieldMetaMap.get("test.boolean1")));
     assertTrue(validator.valid(cellMap2.get("test.boolean2"), fieldMetaMap.get("test.boolean2")));
   }

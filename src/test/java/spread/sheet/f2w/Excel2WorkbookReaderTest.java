@@ -23,12 +23,12 @@ public class Excel2WorkbookReaderTest {
 
     Workbook workbook1 = reader.read(is1);
 
-    AssertUtil.assertWorkbookEquals(workbook1);
+    AssertUtil.assertWorkbookEquals(workbook1, true);
 
     InputStream is2 = getClass().getResourceAsStream("test.xlsx");
 
     Workbook workbook2 = reader.read(is2);
 
-    AssertUtil.assertWorkbookEquals(workbook2);
+    AssertUtil.assertWorkbookEquals(workbook2, true);
   }
 }

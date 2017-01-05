@@ -39,18 +39,18 @@ public class PlainNumberExtractorTest {
     PlainNumberExtractor extractor8 = new PlainNumberExtractor("test.float2");
     PlainNumberExtractor extractor9 = new PlainNumberExtractor("test.float2");
 
-    TestBean testBean1 = TestFactory.create1();
+    TestBean testBean1 = TestFactory.createBean1();
     assertEquals(extractor1.getStringValue(testBean1, fieldMeta1), "0.00000000000000000001");
     assertEquals(extractor2.getStringValue(testBean1, fieldMeta2), "0.00000000000000000002");
     assertEquals(extractor3.getStringValue(testBean1, fieldMeta3), "10000000000000");
     assertEquals(extractor4.getStringValue(testBean1, fieldMeta4), "20000000000000");
     assertEquals(extractor5.getStringValue(testBean1, fieldMeta5), "10000");
-    assertEquals(extractor6.getStringValue(testBean1, fieldMeta6), "20000");
+    assertEquals(extractor6.getStringValue(testBean1, fieldMeta6), "-20000");
     assertEquals(extractor7.getStringValue(testBean1, fieldMeta7), "0.001");
     assertEquals(extractor8.getStringValue(testBean1, fieldMeta8), "0.00000002");
     assertEquals(extractor9.getStringValue(testBean1, fieldMeta9), "0.00000000000000000001");
 
-    TestBean testBean2 = TestFactory.create2();
+    TestBean testBean2 = TestFactory.createBean2();
     assertEquals(extractor1.getStringValue(testBean2, fieldMeta1), "0.00001");
     assertNull(extractor2.getStringValue(testBean2, fieldMeta2));
     assertEquals(extractor3.getStringValue(testBean2, fieldMeta3), "1");

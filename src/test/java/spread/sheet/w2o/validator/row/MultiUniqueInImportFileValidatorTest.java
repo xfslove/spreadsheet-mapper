@@ -18,7 +18,7 @@ public class MultiUniqueInImportFileValidatorTest {
 
     Sheet sheet = TestFactory.createSheet();
 
-    SheetMeta sheetMeta = TestFactory.createSheetMeta();
+    SheetMeta sheetMeta = TestFactory.createSheetMeta(true);
 
     MultiUniqueInImportFileValidator validator1 = new MultiUniqueInImportFileValidator("", new String[]{"test.int1", "test.int2"});
     assertTrue(validator1.valid(sheet.getRow(2), sheetMeta));

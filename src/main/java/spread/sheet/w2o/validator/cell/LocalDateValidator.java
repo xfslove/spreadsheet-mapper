@@ -12,27 +12,27 @@ import org.joda.time.format.DateTimeFormatter;
  */
 public class LocalDateValidator extends CellValidatorAdapter {
 
-  private String format;
+  private String pattern;
 
-  public LocalDateValidator(String format, String matchField, String errorMessage) {
+  public LocalDateValidator(String pattern, String matchField, String errorMessage) {
     super(matchField, errorMessage);
-    this.format = format;
+    this.pattern = pattern;
   }
 
-  public LocalDateValidator(String format, String matchField, String errorMessage, String[] dependsOn) {
+  public LocalDateValidator(String pattern, String matchField, String errorMessage, String[] dependsOn) {
     super(matchField, errorMessage, dependsOn);
-    this.format = format;
+    this.pattern = pattern;
   }
 
-  public LocalDateValidator(String format, String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {
+  public LocalDateValidator(String pattern, String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {
     super(group, matchField, errorMessage, messageOnField, dependsOn);
-    this.format = format;
+    this.pattern = pattern;
   }
 
   @Override
   protected boolean customValidate(Cell cell, FieldMeta fieldMeta) {
 
-    DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(format);
+    DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(pattern);
 
     try {
       dateTimeFormatter.parseLocalDate(cell.getValue());

@@ -7,11 +7,11 @@ import spread.sheet.o2w.extractor.FieldValueExtractor;
 import java.util.List;
 
 /**
- * sheet composer, generated all cell type is string (include number, date ...).
+ * sheet composer, generated all cell type is string (include number, date etc.).
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface SheetComposer {
+public interface SheetComposer<T> {
 
   /**
    * <pre>
@@ -23,17 +23,17 @@ public interface SheetComposer {
    * @param fieldValueExtractors field value extractor
    * @see FieldValueExtractor
    */
-  SheetComposer fieldValueExtractor(FieldValueExtractor... fieldValueExtractors);
+  SheetComposer<T> fieldValueExtractor(FieldValueExtractor... fieldValueExtractors);
 
   /**
    * @param sheetMeta sheet meta
    */
-  SheetComposer sheetMeta(SheetMeta sheetMeta);
+  SheetComposer<T> sheetMeta(SheetMeta sheetMeta);
 
   /**
    * @param data list of data
    */
-  SheetComposer data(List<Object> data);
+  SheetComposer<T> data(List<T> data);
 
   /**
    * @return composed sheet

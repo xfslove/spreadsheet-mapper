@@ -20,26 +20,26 @@ import java.util.Map;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public class DefaultSheetProcessor implements SheetProcessor {
+public class DefaultSheetProcessor<T> implements SheetProcessor<T> {
 
   private Sheet sheet;
 
   private SheetMeta sheetMeta;
 
-  private ObjectFactory objectFactory;
+  private ObjectFactory<T> objectFactory;
 
-  private SheetProcessorListener sheetProcessorListener = new NoopSheetProcessorListener();
+  private SheetProcessorListener<T> sheetProcessorListener = new NoopSheetProcessorListener<>();
 
-  private RowProcessorListener rowProcessorListener = new NoopRowProcessorListener();
+  private RowProcessorListener<T> rowProcessorListener = new NoopRowProcessorListener<>();
 
-  private CellProcessorListener cellProcessorListener = new NoopCellProcessorListener();
+  private CellProcessorListener<T> cellProcessorListener = new NoopCellProcessorListener<>();
 
   private Map<String, FieldValueSetter> key2fieldValueSetter = new HashMap<>();
 
   private ValueSetter defaultValueSetter = new BeanUtilsValueSetter();
 
   @Override
-  public SheetProcessor fieldValueSetter(FieldValueSetter... fieldValueSetters) {
+  public SheetProcessor<T> fieldValueSetter(FieldValueSetter... fieldValueSetters) {
     if (fieldValueSetters == null) {
       return this;
     }
@@ -51,43 +51,43 @@ public class DefaultSheetProcessor implements SheetProcessor {
   }
 
   @Override
-  public SheetProcessor objectFactory(ObjectFactory objectFactory) {
+  public SheetProcessor<T> objectFactory(ObjectFactory<T> objectFactory) {
     this.objectFactory = objectFactory;
     return this;
   }
 
   @Override
-  public SheetProcessor sheetProcessorListener(SheetProcessorListener sheetProcessorListener) {
+  public SheetProcessor<T> sheetProcessorListener(SheetProcessorListener<T> sheetProcessorListener) {
     this.sheetProcessorListener = sheetProcessorListener;
     return this;
   }
 
   @Override
-  public SheetProcessor rowProcessorListener(RowProcessorListener rowProcessorListener) {
+  public SheetProcessor<T> rowProcessorListener(RowProcessorListener<T> rowProcessorListener) {
     this.rowProcessorListener = rowProcessorListener;
     return this;
   }
 
   @Override
-  public SheetProcessor cellProcessorListener(CellProcessorListener cellProcessorListener) {
+  public SheetProcessor<T> cellProcessorListener(CellProcessorListener<T> cellProcessorListener) {
     this.cellProcessorListener = cellProcessorListener;
     return this;
   }
 
   @Override
-  public SheetProcessor sheet(Sheet sheet) {
+  public SheetProcessor<T> sheet(Sheet sheet) {
     this.sheet = sheet;
     return this;
   }
 
   @Override
-  public SheetProcessor sheetMeta(SheetMeta sheetMeta) {
+  public SheetProcessor<T> sheetMeta(SheetMeta sheetMeta) {
     this.sheetMeta = sheetMeta;
     return this;
   }
 
   @Override
-  public List<Object> process() {
+  public List<T> process() {
     if (sheet == null) {
       throw new WorkbookProcessException("set sheet first");
     }
@@ -103,13 +103,13 @@ public class DefaultSheetProcessor implements SheetProcessor {
     List<FieldMeta> fieldMetas = sheetMeta.getFieldMetas();
     Map<Integer, FieldMeta> columnIndex2fieldMeta = buildFieldMetaMap(fieldMetas);
 
-    List<Object> oneSheetObjects = new ArrayList<>();
+    List<T> oneSheetObjects = new ArrayList<>();
     sheetProcessorListener.before(sheet, sheetMeta);
 
     for (int i = sheetMeta.getDataStartRowIndex(); i <= sheet.sizeOfRows(); i++) {
       Row row = sheet.getRow(i);
 
-      Object object = objectFactory.create(row);
+      T object = objectFactory.create(row);
 
       rowProcessorListener.before(row, sheetMeta, object);
 

@@ -31,7 +31,7 @@ public class NumberScaleRangeValidatorTest {
     assertFalse(validator7.valid(cellMap1.get("test.double1"), fieldMetaMap.get("test.double1")));
     assertFalse(validator8.valid(cellMap1.get("test.double2"), fieldMetaMap.get("test.double2")));
 
-    Map<String, Cell> cellMap2 = TestFactory.createCellMap2();
+    Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
     assertFalse(validator5.valid(cellMap2.get("test.float1"), fieldMetaMap.get("test.float1")));
     assertTrue(validator6.valid(cellMap2.get("test.float2"), fieldMetaMap.get("test.float2")));
     assertFalse(validator7.valid(cellMap2.get("test.double1"), fieldMetaMap.get("test.double1")));

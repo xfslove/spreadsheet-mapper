@@ -21,7 +21,7 @@ public class FieldScopeValidatorTest {
 
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
 
-    SheetMeta sheetMeta = TestFactory.createSheetMeta();
+    SheetMeta sheetMeta = TestFactory.createSheetMeta(true);
 
     Sheet sheet = TestFactory.createSheet();
 

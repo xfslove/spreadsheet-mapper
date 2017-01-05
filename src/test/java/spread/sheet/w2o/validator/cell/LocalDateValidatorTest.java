@@ -23,7 +23,7 @@ public class LocalDateValidatorTest {
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
     assertTrue(validator.valid(cellMap1.get("test.localDate"), fieldMetaMap.get("test.localDate")));
 
-    Map<String, Cell> cellMap2 = TestFactory.createCellMap2();
+    Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
     assertFalse(validator.valid(cellMap2.get("test.localDate"), fieldMetaMap.get("test.localDate")));
   }
 

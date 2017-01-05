@@ -45,7 +45,7 @@ public class HSSFWorkbook2ExcelWriterTest {
 
     Workbook workbook1 = reader.read(new FileInputStream(file));
 
-    AssertUtil.assertWorkbookEquals(workbook1);
+    AssertUtil.assertWorkbookEquals(workbook1, true);
   }
 
 }

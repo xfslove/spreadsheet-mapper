@@ -21,7 +21,7 @@ public class LocalDateExtractor extends FieldValueExtractorAdapter {
 
   private String pattern;
 
-  public LocalDateExtractor(String matchField, String pattern) {
+  public LocalDateExtractor(String pattern, String matchField) {
     super(matchField);
     this.pattern = pattern;
   }
