@@ -1,18 +1,18 @@
 package spread.sheet.w2o.validator;
 
-import spread.sheet.model.message.ErrorMessageBean;
-import spread.sheet.model.meta.FieldMeta;
-import spread.sheet.model.meta.SheetMeta;
-import spread.sheet.w2o.processor.WorkbookProcessException;
-import spread.sheet.w2o.validator.cell.CellValidator;
+import org.apache.commons.collections.CollectionUtils;
 import spread.sheet.model.core.Cell;
 import spread.sheet.model.core.Row;
 import spread.sheet.model.core.Sheet;
 import spread.sheet.model.message.ErrorMessage;
+import spread.sheet.model.message.ErrorMessageBean;
 import spread.sheet.model.message.MessageWriteStrategies;
+import spread.sheet.model.meta.FieldMeta;
+import spread.sheet.model.meta.SheetMeta;
+import spread.sheet.w2o.processor.WorkbookProcessException;
+import spread.sheet.w2o.validator.cell.CellValidator;
 import spread.sheet.w2o.validator.row.RowValidator;
 import spread.sheet.w2o.validator.sheet.SheetValidator;
-import org.apache.commons.collections.CollectionUtils;
 
 import java.util.*;
 
@@ -134,37 +134,17 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
 
     Map<String, Set<String>> dependsOnHierarchy = buildDependsOnHierarchy(validatorMap);
 
-    Set<String> satisfiedGroups = new HashSet<>();
-    for (String group : dependsOnHierarchy.keySet()) {
-      Set<String> dependencyGroups = new HashSet<>();
-      checkValidatorKeyDependencyHierarchy(dependsOnHierarchy, satisfiedGroups, dependencyGroups, group);
-      satisfiedGroups.addAll(dependencyGroups);
-    }
-  }
-
-  private void checkValidatorKeyDependencyHierarchy(
-      Map<String, Set<String>> dependsOnHierarchy,
-      Set<String> satisfiedGroups,
-      Set<String> dependencyGroups,
-      String group
-  ) {
-
-    if (satisfiedGroups.contains(group)) {
-      return;
+    for (Set<String> dependsOns : dependsOnHierarchy.values()) {
+      for (String dependsOn : dependsOns) {
+        if (!dependsOnHierarchy.containsKey(dependsOn)) {
+          throw new WorkbookValidateException("depends on missing group.");
+        }
+      }
     }
 
-    dependencyGroups.add(group);
-    for (String dependsOn : dependsOnHierarchy.get(group)) {
-
-      if (!dependsOnHierarchy.containsKey(dependsOn)) {
-        throw new WorkbookValidateException("dependency missing group [" + dependsOn + "]");
-      }
-
-      if (dependencyGroups.contains(dependsOn)) {
-        throw new WorkbookValidateException("dependency cycling on [" + group + "] and [" + dependsOn + "]");
-      }
-
-      checkValidatorKeyDependencyHierarchy(dependsOnHierarchy, satisfiedGroups, dependencyGroups, dependsOn);
+    CyclingChecker cyclingChecker = new CyclingChecker(dependsOnHierarchy);
+    if (cyclingChecker.cycling()) {
+      throw new WorkbookValidateException("dependency cycling.");
     }
   }
 
