@@ -6,7 +6,7 @@ import java.util.*;
 
 /**
  * <pre>
- * using Tarjan's strongly connected components algorithm to check cycling,
+ * use Tarjan's strongly connected components algorithm to check cycling,
  * in directed graph, if a strongly connected component not a isolated node, means has cycle.
  * </pre>
  * Created by hanwen on 2017/1/5.
@@ -31,6 +31,10 @@ public class CyclingChecker {
 
   public boolean cycling() {
     for (String s : vGraph.keySet()) {
+
+      if (vGraph.get(s).contains(s)) {
+        cycling = true;
+      }
 
       if (cycling) {
         return cycling;
@@ -66,14 +70,14 @@ public class CyclingChecker {
 
     if (Objects.equals(vLowLink.get(v), vIndex.get(v))) {
 
-      List<String> connectedComponent = new ArrayList<>();
-      String pop = null;
-      while (!StringUtils.equals(pop, v)) {
-        pop = vStack.pop();
-        connectedComponent.add(pop);
+      List<String> connectedComponents = new ArrayList<>();
+      String connectedComponent = null;
+      while (!StringUtils.equals(connectedComponent, v)) {
+        connectedComponent = vStack.pop();
+        connectedComponents.add(connectedComponent);
       }
 
-      cycling = connectedComponent.size() > 1;
+      cycling = connectedComponents.size() > 1;
     }
   }
 

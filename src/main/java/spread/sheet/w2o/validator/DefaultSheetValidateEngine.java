@@ -126,19 +126,13 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
    * check if dependency correct
    */
   private void checkValidatorKeyDependency() {
-
-    // one key corresponding multi validators
-    Map<String, List<? extends RelationValidator>> validatorMap = new HashMap<>();
-    validatorMap.putAll(group2rowValidators);
-    validatorMap.putAll(group2cellValidators);
-
+    Map<String, List<RelationValidator>> validatorMap = buildRelationValidatorMap();
     Map<String, Set<String>> dependsOnHierarchy = buildDependsOnHierarchy(validatorMap);
 
+    Set<String> allGroups = dependsOnHierarchy.keySet();
     for (Set<String> dependsOns : dependsOnHierarchy.values()) {
-      for (String dependsOn : dependsOns) {
-        if (!dependsOnHierarchy.containsKey(dependsOn)) {
-          throw new WorkbookValidateException("depends on missing group.");
-        }
+      if (!CollectionUtils.subtract(dependsOns, allGroups).isEmpty()) {
+        throw new WorkbookValidateException("depends on missing group.");
       }
     }
 
@@ -164,11 +158,7 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
   }
 
   private void validRowCells(Row row) {
-    // one key corresponding multi validators
-    Map<String, List<? extends RelationValidator>> validatorMap = new HashMap<>();
-    validatorMap.putAll(group2rowValidators);
-    validatorMap.putAll(group2cellValidators);
-
+    Map<String, List<RelationValidator>> validatorMap = buildRelationValidatorMap();
     Map<String, Set<String>> dependsOnHierarchy = buildDependsOnHierarchy(validatorMap);
 
     Map<String, Set<Boolean>> allResult = new HashMap<>();
@@ -187,7 +177,7 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
   }
 
   private Map<String, Set<Boolean>> validRowCellsHierarchy(
-      Map<String, List<? extends RelationValidator>> validatorMap,
+      Map<String, List<RelationValidator>> validatorMap,
       Map<String, Set<Boolean>> allResult,
       Map<String, Set<String>> dependsOnHierarchy,
       Row row,
@@ -280,10 +270,33 @@ public class DefaultSheetValidateEngine implements SheetValidateEngine {
     }
   }
 
-  private Map<String, Set<String>> buildDependsOnHierarchy(Map<String, List<? extends RelationValidator>> validatorMap) {
+  private Map<String, List<RelationValidator>> buildRelationValidatorMap() {
+    // one key corresponding multi validators
+    Map<String, List<RelationValidator>> validatorMap = new HashMap<>();
+
+    for (Map.Entry<String, List<RowValidator>> entry : group2rowValidators.entrySet()) {
+      String group = entry.getKey();
+      if (!validatorMap.containsKey(group)) {
+        validatorMap.put(group, new ArrayList<RelationValidator>());
+      }
+      validatorMap.get(group).addAll(entry.getValue());
+    }
+
+    for (Map.Entry<String, List<CellValidator>> entry : group2cellValidators.entrySet()) {
+      String group = entry.getKey();
+      if (!validatorMap.containsKey(group)) {
+        validatorMap.put(group, new ArrayList<RelationValidator>());
+      }
+      validatorMap.get(group).addAll(entry.getValue());
+    }
+
+    return validatorMap;
+  }
+
+  private Map<String, Set<String>> buildDependsOnHierarchy(Map<String, List<RelationValidator>> validatorMap) {
     Map<String, Set<String>> dependsOnHierarchy = new HashMap<>();
 
-    for (Map.Entry<String, List<? extends RelationValidator>> entry : validatorMap.entrySet()) {
+    for (Map.Entry<String, List<RelationValidator>> entry : validatorMap.entrySet()) {
       String key = entry.getKey();
       dependsOnHierarchy.put(key, new HashSet<String>());
 
