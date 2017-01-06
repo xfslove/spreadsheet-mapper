@@ -59,7 +59,7 @@ public class Workbook2ExcelWriter implements WorkbookWriter {
       poiWorkbook.write(outputStream);
 
       if (poiWorkbook instanceof SXSSFWorkbook) {
-        ((SXSSFWorkbook) workbook).dispose();
+        ((SXSSFWorkbook) poiWorkbook).dispose();
       }
     } catch (IOException e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
