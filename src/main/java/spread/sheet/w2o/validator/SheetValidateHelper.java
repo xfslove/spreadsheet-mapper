@@ -15,39 +15,39 @@ import java.util.List;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface SheetValidateEngine {
+public interface SheetValidateHelper {
 
   /**
    * @param validators sheet validator
    * @see SheetValidator
    */
-  SheetValidateEngine sheetValidator(SheetValidator... validators);
+  SheetValidateHelper sheetValidator(SheetValidator... validators);
 
   /**
    * @param validators row validator
    * @see RowValidator
-   * @see RelationValidator#getGroup()
-   * @see RelationValidator#getDependsOn()
+   * @see DependencyValidator#getGroup()
+   * @see DependencyValidator#getDependsOn()
    */
-  SheetValidateEngine rowValidator(RowValidator... validators);
+  SheetValidateHelper rowValidator(RowValidator... validators);
 
   /**
    * @param validators cell validator
    * @see CellValidator
-   * @see RelationValidator#getGroup()
-   * @see RelationValidator#getDependsOn()
+   * @see DependencyValidator#getGroup()
+   * @see DependencyValidator#getDependsOn()
    */
-  SheetValidateEngine cellValidator(CellValidator... validators);
+  SheetValidateHelper cellValidator(CellValidator... validators);
 
   /**
    * @param sheet sheet
    */
-  SheetValidateEngine sheet(Sheet sheet);
+  SheetValidateHelper sheet(Sheet sheet);
 
   /**
    * @param sheetMeta sheet meta
    */
-  SheetValidateEngine sheetMeta(SheetMeta sheetMeta);
+  SheetValidateHelper sheetMeta(SheetMeta sheetMeta);
 
   /**
    * execute valid

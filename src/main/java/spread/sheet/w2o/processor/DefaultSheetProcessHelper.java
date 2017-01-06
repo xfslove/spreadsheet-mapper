@@ -10,17 +10,14 @@ import spread.sheet.w2o.setter.BeanUtilsValueSetter;
 import spread.sheet.w2o.setter.FieldValueSetter;
 import spread.sheet.w2o.setter.ValueSetter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * sheet to objects processor
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public class DefaultSheetProcessor<T> implements SheetProcessor<T> {
+public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
 
   private Sheet sheet;
 
@@ -28,19 +25,19 @@ public class DefaultSheetProcessor<T> implements SheetProcessor<T> {
 
   private ObjectFactory<T> objectFactory;
 
-  private SheetProcessorListener<T> sheetProcessorListener = new NoopSheetProcessorListener<>();
+  private SheetProcessListener<T> sheetProcessListener = new NoopSheetProcessListener<>();
 
-  private RowProcessorListener<T> rowProcessorListener = new NoopRowProcessorListener<>();
+  private RowProcessListener<T> rowProcessListener = new NoopRowProcessListener<>();
 
-  private CellProcessorListener<T> cellProcessorListener = new NoopCellProcessorListener<>();
+  private CellProcessListener<T> cellProcessListener = new NoopCellProcessListener<>();
 
-  private Map<String, FieldValueSetter<T>> key2fieldValueSetter = new HashMap<>();
+  private Map<String, FieldValueSetter<T>> key2fieldValueSetter = new LinkedHashMap<>();
 
   private ValueSetter<T> defaultValueSetter = new BeanUtilsValueSetter<>();
 
   @Override
   @SuppressWarnings("unchecked")
-  public SheetProcessor<T> fieldValueSetter(FieldValueSetter<T>... fieldValueSetters) {
+  public SheetProcessHelper<T> fieldValueSetter(FieldValueSetter<T>... fieldValueSetters) {
     if (fieldValueSetters == null) {
       return this;
     }
@@ -52,37 +49,37 @@ public class DefaultSheetProcessor<T> implements SheetProcessor<T> {
   }
 
   @Override
-  public SheetProcessor<T> objectFactory(ObjectFactory<T> objectFactory) {
+  public SheetProcessHelper<T> objectFactory(ObjectFactory<T> objectFactory) {
     this.objectFactory = objectFactory;
     return this;
   }
 
   @Override
-  public SheetProcessor<T> sheetProcessorListener(SheetProcessorListener<T> sheetProcessorListener) {
-    this.sheetProcessorListener = sheetProcessorListener;
+  public SheetProcessHelper<T> sheetProcessorListener(SheetProcessListener<T> sheetProcessListener) {
+    this.sheetProcessListener = sheetProcessListener;
     return this;
   }
 
   @Override
-  public SheetProcessor<T> rowProcessorListener(RowProcessorListener<T> rowProcessorListener) {
-    this.rowProcessorListener = rowProcessorListener;
+  public SheetProcessHelper<T> rowProcessorListener(RowProcessListener<T> rowProcessListener) {
+    this.rowProcessListener = rowProcessListener;
     return this;
   }
 
   @Override
-  public SheetProcessor<T> cellProcessorListener(CellProcessorListener<T> cellProcessorListener) {
-    this.cellProcessorListener = cellProcessorListener;
+  public SheetProcessHelper<T> cellProcessorListener(CellProcessListener<T> cellProcessListener) {
+    this.cellProcessListener = cellProcessListener;
     return this;
   }
 
   @Override
-  public SheetProcessor<T> sheet(Sheet sheet) {
+  public SheetProcessHelper<T> sheet(Sheet sheet) {
     this.sheet = sheet;
     return this;
   }
 
   @Override
-  public SheetProcessor<T> sheetMeta(SheetMeta sheetMeta) {
+  public SheetProcessHelper<T> sheetMeta(SheetMeta sheetMeta) {
     this.sheetMeta = sheetMeta;
     return this;
   }
@@ -105,14 +102,14 @@ public class DefaultSheetProcessor<T> implements SheetProcessor<T> {
     Map<Integer, FieldMeta> columnIndex2fieldMeta = buildFieldMetaMap(fieldMetas);
 
     List<T> oneSheetObjects = new ArrayList<>();
-    sheetProcessorListener.before(sheet, sheetMeta);
+    sheetProcessListener.before(sheet, sheetMeta);
 
     for (int i = sheetMeta.getDataStartRowIndex(); i <= sheet.sizeOfRows(); i++) {
       Row row = sheet.getRow(i);
 
       T object = objectFactory.create(row);
 
-      rowProcessorListener.before(row, sheetMeta, object);
+      rowProcessListener.before(row, sheetMeta, object);
 
       for (Cell cell : row.getCells()) {
 
@@ -123,7 +120,7 @@ public class DefaultSheetProcessor<T> implements SheetProcessor<T> {
           continue;
         }
 
-        cellProcessorListener.before(cell, fieldMeta, object);
+        cellProcessListener.before(cell, fieldMeta, object);
 
         FieldValueSetter<T> fieldValueSetter = key2fieldValueSetter.get(fieldMeta.getName());
 
@@ -134,16 +131,16 @@ public class DefaultSheetProcessor<T> implements SheetProcessor<T> {
           defaultValueSetter.set(object, cell, fieldMeta);
         }
 
-        cellProcessorListener.after(cell, fieldMeta, object);
+        cellProcessListener.after(cell, fieldMeta, object);
 
       }
 
-      rowProcessorListener.after(row, sheetMeta, object);
+      rowProcessListener.after(row, sheetMeta, object);
 
       oneSheetObjects.add(object);
     }
 
-    sheetProcessorListener.after(sheet, sheetMeta, oneSheetObjects);
+    sheetProcessListener.after(sheet, sheetMeta, oneSheetObjects);
 
     return oneSheetObjects;
   }

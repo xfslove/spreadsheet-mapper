@@ -10,29 +10,29 @@ import java.util.List;
  * <p>
  * Created by hanwen on 2017/1/4.
  */
-public interface WorkbookValidateEngine {
+public interface WorkbookValidateHelper {
 
   /**
    * @param workbookValidators workbook validator
    * @see WorkbookValidator
    */
-  WorkbookValidateEngine workbookValidator(WorkbookValidator... workbookValidators);
+  WorkbookValidateHelper workbookValidator(WorkbookValidator... workbookValidators);
 
   /**
-   * @param sheetValidateEngines sheet validate engine
-   * @see SheetValidateEngine
+   * @param sheetValidateHelpers sheet validate engine
+   * @see SheetValidateHelper
    */
-  WorkbookValidateEngine sheetValidateEngine(SheetValidateEngine... sheetValidateEngines);
+  WorkbookValidateHelper sheetValidateEngine(SheetValidateHelper... sheetValidateHelpers);
 
   /**
    * @return true if pass all
-   * @see SheetValidateEngine#valid()
+   * @see SheetValidateHelper#valid()
    */
   boolean valid();
 
   /**
    * @return error messages
-   * @see SheetValidateEngine#getErrorMessages()
+   * @see SheetValidateHelper#getErrorMessages()
    */
   List<ErrorMessage> getErrorMessages();
 }

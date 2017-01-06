@@ -7,17 +7,17 @@ import java.util.List;
  * <p>
  * Created by hanwen on 2017/1/4.
  */
-public interface WorkbookProcessor {
+public interface WorkbookProcessHelper {
 
   /**
-   * @param sheetProcessors sheet processor
-   * @see SheetProcessor
+   * @param sheetProcessHelpers sheet processor
+   * @see SheetProcessHelper
    */
-  WorkbookProcessor sheetProcessor(SheetProcessor... sheetProcessors);
+  WorkbookProcessHelper sheetProcessor(SheetProcessHelper... sheetProcessHelpers);
 
   /**
    * @return list of sheet list data
-   * @see SheetProcessor#process()
+   * @see SheetProcessHelper#process()
    */
   List<List> process();
 }

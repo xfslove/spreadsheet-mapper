@@ -78,18 +78,18 @@ UserFileTemplate excelSheetTemplate = new ExcelFileTemplate(excel);
 - 生成导入文件
 
 ```
-sheetComposer = new ExcelFileGenerator();
-sheetComposer.setTitles("姓名", "年龄", "生日");
-sheetComposer.setFields("person.value", "person.age", "person.birthday");
+sheetComposeHelper = new ExcelFileGenerator();
+sheetComposeHelper.setTitles("姓名", "年龄", "生日");
+sheetComposeHelper.setFields("person.value", "person.age", "person.birthday");
 // 添加字段提示
-sheetComposer.addCellPrompters(
+sheetComposeHelper.addCellPrompters(
         new PromptBuilder()
             .prompt("person.age", "整数")
             .prompt("person.birthday", "yyyy-MM-dd")
             .add(new RequiredPrompter("person.value"))
             .build()
     );
-sheetComposer.generate(excel);
+sheetComposeHelper.generate(excel);
 ```
 
 - 校验
@@ -131,5 +131,5 @@ objectProcessorEngine.process(new PersonListProcessor());
 	和生成导入文件类似，只需要把导出的数据给<code>ExcelFileGenerator</code>即可
 
 ```
-sheetComposer.setData(data);
+sheetComposeHelper.setData(data);
 ```

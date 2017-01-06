@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -25,7 +26,7 @@ public abstract class CellValidatorAdapter implements CellValidator {
 
   private String messageOnField;
 
-  private Set<String> dependsOn = new HashSet<>();
+  private Set<String> dependsOn = new LinkedHashSet<>();
 
   public CellValidatorAdapter(String matchField, String errorMessage) {
     this.group = matchField;

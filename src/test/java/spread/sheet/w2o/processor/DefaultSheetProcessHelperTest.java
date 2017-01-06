@@ -19,7 +19,7 @@ import static org.testng.Assert.assertEquals;
 /**
  * Created by hanwen on 2017/1/5.
  */
-public class DefaultSheetProcessorTest {
+public class DefaultSheetProcessHelperTest {
 
   @Test
   public void testProcess() throws Exception {
@@ -27,7 +27,7 @@ public class DefaultSheetProcessorTest {
     Sheet sheet = TestFactory.createSheet();
     SheetMeta sheetMeta1 = TestFactory.createSheetMeta(true);
 
-    SheetProcessor<TestBean> processor1 = new DefaultSheetProcessor<TestBean>()
+    SheetProcessHelper<TestBean> processor1 = new DefaultSheetProcessHelper<TestBean>()
         .sheet(sheet).sheetMeta(sheetMeta1).objectFactory(new TestBeanObjectFactory());
 
     processor1.fieldValueSetter(
@@ -46,7 +46,7 @@ public class DefaultSheetProcessorTest {
 
     SheetMeta sheetMeta2 = new SheetMetaBean(sheetMeta1.getDataStartRowIndex());
 
-    SheetProcessor<TestBean> processor2 = new DefaultSheetProcessor<TestBean>()
+    SheetProcessHelper<TestBean> processor2 = new DefaultSheetProcessHelper<TestBean>()
         .sheet(sheet).sheetMeta(sheetMeta2).objectFactory(new TestBeanObjectFactory());
 
     List<TestBean> list2 = processor2.process();

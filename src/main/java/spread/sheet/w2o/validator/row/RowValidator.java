@@ -3,7 +3,7 @@ package spread.sheet.w2o.validator.row;
 
 import spread.sheet.model.core.Row;
 import spread.sheet.model.meta.SheetMeta;
-import spread.sheet.w2o.validator.RelationValidator;
+import spread.sheet.w2o.validator.DependencyValidator;
 
 import java.util.Set;
 
@@ -12,7 +12,7 @@ import java.util.Set;
  * <p>
  * Created by hanwen on 4/26/16.
  */
-public interface RowValidator extends RelationValidator {
+public interface RowValidator extends DependencyValidator {
 
   /**
    * valid supplied excel row

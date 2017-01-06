@@ -7,17 +7,17 @@ import spread.sheet.model.core.Workbook;
  * <p>
  * Created by hanwen on 2017/1/4.
  */
-public interface WorkbookComposer {
+public interface WorkbookComposeHelper {
 
   /**
-   * @param sheetComposers sheet composer
-   * @see SheetComposer
+   * @param sheetComposeHelpers sheet composer
+   * @see SheetComposeHelper
    */
-  WorkbookComposer sheetComposer(SheetComposer... sheetComposers);
+  WorkbookComposeHelper sheetComposer(SheetComposeHelper... sheetComposeHelpers);
 
   /**
    * @return composed workbook
-   * @see SheetComposer#compose()
+   * @see SheetComposeHelper#compose()
    */
   Workbook compose();
 }

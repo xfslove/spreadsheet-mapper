@@ -10,27 +10,24 @@ import spread.sheet.o2w.extractor.BeanUtilsValueExtractor;
 import spread.sheet.o2w.extractor.FieldValueExtractor;
 import spread.sheet.o2w.extractor.ValueExtractor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by hanwen on 15-12-16.
  */
-public class DefaultSheetComposer<T> implements SheetComposer<T> {
+public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
 
   private SheetMeta sheetMeta;
 
   private List<T> data = new ArrayList<>();
 
-  private Map<String, FieldValueExtractor<T>> key2fieldValueExtractor = new HashMap<>();
+  private Map<String, FieldValueExtractor<T>> key2fieldValueExtractor = new LinkedHashMap<>();
 
   private ValueExtractor<T> defaultValueExtractor = new BeanUtilsValueExtractor<>();
 
   @Override
   @SuppressWarnings("unchecked")
-  public SheetComposer<T> fieldValueExtractor(FieldValueExtractor<T>... fieldValueExtractors) {
+  public SheetComposeHelper<T> fieldValueExtractor(FieldValueExtractor<T>... fieldValueExtractors) {
     if (fieldValueExtractors == null) {
       return this;
     }
@@ -41,13 +38,13 @@ public class DefaultSheetComposer<T> implements SheetComposer<T> {
   }
 
   @Override
-  public SheetComposer<T> sheetMeta(SheetMeta sheetMeta) {
+  public SheetComposeHelper<T> sheetMeta(SheetMeta sheetMeta) {
     this.sheetMeta = sheetMeta;
     return this;
   }
 
   @Override
-  public SheetComposer<T> data(List<T> data) {
+  public SheetComposeHelper<T> data(List<T> data) {
     this.data = data;
     return this;
   }

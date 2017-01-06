@@ -1,11 +1,12 @@
 package spread.sheet.w2o.validator.row;
 
 
-import spread.sheet.model.meta.SheetMeta;
 import spread.sheet.model.core.Row;
+import spread.sheet.model.meta.SheetMeta;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -19,7 +20,7 @@ public abstract class RowValidatorAdapter implements RowValidator {
 
   private String errorMessage;
 
-  private Set<String> dependsOn = new HashSet<>();
+  private Set<String> dependsOn = new LinkedHashSet<>();
 
   private Set<String> messageOnFields = new HashSet<>();
 

@@ -3,14 +3,14 @@ package spread.sheet.w2o.validator.cell;
 
 import spread.sheet.model.meta.FieldMeta;
 import spread.sheet.model.core.Cell;
-import spread.sheet.w2o.validator.RelationValidator;
+import spread.sheet.w2o.validator.DependencyValidator;
 
 /**
  * cell value validator, general(no dependency) after row validators.
  * <p>
  * Created by hanwen on 15-12-15.
  */
-public interface CellValidator extends RelationValidator {
+public interface CellValidator extends DependencyValidator {
 
   /**
    * valid supplied excel cell value

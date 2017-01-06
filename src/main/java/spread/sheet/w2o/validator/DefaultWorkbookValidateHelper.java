@@ -14,13 +14,13 @@ import java.util.List;
 /**
  * Created by hanwen on 2017/1/4.
  */
-public class DefaultWorkbookValidateEngine implements WorkbookValidateEngine {
+public class DefaultWorkbookValidateHelper implements WorkbookValidateHelper {
 
   private Workbook workbook;
 
   private List<WorkbookValidator> workbookValidators = new ArrayList<>();
 
-  private List<SheetValidateEngine> sheetValidateEngines = new ArrayList<>();
+  private List<SheetValidateHelper> sheetValidateHelpers = new ArrayList<>();
 
   private List<ErrorMessage> errorMessages = new ArrayList<>();
 
@@ -28,7 +28,7 @@ public class DefaultWorkbookValidateEngine implements WorkbookValidateEngine {
   private static final int WORKBOOK_ERROR_MESSAGE_ON_SHEET = 1;
 
   @Override
-  public WorkbookValidateEngine workbookValidator(WorkbookValidator... workbookValidators) {
+  public WorkbookValidateHelper workbookValidator(WorkbookValidator... workbookValidators) {
     if (workbookValidators == null) {
       return this;
     }
@@ -37,15 +37,15 @@ public class DefaultWorkbookValidateEngine implements WorkbookValidateEngine {
   }
 
   @Override
-  public WorkbookValidateEngine sheetValidateEngine(SheetValidateEngine... sheetValidateEngines) {
-    if (sheetValidateEngines == null) {
+  public WorkbookValidateHelper sheetValidateEngine(SheetValidateHelper... sheetValidateHelpers) {
+    if (sheetValidateHelpers == null) {
       return this;
     }
-    Collections.addAll(this.sheetValidateEngines, sheetValidateEngines);
+    Collections.addAll(this.sheetValidateHelpers, sheetValidateHelpers);
     return this;
   }
 
-  public WorkbookValidateEngine workbook(Workbook workbook) {
+  public WorkbookValidateHelper workbook(Workbook workbook) {
     this.workbook = workbook;
     return this;
   }
@@ -63,10 +63,10 @@ public class DefaultWorkbookValidateEngine implements WorkbookValidateEngine {
 
     boolean sheetValidResult = true;
 
-    for (SheetValidateEngine sheetValidateEngine : sheetValidateEngines) {
+    for (SheetValidateHelper sheetValidateHelper : sheetValidateHelpers) {
 
-      if (!sheetValidateEngine.valid()) {
-        errorMessages.addAll(sheetValidateEngine.getErrorMessages());
+      if (!sheetValidateHelper.valid()) {
+        errorMessages.addAll(sheetValidateHelper.getErrorMessages());
         sheetValidResult = false;
       }
     }

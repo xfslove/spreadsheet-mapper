@@ -18,7 +18,7 @@ import static org.testng.Assert.assertEquals;
 /**
  * Created by hanwen on 2017/1/5.
  */
-public class DefaultSheetComposerTest {
+public class DefaultSheetComposeHelperTest {
 
   @Test
   public void testCompose() throws Exception {
@@ -30,31 +30,31 @@ public class DefaultSheetComposerTest {
 
     List<TestBean> data = Arrays.asList(testBean1, testBean2);
 
-    SheetComposer<TestBean> sheetComposer1 = new DefaultSheetComposer<TestBean>().sheetMeta(sheetMeta1).data(data);
-    addExtractor(sheetComposer1);
+    SheetComposeHelper<TestBean> sheetComposeHelper1 = new DefaultSheetComposeHelper<TestBean>().sheetMeta(sheetMeta1).data(data);
+    addExtractor(sheetComposeHelper1);
 
-    Sheet sheet1 = sheetComposer1.compose();
+    Sheet sheet1 = sheetComposeHelper1.compose();
 
     AssertUtil.assertSheetEquals(sheet1, true);
 
     SheetMeta sheetMeta2 = TestFactory.createSheetMeta(false);
 
-    SheetComposer<TestBean> sheetComposer2 = new DefaultSheetComposer<TestBean>().sheetMeta(sheetMeta2).data(data);
-    addExtractor(sheetComposer2);
+    SheetComposeHelper<TestBean> sheetComposeHelper2 = new DefaultSheetComposeHelper<TestBean>().sheetMeta(sheetMeta2).data(data);
+    addExtractor(sheetComposeHelper2);
 
-    Sheet sheet2 = sheetComposer2.compose();
+    Sheet sheet2 = sheetComposeHelper2.compose();
 
     AssertUtil.assertSheetEquals(sheet2, false);
 
-    SheetComposer<TestBean> sheetComposer3 = new DefaultSheetComposer<TestBean>().sheetMeta(sheetMeta1);
+    SheetComposeHelper<TestBean> sheetComposeHelper3 = new DefaultSheetComposeHelper<TestBean>().sheetMeta(sheetMeta1);
 
-    Sheet sheet3 = sheetComposer3.compose();
+    Sheet sheet3 = sheetComposeHelper3.compose();
     assertEquals(sheet3.sizeOfRows(), 1);
     AssertUtil.assertHeaderRowEquals(sheet3.getRow(1), true);
   }
 
-  private void addExtractor(SheetComposer sheetComposer) {
-    sheetComposer.fieldValueExtractor(
+  private void addExtractor(SheetComposeHelper sheetComposeHelper) {
+    sheetComposeHelper.fieldValueExtractor(
         new PlainNumberExtractor("test.int1"),
         new PlainNumberExtractor("test.int2"),
         new PlainNumberExtractor("test.long1"),

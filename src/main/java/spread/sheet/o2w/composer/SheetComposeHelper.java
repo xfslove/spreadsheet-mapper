@@ -11,7 +11,7 @@ import java.util.List;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface SheetComposer<T> {
+public interface SheetComposeHelper<T> {
 
   /**
    * <pre>
@@ -24,17 +24,17 @@ public interface SheetComposer<T> {
    * @see FieldValueExtractor
    */
   @SuppressWarnings("unchecked")
-  SheetComposer<T> fieldValueExtractor(FieldValueExtractor<T>... fieldValueExtractors);
+  SheetComposeHelper<T> fieldValueExtractor(FieldValueExtractor<T>... fieldValueExtractors);
 
   /**
    * @param sheetMeta sheet meta
    */
-  SheetComposer<T> sheetMeta(SheetMeta sheetMeta);
+  SheetComposeHelper<T> sheetMeta(SheetMeta sheetMeta);
 
   /**
    * @param data list of data
    */
-  SheetComposer<T> data(List<T> data);
+  SheetComposeHelper<T> data(List<T> data);
 
   /**
    * @return composed sheet

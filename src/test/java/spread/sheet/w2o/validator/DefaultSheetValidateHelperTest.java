@@ -6,7 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 import spread.sheet.TestFactory;
-import spread.sheet.model.core.*;
+import spread.sheet.model.core.Cell;
+import spread.sheet.model.core.Row;
+import spread.sheet.model.core.Sheet;
+import spread.sheet.model.core.SheetBean;
 import spread.sheet.model.meta.FieldMeta;
 import spread.sheet.model.meta.SheetMeta;
 import spread.sheet.model.meta.SheetMetaBean;
@@ -15,16 +18,18 @@ import spread.sheet.w2o.validator.cell.CellValidatorAdapter;
 import spread.sheet.w2o.validator.row.RowValidator;
 import spread.sheet.w2o.validator.row.RowValidatorAdapter;
 
-import java.util.Map;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.testng.Assert.*;
 
 /**
  * Created by hanwen on 2017/1/5.
  */
-public class DefaultSheetValidateEngineTest {
+public class DefaultSheetValidateHelperTest {
 
-  private static Logger LOGGER = LoggerFactory.getLogger(DefaultSheetValidateEngineTest.class);
+  private static Logger LOGGER = LoggerFactory.getLogger(DefaultSheetValidateHelperTest.class);
 
   @Test(groups = "missingTest")
   public void testMissing() {
@@ -34,12 +39,12 @@ public class DefaultSheetValidateEngineTest {
         new TestCellValidator("2", new String[]{})
     };
 
-    SheetValidateEngine sheetValidateEngine = new DefaultSheetValidateEngine().sheetMeta(new SheetMetaBean(2)).sheet(new SheetBean());
-    sheetValidateEngine.cellValidator(cellValidators);
+    SheetValidateHelper sheetValidateHelper = new DefaultSheetValidateHelper().sheetMeta(new SheetMetaBean(2)).sheet(new SheetBean());
+    sheetValidateHelper.cellValidator(cellValidators);
 
     boolean missing = false;
     try {
-      sheetValidateEngine.valid();
+      sheetValidateHelper.valid();
     } catch (WorkbookValidateException e) {
       LOGGER.debug(ExceptionUtils.getStackTrace(e));
       if (StringUtils.contains(e.getMessage(), "missing")) {
@@ -204,7 +209,7 @@ public class DefaultSheetValidateEngineTest {
     assertValid(cellValidators, null, true);
   }
 
-  @Test(dependsOnGroups = {"cyclingTest", "missingTest"})
+  @Test(groups = "hitTest", dependsOnGroups = {"cyclingTest", "missingTest"})
   public void validatorHitTest() {
 
     Counter counter = new Counter();
@@ -234,26 +239,69 @@ public class DefaultSheetValidateEngineTest {
     };
 
     SheetMeta sheetMeta = TestFactory.createSheetMeta(true);
-    Sheet sheet = TestFactory.createSheet();
+    Sheet sheet = getSheet();
 
-    SheetValidateEngine sheetValidateEngine = new DefaultSheetValidateEngine().sheetMeta(sheetMeta).sheet(sheet);
-    sheetValidateEngine.cellValidator(cellValidators);
-    sheetValidateEngine.rowValidator(rowValidators);
+    SheetValidateHelper sheetValidateHelper = new DefaultSheetValidateHelper().sheetMeta(sheetMeta).sheet(sheet);
+    sheetValidateHelper.cellValidator(cellValidators);
+    sheetValidateHelper.rowValidator(rowValidators);
 
-    boolean valid = sheetValidateEngine.valid();
+    boolean valid = sheetValidateHelper.valid();
     assertTrue(valid);
-    assertEquals(counter.hitTime(), 18);
+    assertEquals(counter.hitTime(), 13 + 5);
+  }
+
+  @Test(dependsOnGroups = "hitTest")
+  public void testSkip() {
+
+    Set<String> hitValidators = new HashSet<>();
+    /*
+       no cycle
+       test.int1 -> test.int2, test.long1, test.double1
+       test.int2 -> test.long2
+       test.long1 -> test.float2
+       test.long2 -> test.float1, test.float2
+       test.float1 -> test.double1
+       test.float2 -> test.double1
+     */
+    CellValidator[] cellValidators = new CellValidator[]{
+        new TrueCellValidator("test.float2", new String[]{"test.double1"}, hitValidators),
+        new FalseCellValidator("test.int1", new String[]{"test.int2"}, hitValidators),
+        new TrueCellValidator("test.int1", new String[]{"test.long1"}, hitValidators),
+        new TrueCellValidator("test.int2", new String[]{"test.long2"}, hitValidators),
+        new TrueCellValidator("test.long1", new String[]{"test.float2"}, hitValidators),
+        new TrueCellValidator("test.long2", new String[]{"test.float1"}, hitValidators),
+        new FalseCellValidator("test.float1", new String[0], hitValidators),
+        new TrueCellValidator("test.double1", new String[0], hitValidators)
+    };
+    RowValidator[] rowValidators = new RowValidator[]{
+        new TrueRowValidator("test.int1", new String[]{"test.double1"}, hitValidators),
+        new TrueRowValidator("test.long2", new String[]{"test.float2"}, hitValidators),
+        new FalseRowValidator("test.float1", new String[]{"test.double1"}, hitValidators)
+    };
+
+    SheetMeta sheetMeta = TestFactory.createSheetMeta(true);
+    Sheet sheet = getSheet();
+
+    SheetValidateHelper sheetValidateHelper = new DefaultSheetValidateHelper().sheetMeta(sheetMeta).sheet(sheet);
+    sheetValidateHelper.cellValidator(cellValidators);
+    sheetValidateHelper.rowValidator(rowValidators);
+
+    sheetValidateHelper.valid();
+
+    Set<String> expected = new HashSet<>(Arrays.asList("cell:true:test.float2", "cell:true:test.double1", "row:false:test.float1"));
+
+    assertEquals(hitValidators, expected);
   }
 
   private void assertValid(CellValidator[] cellValidators, RowValidator[] rowValidators, boolean cycling) {
-    SheetValidateEngine sheetValidateEngine = new DefaultSheetValidateEngine().sheetMeta(new SheetMetaBean(2)).sheet(new SheetBean());
+    SheetValidateHelper sheetValidateHelper = new DefaultSheetValidateHelper().sheetMeta(new SheetMetaBean(2)).sheet(new SheetBean());
 
-    sheetValidateEngine.cellValidator(cellValidators);
-    sheetValidateEngine.rowValidator(rowValidators);
+    sheetValidateHelper.cellValidator(cellValidators);
+    sheetValidateHelper.rowValidator(rowValidators);
 
     boolean result = false;
     try {
-      sheetValidateEngine.valid();
+      sheetValidateHelper.valid();
     } catch (WorkbookValidateException e) {
       LOGGER.debug(ExceptionUtils.getStackTrace(e));
       if (StringUtils.contains(e.getMessage(), "cycling")) {
@@ -264,6 +312,71 @@ public class DefaultSheetValidateEngineTest {
       assertTrue(result);
     } else {
       assertFalse(result);
+    }
+  }
+
+  private class TrueCellValidator extends CellValidatorAdapter {
+
+    private Set<String> hitValidators;
+
+    TrueCellValidator(String matchField, String[] dependsOn, Set<String> hitValidators) {
+      super(matchField, "", dependsOn);
+      this.hitValidators = hitValidators;
+    }
+
+    @Override
+    protected boolean customValidate(Cell cell, FieldMeta fieldMeta) {
+      hitValidators.add("cell:true:" + getGroup());
+      return true;
+    }
+
+  }
+
+  private class TrueRowValidator extends RowValidatorAdapter {
+
+    private Set<String> hitValidators;
+
+    TrueRowValidator(String group, String[] dependsOn, Set<String> hitValidators) {
+      super(group, "", new String[0], dependsOn);
+      this.hitValidators = hitValidators;
+    }
+
+    @Override
+    protected boolean customValidate(Row row, SheetMeta sheetMeta) {
+      hitValidators.add("row:true:" + getGroup());
+      return false;
+    }
+  }
+
+  private class FalseCellValidator extends CellValidatorAdapter {
+
+    private Set<String> hitValidators;
+
+    FalseCellValidator(String matchField, String[] dependsOn, Set<String> hitValidators) {
+      super(matchField, "", dependsOn);
+      this.hitValidators = hitValidators;
+    }
+
+    @Override
+    protected boolean customValidate(Cell cell, FieldMeta fieldMeta) {
+      hitValidators.add("cell:false:" + getGroup());
+      return false;
+    }
+  }
+
+  private class FalseRowValidator extends RowValidatorAdapter {
+
+    private Set<String> hitValidators;
+
+    FalseRowValidator(String group, String[] dependsOn, Set<String> hitValidators) {
+      super(group, "", new String[0], dependsOn);
+      this.hitValidators = hitValidators;
+    }
+
+    @Override
+    protected boolean customValidate(Row row, SheetMeta sheetMeta) {
+      hitValidators.add("row:false:" + getGroup());
+      return false;
     }
   }
 
@@ -282,7 +395,9 @@ public class DefaultSheetValidateEngineTest {
 
     @Override
     protected boolean customValidate(Cell cell, FieldMeta fieldMeta) {
-      counter.hit();
+      if (counter != null) {
+        counter.hit();
+      }
       return true;
     }
   }
@@ -291,24 +406,26 @@ public class DefaultSheetValidateEngineTest {
 
     private Counter counter;
 
-    public TestRowValidator(String group, String[] dependsOn, Counter counter) {
+    TestRowValidator(String group, String[] dependsOn, Counter counter) {
       super(group, "", new String[0], dependsOn);
       this.counter = counter;
     }
 
-    public TestRowValidator(String group, String[] dependsOn) {
+    TestRowValidator(String group, String[] dependsOn) {
       super(group, "", new String[0], dependsOn);
     }
 
     @Override
     protected boolean customValidate(Row row, SheetMeta sheetMeta) {
-      counter.hit();
+      if (counter != null) {
+        counter.hit();
+      }
       return true;
     }
   }
 
   private class Counter {
-    private int count = 1;
+    private int count = 0;
 
     void hit() {
       count++;
@@ -320,13 +437,10 @@ public class DefaultSheetValidateEngineTest {
   }
 
   private Sheet getSheet() {
-    Sheet sheet = TestFactory.createSheet();
-    Map<String, Cell> errorCellMap = TestFactory.createErrorCellMap();
-    Row er = new RowBean();
-    for (Cell cell : errorCellMap.values()) {
-      er.addCell(cell);
-    }
-    sheet.addRow(er);
+    Sheet baseSheet = TestFactory.createSheet();
+    Sheet sheet = new SheetBean();
+    sheet.addRow(baseSheet.getRow(1));
+    sheet.addRow(baseSheet.getRow(2));
     return sheet;
   }
 }

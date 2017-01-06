@@ -8,7 +8,7 @@ import spread.sheet.model.meta.FieldMeta;
  * <p>
  * Created by hanwen on 2017/1/3.
  */
-public interface CellProcessorListener<T> {
+public interface CellProcessListener<T> {
 
   /**
    * before object value set

@@ -6,7 +6,7 @@ import spread.sheet.model.meta.FieldMeta;
 /**
  * Created by hanwen on 2017/1/3.
  */
-public final class NoopCellProcessorListener<T> implements CellProcessorListener<T> {
+public final class NoopCellProcessListener<T> implements CellProcessListener<T> {
 
   @Override
   public void before(Cell cell, FieldMeta fieldMeta, T object) {
