@@ -30,8 +30,8 @@ public class DefaultSheetValidateHelper implements SheetValidateHelper {
     validators
    ================*/
   private List<SheetValidator> sheetValidators = new ArrayList<>();
-  private Map<String, List<RowValidator>> group2rowValidators = new LinkedHashMap<>();
-  private Map<String, List<CellValidator>> group2cellValidators = new LinkedHashMap<>();
+  private List<RowValidator> rowValidators = new ArrayList<>();
+  private List<CellValidator> cellValidators = new ArrayList<>();
 
   /*==============
     error messages
@@ -52,15 +52,7 @@ public class DefaultSheetValidateHelper implements SheetValidateHelper {
     if (validators == null) {
       return this;
     }
-
-    for (RowValidator validator : validators) {
-      String group = validator.getGroup();
-
-      if (!group2rowValidators.containsKey(group)) {
-        group2rowValidators.put(group, new ArrayList<RowValidator>());
-      }
-      group2rowValidators.get(group).add(validator);
-    }
+    Collections.addAll(this.rowValidators, validators);
     return this;
   }
 
@@ -69,14 +61,7 @@ public class DefaultSheetValidateHelper implements SheetValidateHelper {
     if (validators == null) {
       return this;
     }
-    for (CellValidator validator : validators) {
-      String group = validator.getGroup();
-
-      if (!group2cellValidators.containsKey(group)) {
-        group2cellValidators.put(group, new ArrayList<CellValidator>());
-      }
-      group2cellValidators.get(group).add(validator);
-    }
+    Collections.addAll(this.cellValidators, validators);
     return this;
   }
 
@@ -169,20 +154,20 @@ public class DefaultSheetValidateHelper implements SheetValidateHelper {
     // one key corresponding multi validators, row validators first
     Map<String, List<DependencyValidator>> validatorMap = new LinkedHashMap<>();
 
-    for (Map.Entry<String, List<RowValidator>> entry : group2rowValidators.entrySet()) {
-      String group = entry.getKey();
+    for (RowValidator validator : rowValidators) {
+      String group = validator.getGroup();
       if (!validatorMap.containsKey(group)) {
         validatorMap.put(group, new ArrayList<DependencyValidator>());
       }
-      validatorMap.get(group).addAll(entry.getValue());
+      validatorMap.get(group).add(validator);
     }
 
-    for (Map.Entry<String, List<CellValidator>> entry : group2cellValidators.entrySet()) {
-      String group = entry.getKey();
+    for (CellValidator validator : cellValidators) {
+      String group = validator.getGroup();
       if (!validatorMap.containsKey(group)) {
         validatorMap.put(group, new ArrayList<DependencyValidator>());
       }
-      validatorMap.get(group).addAll(entry.getValue());
+      validatorMap.get(group).add(validator);
     }
 
     return validatorMap;

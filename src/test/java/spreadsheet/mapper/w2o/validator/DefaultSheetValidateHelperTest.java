@@ -18,9 +18,9 @@ import spreadsheet.mapper.w2o.validator.cell.CellValidatorAdapter;
 import spreadsheet.mapper.w2o.validator.row.RowValidator;
 import spreadsheet.mapper.w2o.validator.row.RowValidatorAdapter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import static org.testng.Assert.*;
 
@@ -253,7 +253,7 @@ public class DefaultSheetValidateHelperTest {
   @Test(dependsOnGroups = "hitTest")
   public void testSkip() {
 
-    Set<String> hitValidators = new HashSet<>();
+    List<String> hitValidators = new ArrayList<>();
     /*
        no cycle
        test.int1 -> test.int2, test.long1, test.double1
@@ -288,7 +288,7 @@ public class DefaultSheetValidateHelperTest {
 
     sheetValidateHelper.valid();
 
-    Set<String> expected = new HashSet<>(Arrays.asList("cell:true:test.float2", "cell:true:test.double1", "row:false:test.float1"));
+    List<String> expected = Arrays.asList("cell:true:test.double1", "cell:true:test.float2", "row:false:test.float1");
 
     assertEquals(hitValidators, expected);
   }
@@ -317,9 +317,9 @@ public class DefaultSheetValidateHelperTest {
 
   private class TrueCellValidator extends CellValidatorAdapter {
 
-    private Set<String> hitValidators;
+    private List<String> hitValidators;
 
-    TrueCellValidator(String matchField, String[] dependsOn, Set<String> hitValidators) {
+    TrueCellValidator(String matchField, String[] dependsOn, List<String> hitValidators) {
       super(matchField, "", dependsOn);
       this.hitValidators = hitValidators;
     }
@@ -334,9 +334,9 @@ public class DefaultSheetValidateHelperTest {
 
   private class TrueRowValidator extends RowValidatorAdapter {
 
-    private Set<String> hitValidators;
+    private List<String> hitValidators;
 
-    TrueRowValidator(String group, String[] dependsOn, Set<String> hitValidators) {
+    TrueRowValidator(String group, String[] dependsOn, List<String> hitValidators) {
       super(group, "", new String[0], dependsOn);
       this.hitValidators = hitValidators;
     }
@@ -350,9 +350,9 @@ public class DefaultSheetValidateHelperTest {
 
   private class FalseCellValidator extends CellValidatorAdapter {
 
-    private Set<String> hitValidators;
+    private List<String> hitValidators;
 
-    FalseCellValidator(String matchField, String[] dependsOn, Set<String> hitValidators) {
+    FalseCellValidator(String matchField, String[] dependsOn, List<String> hitValidators) {
       super(matchField, "", dependsOn);
       this.hitValidators = hitValidators;
     }
@@ -366,9 +366,9 @@ public class DefaultSheetValidateHelperTest {
 
   private class FalseRowValidator extends RowValidatorAdapter {
 
-    private Set<String> hitValidators;
+    private List<String> hitValidators;
 
-    FalseRowValidator(String group, String[] dependsOn, Set<String> hitValidators) {
+    FalseRowValidator(String group, String[] dependsOn, List<String> hitValidators) {
       super(group, "", new String[0], dependsOn);
       this.hitValidators = hitValidators;
     }
