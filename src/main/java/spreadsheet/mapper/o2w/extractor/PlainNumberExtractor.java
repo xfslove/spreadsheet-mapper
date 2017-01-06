@@ -28,7 +28,7 @@ public class PlainNumberExtractor<T> extends FieldValueExtractorAdapter<T> {
   public String getStringValue(T object, FieldMeta fieldMeta) {
 
     try {
-      Object value = PropertyUtils.getProperty(object, FieldUtils.detectRealField(fieldMeta.getName()));
+      Object value = PropertyUtils.getProperty(object, FieldUtils.detectRealFieldName(fieldMeta));
 
       if (!(value instanceof Number)) {
         return null;

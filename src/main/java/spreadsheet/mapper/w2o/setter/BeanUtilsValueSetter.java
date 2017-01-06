@@ -34,15 +34,15 @@ public class BeanUtilsValueSetter<T> implements ValueSetter<T> {
   @Override
   public void set(T object, Cell cell, FieldMeta fieldMeta) {
     try {
-      BeanUtils.setProperty(object, FieldUtils.detectRealField(fieldMeta.getName()), lookup(object, fieldMeta.getName()) ? cell.getValue() : null);
+      BeanUtils.setProperty(object, FieldUtils.detectRealFieldName(fieldMeta), lookup(object, fieldMeta) ? cell.getValue() : null);
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new WorkbookProcessException(e);
     }
   }
 
-  private boolean lookup(T object, String field) {
-    Class fieldType = FieldUtils.getFieldType(object.getClass(), FieldUtils.detectRealField(field).split("\\."));
+  private boolean lookup(T object, FieldMeta fieldMeta) {
+    Class fieldType = FieldUtils.getFieldType(object.getClass(), FieldUtils.detectRealFieldName(fieldMeta).split("\\."));
     return ConvertUtils.lookup(fieldType) != null;
   }
 

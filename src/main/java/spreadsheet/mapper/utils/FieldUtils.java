@@ -2,6 +2,7 @@ package spreadsheet.mapper.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import spreadsheet.mapper.Constants;
+import spreadsheet.mapper.model.meta.FieldMeta;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -34,26 +35,31 @@ public class FieldUtils {
 
   /**
    * <pre>
-   * get field name without prefix
+   * get real field name from field meta name, without prefix if has prefix
+   *
    * eg:
    * object.name -&gt; name
    * object.nested.name -&gt; nested.name
    * </pre>
    *
-   * @param field field
-   * @return field name of object
+   * @param fieldMeta field meta
+   * @return real field name of object
    */
-  public static String detectRealField(String field) {
+  public static String detectRealFieldName(FieldMeta fieldMeta) {
 
-    String realField = field;
-
-    if (field.contains(Constants.BUSINESS_KEY_PREFIX)) {
-      realField = FieldUtils.subtractBusinessKey(field);
+    if (StringUtils.isBlank(fieldMeta.getPrefix())) {
+      return fieldMeta.getName();
     }
 
-    List<String> splitFields = new ArrayList<>(Arrays.asList(realField.split("\\.")));
+    String fieldName = StringUtils.substring(fieldMeta.getName(), fieldMeta.getPrefix().length());
+
+    if (fieldName.contains(Constants.BUSINESS_KEY_PREFIX)) {
+      fieldName = FieldUtils.subtractBusinessKey(fieldName);
+    }
+
+    List<String> splitFields = new ArrayList<>(Arrays.asList(fieldName.split("\\.")));
     if (splitFields.size() == 1) {
-      throw new IllegalArgumentException("field not has prefix");
+      return splitFields.get(0);
     } else {
       splitFields.remove(0);
       return StringUtils.join(splitFields, Constants.DOT_SEPARATOR);

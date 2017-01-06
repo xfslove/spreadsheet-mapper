@@ -22,7 +22,7 @@ public class BeanUtilsValueExtractor<T> implements ValueExtractor<T> {
   @Override
   public String getStringValue(T object, FieldMeta fieldMeta) {
     try {
-      return BeanUtils.getProperty(object, FieldUtils.detectRealField(fieldMeta.getName()));
+      return BeanUtils.getProperty(object, FieldUtils.detectRealFieldName(fieldMeta));
     } catch (NestedNullException e) {
       LOGGER.trace(ExceptionUtils.getStackTrace(e));
       return null;

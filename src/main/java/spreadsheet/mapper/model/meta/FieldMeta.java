@@ -6,7 +6,8 @@ import java.util.List;
 /**
  * <pre>
  * field meta include:
- * 1. field name (this is importance, is determined all cell value of the same column index corresponding which field of object)
+ * 1. field name (like: object.field1, object.field2, etc.)
+ *    this is importance, is determined all cell value of the same column index reflect which field of object
  * 2. field at column index
  * 3. list of header meta of this field (see {@link HeaderMeta})
  * </pre>
@@ -15,7 +16,14 @@ import java.util.List;
 public interface FieldMeta extends Serializable, Comparable<FieldMeta> {
 
   /**
-   * @return field name
+   * if field meta has prefix, when reflection the object's field, will subtract the prefix from field meta name
+   *
+   * @return the field meta name prefix
+   */
+  String getPrefix();
+
+  /**
+   * @return field meta name
    */
   String getName();
 

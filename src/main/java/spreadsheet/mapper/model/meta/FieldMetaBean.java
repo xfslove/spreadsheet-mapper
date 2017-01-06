@@ -12,6 +12,8 @@ import java.util.List;
  */
 public class FieldMetaBean implements FieldMeta {
 
+  private String prefix;
+
   private String name;
 
   private int columnIndex;
@@ -26,6 +28,20 @@ public class FieldMetaBean implements FieldMeta {
     }
     this.name = name;
     this.columnIndex = columnIndex;
+  }
+
+  public FieldMetaBean(String prefix, String name, int columnIndex) {
+    if (StringUtils.isBlank(name)) {
+      throw new IllegalArgumentException("name can not be null");
+    }
+    this.prefix = prefix;
+    this.name = name;
+    this.columnIndex = columnIndex;
+  }
+
+  @Override
+  public String getPrefix() {
+    return prefix;
   }
 
   @Override

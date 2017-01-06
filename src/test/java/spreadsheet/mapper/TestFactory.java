@@ -67,20 +67,20 @@ public class TestFactory {
 
     Map<String, FieldMeta> fieldMetaMap = new LinkedHashMap<>();
 
-    fieldMetaMap.put("test.int1", new FieldMetaBean("test.int1", 1));
-    fieldMetaMap.put("test.int2", new FieldMetaBean("test.int2", 2));
-    fieldMetaMap.put("test.long1", new FieldMetaBean("test.long1", 3));
-    fieldMetaMap.put("test.long2", new FieldMetaBean("test.long2", 4));
-    fieldMetaMap.put("test.float1", new FieldMetaBean("test.float1", 5));
-    fieldMetaMap.put("test.float2", new FieldMetaBean("test.float2", 6));
-    fieldMetaMap.put("test.double1", new FieldMetaBean("test.double1", 7));
-    fieldMetaMap.put("test.double2", new FieldMetaBean("test.double2", 8));
-    fieldMetaMap.put("test.boolean1", new FieldMetaBean("test.boolean1", 9));
-    fieldMetaMap.put("test.boolean2", new FieldMetaBean("test.boolean2", 10));
-    fieldMetaMap.put("test.string", new FieldMetaBean("test.string", 11));
-    fieldMetaMap.put("test.bigDecimal", new FieldMetaBean("test.bigDecimal", 12));
-    fieldMetaMap.put("test.localDate", new FieldMetaBean("test.localDate", 13));
-    fieldMetaMap.put("test.localDateTime", new FieldMetaBean("test.localDateTime", 14));
+    fieldMetaMap.put("test.int1", new FieldMetaBean("test.", "test.int1", 1));
+    fieldMetaMap.put("test.int2", new FieldMetaBean("test.", "test.int2", 2));
+    fieldMetaMap.put("test.long1", new FieldMetaBean("test.", "test.long1", 3));
+    fieldMetaMap.put("test.long2", new FieldMetaBean("test.", "test.long2", 4));
+    fieldMetaMap.put("test.float1", new FieldMetaBean("test.", "test.float1", 5));
+    fieldMetaMap.put("test.float2", new FieldMetaBean("test.", "test.float2", 6));
+    fieldMetaMap.put("test.double1", new FieldMetaBean("test.", "test.double1", 7));
+    fieldMetaMap.put("test.double2", new FieldMetaBean("test.", "test.double2", 8));
+    fieldMetaMap.put("test.boolean1", new FieldMetaBean("test.", "test.boolean1", 9));
+    fieldMetaMap.put("test.boolean2", new FieldMetaBean("test.", "test.boolean2", 10));
+    fieldMetaMap.put("test.string", new FieldMetaBean("test.", "test.string", 11));
+    fieldMetaMap.put("test.bigDecimal", new FieldMetaBean("test.", "test.bigDecimal", 12));
+    fieldMetaMap.put("test.localDate", new FieldMetaBean("test.", "test.localDate", 13));
+    fieldMetaMap.put("test.localDateTime", new FieldMetaBean("test.", "test.localDateTime", 14));
 
     return fieldMetaMap;
   }
