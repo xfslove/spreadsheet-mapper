@@ -11,7 +11,10 @@ import java.io.Serializable;
  */
 public class TextBoxStyle implements Serializable {
 
-  public static final TextBoxStyle DEFAULT = new TextBoxStyle(0, 0, 3, 3, 251, 252, 155);
+  /**
+   * 1 * 3
+   */
+  public static final TextBoxStyle DEFAULT = new TextBoxStyle(1, 1, 4, 4, 251, 252, 155);
 
   private int col1;
 

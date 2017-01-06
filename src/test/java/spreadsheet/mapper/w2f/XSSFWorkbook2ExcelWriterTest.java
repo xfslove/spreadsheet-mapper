@@ -37,7 +37,7 @@ public class XSSFWorkbook2ExcelWriterTest {
 
     Workbook workbook = TestFactory.createWorkbook();
 
-    WorkbookWriter workbookWriter = new XSSFWorkbook2ExcelWriter();
+    WorkbookWriter workbookWriter = new Workbook2ExcelWriter(true);
 
     workbookWriter.write(workbook, new FileOutputStream(file));
 

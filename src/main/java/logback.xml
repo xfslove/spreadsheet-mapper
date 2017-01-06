@@ -7,9 +7,9 @@
     </encoder>
   </appender>
 
-  <logger value="spread.sheet"/>
+  <logger value="spreadsheet.mapper"/>
 
-  <root level="debug">
+  <root level="info">
     <appender-ref ref="consoleAppender" />
   </root>
 

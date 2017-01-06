@@ -7,31 +7,34 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.NumberToTextConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import spreadsheet.mapper.utils.DateFormatRegister;
 import spreadsheet.mapper.model.core.*;
+import spreadsheet.mapper.utils.DateFormatRegister;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 
 /**
+ * excel to workbook reader decorator
+ * <p>
  * Created by hanwen on 2017/1/3.
  */
 public class Excel2WorkbookReader implements WorkbookReader {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Excel2WorkbookReader.class);
 
+  private org.apache.poi.ss.usermodel.Workbook workbook;
+
   public Workbook read(InputStream inputStream) {
 
     Workbook excelWorkbook = new WorkbookBean();
-
     try {
 
       if (inputStream.available() == 0) {
         return excelWorkbook;
       }
 
-      org.apache.poi.ss.usermodel.Workbook workbook = WorkbookFactory.create(inputStream);
+      workbook = WorkbookFactory.create(inputStream);
 
       int sheetCount = workbook.getNumberOfSheets();
 
@@ -69,7 +72,7 @@ public class Excel2WorkbookReader implements WorkbookReader {
     } finally {
 
       try {
-        inputStream.close();
+        workbook.close();
       } catch (IOException e) {
         LOGGER.error(ExceptionUtils.getStackTrace(e));
       }

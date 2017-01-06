@@ -1,19 +1,13 @@
 package spreadsheet.mapper.message;
 
-import spreadsheet.mapper.w2f.WorkbookWriteException;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.*;
 import spreadsheet.mapper.Constants;
 import spreadsheet.mapper.model.message.ErrorMessage;
 import spreadsheet.mapper.model.message.MessageWriteStrategies;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.poi.ss.usermodel.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import spreadsheet.mapper.model.shapes.*;
+import spreadsheet.mapper.model.shapes.CommentBean;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.*;
 
 /**
@@ -23,21 +17,13 @@ import java.util.*;
  */
 public class SingleCommentInCellStrategy implements MessageWriteStrategy {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(SingleCommentInCellStrategy.class);
-
-  private Workbook workbook;
-
-  public SingleCommentInCellStrategy(Workbook workbook) {
-    this.workbook = workbook;
-  }
-
   @Override
   public String getStrategy() {
     return MessageWriteStrategies.COMMENT;
   }
 
   @Override
-  public void write(OutputStream outputStream, Collection<ErrorMessage> errorMessages) {
+  public void write(Workbook workbook, Collection<ErrorMessage> errorMessages) {
 
     if (CollectionUtils.isEmpty(errorMessages)) {
       return;
@@ -56,13 +42,6 @@ public class SingleCommentInCellStrategy implements MessageWriteStrategy {
 
       Sheet sheet = workbook.getSheetAt(comment.getSheetIndex() - 1);
       addComment(sheet, comment);
-    }
-
-    try {
-      workbook.write(outputStream);
-    } catch (IOException e) {
-      LOGGER.error(ExceptionUtils.getStackTrace(e));
-      throw new WorkbookWriteException(e);
     }
   }
 
@@ -102,7 +81,7 @@ public class SingleCommentInCellStrategy implements MessageWriteStrategy {
         for (Map.Entry<Integer, List<String>> columnEntry : rowEntry.getValue().entrySet()) {
 
           comments.add(
-              new CommentBean(StringUtils.join(columnEntry.getValue(), Constants.COMMA_SEPARATOR), sheetEntry.getKey(), rowEntry.getKey(), columnEntry.getKey()));
+              new CommentBean(StringUtils.join(columnEntry.getValue(), Constants.ENTER_SEPARATOR), sheetEntry.getKey(), rowEntry.getKey(), columnEntry.getKey()));
 
         }
       }

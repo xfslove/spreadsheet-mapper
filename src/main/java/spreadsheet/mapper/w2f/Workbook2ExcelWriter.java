@@ -2,6 +2,8 @@ package spreadsheet.mapper.w2f;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.Constants;
@@ -14,22 +16,30 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * workbook to excel writer adapter
+ * workbook to excel writer decorator
  * <p>
  * Created by hanwen on 2016/12/30.
  */
-public abstract class Workbook2ExcelWriterAdapter implements WorkbookWriter {
+public class Workbook2ExcelWriter implements WorkbookWriter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Workbook2ExcelWriterAdapter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Workbook2ExcelWriter.class);
+
+  private org.apache.poi.ss.usermodel.Workbook poiWorkbook;
+
+  /**
+   * workbook to excel writer use {@link SXSSFWorkbook} or {@link HSSFWorkbook}
+   *
+   * @param xlsx true use {@link SXSSFWorkbook} else use {@link HSSFWorkbook}
+   */
+  public Workbook2ExcelWriter(boolean xlsx) {
+    // sxssf keep 100 rows in memory, exceeding rows will be flushed to disk
+    poiWorkbook = xlsx ? new SXSSFWorkbook(100) : new HSSFWorkbook();
+  }
 
   public void write(Workbook workbook, OutputStream outputStream) {
     if (workbook == null) {
       return;
     }
-
-    beforeWrite();
-
-    org.apache.poi.ss.usermodel.Workbook poiWorkbook = createWorkbook(workbook);
 
     for (Sheet excelSheet : workbook.getSheets()) {
 
@@ -47,23 +57,23 @@ public abstract class Workbook2ExcelWriterAdapter implements WorkbookWriter {
 
     try {
       poiWorkbook.write(outputStream);
+
+      if (poiWorkbook instanceof SXSSFWorkbook) {
+        ((SXSSFWorkbook) workbook).dispose();
+      }
     } catch (IOException e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new WorkbookWriteException(e);
+    } finally {
+
+      try {
+        poiWorkbook.close();
+      } catch (IOException e) {
+        LOGGER.error(ExceptionUtils.getStackTrace(e));
+      }
     }
 
-    afterWrite(poiWorkbook);
   }
-
-  protected void afterWrite(org.apache.poi.ss.usermodel.Workbook workbook) {
-    // nothing
-  }
-
-  protected void beforeWrite() {
-    // nothing
-  }
-
-  protected abstract org.apache.poi.ss.usermodel.Workbook createWorkbook(Workbook workbook);
 
   private org.apache.poi.ss.usermodel.Sheet createSheet(org.apache.poi.ss.usermodel.Workbook workbook, Sheet sheet) {
     String sheetName = sheet.getName();

@@ -1,14 +1,17 @@
 package spreadsheet.mapper.message;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.f2w.WorkbookReadException;
 import spreadsheet.mapper.model.message.ErrorMessage;
 import spreadsheet.mapper.w2f.WorkbookWriteException;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -17,6 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * error message writer to excel decorator
+ * <p>
  * Created by hanwen on 2017/1/3.
  */
 public class ExcelErrorMessageWriter implements ErrorMessageWriter {
@@ -25,11 +30,21 @@ public class ExcelErrorMessageWriter implements ErrorMessageWriter {
 
   private Map<String, MessageWriteStrategy> strategy2writeStrategy = new HashMap<>();
 
+  private Workbook workbook;
+
+  {
+    messageWriteStrategy(
+        new SingleCommentInCellStrategy(),
+        new SingleTextBoxInSheetStrategy());
+  }
+
   /**
    * this will create a new excel workbook to write error messages
+   *
+   * @param xlsx true use {@link XSSFWorkbook} else use {@link HSSFWorkbook}
    */
-  public ExcelErrorMessageWriter() {
-    // default constructor
+  public ExcelErrorMessageWriter(boolean xlsx) {
+    workbook = xlsx ? new XSSFWorkbook() : new HSSFWorkbook();
   }
 
   /**
@@ -38,10 +53,8 @@ public class ExcelErrorMessageWriter implements ErrorMessageWriter {
    * @param inputStream auto close
    */
   public ExcelErrorMessageWriter(InputStream inputStream) {
-    try (Workbook workbook = WorkbookFactory.create(inputStream)) {
-      messageWriteStrategy(
-          new SingleCommentInCellStrategy(workbook),
-          new SingleTextBoxInSheetStrategy(workbook));
+    try {
+      workbook = WorkbookFactory.create(inputStream);
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new WorkbookReadException(e);
@@ -68,7 +81,21 @@ public class ExcelErrorMessageWriter implements ErrorMessageWriter {
         throw new WorkbookWriteException("no message write helper of [" + writeStrategy + "]");
       }
 
-      messageWriteStrategy.write(outputStream, messageWriteStrategyMap.get(writeStrategy));
+      messageWriteStrategy.write(workbook, messageWriteStrategyMap.get(writeStrategy));
+    }
+
+    try {
+      workbook.write(outputStream);
+    } catch (IOException e) {
+      LOGGER.error(ExceptionUtils.getStackTrace(e));
+      throw new WorkbookWriteException(e);
+    } finally {
+
+      try {
+        workbook.close();
+      } catch (IOException e) {
+        LOGGER.error(ExceptionUtils.getStackTrace(e));
+      }
     }
   }
 

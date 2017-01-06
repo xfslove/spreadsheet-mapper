@@ -1,8 +1,8 @@
 package spreadsheet.mapper.message;
 
+import org.apache.poi.ss.usermodel.Workbook;
 import spreadsheet.mapper.model.message.ErrorMessage;
 
-import java.io.OutputStream;
 import java.util.Collection;
 
 /**
@@ -20,8 +20,8 @@ public interface MessageWriteStrategy {
   /**
    * write error messages
    *
-   * @param outputStream  intend to write out stream
+   * @param workbook      error message write workbook
    * @param errorMessages collection of error message with same message write strategy
    */
-  void write(OutputStream outputStream, Collection<ErrorMessage> errorMessages);
+  void write(Workbook workbook, Collection<ErrorMessage> errorMessages);
 }

@@ -1,23 +1,17 @@
 package spreadsheet.mapper.message;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.Constants;
 import spreadsheet.mapper.model.message.ErrorMessage;
 import spreadsheet.mapper.model.message.MessageWriteStrategies;
 import spreadsheet.mapper.model.shapes.TextBox;
 import spreadsheet.mapper.model.shapes.TextBoxBean;
 import spreadsheet.mapper.model.shapes.TextBoxStyle;
-import spreadsheet.mapper.w2f.WorkbookWriteException;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.*;
 
 /**
@@ -27,21 +21,13 @@ import java.util.*;
  */
 public class SingleTextBoxInSheetStrategy implements MessageWriteStrategy {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(SingleTextBoxInSheetStrategy.class);
-
-  private Workbook workbook;
-
-  public SingleTextBoxInSheetStrategy(Workbook workbook) {
-    this.workbook = workbook;
-  }
-
   @Override
   public String getStrategy() {
     return MessageWriteStrategies.TEXT_BOX;
   }
 
   @Override
-  public void write(OutputStream outputStream, Collection<ErrorMessage> errorMessages) {
+  public void write(Workbook workbook, Collection<ErrorMessage> errorMessages) {
 
     List<TextBox> textBoxes = transferToTextBoxes(errorMessages);
 
@@ -61,14 +47,6 @@ public class SingleTextBoxInSheetStrategy implements MessageWriteStrategy {
         addHSSFTextBox(sheet, textBox);
       }
     }
-
-    try {
-      workbook.write(outputStream);
-    } catch (IOException e) {
-      LOGGER.error(ExceptionUtils.getStackTrace(e));
-      throw new WorkbookWriteException(e);
-    }
-
   }
 
   private List<TextBox> transferToTextBoxes(Collection<ErrorMessage> errorMessages) {
