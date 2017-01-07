@@ -1,0 +1,13 @@
+language: java
+jdk:
+  - oraclejdk7
+
+script: "mvn clean install"
+
+branches:
+  only:
+    - master
+
+notifications:
+  email:
+    - xfslove@gmail.com
