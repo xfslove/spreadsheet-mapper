@@ -4,12 +4,22 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.xfslove/spreadsheet-mapper/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.xfslove/spreadsheet-mapper)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-## POM.XML
+## Maven
 
-```
+```xml
 <dependency>
-  <groupId>com.github.xfslove</groupId>
-  <artifactId>spreadsheet-mapper</artifactId>
-  <version>1.3.0</version>
+    <groupId>com.github.xfslove</groupId>
+    <artifactId>spreadsheet-mapper</artifactId>
+    <version>1.3.0</version>
 </dependency>
 ```
+
+## Gradle
+
+``` groovy
+compile 'com.github.xfslove:spreadsheet-mapper:1.3.0'
+```
+
+###*License*
+
+Released under the [Apache 2.0 license](license).
