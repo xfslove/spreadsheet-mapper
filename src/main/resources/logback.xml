@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-  <appender value="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+  <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>%d [%t] %-5p %m%n</pattern>
     </encoder>
   </appender>
 
-  <logger value="spreadsheet.mapper"/>
+  <logger name="spreadsheet.mapper" value="spreadsheet.mapper"/>
 
   <root level="debug">
     <appender-ref ref="consoleAppender" />
