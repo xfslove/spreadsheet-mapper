@@ -17,6 +17,10 @@ public class CommentBean implements Comment {
 
   private int height;
 
+  public CommentBean(String message, int sheetIndex, int rowIndex, int columnIndex) {
+    this(message, sheetIndex, rowIndex, columnIndex, 3, 1);
+  }
+
   public CommentBean(String message, int sheetIndex, int rowIndex, int columnIndex, int length, int height) {
     this.message = message;
     this.sheetIndex = sheetIndex;
@@ -24,15 +28,6 @@ public class CommentBean implements Comment {
     this.columnIndex = columnIndex;
     this.length = length;
     this.height = height;
-  }
-
-  public CommentBean(String message, int sheetIndex, int rowIndex, int columnIndex) {
-    this.message = message;
-    this.sheetIndex = sheetIndex;
-    this.rowIndex = rowIndex;
-    this.columnIndex = columnIndex;
-    this.length = 3;
-    this.height = 1;
   }
 
   @Override

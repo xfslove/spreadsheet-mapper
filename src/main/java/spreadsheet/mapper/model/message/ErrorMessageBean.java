@@ -16,9 +16,7 @@ public class ErrorMessageBean implements ErrorMessage {
   private Integer columnIndex;
 
   public ErrorMessageBean(String messageWriteStrategy, String errorMessage, int sheetIndex) {
-    this.messageWriteStrategy = messageWriteStrategy;
-    this.errorMessage = errorMessage;
-    this.sheetIndex = sheetIndex;
+    this(messageWriteStrategy, errorMessage, sheetIndex, null, null);
   }
 
   public ErrorMessageBean(String messageWriteStrategy, String errorMessage, int sheetIndex, Integer rowIndex, Integer columnIndex) {

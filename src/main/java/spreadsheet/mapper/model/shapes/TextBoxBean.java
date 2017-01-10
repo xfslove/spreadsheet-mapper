@@ -12,9 +12,7 @@ public class TextBoxBean implements TextBox {
   private TextBoxStyle style;
 
   public TextBoxBean(String message, int sheetIndex) {
-    this.sheetIndex = sheetIndex;
-    this.message = message;
-    this.style = TextBoxStyle.DEFAULT;
+    this(message, sheetIndex, TextBoxStyle.DEFAULT);
   }
 
   public TextBoxBean(String message, int sheetIndex, TextBoxStyle style) {

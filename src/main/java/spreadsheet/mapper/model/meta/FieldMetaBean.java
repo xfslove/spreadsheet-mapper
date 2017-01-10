@@ -23,11 +23,7 @@ public class FieldMetaBean implements FieldMeta {
   private SheetMeta sheetMeta;
 
   public FieldMetaBean(String name, int columnIndex) {
-    if (StringUtils.isBlank(name)) {
-      throw new IllegalArgumentException("name can not be null");
-    }
-    this.name = name;
-    this.columnIndex = columnIndex;
+    this(null, name, columnIndex);
   }
 
   public FieldMetaBean(String prefix, String name, int columnIndex) {

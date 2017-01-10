@@ -18,7 +18,7 @@ public class SheetMetaBean implements SheetMeta {
   private List<FieldMeta> fieldMetas = new ArrayList<>();
 
   public SheetMetaBean(int dataStartRowIndex) {
-    this.dataStartRowIndex = dataStartRowIndex;
+    this(null, dataStartRowIndex);
   }
 
   public SheetMetaBean(String sheetName, int dataStartRowIndex) {
