@@ -13,7 +13,7 @@ public interface WorkbookReader {
    * read supplied stream to {@link Workbook}
    *
    * @param inputStream auto close
-   * @return workbook
+   * @return {@link Workbook}
    */
   Workbook read(InputStream inputStream);
 }

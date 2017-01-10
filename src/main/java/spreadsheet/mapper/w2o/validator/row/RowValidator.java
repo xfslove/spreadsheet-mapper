@@ -17,8 +17,8 @@ public interface RowValidator extends DependencyValidator {
   /**
    * valid supplied excel row
    *
-   * @param row       row
-   * @param sheetMeta sheet meta
+   * @param row       {@link Row}
+   * @param sheetMeta {@link SheetMeta}
    * @return true if pass
    */
   boolean valid(Row row, SheetMeta sheetMeta);

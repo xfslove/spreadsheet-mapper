@@ -1,6 +1,8 @@
 package spreadsheet.mapper.w2o.setter;
 
 
+import spreadsheet.mapper.model.meta.FieldMeta;
+
 /**
  * object field value setter
  * <p>
@@ -10,6 +12,7 @@ public interface FieldValueSetter<T> extends ValueSetter<T> {
 
   /**
    * @return which field this setter matched
+   * @see FieldMeta#getName()
    */
   String getMatchField();
 

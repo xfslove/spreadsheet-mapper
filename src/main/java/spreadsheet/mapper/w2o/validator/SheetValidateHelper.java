@@ -18,34 +18,31 @@ import java.util.List;
 public interface SheetValidateHelper {
 
   /**
-   * @param validators sheet validator
-   * @see SheetValidator
+   * @param validators {@link SheetValidator}
    */
   SheetValidateHelper sheetValidator(SheetValidator... validators);
 
   /**
-   * @param validators row validator
-   * @see RowValidator
+   * @param validators {@link RowValidator}
    * @see DependencyValidator#getGroup()
    * @see DependencyValidator#getDependsOn()
    */
   SheetValidateHelper rowValidator(RowValidator... validators);
 
   /**
-   * @param validators cell validator
-   * @see CellValidator
+   * @param validators {@link CellValidator}
    * @see DependencyValidator#getGroup()
    * @see DependencyValidator#getDependsOn()
    */
   SheetValidateHelper cellValidator(CellValidator... validators);
 
   /**
-   * @param sheet sheet
+   * @param sheet {@link Sheet}
    */
   SheetValidateHelper sheet(Sheet sheet);
 
   /**
-   * @param sheetMeta sheet meta
+   * @param sheetMeta {@link SheetMeta}
    */
   SheetValidateHelper sheetMeta(SheetMeta sheetMeta);
 

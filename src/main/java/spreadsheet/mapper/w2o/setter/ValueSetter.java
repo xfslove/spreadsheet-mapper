@@ -13,9 +13,9 @@ public interface ValueSetter<T> {
   /**
    * set object field from cell value
    *
-   * @param object      supplied object
-   * @param cell      cell
-   * @param fieldMeta field meta
+   * @param object    supplied object
+   * @param cell      {@link Cell}
+   * @param fieldMeta {@link FieldMeta}
    */
   void set(T object, Cell cell, FieldMeta fieldMeta);
 }

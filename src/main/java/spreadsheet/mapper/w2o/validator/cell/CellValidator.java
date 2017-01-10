@@ -1,8 +1,8 @@
 package spreadsheet.mapper.w2o.validator.cell;
 
 
-import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.core.Cell;
+import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.w2o.validator.DependencyValidator;
 
 /**
@@ -15,14 +15,15 @@ public interface CellValidator extends DependencyValidator {
   /**
    * valid supplied excel cell value
    *
-   * @param cell      cell
-   * @param fieldMeta field meta
+   * @param cell      {@link Cell}
+   * @param fieldMeta {@link FieldMeta}
    * @return true if pass
    */
   boolean valid(Cell cell, FieldMeta fieldMeta);
 
   /**
    * @return which field this validator to valid
+   * @see FieldMeta#getName()
    */
   String getMatchField();
 

@@ -13,7 +13,7 @@ public interface ValueExtractor<T> {
    * get human readable value to shown on cell
    *
    * @param object    supplied object
-   * @param fieldMeta field meta
+   * @param fieldMeta {@link FieldMeta}
    * @return human readable value
    */
   String getStringValue(T object, FieldMeta fieldMeta);

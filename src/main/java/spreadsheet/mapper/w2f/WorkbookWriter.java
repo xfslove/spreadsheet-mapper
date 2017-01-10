@@ -10,9 +10,9 @@ import java.io.OutputStream;
 public interface WorkbookWriter {
 
   /**
-   * write workbook to supplied output stream
+   * write {@link Workbook} to supplied output stream
    *
-   * @param workbook     write workbook
+   * @param workbook    {@link Workbook}
    * @param outputStream notice close the stream
    */
   void write(Workbook workbook, OutputStream outputStream);

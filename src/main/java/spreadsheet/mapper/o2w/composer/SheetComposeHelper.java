@@ -20,14 +20,13 @@ public interface SheetComposeHelper<T> {
    * after add will override before add
    * </pre>
    *
-   * @param fieldValueExtractors field value extractor
-   * @see FieldValueExtractor
+   * @param fieldValueExtractors {@link FieldValueExtractor}
    */
   @SuppressWarnings("unchecked")
   SheetComposeHelper<T> fieldValueExtractor(FieldValueExtractor<T>... fieldValueExtractors);
 
   /**
-   * @param sheetMeta sheet meta
+   * @param sheetMeta {@link SheetMeta}
    */
   SheetComposeHelper<T> sheetMeta(SheetMeta sheetMeta);
 
@@ -37,7 +36,7 @@ public interface SheetComposeHelper<T> {
   SheetComposeHelper<T> data(List<T> data);
 
   /**
-   * @return composed sheet
+   * @return {@link Sheet}
    */
   Sheet compose();
 }

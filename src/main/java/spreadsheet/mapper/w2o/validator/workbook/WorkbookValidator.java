@@ -14,7 +14,7 @@ public interface WorkbookValidator extends Validator {
   /**
    * valid supplied excel workbook
    *
-   * @param workbook workbook
+   * @param workbook {@link Workbook}
    * @return true if pass
    */
   boolean valid(Workbook workbook);

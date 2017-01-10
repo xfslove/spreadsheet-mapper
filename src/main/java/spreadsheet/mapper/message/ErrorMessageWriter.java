@@ -20,8 +20,7 @@ public interface ErrorMessageWriter {
    * after add will override before add
    * </pre>
    *
-   * @param messageWriteStrategies message write strategy
-   * @see MessageWriteStrategy
+   * @param messageWriteStrategies {@link MessageWriteStrategy}
    */
   ErrorMessageWriter messageWriteStrategy(MessageWriteStrategy... messageWriteStrategies);
 

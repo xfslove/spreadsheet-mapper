@@ -1,5 +1,7 @@
 package spreadsheet.mapper.o2w.extractor;
 
+import spreadsheet.mapper.model.meta.FieldMeta;
+
 /**
  * field value extract to human readable value
  * <p>
@@ -9,6 +11,7 @@ public interface FieldValueExtractor<T> extends ValueExtractor<T> {
 
   /**
    * @return which field this extractor matched
+   * @see FieldMeta#getName()
    */
   String getMatchField();
 }

@@ -42,7 +42,7 @@ public class FieldUtils {
    * object.nested.name -&gt; nested.name
    * </pre>
    *
-   * @param fieldMeta field meta
+   * @param fieldMeta {@link FieldMeta}
    * @return real field name of object
    */
   public static String detectRealFieldName(FieldMeta fieldMeta) {

@@ -13,7 +13,7 @@ import java.util.Collection;
 public interface MessageWriteStrategy {
 
   /**
-   * @return which strategy use of this
+   * @return {@link spreadsheet.mapper.model.message.MessageWriteStrategies}
    */
   String getStrategy();
 

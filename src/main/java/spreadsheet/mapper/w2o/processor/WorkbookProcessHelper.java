@@ -10,8 +10,7 @@ import java.util.List;
 public interface WorkbookProcessHelper {
 
   /**
-   * @param sheetProcessHelpers sheet processor
-   * @see SheetProcessHelper
+   * @param sheetProcessHelpers {@link SheetProcessHelper}
    */
   WorkbookProcessHelper sheetProcessor(SheetProcessHelper... sheetProcessHelpers);
 
