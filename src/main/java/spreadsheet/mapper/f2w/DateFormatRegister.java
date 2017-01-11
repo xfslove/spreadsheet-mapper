@@ -1,6 +1,5 @@
-package spreadsheet.mapper.utils;
+package spreadsheet.mapper.f2w;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -9,6 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by hanwen on 5/3/16.
  */
 public class DateFormatRegister {
+
+  public static DateFormatRegister GLOBAL = new DateFormatRegister();
 
   public static final String FULL_LOCAL_DATE_PATTERN = "yyyy-MM-dd";
 
@@ -24,13 +25,9 @@ public class DateFormatRegister {
 
   public static final String ERROR_PATTERN = "error-date-pattern";
 
-  private DateFormatRegister() {
-    // default constructor
-  }
+  private ConcurrentHashMap<String, String> DATE_FORMAT_CORRESPONDING = new ConcurrentHashMap<>();
 
-  private static final Map<String, String> DATE_FORMAT_CORRESPONDING = new ConcurrentHashMap<>();
-
-  static {
+  {
     register("yyyy", LOCAL_DATE_WITH_YEAR_PATTERN);
     register("yyyy\\-mm", LOCAL_DATE_WITH_YEAR_MONTH_PATTERN);
     register("yyyy\\-mm\\-dd", FULL_LOCAL_DATE_PATTERN);
@@ -45,11 +42,11 @@ public class DateFormatRegister {
    * @param customerFormat date format of customer definition
    * @param dateFormat     date format of object
    */
-  public static void register(String customerFormat, String dateFormat) {
+  public void register(String customerFormat, String dateFormat) {
     DATE_FORMAT_CORRESPONDING.put(customerFormat, dateFormat);
   }
 
-  public static String get(String customerFormat) {
+  public String get(String customerFormat) {
     return DATE_FORMAT_CORRESPONDING.get(customerFormat);
   }
 }

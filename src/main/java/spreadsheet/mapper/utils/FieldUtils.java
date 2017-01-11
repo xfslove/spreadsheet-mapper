@@ -21,16 +21,24 @@ public class FieldUtils {
   }
 
   /**
-   * get field with out business key({@link Constants#BUSINESS_KEY_PREFIX})
+   * <pre>
+   * the business key present a domain object, it can identified a domain object.
+   * it useful where update a domain object.
+   * </pre>
+   */
+  public static final String BUSINESS_KEY_PREFIX = "businessKey.";
+
+  /**
+   * get field with out business key({@link #BUSINESS_KEY_PREFIX})
    *
    * @param field field
    * @return field without business key
    */
   public static String subtractBusinessKey(String field) {
-    if (!StringUtils.contains(field, Constants.BUSINESS_KEY_PREFIX)) {
+    if (!StringUtils.contains(field, BUSINESS_KEY_PREFIX)) {
       throw new IllegalStateException("field is not business key");
     }
-    return field.substring(Constants.BUSINESS_KEY_PREFIX.length());
+    return field.substring(BUSINESS_KEY_PREFIX.length());
   }
 
   /**
@@ -53,8 +61,8 @@ public class FieldUtils {
 
     String fieldName = StringUtils.substring(fieldMeta.getName(), fieldMeta.getPrefix().length());
 
-    if (fieldName.contains(Constants.BUSINESS_KEY_PREFIX)) {
-      fieldName = FieldUtils.subtractBusinessKey(fieldName);
+    if (fieldName.contains(BUSINESS_KEY_PREFIX)) {
+      fieldName = subtractBusinessKey(fieldName);
     }
 
     List<String> splitFields = new ArrayList<>(Arrays.asList(fieldName.split("\\.")));
