@@ -24,7 +24,7 @@ public class BeanUtilsValueExtractor<T> implements ValueExtractor<T> {
     try {
       return BeanUtils.getProperty(object, FieldUtils.detectRealFieldName(fieldMeta));
     } catch (NestedNullException e) {
-      LOGGER.trace(ExceptionUtils.getStackTrace(e));
+      LOGGER.debug("{} is null", fieldMeta.getName());
       return null;
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));

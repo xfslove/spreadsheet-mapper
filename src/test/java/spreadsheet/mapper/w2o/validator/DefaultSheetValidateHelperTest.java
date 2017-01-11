@@ -1,7 +1,6 @@
 package spreadsheet.mapper.w2o.validator;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
@@ -46,7 +45,7 @@ public class DefaultSheetValidateHelperTest {
     try {
       sheetValidateHelper.valid();
     } catch (WorkbookValidateException e) {
-      LOGGER.debug(ExceptionUtils.getStackTrace(e));
+      LOGGER.debug("valid missing dependency group");
       if (StringUtils.contains(e.getMessage(), "missing")) {
         missing = true;
       }
@@ -303,7 +302,7 @@ public class DefaultSheetValidateHelperTest {
     try {
       sheetValidateHelper.valid();
     } catch (WorkbookValidateException e) {
-      LOGGER.debug(ExceptionUtils.getStackTrace(e));
+      LOGGER.debug("valid dependency cycling");
       if (StringUtils.contains(e.getMessage(), "cycling")) {
         result = true;
       }

@@ -39,7 +39,7 @@ public class LocalDateExtractor<T> extends FieldValueExtractorAdapter<T> {
       return ((LocalDate) value).toString(pattern);
 
     } catch (NestedNullException e) {
-      LOGGER.trace(ExceptionUtils.getStackTrace(e));
+      LOGGER.debug("{} is null", fieldMeta.getName());
       return null;
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));

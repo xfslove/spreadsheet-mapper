@@ -42,7 +42,7 @@ public class BooleanExtractor<T> extends FieldValueExtractorAdapter<T> {
       }
       return null;
     } catch (NestedNullException e) {
-      LOGGER.trace(ExceptionUtils.getStackTrace(e));
+      LOGGER.debug("{} is null", fieldMeta.getName());
       return null;
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
