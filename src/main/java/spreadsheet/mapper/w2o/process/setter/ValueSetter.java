@@ -1,0 +1,21 @@
+package spreadsheet.mapper.w2o.process.setter;
+
+import spreadsheet.mapper.model.core.Cell;
+import spreadsheet.mapper.model.meta.FieldMeta;
+
+/**
+ * value setter
+ * <p>
+ * Created by hanwen on 2016/12/30.
+ */
+public interface ValueSetter<T> {
+
+  /**
+   * set object field from cell value
+   *
+   * @param object    supplied object
+   * @param cell      {@link Cell}
+   * @param fieldMeta {@link FieldMeta}
+   */
+  void set(T object, Cell cell, FieldMeta fieldMeta);
+}
