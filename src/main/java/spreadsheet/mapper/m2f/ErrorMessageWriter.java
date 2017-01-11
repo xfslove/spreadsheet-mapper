@@ -1,5 +1,6 @@
 package spreadsheet.mapper.m2f;
 
+import spreadsheet.mapper.m2f.strategy.MessageWriteStrategy;
 import spreadsheet.mapper.model.msg.ErrorMessage;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 

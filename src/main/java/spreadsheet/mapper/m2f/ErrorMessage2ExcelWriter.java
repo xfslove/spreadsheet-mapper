@@ -8,6 +8,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.f2w.WorkbookReadException;
+import spreadsheet.mapper.m2f.strategy.MessageWriteStrategy;
+import spreadsheet.mapper.m2f.strategy.SingleCommentInCellStrategy;
+import spreadsheet.mapper.m2f.strategy.SingleTextBoxInSheetStrategy;
 import spreadsheet.mapper.model.msg.ErrorMessage;
 import spreadsheet.mapper.w2f.WorkbookWriteException;
 

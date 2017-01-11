@@ -1,4 +1,4 @@
-package spreadsheet.mapper.m2f;
+package spreadsheet.mapper.m2f.strategy;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import spreadsheet.mapper.model.msg.ErrorMessage;

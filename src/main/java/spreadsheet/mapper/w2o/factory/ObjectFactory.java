@@ -1,4 +1,4 @@
-package spreadsheet.mapper.w2o.processor;
+package spreadsheet.mapper.w2o.factory;
 
 import spreadsheet.mapper.model.core.Row;
 

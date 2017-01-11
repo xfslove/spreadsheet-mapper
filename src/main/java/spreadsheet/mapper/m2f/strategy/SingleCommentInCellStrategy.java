@@ -1,4 +1,4 @@
-package spreadsheet.mapper.m2f;
+package spreadsheet.mapper.m2f.strategy;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;

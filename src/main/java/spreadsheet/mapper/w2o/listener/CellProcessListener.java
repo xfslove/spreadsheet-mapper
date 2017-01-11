@@ -1,4 +1,4 @@
-package spreadsheet.mapper.w2o.processor.listener;
+package spreadsheet.mapper.w2o.listener;
 
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
