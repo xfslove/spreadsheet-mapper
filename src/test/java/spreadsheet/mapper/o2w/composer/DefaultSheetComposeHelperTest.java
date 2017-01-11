@@ -63,8 +63,8 @@ public class DefaultSheetComposeHelperTest {
         new PlainNumberExtractor("test.float2"),
         new PlainNumberExtractor("test.double1"),
         new PlainNumberExtractor("test.double2"),
-        new BooleanExtractor("test.boolean1", "pass", "failure"),
-        new BooleanExtractor("test.boolean2", "pass", "failure"),
+        new BooleanExtractor("pass", "failure", "test.boolean1"),
+        new BooleanExtractor("pass", "failure", "test.boolean2"),
         new LocalDateTimeExtractor("yyyy-MM-dd HH:mm:ss", "test.localDateTime")
     );
   }

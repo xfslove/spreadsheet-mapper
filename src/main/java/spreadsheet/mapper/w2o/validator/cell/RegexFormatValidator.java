@@ -1,8 +1,8 @@
 package spreadsheet.mapper.w2o.validator.cell;
 
 
-import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.core.Cell;
+import spreadsheet.mapper.model.meta.FieldMeta;
 
 /**
  * regex format validator
@@ -17,13 +17,15 @@ public class RegexFormatValidator extends CellValidatorAdapter {
   private String regex;
 
   public RegexFormatValidator(String regex, String matchField, String errorMessage) {
-    super(matchField, errorMessage);
-    this.regex = regex;
+    this(regex, matchField, errorMessage, null);
   }
 
   public RegexFormatValidator(String regex, String matchField, String errorMessage, String[] dependsOn) {
-    super(matchField, errorMessage, dependsOn);
-    this.regex = regex;
+    this(regex, matchField, matchField, errorMessage, dependsOn);
+  }
+
+  public RegexFormatValidator(String regex, String group, String matchField, String errorMessage, String[] dependsOn) {
+    this(regex, group, matchField, errorMessage, matchField, dependsOn);
   }
 
   public RegexFormatValidator(String regex, String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {

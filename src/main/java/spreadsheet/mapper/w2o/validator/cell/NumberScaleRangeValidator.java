@@ -1,8 +1,8 @@
 package spreadsheet.mapper.w2o.validator.cell;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
-import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * number scale range validator
@@ -16,15 +16,15 @@ public class NumberScaleRangeValidator extends CellValidatorAdapter {
   private int gte;
 
   public NumberScaleRangeValidator(int gte, int lte, String matchField, String errorMessage) {
-    super(matchField, errorMessage);
-    this.gte = gte;
-    this.lte = lte;
+    this(gte, lte, matchField, errorMessage, null);
   }
 
   public NumberScaleRangeValidator(int gte, int lte, String matchField, String errorMessage, String[] dependsOn) {
-    super(matchField, errorMessage, dependsOn);
-    this.gte = gte;
-    this.lte = lte;
+    this(gte, lte, matchField, matchField, errorMessage, dependsOn);
+  }
+
+  public NumberScaleRangeValidator(int gte, int lte, String group, String matchField, String errorMessage, String[] dependsOn) {
+    this(gte, lte, group, matchField, errorMessage, matchField, dependsOn);
   }
 
   public NumberScaleRangeValidator(int gte, int lte, String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {

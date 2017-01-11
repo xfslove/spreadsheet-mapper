@@ -23,7 +23,7 @@ public class BooleanExtractor<T> extends FieldValueExtractorAdapter<T> {
 
   private String falseString;
 
-  public BooleanExtractor(String matchField, String trueString, String falseString) {
+  public BooleanExtractor(String trueString, String falseString, String matchField) {
     super(matchField);
     this.trueString = trueString;
     this.falseString = falseString;

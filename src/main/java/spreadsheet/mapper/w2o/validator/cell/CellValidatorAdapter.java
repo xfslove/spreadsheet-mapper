@@ -1,8 +1,8 @@
 package spreadsheet.mapper.w2o.validator.cell;
 
-import spreadsheet.mapper.model.meta.FieldMeta;
-import spreadsheet.mapper.model.core.Cell;
 import org.apache.commons.lang3.StringUtils;
+import spreadsheet.mapper.model.core.Cell;
+import spreadsheet.mapper.model.meta.FieldMeta;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -28,20 +28,15 @@ public abstract class CellValidatorAdapter implements CellValidator {
   private Set<String> dependsOn = new LinkedHashSet<>();
 
   public CellValidatorAdapter(String matchField, String errorMessage) {
-    this.group = matchField;
-    this.matchField = matchField;
-    this.errorMessage = errorMessage;
-    this.messageOnField = matchField;
+    this(matchField, errorMessage, null);
   }
 
   public CellValidatorAdapter(String matchField, String errorMessage, String[] dependsOn) {
-    this.group = matchField;
-    this.matchField = matchField;
-    this.errorMessage = errorMessage;
-    this.messageOnField = matchField;
-    if (dependsOn != null) {
-      Collections.addAll(this.dependsOn, dependsOn);
-    }
+    this(matchField, matchField, errorMessage, dependsOn);
+  }
+
+  public CellValidatorAdapter(String group, String matchField, String errorMessage, String[] dependsOn) {
+    this(group, matchField, errorMessage, matchField, dependsOn);
   }
 
   public CellValidatorAdapter(String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {

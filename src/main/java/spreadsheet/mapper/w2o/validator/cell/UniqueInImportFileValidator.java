@@ -1,9 +1,9 @@
 package spreadsheet.mapper.w2o.validator.cell;
 
+import org.apache.commons.lang3.StringUtils;
+import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.w2o.validator.row.MultiUniqueInImportFileValidator;
-import spreadsheet.mapper.model.core.Cell;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,11 +22,15 @@ public class UniqueInImportFileValidator extends CellValidatorAdapter {
   private Set<String> cellValueHolder = new HashSet<>();
 
   public UniqueInImportFileValidator(String matchField, String errorMessage) {
-    super(matchField, errorMessage);
+    this(matchField, errorMessage, null);
   }
 
   public UniqueInImportFileValidator(String matchField, String errorMessage, String[] dependsOn) {
-    super(matchField, errorMessage, dependsOn);
+    this(matchField, matchField, errorMessage, dependsOn);
+  }
+
+  public UniqueInImportFileValidator(String group, String matchField, String errorMessage, String[] dependsOn) {
+    this(group, matchField, errorMessage, matchField, dependsOn);
   }
 
   public UniqueInImportFileValidator(String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {

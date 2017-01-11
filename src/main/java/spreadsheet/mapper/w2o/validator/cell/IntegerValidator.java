@@ -14,11 +14,15 @@ import spreadsheet.mapper.model.meta.FieldMeta;
 public class IntegerValidator extends CellValidatorAdapter {
 
   public IntegerValidator(String matchField, String errorMessage) {
-    super(matchField, errorMessage);
+    this(matchField, errorMessage, null);
   }
 
   public IntegerValidator(String matchField, String errorMessage, String[] dependsOn) {
-    super(matchField, errorMessage, dependsOn);
+    this(matchField, matchField, errorMessage, dependsOn);
+  }
+
+  public IntegerValidator(String group, String matchField, String errorMessage, String[] dependsOn) {
+    this(group, matchField, errorMessage, matchField, dependsOn);
   }
 
   public IntegerValidator(String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {

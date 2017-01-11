@@ -25,11 +25,7 @@ public abstract class RowValidatorAdapter implements RowValidator {
   private Set<String> messageOnFields = new HashSet<>();
 
   public RowValidatorAdapter(String group, String errorMessage, String[] messageOnFields) {
-    this.group = group;
-    this.errorMessage = errorMessage;
-    if (messageOnFields != null) {
-      Collections.addAll(this.messageOnFields, messageOnFields);
-    }
+    this(group, errorMessage, messageOnFields, null);
   }
 
   public RowValidatorAdapter(String group, String errorMessage, String[] messageOnFields, String[] dependsOn) {

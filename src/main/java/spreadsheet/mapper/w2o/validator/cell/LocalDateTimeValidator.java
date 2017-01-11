@@ -1,9 +1,9 @@
 package spreadsheet.mapper.w2o.validator.cell;
 
-import spreadsheet.mapper.model.core.Cell;
-import spreadsheet.mapper.model.meta.FieldMeta;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import spreadsheet.mapper.model.core.Cell;
+import spreadsheet.mapper.model.meta.FieldMeta;
 
 /**
  * local date time validator
@@ -15,13 +15,15 @@ public class LocalDateTimeValidator extends CellValidatorAdapter {
   private String pattern;
 
   public LocalDateTimeValidator(String pattern, String matchField, String errorMessage) {
-    super(matchField, errorMessage);
-    this.pattern = pattern;
+    this(pattern, matchField, errorMessage, null);
   }
 
   public LocalDateTimeValidator(String pattern, String matchField, String errorMessage, String[] dependsOn) {
-    super(matchField, errorMessage, dependsOn);
-    this.pattern = pattern;
+    this(pattern, matchField, matchField, errorMessage, dependsOn);
+  }
+
+  public LocalDateTimeValidator(String pattern, String group, String matchField, String errorMessage, String[] dependsOn) {
+    this(pattern, group, matchField, errorMessage, matchField, dependsOn);
   }
 
   public LocalDateTimeValidator(String pattern, String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {

@@ -44,7 +44,7 @@ public class LocalDateValueSetter<T> extends FieldValueSetterAdapter<T> {
       try {
         localDate = dateTimeFormatter.parseLocalDate(value);
       } catch (IllegalArgumentException e) {
-        LOGGER.debug("value format not valid", ExceptionUtils.getStackTrace(e));
+        LOGGER.debug("value format not valid {}", ExceptionUtils.getStackTrace(e));
       }
 
       PropertyUtils.setProperty(object, fieldName, localDate);

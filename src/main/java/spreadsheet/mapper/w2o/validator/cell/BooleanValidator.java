@@ -20,23 +20,15 @@ public class BooleanValidator extends CellValidatorAdapter {
   private Set<String> supportedFalseStrings = new HashSet<>();
 
   public BooleanValidator(String[] supportedTrueStrings, String[] supportedFalseStrings, String matchField, String errorMessage) {
-    super(matchField, errorMessage);
-    if (supportedTrueStrings != null) {
-      Collections.addAll(this.supportedTrueStrings, supportedTrueStrings);
-    }
-    if (supportedFalseStrings != null) {
-      Collections.addAll(this.supportedFalseStrings, supportedFalseStrings);
-    }
+    this(supportedTrueStrings, supportedFalseStrings, matchField, errorMessage, null);
   }
 
   public BooleanValidator(String[] supportedTrueStrings, String[] supportedFalseStrings, String matchField, String errorMessage, String[] dependsOn) {
-    super(matchField, errorMessage, dependsOn);
-    if (supportedTrueStrings != null) {
-      Collections.addAll(this.supportedTrueStrings, supportedTrueStrings);
-    }
-    if (supportedFalseStrings != null) {
-      Collections.addAll(this.supportedFalseStrings, supportedFalseStrings);
-    }
+    this(supportedTrueStrings, supportedFalseStrings, matchField, matchField, errorMessage, dependsOn);
+  }
+
+  public BooleanValidator(String[] supportedTrueStrings, String[] supportedFalseStrings, String group, String matchField, String errorMessage, String[] dependsOn) {
+    this(supportedTrueStrings, supportedFalseStrings, group, matchField, errorMessage, matchField, dependsOn);
   }
 
   public BooleanValidator(String[] supportedTrueStrings, String[] supportedFalseStrings, String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {

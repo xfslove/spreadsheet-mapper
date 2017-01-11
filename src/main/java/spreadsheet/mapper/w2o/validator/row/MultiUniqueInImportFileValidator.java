@@ -26,8 +26,16 @@ public class MultiUniqueInImportFileValidator extends RowValidatorAdapter {
 
   private Set<String> matchFields = new HashSet<>();
 
-  public MultiUniqueInImportFileValidator(String errorMessage, String[] matchFields) {
-    super("row.union.unique", errorMessage, matchFields);
+  public MultiUniqueInImportFileValidator(String[] matchFields, String group, String errorMessage) {
+    this(matchFields, group, errorMessage, matchFields);
+  }
+
+  public MultiUniqueInImportFileValidator(String[] matchFields, String group, String errorMessage, String[] messageOnFields) {
+    this(matchFields, group, errorMessage, messageOnFields, null);
+  }
+
+  public MultiUniqueInImportFileValidator(String[] matchFields, String group, String errorMessage, String[] messageOnFields, String[] dependsOn) {
+    super(group, errorMessage, messageOnFields, dependsOn);
     if (matchFields != null) {
       Collections.addAll(this.matchFields, matchFields);
     }

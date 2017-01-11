@@ -22,8 +22,8 @@ public class BooleanExtractorTest {
     FieldMeta fieldMeta1 = fieldMetaMap.get("test.boolean1");
     FieldMeta fieldMeta2 = fieldMetaMap.get("test.boolean2");
 
-    BooleanExtractor extractor1 = new BooleanExtractor("test.boolean1", "pass", "failure");
-    BooleanExtractor extractor2 = new BooleanExtractor("test.boolean2", "pass", "failure");
+    BooleanExtractor extractor1 = new BooleanExtractor("pass", "failure", "test.boolean1");
+    BooleanExtractor extractor2 = new BooleanExtractor("pass", "failure", "test.boolean2");
 
     TestBean testBean1 = TestFactory.createBean1();
     String s11 = extractor1.getStringValue(testBean1, fieldMeta1);
