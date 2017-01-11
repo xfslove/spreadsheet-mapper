@@ -1,11 +1,11 @@
-package spreadsheet.mapper.message;
+package spreadsheet.mapper.m2f;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import spreadsheet.mapper.Constants;
-import spreadsheet.mapper.model.message.ErrorMessage;
-import spreadsheet.mapper.model.message.MessageWriteStrategies;
+import spreadsheet.mapper.model.msg.ErrorMessage;
+import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 import spreadsheet.mapper.model.shapes.CommentBean;
 
 import java.util.*;

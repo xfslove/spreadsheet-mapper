@@ -1,4 +1,4 @@
-package spreadsheet.mapper.model.message;
+package spreadsheet.mapper.model.msg;
 
 /**
  * Created by hanwen on 2017/1/3.

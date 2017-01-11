@@ -1,13 +1,13 @@
-package spreadsheet.mapper.message;
+package spreadsheet.mapper.m2f;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import spreadsheet.mapper.Constants;
-import spreadsheet.mapper.model.message.ErrorMessage;
-import spreadsheet.mapper.model.message.ErrorMessageBean;
-import spreadsheet.mapper.model.message.MessageWriteStrategies;
+import spreadsheet.mapper.model.msg.ErrorMessage;
+import spreadsheet.mapper.model.msg.ErrorMessageBean;
+import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,9 +19,9 @@ import java.util.List;
 /**
  * Created by hanwen on 2017/1/6.
  */
-public class ExcelErrorMessageWriterTest {
+public class ErrorMessage2ExcelWriterTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ExcelErrorMessageWriterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ErrorMessage2ExcelWriterTest.class);
 
   private File file;
 
@@ -34,7 +34,7 @@ public class ExcelErrorMessageWriterTest {
   @Test
   public void testWrite() throws Exception {
 
-    ErrorMessageWriter messageWriter = new ExcelErrorMessageWriter(true);
+    ErrorMessageWriter messageWriter = new ErrorMessage2ExcelWriter(true);
     messageWriter.write(createErrorMessages(), new FileOutputStream(file));
   }
 

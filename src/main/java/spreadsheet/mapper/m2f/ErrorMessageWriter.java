@@ -1,7 +1,7 @@
-package spreadsheet.mapper.message;
+package spreadsheet.mapper.m2f;
 
-import spreadsheet.mapper.model.message.ErrorMessage;
-import spreadsheet.mapper.model.message.MessageWriteStrategies;
+import spreadsheet.mapper.model.msg.ErrorMessage;
+import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 
 import java.io.OutputStream;
 import java.util.Collection;
@@ -25,9 +25,9 @@ public interface ErrorMessageWriter {
   ErrorMessageWriter messageWriteStrategy(MessageWriteStrategy... messageWriteStrategies);
 
   /**
-   * write supplied message to file
+   * write supplied error message to file
    *
-   * @param errorMessages collection of error message
+   * @param errorMessages {@link ErrorMessage}
    * @param outputStream  intend to write out stream
    */
   void write(Collection<ErrorMessage> errorMessages, OutputStream outputStream);

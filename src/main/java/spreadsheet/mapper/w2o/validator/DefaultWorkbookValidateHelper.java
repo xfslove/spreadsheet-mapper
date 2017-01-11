@@ -2,9 +2,9 @@ package spreadsheet.mapper.w2o.validator;
 
 import org.apache.commons.collections.CollectionUtils;
 import spreadsheet.mapper.model.core.Workbook;
-import spreadsheet.mapper.model.message.ErrorMessage;
-import spreadsheet.mapper.model.message.ErrorMessageBean;
-import spreadsheet.mapper.model.message.MessageWriteStrategies;
+import spreadsheet.mapper.model.msg.ErrorMessage;
+import spreadsheet.mapper.model.msg.ErrorMessageBean;
+import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 import spreadsheet.mapper.w2o.validator.workbook.WorkbookValidator;
 
 import java.util.ArrayList;

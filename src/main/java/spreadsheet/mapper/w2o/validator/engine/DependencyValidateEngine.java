@@ -2,9 +2,9 @@ package spreadsheet.mapper.w2o.validator.engine;
 
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.core.Row;
-import spreadsheet.mapper.model.message.ErrorMessage;
-import spreadsheet.mapper.model.message.ErrorMessageBean;
-import spreadsheet.mapper.model.message.MessageWriteStrategies;
+import spreadsheet.mapper.model.msg.ErrorMessage;
+import spreadsheet.mapper.model.msg.ErrorMessageBean;
+import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.w2o.validator.DependencyValidator;

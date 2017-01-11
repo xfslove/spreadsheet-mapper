@@ -1,4 +1,4 @@
-package spreadsheet.mapper.model.message;
+package spreadsheet.mapper.model.msg;
 
 import spreadsheet.mapper.model.shapes.Comment;
 import spreadsheet.mapper.model.shapes.TextBox;

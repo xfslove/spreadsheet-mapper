@@ -1,4 +1,4 @@
-package spreadsheet.mapper.message;
+package spreadsheet.mapper.m2f;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -8,7 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.f2w.WorkbookReadException;
-import spreadsheet.mapper.model.message.ErrorMessage;
+import spreadsheet.mapper.model.msg.ErrorMessage;
 import spreadsheet.mapper.w2f.WorkbookWriteException;
 
 import java.io.IOException;
@@ -20,13 +20,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * error message writer to excel decorator
+ * error message to excel writer decorator
  * <p>
  * Created by hanwen on 2017/1/3.
  */
-public class ExcelErrorMessageWriter implements ErrorMessageWriter {
+public class ErrorMessage2ExcelWriter implements ErrorMessageWriter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ExcelErrorMessageWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ErrorMessage2ExcelWriter.class);
 
   private Map<String, MessageWriteStrategy> strategy2writeStrategy = new HashMap<>();
 
@@ -43,7 +43,7 @@ public class ExcelErrorMessageWriter implements ErrorMessageWriter {
    *
    * @param xlsx true use {@link XSSFWorkbook} else use {@link HSSFWorkbook}
    */
-  public ExcelErrorMessageWriter(boolean xlsx) {
+  public ErrorMessage2ExcelWriter(boolean xlsx) {
     workbook = xlsx ? new XSSFWorkbook() : new HSSFWorkbook();
   }
 
@@ -52,7 +52,7 @@ public class ExcelErrorMessageWriter implements ErrorMessageWriter {
    *
    * @param inputStream auto close
    */
-  public ExcelErrorMessageWriter(InputStream inputStream) {
+  public ErrorMessage2ExcelWriter(InputStream inputStream) {
     try {
       workbook = WorkbookFactory.create(inputStream);
     } catch (Exception e) {

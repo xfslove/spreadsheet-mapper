@@ -1,6 +1,6 @@
 package spreadsheet.mapper.w2o.validator;
 
-import spreadsheet.mapper.model.message.ErrorMessage;
+import spreadsheet.mapper.model.msg.ErrorMessage;
 import spreadsheet.mapper.w2o.validator.workbook.WorkbookValidator;
 
 import java.util.List;

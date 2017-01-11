@@ -1,8 +1,8 @@
 package spreadsheet.mapper.w2o.validator;
 
 import spreadsheet.mapper.model.core.Sheet;
-import spreadsheet.mapper.model.message.ErrorMessage;
-import spreadsheet.mapper.model.message.MessageWriteStrategies;
+import spreadsheet.mapper.model.msg.ErrorMessage;
+import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.w2o.validator.cell.CellValidator;
 import spreadsheet.mapper.w2o.validator.row.RowValidator;

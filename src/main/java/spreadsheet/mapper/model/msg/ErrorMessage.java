@@ -1,4 +1,4 @@
-package spreadsheet.mapper.model.message;
+package spreadsheet.mapper.model.msg;
 
 import java.io.Serializable;
 
