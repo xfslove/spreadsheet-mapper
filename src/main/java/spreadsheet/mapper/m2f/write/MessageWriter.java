@@ -22,6 +22,7 @@ public interface MessageWriter {
    * </pre>
    *
    * @param messageWriteStrategies {@link MessageWriteStrategy}
+   * @return {@link MessageWriter}
    */
   MessageWriter messageWriteStrategies(MessageWriteStrategy... messageWriteStrategies);
 
