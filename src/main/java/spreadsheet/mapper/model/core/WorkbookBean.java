@@ -22,10 +22,9 @@ public class WorkbookBean implements Workbook {
 
   @Override
   public boolean addSheet(Sheet sheet) {
-    boolean success = sheets.add(sheet);
     ((SheetBean) sheet).setWorkbook(this);
     ((SheetBean) sheet).setIndex(sizeOfSheets() + 1);
-    return success;
+    return sheets.add(sheet);
   }
 
   @Override

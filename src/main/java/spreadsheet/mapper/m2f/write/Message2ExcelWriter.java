@@ -36,7 +36,7 @@ public class Message2ExcelWriter implements MessageWriter {
   private Workbook workbook;
 
   {
-    messageWriteStrategy(
+    messageWriteStrategies(
         new SingleCommentInCellStrategy(),
         new SingleTextBoxInSheetStrategy());
   }
@@ -65,7 +65,7 @@ public class Message2ExcelWriter implements MessageWriter {
   }
 
   @Override
-  public MessageWriter messageWriteStrategy(MessageWriteStrategy... messageWriteStrategies) {
+  public MessageWriter messageWriteStrategies(MessageWriteStrategy... messageWriteStrategies) {
     if (messageWriteStrategies == null) {
       return this;
     }

@@ -22,17 +22,17 @@ public class BooleanValueSetter<T> extends FieldValueSetterAdapter<T> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BooleanValueSetter.class);
 
-  private Set<String> supportedTrueStrings = new HashSet<>();
+  private Set<String> trueStrings = new HashSet<>();
 
-  private Set<String> supportedFalseStrings = new HashSet<>();
+  private Set<String> falseStrings = new HashSet<>();
 
-  public BooleanValueSetter(String[] supportedTrueStrings, String[] supportedFalseStrings, String matchField) {
+  public BooleanValueSetter(String[] trueStrings, String[] falseStrings, String matchField) {
     super(matchField);
-    if (supportedTrueStrings != null) {
-      Collections.addAll(this.supportedTrueStrings, supportedTrueStrings);
+    if (trueStrings != null) {
+      Collections.addAll(this.trueStrings, trueStrings);
     }
-    if (supportedFalseStrings != null) {
-      Collections.addAll(this.supportedFalseStrings, supportedFalseStrings);
+    if (falseStrings != null) {
+      Collections.addAll(this.falseStrings, falseStrings);
     }
   }
 
@@ -42,9 +42,9 @@ public class BooleanValueSetter<T> extends FieldValueSetterAdapter<T> {
       String stringValue = cell.getValue();
       Boolean booleanValue = null;
 
-      if (supportedTrueStrings.contains(stringValue)) {
+      if (trueStrings.contains(stringValue)) {
         booleanValue = Boolean.TRUE;
-      } else if (supportedFalseStrings.contains(stringValue)) {
+      } else if (falseStrings.contains(stringValue)) {
         booleanValue = Boolean.FALSE;
       }
 

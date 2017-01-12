@@ -28,6 +28,8 @@ public class AssertUtil {
 
     Sheet sheet = workbook.getSheet(1);
 
+    assertEquals(sheet.getIndex(), 1);
+
     assertSheetEquals(sheet, hasHeader);
 
   }

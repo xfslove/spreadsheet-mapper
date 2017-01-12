@@ -23,7 +23,7 @@ public interface MessageWriter {
    *
    * @param messageWriteStrategies {@link MessageWriteStrategy}
    */
-  MessageWriter messageWriteStrategy(MessageWriteStrategy... messageWriteStrategies);
+  MessageWriter messageWriteStrategies(MessageWriteStrategy... messageWriteStrategies);
 
   /**
    * write messages to supplied output stream
