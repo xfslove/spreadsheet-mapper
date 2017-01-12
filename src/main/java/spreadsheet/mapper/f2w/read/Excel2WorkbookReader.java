@@ -102,23 +102,24 @@ public class Excel2WorkbookReader implements WorkbookReader {
 
     String value;
 
-    if (cell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BLANK) {
+    int cellType = cell.getCellType();
+    if (cellType == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BLANK) {
 
       value = null;
 
-    } else if (cell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BOOLEAN) {
+    } else if (cellType == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BOOLEAN) {
 
       value = Boolean.toString(cell.getBooleanCellValue());
 
-    } else if (cell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_ERROR) {
+    } else if (cellType == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_ERROR) {
 
       value = null;
 
-    } else if (cell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_FORMULA) {
+    } else if (cellType == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_FORMULA) {
 
       value = null;
 
-    } else if (cell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC) {
+    } else if (cellType == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC) {
 
       if (DateUtil.isCellDateFormatted(cell)) {
         String dateFormat = DateFormatRegister.GLOBAL.get(cell.getCellStyle().getDataFormatString());
@@ -133,7 +134,7 @@ public class Excel2WorkbookReader implements WorkbookReader {
         value = NumberToTextConverter.toText(cell.getNumericCellValue());
       }
 
-    } else if (cell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING) {
+    } else if (cellType == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING) {
 
       String cellValue = cell.getStringCellValue();
       value = StringUtils.isBlank(cellValue) ? null : cellValue.trim();

@@ -15,7 +15,7 @@ import java.util.Set;
 public interface RowValidator extends DependencyValidator {
 
   /**
-   * valid supplied excel row
+   * valid supplied row
    *
    * @param row       {@link Row}
    * @param sheetMeta {@link SheetMeta}

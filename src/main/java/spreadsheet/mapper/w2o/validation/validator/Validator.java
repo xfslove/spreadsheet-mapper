@@ -1,7 +1,7 @@
 package spreadsheet.mapper.w2o.validation.validator;
 
 /**
- * excel meta validator
+ * validator
  * <p>
  * Created by hanwen on 2016/12/28.
  */

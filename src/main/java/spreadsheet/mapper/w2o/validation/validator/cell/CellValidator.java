@@ -13,7 +13,7 @@ import spreadsheet.mapper.w2o.validation.validator.DependencyValidator;
 public interface CellValidator extends DependencyValidator {
 
   /**
-   * valid supplied excel cell value
+   * valid supplied cell
    *
    * @param cell      {@link Cell}
    * @param fieldMeta {@link FieldMeta}

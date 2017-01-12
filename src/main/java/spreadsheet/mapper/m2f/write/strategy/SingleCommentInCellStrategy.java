@@ -3,6 +3,7 @@ package spreadsheet.mapper.m2f.write.strategy;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellAddress;
 import spreadsheet.mapper.Constants;
 import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
@@ -29,11 +30,17 @@ public class SingleCommentInCellStrategy implements MessageWriteStrategy {
       return;
     }
 
+    int numberOfSheets = workbook.getNumberOfSheets();
+
+    // remove old comments
+    for (int i = 0; i < numberOfSheets; i++) {
+      removeComments(workbook.getSheetAt(i));
+    }
+
+    // add new comments
     List<spreadsheet.mapper.model.shapes.Comment> comments = transferToComments(messages);
 
     for (spreadsheet.mapper.model.shapes.Comment comment : comments) {
-
-      int numberOfSheets = workbook.getNumberOfSheets();
 
       while (numberOfSheets < comment.getSheetIndex()) {
         workbook.createSheet();
@@ -90,6 +97,13 @@ public class SingleCommentInCellStrategy implements MessageWriteStrategy {
     return comments;
   }
 
+  private void removeComments(Sheet sheet) {
+    Map<CellAddress, ? extends Comment> cellComments = sheet.getCellComments();
+    for (CellAddress cellAddress : cellComments.keySet()) {
+      sheet.getRow(cellAddress.getRow()).getCell(cellAddress.getColumn()).removeCellComment();
+    }
+  }
+
   private void addComment(Sheet sheet, spreadsheet.mapper.model.shapes.Comment comment) {
     int rowIndex = comment.getRowIndex();
     int colIndex = comment.getColumnIndex();
@@ -100,7 +114,7 @@ public class SingleCommentInCellStrategy implements MessageWriteStrategy {
     }
     Cell cell = row.getCell(colIndex - 1);
     if (cell == null) {
-      cell = row.createCell(colIndex - 1, Cell.CELL_TYPE_STRING);
+      cell = row.createCell(colIndex - 1, CellType.STRING);
     }
 
     CreationHelper factory = sheet.getWorkbook().getCreationHelper();

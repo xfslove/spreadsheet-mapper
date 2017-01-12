@@ -3,6 +3,7 @@ package spreadsheet.mapper.w2f.write;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,7 +95,7 @@ public class Workbook2ExcelWriter implements WorkbookWriter {
 
   private void createCell(org.apache.poi.ss.usermodel.Row row, Cell excelCell) {
     String value = excelCell.getValue();
-    org.apache.poi.ss.usermodel.Cell cell = row.createCell(excelCell.getIndex() - 1, org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING);
+    org.apache.poi.ss.usermodel.Cell cell = row.createCell(excelCell.getIndex() - 1, CellType.STRING);
     cell.setCellValue(value == null ? Constants.EMPTY_VALUE : value);
   }
 

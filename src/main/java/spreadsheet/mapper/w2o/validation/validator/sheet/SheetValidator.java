@@ -12,7 +12,7 @@ import spreadsheet.mapper.w2o.validation.validator.Validator;
 public interface SheetValidator extends Validator {
 
   /**
-   * valid supplied excel sheet
+   * valid supplied sheet
    *
    * @param sheet     {@link Sheet}
    * @param sheetMeta {@link SheetMeta}

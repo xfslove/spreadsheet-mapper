@@ -41,7 +41,7 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   private List<Message> errorMessages = new ArrayList<>();
 
   /*============
-    valid result
+    validate result
    =============*/
   private boolean validResult = true;
 

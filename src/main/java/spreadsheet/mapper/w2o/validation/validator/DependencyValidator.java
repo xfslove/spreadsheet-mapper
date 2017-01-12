@@ -3,8 +3,12 @@ package spreadsheet.mapper.w2o.validation.validator;
 import java.util.Set;
 
 /**
+ * <pre>
  * dependency validator, after workbook and sheet validators, if post validators failure, dependency validators will skip.
- * <p>
+ * dependency validator will hit on each rows, means:
+ * 1. each rows validate result is isolated.
+ * 2. when valid one row the other rows validate result not influence this row valid.
+ * </pre>
  * Created by hanwen on 2016/12/26.
  */
 public interface DependencyValidator extends Validator {

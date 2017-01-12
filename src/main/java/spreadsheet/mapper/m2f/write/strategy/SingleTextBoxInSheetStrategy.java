@@ -1,5 +1,6 @@
 package spreadsheet.mapper.m2f.write.strategy;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -29,11 +30,28 @@ public class SingleTextBoxInSheetStrategy implements MessageWriteStrategy {
   @Override
   public void write(Workbook workbook, Collection<Message> messages) {
 
+    if (CollectionUtils.isEmpty(messages)) {
+      return;
+    }
+
+    int numberOfSheets = workbook.getNumberOfSheets();
+
+    // remove old text boxes
+    for (int i = 0; i < numberOfSheets; i++) {
+
+      Sheet sheet = workbook.getSheetAt(i);
+      if (sheet instanceof XSSFSheet) {
+        removeXSSFTextBox((XSSFSheet) sheet);
+      } else {
+        removeHSSFTextBox((HSSFSheet) sheet);
+      }
+    }
+
+    // create new text boxes
     List<TextBox> textBoxes = transferToTextBoxes(messages);
 
     for (TextBox textBox : textBoxes) {
 
-      int numberOfSheets = workbook.getNumberOfSheets();
 
       while (numberOfSheets < textBox.getSheetIndex()) {
         workbook.createSheet();
@@ -42,9 +60,9 @@ public class SingleTextBoxInSheetStrategy implements MessageWriteStrategy {
 
       Sheet sheet = workbook.getSheetAt(textBox.getSheetIndex() - 1);
       if (sheet instanceof XSSFSheet) {
-        addXSSFTextBox(sheet, textBox);
+        addXSSFTextBox((XSSFSheet) sheet, textBox);
       } else {
-        addHSSFTextBox(sheet, textBox);
+        addHSSFTextBox((HSSFSheet) sheet, textBox);
       }
     }
   }
@@ -70,10 +88,23 @@ public class SingleTextBoxInSheetStrategy implements MessageWriteStrategy {
     return textBoxes;
   }
 
-  private void addXSSFTextBox(Sheet sheet, TextBox textBox) {
+  private void removeXSSFTextBox(XSSFSheet xssfSheet) {
+    XSSFDrawing drawingPatriarch = xssfSheet.createDrawingPatriarch();
+
+    // current remove all the text boxes in sheet rudely
+    List<XSSFShape> textboxes = new ArrayList<>();
+    for (XSSFShape shape : drawingPatriarch.getShapes()) {
+      if (shape instanceof XSSFTextBox) {
+        textboxes.add(shape);
+      }
+    }
+
+    drawingPatriarch.getShapes().removeAll(textboxes);
+  }
+
+  private void addXSSFTextBox(XSSFSheet xssfSheet, TextBox textBox) {
     TextBoxStyle style = textBox.getStyle();
 
-    XSSFSheet xssfSheet = (XSSFSheet) sheet;
     XSSFDrawing drawingPatriarch = xssfSheet.createDrawingPatriarch();
     XSSFClientAnchor anchor = drawingPatriarch.createAnchor(0, 0, 0, 0, style.getCol1() - 1, style.getRow1() - 1, style.getCol2() - 1, style.getRow2() - 1);
 
@@ -83,10 +114,23 @@ public class SingleTextBoxInSheetStrategy implements MessageWriteStrategy {
 
   }
 
-  private void addHSSFTextBox(Sheet sheet, TextBox textBox) {
+  private void removeHSSFTextBox(HSSFSheet hssfSheet) {
+    HSSFPatriarch drawingPatriarch = hssfSheet.createDrawingPatriarch();
+
+    // current remove all the text boxes in sheet rudely
+    List<HSSFShape> textboxes = new ArrayList<>();
+    for (HSSFShape shape : drawingPatriarch.getChildren()) {
+      if (shape instanceof HSSFTextbox) {
+        textboxes.add(shape);
+      }
+    }
+
+    drawingPatriarch.getChildren().removeAll(textboxes);
+  }
+
+  private void addHSSFTextBox(HSSFSheet hssfSheet, TextBox textBox) {
     TextBoxStyle style = textBox.getStyle();
 
-    HSSFSheet hssfSheet = (HSSFSheet) sheet;
     HSSFPatriarch drawingPatriarch = hssfSheet.createDrawingPatriarch();
     HSSFClientAnchor anchor = drawingPatriarch.createAnchor(0, 0, 0, 0, style.getCol1() - 1, style.getRow1() - 1, style.getCol2() - 1, style.getRow2() - 1);
 
