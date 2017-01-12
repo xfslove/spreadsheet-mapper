@@ -1,5 +1,7 @@
 package spreadsheet.mapper.model.shapes;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Created by hanwen on 15-12-17.
  */
@@ -58,5 +60,17 @@ public class CommentBean implements Comment {
   @Override
   public int getColumnIndex() {
     return columnIndex;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("message", message)
+        .append("sheetIndex", sheetIndex)
+        .append("rowIndex", rowIndex)
+        .append("columnIndex", columnIndex)
+        .append("length", length)
+        .append("height", height)
+        .toString();
   }
 }

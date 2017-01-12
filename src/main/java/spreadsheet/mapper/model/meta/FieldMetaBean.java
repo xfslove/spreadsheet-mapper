@@ -2,6 +2,7 @@ package spreadsheet.mapper.model.meta;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,6 +86,15 @@ public class FieldMetaBean implements FieldMeta {
   @Override
   public int compareTo(FieldMeta o) {
     return new CompareToBuilder().append(columnIndex, o.getColumnIndex()).toComparison();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("prefix", prefix)
+        .append("name", name)
+        .append("columnIndex", columnIndex)
+        .toString();
   }
 }
 

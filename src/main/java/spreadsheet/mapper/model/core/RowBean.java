@@ -1,5 +1,7 @@
 package spreadsheet.mapper.model.core;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +65,13 @@ public class RowBean implements Row {
   @Override
   public Sheet getSheet() {
     return sheet;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("index", index)
+        .toString();
   }
 
   void setSheet(Sheet sheet) {

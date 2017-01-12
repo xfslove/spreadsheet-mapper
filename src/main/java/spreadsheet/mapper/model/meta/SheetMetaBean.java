@@ -1,6 +1,7 @@
 package spreadsheet.mapper.model.meta;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,5 +56,13 @@ public class SheetMetaBean implements SheetMeta {
   public void addFieldMeta(FieldMeta fieldMeta) {
     ((FieldMetaBean) fieldMeta).setSheetMeta(this);
     this.fieldMetas.add(fieldMeta);
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("sheetName", sheetName)
+        .append("dataStartRowIndex", dataStartRowIndex)
+        .toString();
   }
 }

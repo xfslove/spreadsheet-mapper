@@ -1,5 +1,6 @@
 package spreadsheet.mapper.model.shapes;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 
 import java.io.Serializable;
@@ -97,5 +98,18 @@ public class TextBoxStyle implements Serializable {
    */
   public int getBlue() {
     return blue;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("col1", col1)
+        .append("row1", row1)
+        .append("col2", col2)
+        .append("row2", row2)
+        .append("red", red)
+        .append("green", green)
+        .append("blue", blue)
+        .toString();
   }
 }

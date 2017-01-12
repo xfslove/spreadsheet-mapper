@@ -1,5 +1,7 @@
 package spreadsheet.mapper.model.core;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +80,14 @@ public class SheetBean implements Sheet {
   @Override
   public Workbook getWorkbook() {
     return workbook;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("index", index)
+        .append("name", name)
+        .toString();
   }
 
   public void setWorkbook(Workbook workbook) {

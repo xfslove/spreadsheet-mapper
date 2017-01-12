@@ -1,5 +1,7 @@
 package spreadsheet.mapper.model.msg;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Created by hanwen on 2017/1/3.
  */
@@ -54,5 +56,16 @@ public class MessageBean implements Message {
   @Override
   public String getMessage() {
     return errorMessage;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("sheetIndex", sheetIndex)
+        .append("rowIndex", rowIndex)
+        .append("columnIndex", columnIndex)
+        .append("errorMessage", errorMessage)
+        .append("messageWriteStrategy", messageWriteStrategy)
+        .toString();
   }
 }
