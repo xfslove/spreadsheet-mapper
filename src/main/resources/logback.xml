@@ -9,7 +9,7 @@
 
   <logger name="spreadsheet.mapper" value="spreadsheet.mapper"/>
 
-  <root level="debug">
+  <root level="info">
     <appender-ref ref="consoleAppender" />
   </root>
 
