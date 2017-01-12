@@ -20,7 +20,7 @@ public class LocalDateValidator extends CellValidatorAdapter<LocalDateValidator>
 
   public LocalDateValidator pattern(String pattern) {
     this.pattern = pattern;
-    return this;
+    return getThis();
   }
 
   @Override

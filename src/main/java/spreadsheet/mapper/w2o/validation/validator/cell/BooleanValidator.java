@@ -20,18 +20,18 @@ public class BooleanValidator extends CellValidatorAdapter<BooleanValidator> {
 
   public BooleanValidator supportedTrue(String... trueStrings) {
     if (trueStrings == null) {
-      return this;
+      return getThis();
     }
     Collections.addAll(this.trueStrings, trueStrings);
-    return this;
+    return getThis();
   }
 
   public BooleanValidator supportedFalse(String... falseStrings) {
     if (falseStrings == null) {
-      return this;
+      return getThis();
     }
     Collections.addAll(this.falseStrings, falseStrings);
-    return this;
+    return getThis();
   }
 
   @Override

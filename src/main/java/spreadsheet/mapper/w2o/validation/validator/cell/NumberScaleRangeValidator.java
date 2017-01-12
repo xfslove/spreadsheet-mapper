@@ -17,12 +17,12 @@ public class NumberScaleRangeValidator extends CellValidatorAdapter<NumberScaleR
 
   public NumberScaleRangeValidator lte(int lte) {
     this.lte = lte;
-    return this;
+    return getThis();
   }
 
   public NumberScaleRangeValidator gte(int gte) {
     this.gte = gte;
-    return this;
+    return getThis();
   }
 
   @Override
