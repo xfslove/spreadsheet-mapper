@@ -3,16 +3,16 @@ package spreadsheet.mapper.model.msg;
 import java.io.Serializable;
 
 /**
- * validate error message
+ * spreadsheet message
  * <p>
  * Created by hanwen on 2016/12/27.
  */
-public interface ErrorMessage extends Serializable {
+public interface Message extends Serializable {
 
   /**
    * if use {@link MessageWriteStrategies#TEXT_BOX}, {@link #getRowIndex()} &amp; {@link #getColumnIndex()} will ignore
    *
-   * @return use which message write strategy to write error message
+   * @return use which message write strategy to write message
    * @see MessageWriteStrategies
    */
   String getMessageWriteStrategy();
@@ -33,7 +33,7 @@ public interface ErrorMessage extends Serializable {
   Integer getColumnIndex();
 
   /**
-   * @return valid error message
+   * @return message
    */
-  String getErrorMessage();
+  String getMessage();
 }

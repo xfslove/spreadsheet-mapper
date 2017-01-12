@@ -1,18 +1,18 @@
 package spreadsheet.mapper.m2f.write;
 
 import spreadsheet.mapper.m2f.write.strategy.MessageWriteStrategy;
-import spreadsheet.mapper.model.msg.ErrorMessage;
+import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 
 import java.io.OutputStream;
 import java.util.Collection;
 
 /**
- * error message writer
+ * message writer
  * <p>
  * Created by hanwen on 2017/1/3.
  */
-public interface ErrorMessageWriter {
+public interface MessageWriter {
 
   /**
    * <pre>
@@ -23,13 +23,13 @@ public interface ErrorMessageWriter {
    *
    * @param messageWriteStrategies {@link MessageWriteStrategy}
    */
-  ErrorMessageWriter messageWriteStrategy(MessageWriteStrategy... messageWriteStrategies);
+  MessageWriter messageWriteStrategy(MessageWriteStrategy... messageWriteStrategies);
 
   /**
-   * write supplied error message to file
+   * write messages to supplied output stream
    *
-   * @param errorMessages {@link ErrorMessage}
-   * @param outputStream  intend to write out stream
+   * @param messages     {@link Message}
+   * @param outputStream notice close the stream
    */
-  void write(Collection<ErrorMessage> errorMessages, OutputStream outputStream);
+  void write(Collection<Message> messages, OutputStream outputStream);
 }

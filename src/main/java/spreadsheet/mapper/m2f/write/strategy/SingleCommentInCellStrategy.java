@@ -4,14 +4,14 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import spreadsheet.mapper.Constants;
-import spreadsheet.mapper.model.msg.ErrorMessage;
+import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 import spreadsheet.mapper.model.shapes.CommentBean;
 
 import java.util.*;
 
 /**
- * use comment to write error message strategy and one cell one comment
+ * use comment to write messages strategy and one cell one comment
  * <p>
  * Created by hanwen on 2017/1/3.
  */
@@ -23,13 +23,13 @@ public class SingleCommentInCellStrategy implements MessageWriteStrategy {
   }
 
   @Override
-  public void write(Workbook workbook, Collection<ErrorMessage> errorMessages) {
+  public void write(Workbook workbook, Collection<Message> messages) {
 
-    if (CollectionUtils.isEmpty(errorMessages)) {
+    if (CollectionUtils.isEmpty(messages)) {
       return;
     }
 
-    List<spreadsheet.mapper.model.shapes.Comment> comments = transferToComments(errorMessages);
+    List<spreadsheet.mapper.model.shapes.Comment> comments = transferToComments(messages);
 
     for (spreadsheet.mapper.model.shapes.Comment comment : comments) {
 
@@ -45,16 +45,16 @@ public class SingleCommentInCellStrategy implements MessageWriteStrategy {
     }
   }
 
-  private List<spreadsheet.mapper.model.shapes.Comment> transferToComments(Collection<ErrorMessage> errorMessages) {
+  private List<spreadsheet.mapper.model.shapes.Comment> transferToComments(Collection<Message> messages) {
 
     // sheet -> row -> column -> messages
     Map<Integer, Map<Integer, Map<Integer, List<String>>>> commentMessageMap = new HashMap<>();
 
-    for (ErrorMessage errorMessage : errorMessages) {
+    for (Message message : messages) {
 
-      int sheetIndex = errorMessage.getSheetIndex();
-      int rowIndex = errorMessage.getRowIndex();
-      int columnIndex = errorMessage.getColumnIndex();
+      int sheetIndex = message.getSheetIndex();
+      int rowIndex = message.getRowIndex();
+      int columnIndex = message.getColumnIndex();
 
       if (!commentMessageMap.containsKey(sheetIndex)) {
         commentMessageMap.put(sheetIndex, new HashMap<Integer, Map<Integer, List<String>>>());
@@ -69,7 +69,7 @@ public class SingleCommentInCellStrategy implements MessageWriteStrategy {
       if (!commentColumnMap.containsKey(columnIndex)) {
         commentColumnMap.put(columnIndex, new ArrayList<String>());
       }
-      commentColumnMap.get(columnIndex).add(errorMessage.getErrorMessage());
+      commentColumnMap.get(columnIndex).add(message.getMessage());
     }
 
     List<spreadsheet.mapper.model.shapes.Comment> comments = new ArrayList<>();

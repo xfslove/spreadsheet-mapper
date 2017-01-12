@@ -3,7 +3,7 @@ package spreadsheet.mapper.model.msg;
 /**
  * Created by hanwen on 2017/1/3.
  */
-public class ErrorMessageBean implements ErrorMessage {
+public class MessageBean implements Message {
 
   private String messageWriteStrategy;
 
@@ -15,11 +15,11 @@ public class ErrorMessageBean implements ErrorMessage {
 
   private Integer columnIndex;
 
-  public ErrorMessageBean(String messageWriteStrategy, String errorMessage, int sheetIndex) {
+  public MessageBean(String messageWriteStrategy, String errorMessage, int sheetIndex) {
     this(messageWriteStrategy, errorMessage, sheetIndex, null, null);
   }
 
-  public ErrorMessageBean(String messageWriteStrategy, String errorMessage, int sheetIndex, Integer rowIndex, Integer columnIndex) {
+  public MessageBean(String messageWriteStrategy, String errorMessage, int sheetIndex, Integer rowIndex, Integer columnIndex) {
     if (rowIndex == null ^ columnIndex == null) {
       throw new IllegalArgumentException("row index and column index must both null or both not null");
     }
@@ -52,7 +52,7 @@ public class ErrorMessageBean implements ErrorMessage {
   }
 
   @Override
-  public String getErrorMessage() {
+  public String getMessage() {
     return errorMessage;
   }
 }

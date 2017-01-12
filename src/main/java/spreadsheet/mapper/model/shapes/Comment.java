@@ -3,7 +3,7 @@ package spreadsheet.mapper.model.shapes;
 import java.io.Serializable;
 
 /**
- * excel cell comment, this is a warp of poi cell comment and simplify api, because this comment just propose to show same error message on excel.
+ * excel cell comment, this is a warp of poi cell comment and simplify api, because this comment just propose to show messages on excel.
  * <p>
  * Created by hanwen on 15-12-17.
  */

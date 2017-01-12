@@ -2,7 +2,7 @@ package spreadsheet.mapper.w2o.validation;
 
 import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.SheetMeta;
-import spreadsheet.mapper.model.msg.ErrorMessage;
+import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 import spreadsheet.mapper.w2o.validation.validator.DependencyValidator;
 import spreadsheet.mapper.w2o.validation.validator.cell.CellValidator;
@@ -67,5 +67,5 @@ public interface SheetValidationHelper {
    *
    * @return list of valid error messages
    */
-  List<ErrorMessage> getErrorMessages();
+  List<Message> getErrorMessages();
 }

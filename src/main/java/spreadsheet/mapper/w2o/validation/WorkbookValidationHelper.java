@@ -1,6 +1,6 @@
 package spreadsheet.mapper.w2o.validation;
 
-import spreadsheet.mapper.model.msg.ErrorMessage;
+import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.w2o.validation.validator.workbook.WorkbookValidator;
 
 import java.util.List;
@@ -34,5 +34,5 @@ public interface WorkbookValidationHelper {
    * @return error messages
    * @see SheetValidationHelper#getErrorMessages()
    */
-  List<ErrorMessage> getErrorMessages();
+  List<Message> getErrorMessages();
 }

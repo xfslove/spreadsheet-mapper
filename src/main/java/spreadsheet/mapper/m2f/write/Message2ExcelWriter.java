@@ -11,7 +11,7 @@ import spreadsheet.mapper.f2w.read.WorkbookReadException;
 import spreadsheet.mapper.m2f.write.strategy.MessageWriteStrategy;
 import spreadsheet.mapper.m2f.write.strategy.SingleCommentInCellStrategy;
 import spreadsheet.mapper.m2f.write.strategy.SingleTextBoxInSheetStrategy;
-import spreadsheet.mapper.model.msg.ErrorMessage;
+import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.w2f.write.WorkbookWriteException;
 
 import java.io.IOException;
@@ -23,13 +23,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * error message to excel writer decorator
+ * message to excel writer decorator
  * <p>
  * Created by hanwen on 2017/1/3.
  */
-public class ErrorMessage2ExcelWriter implements ErrorMessageWriter {
+public class Message2ExcelWriter implements MessageWriter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ErrorMessage2ExcelWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Message2ExcelWriter.class);
 
   private Map<String, MessageWriteStrategy> strategy2writeStrategy = new HashMap<>();
 
@@ -42,20 +42,20 @@ public class ErrorMessage2ExcelWriter implements ErrorMessageWriter {
   }
 
   /**
-   * this will create a new excel workbook to write error messages
+   * this will create a new excel workbook to write messages
    *
    * @param xlsx true use {@link XSSFWorkbook} else use {@link HSSFWorkbook}
    */
-  public ErrorMessage2ExcelWriter(boolean xlsx) {
+  public Message2ExcelWriter(boolean xlsx) {
     workbook = xlsx ? new XSSFWorkbook() : new HSSFWorkbook();
   }
 
   /**
-   * this will copy a excel workbook from supplied input stream to write error messages
+   * this will copy a excel workbook from supplied input stream to write messages
    *
    * @param inputStream auto close
    */
-  public ErrorMessage2ExcelWriter(InputStream inputStream) {
+  public Message2ExcelWriter(InputStream inputStream) {
     try {
       workbook = WorkbookFactory.create(inputStream);
     } catch (Exception e) {
@@ -65,7 +65,7 @@ public class ErrorMessage2ExcelWriter implements ErrorMessageWriter {
   }
 
   @Override
-  public ErrorMessageWriter messageWriteStrategy(MessageWriteStrategy... messageWriteStrategies) {
+  public MessageWriter messageWriteStrategy(MessageWriteStrategy... messageWriteStrategies) {
     if (messageWriteStrategies == null) {
       return this;
     }
@@ -76,8 +76,8 @@ public class ErrorMessage2ExcelWriter implements ErrorMessageWriter {
   }
 
   @Override
-  public void write(Collection<ErrorMessage> errorMessages, OutputStream outputStream) {
-    Map<String, Collection<ErrorMessage>> messageWriteStrategyMap = buildMessageWriteStrategyMap(errorMessages);
+  public void write(Collection<Message> messages, OutputStream outputStream) {
+    Map<String, Collection<Message>> messageWriteStrategyMap = buildMessageWriteStrategyMap(messages);
     for (String writeStrategy : messageWriteStrategyMap.keySet()) {
       MessageWriteStrategy messageWriteStrategy = strategy2writeStrategy.get(writeStrategy);
       if (messageWriteStrategy == null) {
@@ -102,16 +102,16 @@ public class ErrorMessage2ExcelWriter implements ErrorMessageWriter {
     }
   }
 
-  private Map<String, Collection<ErrorMessage>> buildMessageWriteStrategyMap(Collection<ErrorMessage> errorMessages) {
-    Map<String, Collection<ErrorMessage>> messageWriteStrategyMap = new HashMap<>();
+  private Map<String, Collection<Message>> buildMessageWriteStrategyMap(Collection<Message> messages) {
+    Map<String, Collection<Message>> messageWriteStrategyMap = new HashMap<>();
 
-    for (ErrorMessage errorMessage : errorMessages) {
-      String messageWriteStrategy = errorMessage.getMessageWriteStrategy();
+    for (Message message : messages) {
+      String messageWriteStrategy = message.getMessageWriteStrategy();
 
       if (!messageWriteStrategyMap.containsKey(messageWriteStrategy)) {
-        messageWriteStrategyMap.put(messageWriteStrategy, new ArrayList<ErrorMessage>());
+        messageWriteStrategyMap.put(messageWriteStrategy, new ArrayList<Message>());
       }
-      messageWriteStrategyMap.get(messageWriteStrategy).add(errorMessage);
+      messageWriteStrategyMap.get(messageWriteStrategy).add(message);
     }
 
     return messageWriteStrategyMap;

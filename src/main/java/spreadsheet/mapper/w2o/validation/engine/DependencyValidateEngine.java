@@ -5,8 +5,8 @@ import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
-import spreadsheet.mapper.model.msg.ErrorMessage;
-import spreadsheet.mapper.model.msg.ErrorMessageBean;
+import spreadsheet.mapper.model.msg.Message;
+import spreadsheet.mapper.model.msg.MessageBean;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 import spreadsheet.mapper.w2o.validation.validator.DependencyValidator;
 import spreadsheet.mapper.w2o.validation.validator.cell.CellValidator;
@@ -31,7 +31,7 @@ public class DependencyValidateEngine {
   // is skip valid rest validator in one search tree
   private boolean skip;
 
-  private List<ErrorMessage> errorMessages = new ArrayList<>();
+  private List<Message> errorMessages = new ArrayList<>();
   private boolean validResult = true;
 
   public DependencyValidateEngine(Map<String, List<DependencyValidator>> validatorMap, SheetMeta sheetMeta, Row row) {
@@ -56,7 +56,7 @@ public class DependencyValidateEngine {
     return validResult;
   }
 
-  public List<ErrorMessage> getErrorMessages() {
+  public List<Message> getErrorMessages() {
     return errorMessages;
   }
 
@@ -101,7 +101,7 @@ public class DependencyValidateEngine {
           for (String messageOnField : rowValidator.getMessageOnFields()) {
             FieldMeta fieldMeta = sheetMeta.getFieldMeta(messageOnField);
 
-            errorMessages.add(new ErrorMessageBean(MessageWriteStrategies.COMMENT, errorMessage, row.getSheet().getIndex(), row.getIndex(), fieldMeta.getColumnIndex()));
+            errorMessages.add(new MessageBean(MessageWriteStrategies.COMMENT, errorMessage, row.getSheet().getIndex(), row.getIndex(), fieldMeta.getColumnIndex()));
           }
         }
 
@@ -125,7 +125,7 @@ public class DependencyValidateEngine {
           String messageOnField = cellValidator.getMessageOnField();
           FieldMeta messageOnFieldMeta = sheetMeta.getFieldMeta(messageOnField);
 
-          errorMessages.add(new ErrorMessageBean(MessageWriteStrategies.COMMENT, errorMessage, row.getSheet().getIndex(), row.getIndex(), messageOnFieldMeta.getColumnIndex()));
+          errorMessages.add(new MessageBean(MessageWriteStrategies.COMMENT, errorMessage, row.getSheet().getIndex(), row.getIndex(), messageOnFieldMeta.getColumnIndex()));
         }
 
       }

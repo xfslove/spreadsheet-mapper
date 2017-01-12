@@ -1,7 +1,7 @@
 package spreadsheet.mapper.m2f.write.strategy;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import spreadsheet.mapper.model.msg.ErrorMessage;
+import spreadsheet.mapper.model.msg.Message;
 
 import java.util.Collection;
 
@@ -18,10 +18,10 @@ public interface MessageWriteStrategy {
   String getStrategy();
 
   /**
-   * write error messages
+   * write messages
    *
-   * @param workbook      {@link Workbook}
-   * @param errorMessages {@link ErrorMessage}
+   * @param workbook {@link Workbook}
+   * @param messages {@link Message}
    */
-  void write(Workbook workbook, Collection<ErrorMessage> errorMessages);
+  void write(Workbook workbook, Collection<Message> messages);
 }

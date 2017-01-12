@@ -5,8 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.SheetMeta;
-import spreadsheet.mapper.model.msg.ErrorMessage;
-import spreadsheet.mapper.model.msg.ErrorMessageBean;
+import spreadsheet.mapper.model.msg.Message;
+import spreadsheet.mapper.model.msg.MessageBean;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 import spreadsheet.mapper.w2o.process.WorkbookProcessException;
 import spreadsheet.mapper.w2o.validation.engine.DependencyCycleCheckEngine;
@@ -38,7 +38,7 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   /*==============
     error messages
    ===============*/
-  private List<ErrorMessage> errorMessages = new ArrayList<>();
+  private List<Message> errorMessages = new ArrayList<>();
 
   /*============
     valid result
@@ -84,7 +84,7 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
     return this;
   }
 
-  public List<ErrorMessage> getErrorMessages() {
+  public List<Message> getErrorMessages() {
     return errorMessages;
   }
 
@@ -147,7 +147,7 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
 
         if (StringUtils.isNotBlank(errorMessage)) {
 
-          this.errorMessages.add(new ErrorMessageBean(MessageWriteStrategies.TEXT_BOX, errorMessage, sheet.getIndex()));
+          this.errorMessages.add(new MessageBean(MessageWriteStrategies.TEXT_BOX, errorMessage, sheet.getIndex()));
         }
       }
     }

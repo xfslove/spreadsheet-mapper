@@ -3,7 +3,7 @@ package spreadsheet.mapper.model.shapes;
 import java.io.Serializable;
 
 /**
- * excel text box, this is a warp of poi text box and simplify api, because this text box just propose to show same error message on excel.
+ * excel text box, this is a warp of poi text box and simplify api, because this text box just propose to show messages on excel.
  * <p>
  * Created by hanwen on 2016/12/27.
  */

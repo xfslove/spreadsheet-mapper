@@ -6,7 +6,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.*;
 import spreadsheet.mapper.Constants;
-import spreadsheet.mapper.model.msg.ErrorMessage;
+import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 import spreadsheet.mapper.model.shapes.TextBox;
 import spreadsheet.mapper.model.shapes.TextBoxBean;
@@ -15,7 +15,7 @@ import spreadsheet.mapper.model.shapes.TextBoxStyle;
 import java.util.*;
 
 /**
- * use text box to write error message strategy and one sheet one text box
+ * use text box to write messages strategy and one sheet one text box
  * <p>
  * Created by hanwen on 2017/1/3.
  */
@@ -27,9 +27,9 @@ public class SingleTextBoxInSheetStrategy implements MessageWriteStrategy {
   }
 
   @Override
-  public void write(Workbook workbook, Collection<ErrorMessage> errorMessages) {
+  public void write(Workbook workbook, Collection<Message> messages) {
 
-    List<TextBox> textBoxes = transferToTextBoxes(errorMessages);
+    List<TextBox> textBoxes = transferToTextBoxes(messages);
 
     for (TextBox textBox : textBoxes) {
 
@@ -49,17 +49,17 @@ public class SingleTextBoxInSheetStrategy implements MessageWriteStrategy {
     }
   }
 
-  private List<TextBox> transferToTextBoxes(Collection<ErrorMessage> errorMessages) {
+  private List<TextBox> transferToTextBoxes(Collection<Message> messages) {
 
     Map<Integer, List<String>> textBoxMessageMap = new HashMap<>();
-    for (ErrorMessage errorMessage : errorMessages) {
+    for (Message message : messages) {
 
-      int sheetIndex = errorMessage.getSheetIndex();
+      int sheetIndex = message.getSheetIndex();
 
       if (!textBoxMessageMap.containsKey(sheetIndex)) {
         textBoxMessageMap.put(sheetIndex, new ArrayList<String>());
       }
-      textBoxMessageMap.get(sheetIndex).add(errorMessage.getErrorMessage());
+      textBoxMessageMap.get(sheetIndex).add(message.getMessage());
     }
 
     List<TextBox> textBoxes = new ArrayList<>();
