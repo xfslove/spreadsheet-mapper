@@ -46,7 +46,7 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   private boolean validResult = true;
 
   @Override
-  public SheetValidationHelper sheetValidator(SheetValidator... validators) {
+  public SheetValidationHelper sheetValidators(SheetValidator... validators) {
     if (validators == null) {
       return this;
     }
@@ -55,7 +55,7 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   }
 
   @Override
-  public SheetValidationHelper rowValidator(RowValidator... validators) {
+  public SheetValidationHelper rowValidators(RowValidator... validators) {
     if (validators == null) {
       return this;
     }
@@ -64,7 +64,7 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   }
 
   @Override
-  public SheetValidationHelper cellValidator(CellValidator... validators) {
+  public SheetValidationHelper cellValidators(CellValidator... validators) {
     if (validators == null) {
       return this;
     }

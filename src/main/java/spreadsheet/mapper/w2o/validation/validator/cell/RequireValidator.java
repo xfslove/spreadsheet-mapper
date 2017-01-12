@@ -7,33 +7,22 @@ import spreadsheet.mapper.model.meta.FieldMeta;
 /**
  * required validator
  * <p>
- * Created by hanwen on 15-12-16.
+ * Created by hanwen on 2017/1/11.
  */
-public class RequireValidator extends CellValidatorAdapter {
+public class RequireValidator extends CellValidatorAdapter<RequireValidator> {
 
-  public RequireValidator(String matchField, String errorMessage) {
-    this(matchField, errorMessage, null);
-  }
-
-  public RequireValidator(String matchField, String errorMessage, String[] dependsOn) {
-    this(matchField, matchField, errorMessage, dependsOn);
-  }
-
-  public RequireValidator(String group, String matchField, String errorMessage, String[] dependsOn) {
-    this(group, matchField, errorMessage, matchField, dependsOn);
-  }
-
-  public RequireValidator(String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {
-    super(group, matchField, errorMessage, messageOnField, dependsOn);
+  @Override
+  protected RequireValidator getThis() {
+    return this;
   }
 
   @Override
   public boolean valid(Cell cell, FieldMeta fieldMeta) {
-    return customValidate(cell, fieldMeta);
+    return customValid(cell, fieldMeta);
   }
 
   @Override
-  protected boolean customValidate(Cell cell, FieldMeta fieldMeta) {
+  protected boolean customValid(Cell cell, FieldMeta fieldMeta) {
     return StringUtils.isNotBlank(cell.getValue());
   }
 }

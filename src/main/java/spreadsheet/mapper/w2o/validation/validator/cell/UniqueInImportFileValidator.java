@@ -15,30 +15,20 @@ import java.util.Set;
  * like {@link MultiUniqueInImportFileValidator},
  * this validator only check one cell value if unique.
  * </pre>
- * Created by hanwen on 2016/12/1.
+ * <p>
+ * Created by hanwen on 2017/1/11.
  */
-public class UniqueInImportFileValidator extends CellValidatorAdapter {
+public class UniqueInImportFileValidator extends CellValidatorAdapter<UniqueInImportFileValidator> {
 
   private Set<String> cellValueHolder = new HashSet<>();
 
-  public UniqueInImportFileValidator(String matchField, String errorMessage) {
-    this(matchField, errorMessage, null);
-  }
-
-  public UniqueInImportFileValidator(String matchField, String errorMessage, String[] dependsOn) {
-    this(matchField, matchField, errorMessage, dependsOn);
-  }
-
-  public UniqueInImportFileValidator(String group, String matchField, String errorMessage, String[] dependsOn) {
-    this(group, matchField, errorMessage, matchField, dependsOn);
-  }
-
-  public UniqueInImportFileValidator(String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {
-    super(group, matchField, errorMessage, messageOnField, dependsOn);
+  @Override
+  protected UniqueInImportFileValidator getThis() {
+    return this;
   }
 
   @Override
-  protected boolean customValidate(Cell cell, FieldMeta fieldMeta) {
+  protected boolean customValid(Cell cell, FieldMeta fieldMeta) {
 
     String cellValue = cell.getValue();
     if (StringUtils.isBlank(cellValue)) {
@@ -51,7 +41,5 @@ public class UniqueInImportFileValidator extends CellValidatorAdapter {
 
     cellValueHolder.add(cellValue);
     return true;
-
   }
-
 }

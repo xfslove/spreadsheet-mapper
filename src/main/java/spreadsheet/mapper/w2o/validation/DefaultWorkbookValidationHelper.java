@@ -28,7 +28,7 @@ public class DefaultWorkbookValidationHelper implements WorkbookValidationHelper
   private static final int WORKBOOK_ERROR_MESSAGE_ON_SHEET = 1;
 
   @Override
-  public WorkbookValidationHelper workbookValidator(WorkbookValidator... workbookValidators) {
+  public WorkbookValidationHelper workbookValidators(WorkbookValidator... workbookValidators) {
     if (workbookValidators == null) {
       return this;
     }
@@ -37,7 +37,7 @@ public class DefaultWorkbookValidationHelper implements WorkbookValidationHelper
   }
 
   @Override
-  public WorkbookValidationHelper sheetValidationHelper(SheetValidationHelper... sheetValidationHelpers) {
+  public WorkbookValidationHelper sheetValidations(SheetValidationHelper... sheetValidationHelpers) {
     if (sheetValidationHelpers == null) {
       return this;
     }

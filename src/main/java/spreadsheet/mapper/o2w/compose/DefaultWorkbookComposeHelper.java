@@ -15,7 +15,7 @@ public class DefaultWorkbookComposeHelper implements WorkbookComposeHelper {
   private List<SheetComposeHelper> sheetComposeHelpers = new ArrayList<>();
 
   @Override
-  public WorkbookComposeHelper sheetComposeHelper(SheetComposeHelper... sheetComposeHelpers) {
+  public WorkbookComposeHelper sheetComposes(SheetComposeHelper... sheetComposeHelpers) {
     if (sheetComposeHelpers == null) {
       return this;
     }

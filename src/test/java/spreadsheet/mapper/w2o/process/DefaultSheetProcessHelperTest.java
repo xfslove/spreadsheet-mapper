@@ -31,7 +31,7 @@ public class DefaultSheetProcessHelperTest {
     SheetProcessHelper<TestBean> processor1 = new DefaultSheetProcessHelper<TestBean>()
         .sheet(sheet).sheetMeta(sheetMeta1).objectFactory(new TestBeanObjectFactory());
 
-    processor1.fieldValueSetter(
+    processor1.fieldValueSetters(
         new LocalDateTimeValueSetter("yyyy-MM-dd HH:mm:ss", "test.localDateTime"),
         new LocalDateValueSetter("yyyy-MM-dd", "test.localDate"),
         new BooleanValueSetter(new String[]{"pass"}, new String[]{"failure"}, "test.boolean1"),

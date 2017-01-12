@@ -1,5 +1,6 @@
 package spreadsheet.mapper.w2o.validation.validator.row;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import spreadsheet.mapper.Constants;
 import spreadsheet.mapper.model.core.Cell;
@@ -19,34 +20,42 @@ import java.util.*;
  * </pre>
  * Created by hanwen on 2016/12/1.
  */
-public class MultiUniqueInImportFileValidator extends RowValidatorAdapter {
+public class MultiUniqueInImportFileValidator extends RowValidatorAdapter<MultiUniqueInImportFileValidator> {
 
   // format: "field1-value1,field2-value2,..."
   private Set<String> rowValueHolder = new HashSet<>();
 
-  private Set<String> matchFields = new HashSet<>();
+  private Set<String> multiUniqueFields = new HashSet<>();
 
-  public MultiUniqueInImportFileValidator(String[] matchFields, String group, String errorMessage) {
-    this(matchFields, group, errorMessage, matchFields);
-  }
-
-  public MultiUniqueInImportFileValidator(String[] matchFields, String group, String errorMessage, String[] messageOnFields) {
-    this(matchFields, group, errorMessage, messageOnFields, null);
-  }
-
-  public MultiUniqueInImportFileValidator(String[] matchFields, String group, String errorMessage, String[] messageOnFields, String[] dependsOn) {
-    super(group, errorMessage, messageOnFields, dependsOn);
-    if (matchFields != null) {
-      Collections.addAll(this.matchFields, matchFields);
+  public MultiUniqueInImportFileValidator multiUniqueFields(String... multiUniqueFields) {
+    if (multiUniqueFields == null) {
+      return getThis();
     }
+    Collections.addAll(this.multiUniqueFields, multiUniqueFields);
+    return getThis();
   }
 
   @Override
-  protected boolean customValidate(Row row, SheetMeta sheetMeta) {
+  protected Set<String> getMessageOnFields() {
+    Set<String> messageOnFields = super.getMessageOnFields();
+
+    if (CollectionUtils.isEmpty(messageOnFields)) {
+      return multiUniqueFields;
+    }
+    return messageOnFields;
+  }
+
+  @Override
+  protected MultiUniqueInImportFileValidator getThis() {
+    return this;
+  }
+
+  @Override
+  protected boolean customValid(Row row, SheetMeta sheetMeta) {
 
     List<String> holdStringList = new ArrayList<>();
 
-    for (String field : matchFields) {
+    for (String field : multiUniqueFields) {
       FieldMeta fieldMeta = sheetMeta.getFieldMeta(field);
       Cell cell = row.getCell(fieldMeta.getColumnIndex());
       holdStringList.add(buildHoldString(fieldMeta, cell));
@@ -65,10 +74,11 @@ public class MultiUniqueInImportFileValidator extends RowValidatorAdapter {
   /**
    * build cache string as "field-value"
    *
-   * @param cell
-   * @return
+   * @param fieldMeta {@link FieldMeta}
+   * @param cell      {@link Cell}
+   * @return hold string
    */
-  private String buildHoldString(FieldMeta fieldMeta, Cell cell) {
+  protected String buildHoldString(FieldMeta fieldMeta, Cell cell) {
     return fieldMeta.getName() + Constants.NEGATIVE_SEPARATOR + cell.getValue();
   }
 }

@@ -3,7 +3,7 @@ package spreadsheet.mapper.o2w.compose;
 import spreadsheet.mapper.model.core.Workbook;
 
 /**
- * workbook composer, simply adapter of sheet composer
+ * workbook compose helper, simply adapter of sheet compose helper
  * <p>
  * Created by hanwen on 2017/1/4.
  */
@@ -11,8 +11,9 @@ public interface WorkbookComposeHelper {
 
   /**
    * @param sheetComposeHelpers {@link SheetComposeHelper}
+   * @return {@link WorkbookComposeHelper}
    */
-  WorkbookComposeHelper sheetComposeHelper(SheetComposeHelper... sheetComposeHelpers);
+  WorkbookComposeHelper sheetComposes(SheetComposeHelper... sheetComposeHelpers);
 
   /**
    * @return {@link Workbook}

@@ -3,7 +3,7 @@ package spreadsheet.mapper.w2o.process;
 import java.util.List;
 
 /**
- * workbook processor, simply adapter of sheet processor
+ * workbook process helper, simply adapter of sheet process helper
  * <p>
  * Created by hanwen on 2017/1/4.
  */
@@ -11,8 +11,9 @@ public interface WorkbookProcessHelper {
 
   /**
    * @param sheetProcessHelpers {@link SheetProcessHelper}
+   * @return {@link WorkbookProcessHelper}
    */
-  WorkbookProcessHelper sheetProcessHelper(SheetProcessHelper... sheetProcessHelpers);
+  WorkbookProcessHelper sheetProcesses(SheetProcessHelper... sheetProcessHelpers);
 
   /**
    * @return list of sheet list data

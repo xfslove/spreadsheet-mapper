@@ -11,7 +11,7 @@ import spreadsheet.mapper.w2o.process.setter.FieldValueSetter;
 import java.util.List;
 
 /**
- * sheet processor
+ * sheet process helper
  * <p>
  * Created by hanwen on 2016/12/28.
  */
@@ -24,39 +24,46 @@ public interface SheetProcessHelper<T> {
    * after add will override before add
    * </pre>
    *
-   * @param fieldValueSetters field value setter
+   * @param fieldValueSetters {@link FieldValueSetter}
+   * @return {@link SheetProcessHelper}
    * @see FieldValueSetter
    */
   @SuppressWarnings("unchecked")
-  SheetProcessHelper<T> fieldValueSetter(FieldValueSetter<T>... fieldValueSetters);
+  SheetProcessHelper<T> fieldValueSetters(FieldValueSetter<T>... fieldValueSetters);
 
   /**
    * @param objectFactory {@link ObjectFactory}
+   * @return {@link SheetProcessHelper}
    */
   SheetProcessHelper<T> objectFactory(ObjectFactory<T> objectFactory);
 
   /**
    * @param sheetProcessListener {@link SheetProcessListener}
+   * @return {@link SheetProcessHelper}
    */
   SheetProcessHelper<T> sheetProcessorListener(SheetProcessListener<T> sheetProcessListener);
 
   /**
    * @param rowProcessListener {@link RowProcessListener}
+   * @return {@link SheetProcessHelper}
    */
   SheetProcessHelper<T> rowProcessorListener(RowProcessListener<T> rowProcessListener);
 
   /**
    * @param cellProcessListener {@link CellProcessListener}
+   * @return {@link SheetProcessHelper}
    */
   SheetProcessHelper<T> cellProcessorListener(CellProcessListener<T> cellProcessListener);
 
   /**
    * @param sheet {@link Sheet}
+   * @return {@link SheetProcessHelper}
    */
   SheetProcessHelper<T> sheet(Sheet sheet);
 
   /**
    * @param sheetMeta {@link SheetMeta}
+   * @return {@link SheetProcessHelper}
    */
   SheetProcessHelper<T> sheetMeta(SheetMeta sheetMeta);
 

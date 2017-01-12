@@ -7,35 +7,31 @@ import spreadsheet.mapper.model.meta.FieldMeta;
 /**
  * number scale range validator
  * <p>
- * Created by hanwen on 2016/12/1.
+ * Created by hanwen on 2017/1/11.
  */
-public class NumberScaleRangeValidator extends CellValidatorAdapter {
+public class NumberScaleRangeValidator extends CellValidatorAdapter<NumberScaleRangeValidator> {
 
   private int lte;
 
   private int gte;
 
-  public NumberScaleRangeValidator(int gte, int lte, String matchField, String errorMessage) {
-    this(gte, lte, matchField, errorMessage, null);
-  }
-
-  public NumberScaleRangeValidator(int gte, int lte, String matchField, String errorMessage, String[] dependsOn) {
-    this(gte, lte, matchField, matchField, errorMessage, dependsOn);
-  }
-
-  public NumberScaleRangeValidator(int gte, int lte, String group, String matchField, String errorMessage, String[] dependsOn) {
-    this(gte, lte, group, matchField, errorMessage, matchField, dependsOn);
-  }
-
-  public NumberScaleRangeValidator(int gte, int lte, String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {
-    super(group, matchField, errorMessage, messageOnField, dependsOn);
-    this.gte = gte;
+  public NumberScaleRangeValidator lte(int lte) {
     this.lte = lte;
+    return this;
+  }
+
+  public NumberScaleRangeValidator gte(int gte) {
+    this.gte = gte;
+    return this;
   }
 
   @Override
-  protected boolean customValidate(Cell cell, FieldMeta fieldMeta) {
+  protected NumberScaleRangeValidator getThis() {
+    return this;
+  }
 
+  @Override
+  protected boolean customValid(Cell cell, FieldMeta fieldMeta) {
     String value = cell.getValue();
 
     if (!NumberUtils.isNumber(value)) {

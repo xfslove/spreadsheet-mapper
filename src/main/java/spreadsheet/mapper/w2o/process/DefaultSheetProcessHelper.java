@@ -38,7 +38,7 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
 
   @Override
   @SuppressWarnings("unchecked")
-  public SheetProcessHelper<T> fieldValueSetter(FieldValueSetter<T>... fieldValueSetters) {
+  public SheetProcessHelper<T> fieldValueSetters(FieldValueSetter<T>... fieldValueSetters) {
     if (fieldValueSetters == null) {
       return this;
     }

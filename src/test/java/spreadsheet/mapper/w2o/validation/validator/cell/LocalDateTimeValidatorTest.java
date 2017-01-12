@@ -7,6 +7,7 @@ import spreadsheet.mapper.model.meta.FieldMeta;
 
 import java.util.Map;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -19,13 +20,16 @@ public class LocalDateTimeValidatorTest {
   public void testCustomValidate() throws Exception {
 
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
-    LocalDateTimeValidator validator = new LocalDateTimeValidator("yyyy-MM-dd HH:mm:ss", "test.localDateTime", "");
+    CellValidator[] validator = new LocalDateTimeValidator()
+        .matchField("test.localDateTime").pattern("yyyy-MM-dd HH:mm:ss").end();
+
+    assertEquals(validator.length, 1);
 
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
-    assertTrue(validator.valid(cellMap1.get("test.localDateTime"), fieldMetaMap.get("test.localDateTime")));
+    assertTrue(validator[0].valid(cellMap1.get("test.localDateTime"), fieldMetaMap.get("test.localDateTime")));
 
     Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
-    assertFalse(validator.valid(cellMap2.get("test.localDateTime"), fieldMetaMap.get("test.localDateTime")));
+    assertFalse(validator[0].valid(cellMap2.get("test.localDateTime"), fieldMetaMap.get("test.localDateTime")));
   }
 
 }

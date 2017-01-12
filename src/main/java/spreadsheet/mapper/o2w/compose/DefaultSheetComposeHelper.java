@@ -27,7 +27,7 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
 
   @Override
   @SuppressWarnings("unchecked")
-  public SheetComposeHelper<T> fieldValueConverter(FieldValueConverter<T>... fieldValueExtractors) {
+  public SheetComposeHelper<T> fieldValueConverters(FieldValueConverter<T>... fieldValueExtractors) {
     if (fieldValueExtractors == null) {
       return this;
     }

@@ -12,7 +12,7 @@ public class DefaultWorkbookProcessHelper implements WorkbookProcessHelper {
   private List<SheetProcessHelper> sheetProcessHelpers = new ArrayList<>();
 
   @Override
-  public WorkbookProcessHelper sheetProcessHelper(SheetProcessHelper... sheetProcessHelpers) {
+  public WorkbookProcessHelper sheetProcesses(SheetProcessHelper... sheetProcessHelpers) {
     if (sheetProcessHelpers == null) {
       return this;
     }

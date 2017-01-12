@@ -18,13 +18,15 @@ public class LocalDateValidatorTest {
   public void testCustomValidate() throws Exception {
 
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
-    LocalDateValidator validator = new LocalDateValidator("yyyy-MM-dd", "test.localDate", "");
+    CellValidator[] validator = new LocalDateValidator().matchField("test.localDate").pattern("yyyy-MM-dd").end();
+
+    assertEquals(validator.length, 1);
 
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
-    assertTrue(validator.valid(cellMap1.get("test.localDate"), fieldMetaMap.get("test.localDate")));
+    assertTrue(validator[0].valid(cellMap1.get("test.localDate"), fieldMetaMap.get("test.localDate")));
 
     Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
-    assertFalse(validator.valid(cellMap2.get("test.localDate"), fieldMetaMap.get("test.localDate")));
+    assertFalse(validator[0].valid(cellMap2.get("test.localDate"), fieldMetaMap.get("test.localDate")));
   }
 
 }

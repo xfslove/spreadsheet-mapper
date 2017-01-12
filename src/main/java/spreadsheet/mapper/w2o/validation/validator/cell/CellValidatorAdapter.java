@@ -4,90 +4,163 @@ import org.apache.commons.lang3.StringUtils;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
 
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <pre>
- * cell value validator adapter, easy implements customer value validator extends this.
+ * cell value validator adapter, using builder pattern, easy implements customer cell validator extends this.
  * extends this validator will skip custom valid when cell value is blank (default blank value means no need valid).
  * </pre>
- * Created by hanwen on 15-12-16.
+ * <p>
+ * Created by hanwen on 2017/1/11.
  */
-public abstract class CellValidatorAdapter implements CellValidator {
+public abstract class CellValidatorAdapter<T extends CellValidatorAdapter<T>> {
 
   private String group;
 
-  private String matchField;
+  private Set<String> dependsOn = new LinkedHashSet<>();
+
+  private List<String> matchFields = new ArrayList<>();
 
   private String errorMessage;
 
   private String messageOnField;
 
-  private Set<String> dependsOn = new LinkedHashSet<>();
-
-  public CellValidatorAdapter(String matchField, String errorMessage) {
-    this(matchField, errorMessage, null);
-  }
-
-  public CellValidatorAdapter(String matchField, String errorMessage, String[] dependsOn) {
-    this(matchField, matchField, errorMessage, dependsOn);
-  }
-
-  public CellValidatorAdapter(String group, String matchField, String errorMessage, String[] dependsOn) {
-    this(group, matchField, errorMessage, matchField, dependsOn);
-  }
-
-  public CellValidatorAdapter(String group, String matchField, String errorMessage, String messageOnField, String[] dependsOn) {
-    this.group = group;
-    this.matchField = matchField;
-    this.errorMessage = errorMessage;
-    this.messageOnField = messageOnField;
-    if (dependsOn != null) {
-      Collections.addAll(this.dependsOn, dependsOn);
-    }
-  }
-
-  @Override
-  public String getGroup() {
-    return group;
-  }
-
-  @Override
-  public Set<String> getDependsOn() {
-    return dependsOn;
-  }
-
-  @Override
-  public String getMatchField() {
-    return matchField;
-  }
-
-  @Override
-  public String getErrorMessage() {
-    return errorMessage;
-  }
-
-  @Override
-  public String getMessageOnField() {
-    return messageOnField;
-  }
-
-  @Override
-  public boolean valid(Cell cell, FieldMeta fieldMeta) {
-    return StringUtils.isBlank(cell.getValue()) || customValidate(cell, fieldMeta);
+  /**
+   * @param matchField {@link CellValidator#getMatchField()}
+   * @return {@link T}
+   */
+  public T matchField(String matchField) {
+    this.matchFields.add(matchField);
+    return getThis();
   }
 
   /**
-   * for customer access error message
-   *
-   * @param errorMessage error message
+   * @param matchFields {@link CellValidator#getMatchField()}
+   * @return {@link T}
    */
-  protected void setErrorMessage(String errorMessage) {
-    this.errorMessage = errorMessage;
+  public T matchFields(String... matchFields) {
+    if (matchFields == null) {
+      return getThis();
+    }
+    Collections.addAll(this.matchFields, matchFields);
+    return getThis();
   }
 
-  protected abstract boolean customValidate(Cell cell, FieldMeta fieldMeta);
+  /**
+   * @param errorMessage {@link CellValidator#getErrorMessage()}
+   * @return {@link T}
+   */
+  public T errorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
+    return getThis();
+  }
 
+  /**
+   * @param messageOnField {@link CellValidator#getMessageOnField()}
+   * @return {@link T}
+   */
+  public T messageOnField(String messageOnField) {
+    this.messageOnField = messageOnField;
+    return getThis();
+  }
+
+  /**
+   * @param dependsOn {@link CellValidator#getDependsOn()}
+   * @return {@link T}
+   */
+  public T dependsOn(String... dependsOn) {
+    if (dependsOn == null) {
+      return getThis();
+    }
+    Collections.addAll(this.dependsOn, dependsOn);
+    return getThis();
+  }
+
+  /**
+   * @param group {@link CellValidator#getGroup()}
+   * @return {@link T}
+   */
+  public T group(String group) {
+    this.group = group;
+    return getThis();
+  }
+
+  /**
+   * <pre>
+   * finish build a cell validator from supplied properties,
+   * get a series of same validators on {@link #matchFields}
+   * the count is number of {@link #matchFields} count
+   * </pre>
+   *
+   * @return {@link CellValidator}[]
+   */
+  public CellValidator[] end() {
+
+    List<CellValidator> validators = new ArrayList<>();
+
+    for (final String matchField : matchFields) {
+      CellValidator validator = new CellValidator() {
+
+        @Override
+        public boolean valid(Cell cell, FieldMeta fieldMeta) {
+          return CellValidatorAdapter.this.valid(cell, fieldMeta);
+        }
+
+        @Override
+        public String getMatchField() {
+          return matchField;
+        }
+
+        @Override
+        public String getMessageOnField() {
+          if (StringUtils.isBlank(CellValidatorAdapter.this.getMessageOnField())) {
+            return matchField;
+          }
+          return CellValidatorAdapter.this.getMessageOnField();
+        }
+
+        @Override
+        public String getGroup() {
+          if (StringUtils.isBlank(group)) {
+            return matchField;
+          }
+          return group;
+        }
+
+        @Override
+        public Set<String> getDependsOn() {
+          return dependsOn;
+        }
+
+        @Override
+        public String getErrorMessage() {
+          return CellValidatorAdapter.this.getErrorMessage();
+        }
+      };
+
+      validators.add(validator);
+    }
+
+    return validators.toArray(new CellValidator[0]);
+  }
+
+  protected abstract T getThis();
+
+  protected abstract boolean customValid(Cell cell, FieldMeta fieldMeta);
+
+  protected boolean valid(Cell cell, FieldMeta fieldMeta) {
+    return StringUtils.isBlank(cell.getValue()) || customValid(cell, fieldMeta);
+  }
+
+  /*=====================
+    from customer access
+   =====================*/
+  protected String getErrorMessage() {
+    return errorMessage;
+  }
+
+  protected String getMessageOnField() {
+    return messageOnField;
+  }
 }

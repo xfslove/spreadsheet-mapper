@@ -54,7 +54,7 @@ public class DefaultSheetComposeHelperTest {
   }
 
   private void addExtractor(SheetComposeHelper sheetComposeHelper) {
-    sheetComposeHelper.fieldValueConverter(
+    sheetComposeHelper.fieldValueConverters(
         new PlainNumberConverter("test.int1"),
         new PlainNumberConverter("test.int2"),
         new PlainNumberConverter("test.long1"),

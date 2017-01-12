@@ -7,7 +7,7 @@ import spreadsheet.mapper.o2w.compose.converter.FieldValueConverter;
 import java.util.List;
 
 /**
- * sheet composer, generated all cell type is string (include number, date etc.).
+ * sheet compose helper, generated all cell type is string (include number, date etc.).
  * <p>
  * Created by hanwen on 15-12-16.
  */
@@ -21,17 +21,20 @@ public interface SheetComposeHelper<T> {
    * </pre>
    *
    * @param fieldValueExtractors {@link FieldValueConverter}
+   * @return {@link SheetComposeHelper}
    */
   @SuppressWarnings("unchecked")
-  SheetComposeHelper<T> fieldValueConverter(FieldValueConverter<T>... fieldValueExtractors);
+  SheetComposeHelper<T> fieldValueConverters(FieldValueConverter<T>... fieldValueExtractors);
 
   /**
    * @param sheetMeta {@link SheetMeta}
+   * @return {@link SheetComposeHelper}
    */
   SheetComposeHelper<T> sheetMeta(SheetMeta sheetMeta);
 
   /**
    * @param data list of data
+   * @return {@link SheetComposeHelper}
    */
   SheetComposeHelper<T> data(List<T> data);
 
