@@ -3,7 +3,7 @@ package spreadsheet.mapper.w2o.validation.validator.cell;
 import org.apache.commons.lang3.StringUtils;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
-import spreadsheet.mapper.w2o.validation.validator.row.MultiUniqueInImportFileValidator;
+import spreadsheet.mapper.w2o.validation.validator.row.MultiUniqueValidator;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,18 +12,18 @@ import java.util.Set;
  * <pre>
  * value unique in template validator
  *
- * like {@link MultiUniqueInImportFileValidator},
+ * like {@link MultiUniqueValidator},
  * this validator only check one cell value if unique.
  * </pre>
  * <p>
  * Created by hanwen on 2017/1/11.
  */
-public class UniqueInImportFileValidator extends CellValidatorAdapter<UniqueInImportFileValidator> {
+public class UniqueValidator extends CellValidatorAdapter<UniqueValidator> {
 
   private Set<String> cellValueHolder = new HashSet<>();
 
   @Override
-  protected UniqueInImportFileValidator getThis() {
+  protected UniqueValidator getThis() {
     return this;
   }
 

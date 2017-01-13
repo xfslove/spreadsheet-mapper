@@ -12,7 +12,7 @@ import static org.testng.Assert.*;
 /**
  * Created by hanwen on 2017/1/4.
  */
-public class UniqueInImportFileValidatorTest {
+public class UniqueValidatorTest {
 
   @Test
   public void testCustomValidate() throws Exception {
@@ -23,7 +23,7 @@ public class UniqueInImportFileValidatorTest {
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
     Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
 
-    CellValidator[] validator = new UniqueInImportFileValidator().matchField("test.string").end();
+    CellValidator[] validator = new UniqueValidator().matchField("test.string").end();
 
     assertEquals(validator.length, 1);
 

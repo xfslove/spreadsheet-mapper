@@ -30,7 +30,7 @@ public class LocalDateTimeValidator extends CellValidatorAdapter<LocalDateTimeVa
 
   @Override
   protected boolean customValid(Cell cell, FieldMeta fieldMeta) {
-    DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(pattern);
+    DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(getPattern());
     String value = cell.getValue();
 
     try {
@@ -40,5 +40,12 @@ public class LocalDateTimeValidator extends CellValidatorAdapter<LocalDateTimeVa
       return false;
     }
     return true;
+  }
+
+  /*=====================
+    for customer access
+   =====================*/
+  protected String getPattern() {
+    return pattern;
   }
 }

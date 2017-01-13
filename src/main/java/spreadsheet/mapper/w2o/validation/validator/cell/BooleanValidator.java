@@ -42,6 +42,17 @@ public class BooleanValidator extends CellValidatorAdapter<BooleanValidator> {
   @Override
   protected boolean customValid(Cell cell, FieldMeta fieldMeta) {
     String value = cell.getValue();
-    return trueStrings.contains(value) || falseStrings.contains(value);
+    return getTrueStrings().contains(value) || getFalseStrings().contains(value);
+  }
+
+  /*=====================
+    for customer access
+   =====================*/
+  protected Set<String> getTrueStrings() {
+    return trueStrings;
+  }
+
+  protected Set<String> getFalseStrings() {
+    return falseStrings;
   }
 }

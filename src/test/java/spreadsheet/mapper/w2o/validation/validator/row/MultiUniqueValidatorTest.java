@@ -11,7 +11,7 @@ import static org.testng.Assert.assertTrue;
 /**
  * Created by hanwen on 2017/1/4.
  */
-public class MultiUniqueInImportFileValidatorTest {
+public class MultiUniqueValidatorTest {
 
   @Test
   public void testCustomValidate() throws Exception {
@@ -20,12 +20,12 @@ public class MultiUniqueInImportFileValidatorTest {
 
     SheetMeta sheetMeta = TestFactory.createSheetMeta(true);
 
-    RowValidator validator1 = new MultiUniqueInImportFileValidator().multiUniqueFields("test.int1", "test.int2").group("test.multi.unique").end();
+    RowValidator validator1 = new MultiUniqueValidator().multiUniqueFields("test.int1", "test.int2").group("test.multi.unique").end();
 
     assertTrue(validator1.valid(sheet.getRow(2), sheetMeta));
     assertTrue(validator1.valid(sheet.getRow(3), sheetMeta));
 
-    RowValidator validator2 = new MultiUniqueInImportFileValidator().multiUniqueFields("test.string").group("test.multi.unique").end();
+    RowValidator validator2 = new MultiUniqueValidator().multiUniqueFields("test.string").group("test.multi.unique").end();
 
     assertTrue(validator2.valid(sheet.getRow(2), sheetMeta));
     assertFalse(validator2.valid(sheet.getRow(3), sheetMeta));

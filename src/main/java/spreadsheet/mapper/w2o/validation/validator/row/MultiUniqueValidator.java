@@ -20,14 +20,14 @@ import java.util.*;
  * </pre>
  * Created by hanwen on 2016/12/1.
  */
-public class MultiUniqueInImportFileValidator extends RowValidatorAdapter<MultiUniqueInImportFileValidator> {
+public class MultiUniqueValidator extends RowValidatorAdapter<MultiUniqueValidator> {
 
   // format: "field1-value1,field2-value2,..."
   private Set<String> rowValueHolder = new HashSet<>();
 
   private Set<String> multiUniqueFields = new HashSet<>();
 
-  public MultiUniqueInImportFileValidator multiUniqueFields(String... multiUniqueFields) {
+  public MultiUniqueValidator multiUniqueFields(String... multiUniqueFields) {
     if (multiUniqueFields == null) {
       return getThis();
     }
@@ -46,7 +46,7 @@ public class MultiUniqueInImportFileValidator extends RowValidatorAdapter<MultiU
   }
 
   @Override
-  protected MultiUniqueInImportFileValidator getThis() {
+  protected MultiUniqueValidator getThis() {
     return this;
   }
 
@@ -55,7 +55,7 @@ public class MultiUniqueInImportFileValidator extends RowValidatorAdapter<MultiU
 
     List<String> holdStringList = new ArrayList<>();
 
-    for (String field : multiUniqueFields) {
+    for (String field : getMultiUniqueFields()) {
       FieldMeta fieldMeta = sheetMeta.getFieldMeta(field);
       Cell cell = row.getCell(fieldMeta.getColumnIndex());
       holdStringList.add(buildHoldString(fieldMeta, cell));
@@ -80,5 +80,12 @@ public class MultiUniqueInImportFileValidator extends RowValidatorAdapter<MultiU
    */
   protected String buildHoldString(FieldMeta fieldMeta, Cell cell) {
     return fieldMeta.getName() + Constants.NEGATIVE_SEPARATOR + cell.getValue();
+  }
+
+  /*=====================
+    for customer access
+   =====================*/
+  protected Set<String> getMultiUniqueFields() {
+    return multiUniqueFields;
   }
 }
