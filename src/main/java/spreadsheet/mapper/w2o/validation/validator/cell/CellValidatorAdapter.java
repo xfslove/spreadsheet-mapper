@@ -99,7 +99,7 @@ public abstract class CellValidatorAdapter<T extends CellValidatorAdapter<T>> {
 
     List<CellValidator> validators = new ArrayList<>();
 
-    for (final String matchField : matchFields) {
+    for (final String matchField : getMatchFields()) {
       CellValidator validator = new CellValidator() {
 
         @Override
@@ -122,15 +122,15 @@ public abstract class CellValidatorAdapter<T extends CellValidatorAdapter<T>> {
 
         @Override
         public String getGroup() {
-          if (StringUtils.isBlank(group)) {
+          if (StringUtils.isBlank(CellValidatorAdapter.this.getGroup())) {
             return matchField;
           }
-          return group;
+          return CellValidatorAdapter.this.getGroup();
         }
 
         @Override
         public Set<String> getDependsOn() {
-          return dependsOn;
+          return CellValidatorAdapter.this.getDependsOn();
         }
 
         @Override
@@ -154,8 +154,20 @@ public abstract class CellValidatorAdapter<T extends CellValidatorAdapter<T>> {
   }
 
   /*=====================
-    from customer access
+    for customer access
    =====================*/
+  protected String getGroup() {
+    return group;
+  }
+
+  protected Set<String> getDependsOn() {
+    return dependsOn;
+  }
+
+  protected List<String> getMatchFields() {
+    return matchFields;
+  }
+
   protected String getErrorMessage() {
     return errorMessage;
   }

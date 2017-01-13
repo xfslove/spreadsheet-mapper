@@ -88,15 +88,15 @@ public abstract class RowValidatorAdapter<T extends RowValidatorAdapter<T>> {
 
       @Override
       public String getGroup() {
-        if (StringUtils.isBlank(group)) {
+        if (StringUtils.isBlank(RowValidatorAdapter.this.getGroup())) {
           throw new WorkbookValidateException("row validator group must be set");
         }
-        return group;
+        return RowValidatorAdapter.this.getGroup();
       }
 
       @Override
       public Set<String> getDependsOn() {
-        return dependsOn;
+        return RowValidatorAdapter.this.getDependsOn();
       }
 
       @Override
@@ -111,8 +111,16 @@ public abstract class RowValidatorAdapter<T extends RowValidatorAdapter<T>> {
   protected abstract T getThis();
 
   /*=====================
-    from customer access
+    for customer access
    =====================*/
+  protected String getGroup() {
+    return group;
+  }
+
+  protected Set<String> getDependsOn() {
+    return dependsOn;
+  }
+
   protected Set<String> getMessageOnFields() {
     return messageOnFields;
   }
