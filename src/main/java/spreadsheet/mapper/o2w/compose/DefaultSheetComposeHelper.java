@@ -2,13 +2,13 @@ package spreadsheet.mapper.o2w.compose;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import spreadsheet.mapper.model.core.*;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.HeaderMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.o2w.compose.converter.BeanUtilsValueConverter;
 import spreadsheet.mapper.o2w.compose.converter.FieldValueConverter;
 import spreadsheet.mapper.o2w.compose.converter.ValueConverter;
-import spreadsheet.mapper.model.core.*;
 
 import java.util.*;
 
@@ -139,20 +139,20 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
         continue;
       }
 
-      String value = getFieldStringValue(object, fieldMeta);
+      String value = getFieldStringValue(object, row, fieldMeta);
       cell = new CellBean(value);
       row.addCell(cell);
     }
   }
 
-  private String getFieldStringValue(T object, FieldMeta fieldMeta) {
+  private String getFieldStringValue(T object, Row row, FieldMeta fieldMeta) {
     FieldValueConverter<T> extractor = key2fieldValueExtractor.get(fieldMeta.getName());
 
     if (extractor != null) {
-      return extractor.getStringValue(object, fieldMeta);
+      return extractor.getStringValue(object, row, fieldMeta);
     }
 
-    return defaultValueConverter.getStringValue(object, fieldMeta);
+    return defaultValueConverter.getStringValue(object, row, fieldMeta);
   }
 
   private int getLastColumnNum(List<FieldMeta> fieldMetas) {

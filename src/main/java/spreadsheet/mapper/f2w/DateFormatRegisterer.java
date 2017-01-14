@@ -7,9 +7,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * Created by hanwen on 5/3/16.
  */
-public class DateFormatRegister {
+public class DateFormatRegisterer {
 
-  public static DateFormatRegister GLOBAL = new DateFormatRegister();
+  public static DateFormatRegisterer GLOBAL = new DateFormatRegisterer();
 
   public static final String FULL_LOCAL_DATE_PATTERN = "yyyy-MM-dd";
 

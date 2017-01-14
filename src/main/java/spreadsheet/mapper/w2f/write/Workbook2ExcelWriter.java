@@ -28,6 +28,15 @@ public class Workbook2ExcelWriter implements WorkbookWriter {
   private org.apache.poi.ss.usermodel.Workbook poiWorkbook;
 
   /**
+   * default xlsx is true
+   *
+   * @see #Workbook2ExcelWriter(boolean)
+   */
+  public Workbook2ExcelWriter() {
+    this(true);
+  }
+
+  /**
    * workbook to excel writer use {@link SXSSFWorkbook} or {@link HSSFWorkbook}
    *
    * @param xlsx true use {@link SXSSFWorkbook} else use {@link HSSFWorkbook}

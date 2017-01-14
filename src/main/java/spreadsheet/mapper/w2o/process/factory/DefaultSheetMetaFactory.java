@@ -20,24 +20,13 @@ public class DefaultSheetMetaFactory implements SheetMetaFactory {
   private int[] headerRowIndices = new int[0];
 
   /**
-   * no header rows
-   *
-   * @param fieldRowIndex     which row is field
-   * @param dataStartRowIndex data start at which row
-   * @see #DefaultSheetMetaFactory(int, int, int[])
-   */
-  public DefaultSheetMetaFactory(int fieldRowIndex, int dataStartRowIndex) {
-    this(fieldRowIndex, dataStartRowIndex, null);
-  }
-
-  /**
    * if you want specify the field row is header, should pass {@link #headerRowIndices} with {@link #fieldRowIndex}
    *
    * @param fieldRowIndex     which row is field
    * @param dataStartRowIndex data start at which row
-   * @param headerRowIndices  which rows is headers
+   * @param headerRowIndices  which rows is headers, maybe no headers
    */
-  public DefaultSheetMetaFactory(int fieldRowIndex, int dataStartRowIndex, int[] headerRowIndices) {
+  public DefaultSheetMetaFactory(int fieldRowIndex, int dataStartRowIndex, int... headerRowIndices) {
     this.dataStartRowIndex = dataStartRowIndex;
     this.fieldRowIndex = fieldRowIndex;
     if (headerRowIndices != null) {

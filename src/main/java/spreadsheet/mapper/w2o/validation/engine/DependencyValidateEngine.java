@@ -22,8 +22,6 @@ import java.util.*;
 public class DependencyValidateEngine {
 
   private Map<String, List<DependencyValidator>> validatorMap = new LinkedHashMap<>();
-  private SheetMeta sheetMeta;
-  private Row row;
 
   private Map<String, Set<String>> vGraph = new LinkedHashMap<>();
   private Map<String, Boolean> visited = new HashMap<>();
@@ -34,22 +32,20 @@ public class DependencyValidateEngine {
   private List<Message> errorMessages = new ArrayList<>();
   private boolean validResult = true;
 
-  public DependencyValidateEngine(Map<String, List<DependencyValidator>> validatorMap, SheetMeta sheetMeta, Row row) {
+  public DependencyValidateEngine(Map<String, List<DependencyValidator>> validatorMap) {
     this.vGraph = DependencyEngineHelper.buildVGraph(validatorMap);
     for (String v : vGraph.keySet()) {
       visited.put(v, false);
     }
     this.validatorMap = validatorMap;
-    this.sheetMeta = sheetMeta;
-    this.row = row;
   }
 
-  public boolean valid() {
+  public boolean valid(Row row, SheetMeta sheetMeta) {
 
     for (String v : vGraph.keySet()) {
       skip = false;
       if (!visited.get(v)) {
-        dfs(v);
+        dfs(row, sheetMeta, v);
       }
     }
 
@@ -60,11 +56,11 @@ public class DependencyValidateEngine {
     return errorMessages;
   }
 
-  private void dfs(String v) {
+  private void dfs(Row row, SheetMeta sheetMeta, String v) {
 
     for (String w : vGraph.get(v)) {
       if (!visited.get(w)) {
-        dfs(w);
+        dfs(row, sheetMeta, w);
       }
     }
 
@@ -77,7 +73,7 @@ public class DependencyValidateEngine {
     List<DependencyValidator> validators = validatorMap.get(v);
 
     for (DependencyValidator validator : validators) {
-      boolean vResult = doRowCellsValid(validator);
+      boolean vResult = doRowCellsValid(row, sheetMeta, validator);
       // if one of the group valid failure skip rest validators
       if (!vResult) {
         skip = true;
@@ -86,7 +82,7 @@ public class DependencyValidateEngine {
     }
   }
 
-  private boolean doRowCellsValid(DependencyValidator dependencyValidator) {
+  private boolean doRowCellsValid(Row row, SheetMeta sheetMeta, DependencyValidator dependencyValidator) {
     if (dependencyValidator instanceof RowValidator) {
 
       RowValidator rowValidator = (RowValidator) dependencyValidator;

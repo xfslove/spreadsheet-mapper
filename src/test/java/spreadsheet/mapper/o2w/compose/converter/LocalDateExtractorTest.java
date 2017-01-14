@@ -3,6 +3,7 @@ package spreadsheet.mapper.o2w.compose.converter;
 import org.testng.annotations.Test;
 import spreadsheet.mapper.TestBean;
 import spreadsheet.mapper.TestFactory;
+import spreadsheet.mapper.model.core.RowBean;
 import spreadsheet.mapper.model.meta.FieldMeta;
 
 import java.util.Map;
@@ -26,14 +27,14 @@ public class LocalDateExtractorTest {
     LocalDateConverter extractor3 = new LocalDateConverter("yyyy", "test.localDate");
 
     TestBean testBean1 = TestFactory.createBean1();
-    String s11 = extractor1.getStringValue(testBean1, fieldMeta1);
+    String s11 = extractor1.getStringValue(testBean1, new RowBean(), fieldMeta1);
     assertEquals(s11, "1984-11-22");
 
-    String s12 = extractor2.getStringValue(testBean1, fieldMeta1);
+    String s12 = extractor2.getStringValue(testBean1, new RowBean(), fieldMeta1);
     assertEquals(s12, "1984-11");
 
     TestBean testBean2 = TestFactory.createBean2();
-    String s21 = extractor3.getStringValue(testBean2, fieldMeta1);
+    String s21 = extractor3.getStringValue(testBean2, new RowBean(), fieldMeta1);
     assertNull(s21);
   }
 

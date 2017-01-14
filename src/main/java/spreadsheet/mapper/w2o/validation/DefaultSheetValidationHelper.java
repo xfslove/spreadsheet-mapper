@@ -156,9 +156,9 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   private void validRowCells(Row row) {
     Map<String, List<DependencyValidator>> validatorMap = buildRelationValidatorMap();
 
-    DependencyValidateEngine dependencyValidateEngine = new DependencyValidateEngine(validatorMap, sheetMeta, row);
+    DependencyValidateEngine dependencyValidateEngine = new DependencyValidateEngine(validatorMap);
 
-    validResult = dependencyValidateEngine.valid();
+    validResult = dependencyValidateEngine.valid(row, sheetMeta);
 
     this.errorMessages.addAll(dependencyValidateEngine.getErrorMessages());
   }

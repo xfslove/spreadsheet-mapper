@@ -5,6 +5,7 @@ import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.o2w.compose.WorkbookComposeException;
 import spreadsheet.mapper.utils.FieldUtils;
@@ -20,7 +21,7 @@ public class BeanUtilsValueConverter<T> implements ValueConverter<T> {
   private static final Logger LOGGER = LoggerFactory.getLogger(BeanUtilsValueConverter.class);
 
   @Override
-  public String getStringValue(T object, FieldMeta fieldMeta) {
+  public String getStringValue(T object, Row row, FieldMeta fieldMeta) {
     try {
       return BeanUtils.getProperty(object, FieldUtils.detectRealFieldName(fieldMeta));
     } catch (NestedNullException e) {

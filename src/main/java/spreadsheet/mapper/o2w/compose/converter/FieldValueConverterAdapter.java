@@ -1,5 +1,6 @@
 package spreadsheet.mapper.o2w.compose.converter;
 
+import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.meta.FieldMeta;
 
 /**
@@ -21,5 +22,5 @@ public abstract class FieldValueConverterAdapter<T> implements FieldValueConvert
   }
 
   @Override
-  public abstract String getStringValue(T object, FieldMeta fieldMeta);
+  public abstract String getStringValue(T object, Row row, FieldMeta fieldMeta);
 }

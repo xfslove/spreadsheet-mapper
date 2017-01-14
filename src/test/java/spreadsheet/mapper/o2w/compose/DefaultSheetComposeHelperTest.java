@@ -53,7 +53,7 @@ public class DefaultSheetComposeHelperTest {
     AssertUtil.assertHeaderRowEquals(sheet3.getRow(1), true);
   }
 
-  private void addExtractor(SheetComposeHelper sheetComposeHelper) {
+  private void addExtractor(SheetComposeHelper<TestBean> sheetComposeHelper) {
     sheetComposeHelper.fieldValueConverters(
         new PlainNumberConverter("test.int1"),
         new PlainNumberConverter("test.int2"),

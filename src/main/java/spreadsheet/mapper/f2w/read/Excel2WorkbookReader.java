@@ -8,7 +8,7 @@ import org.apache.poi.ss.util.NumberToTextConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.model.core.*;
-import spreadsheet.mapper.f2w.DateFormatRegister;
+import spreadsheet.mapper.f2w.DateFormatRegisterer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -122,10 +122,10 @@ public class Excel2WorkbookReader implements WorkbookReader {
     } else if (cellType == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC) {
 
       if (DateUtil.isCellDateFormatted(cell)) {
-        String dateFormat = DateFormatRegister.GLOBAL.get(cell.getCellStyle().getDataFormatString());
+        String dateFormat = DateFormatRegisterer.GLOBAL.get(cell.getCellStyle().getDataFormatString());
 
         if (dateFormat == null) {
-          value = DateFormatRegister.ERROR_PATTERN;
+          value = DateFormatRegisterer.ERROR_PATTERN;
         } else {
           SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
           value = simpleDateFormat.format(cell.getDateCellValue());

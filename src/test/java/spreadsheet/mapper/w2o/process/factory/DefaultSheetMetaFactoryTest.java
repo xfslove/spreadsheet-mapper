@@ -16,7 +16,7 @@ public class DefaultSheetMetaFactoryTest {
 
     SheetMeta expected = TestFactory.createSheetMeta(true);
 
-    SheetMetaFactory sheetMetaFactory = new DefaultSheetMetaFactory(1, 2, new int[]{1});
+    SheetMetaFactory sheetMetaFactory = new DefaultSheetMetaFactory(1, 2, 1);
 
     Sheet sheet = TestFactory.createSheet();
 
