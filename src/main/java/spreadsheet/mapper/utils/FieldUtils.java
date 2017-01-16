@@ -36,7 +36,7 @@ public class FieldUtils {
    */
   public static String subtractBusinessKey(String field) {
     if (!StringUtils.contains(field, BUSINESS_KEY_PREFIX)) {
-      throw new IllegalStateException("field is not business key");
+      throw new IllegalArgumentException("field is not business key");
     }
     return field.substring(BUSINESS_KEY_PREFIX.length());
   }

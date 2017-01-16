@@ -26,13 +26,6 @@ public class RegexFormatValidator extends CellValidatorAdapter<RegexFormatValida
 
   @Override
   protected boolean customValid(Cell cell, FieldMeta fieldMeta) {
-    return cell.getValue().matches(getRegex());
-  }
-
-  /*=====================
-    for customer access
-   =====================*/
-  protected String getRegex() {
-    return regex;
+    return cell.getValue().matches(regex);
   }
 }

@@ -45,17 +45,6 @@ public class NumberScaleRangeValidator extends CellValidatorAdapter<NumberScaleR
       scale = numberPlace[1].length();
     }
 
-    return getGte() <= scale && scale <= getLte();
-  }
-
-  /*=====================
-    for customer access
-   =====================*/
-  protected int getLte() {
-    return lte;
-  }
-
-  protected int getGte() {
-    return gte;
+    return gte <= scale && scale <= lte;
   }
 }

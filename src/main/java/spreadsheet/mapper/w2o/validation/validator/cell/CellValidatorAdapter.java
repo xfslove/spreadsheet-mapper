@@ -4,7 +4,9 @@ import org.apache.commons.lang3.StringUtils;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * <pre>
@@ -20,7 +22,7 @@ public abstract class CellValidatorAdapter<T extends CellValidatorAdapter<T>> {
 
   private Set<String> dependsOn = new LinkedHashSet<>();
 
-  private List<String> matchFields = new ArrayList<>();
+  private String matchField;
 
   private String errorMessage;
 
@@ -31,19 +33,7 @@ public abstract class CellValidatorAdapter<T extends CellValidatorAdapter<T>> {
    * @return {@link T}
    */
   public T matchField(String matchField) {
-    this.matchFields.add(matchField);
-    return getThis();
-  }
-
-  /**
-   * @param matchFields {@link CellValidator#getMatchField()}
-   * @return {@link T}
-   */
-  public T matchFields(String... matchFields) {
-    if (matchFields == null) {
-      return getThis();
-    }
-    Collections.addAll(this.matchFields, matchFields);
+    this.matchField = matchField;
     return getThis();
   }
 
@@ -57,6 +47,8 @@ public abstract class CellValidatorAdapter<T extends CellValidatorAdapter<T>> {
   }
 
   /**
+   * if empty default is {@link #getMatchField()}
+   *
    * @param messageOnField {@link CellValidator#getMessageOnField()}
    * @return {@link T}
    */
@@ -78,6 +70,8 @@ public abstract class CellValidatorAdapter<T extends CellValidatorAdapter<T>> {
   }
 
   /**
+   * if empty default is {@link #getMatchField()}
+   *
    * @param group {@link CellValidator#getGroup()}
    * @return {@link T}
    */
@@ -87,62 +81,51 @@ public abstract class CellValidatorAdapter<T extends CellValidatorAdapter<T>> {
   }
 
   /**
-   * <pre>
-   * finish build a cell validator from supplied properties,
-   * get a series of same validators on {@link #matchFields}
-   * the count is number of {@link #matchFields} count
-   * </pre>
+   * finish build a cell validator from supplied properties
    *
-   * @return {@link CellValidator}[]
+   * @return {@link CellValidator}
    */
-  public CellValidator[] end() {
+  public CellValidator end() {
 
-    List<CellValidator> validators = new ArrayList<>();
+    return new CellValidator() {
 
-    for (final String matchField : getMatchFields()) {
-      CellValidator validator = new CellValidator() {
+      @Override
+      public boolean valid(Cell cell, FieldMeta fieldMeta) {
+        return CellValidatorAdapter.this.valid(cell, fieldMeta);
+      }
 
-        @Override
-        public boolean valid(Cell cell, FieldMeta fieldMeta) {
-          return CellValidatorAdapter.this.valid(cell, fieldMeta);
+      @Override
+      public String getMatchField() {
+        return CellValidatorAdapter.this.getMatchField();
+      }
+
+      @Override
+      public String getMessageOnField() {
+        if (StringUtils.isBlank(CellValidatorAdapter.this.getMessageOnField())) {
+          return CellValidatorAdapter.this.getMatchField();
         }
+        return CellValidatorAdapter.this.getMessageOnField();
+      }
 
-        @Override
-        public String getMatchField() {
-          return matchField;
+      @Override
+      public String getGroup() {
+        if (StringUtils.isBlank(CellValidatorAdapter.this.getGroup())) {
+          return CellValidatorAdapter.this.getMatchField();
         }
+        return CellValidatorAdapter.this.getGroup();
+      }
 
-        @Override
-        public String getMessageOnField() {
-          if (StringUtils.isBlank(CellValidatorAdapter.this.getMessageOnField())) {
-            return matchField;
-          }
-          return CellValidatorAdapter.this.getMessageOnField();
-        }
+      @Override
+      public Set<String> getDependsOn() {
+        return CellValidatorAdapter.this.getDependsOn();
+      }
 
-        @Override
-        public String getGroup() {
-          if (StringUtils.isBlank(CellValidatorAdapter.this.getGroup())) {
-            return matchField;
-          }
-          return CellValidatorAdapter.this.getGroup();
-        }
+      @Override
+      public String getErrorMessage() {
+        return CellValidatorAdapter.this.getErrorMessage();
+      }
+    };
 
-        @Override
-        public Set<String> getDependsOn() {
-          return CellValidatorAdapter.this.getDependsOn();
-        }
-
-        @Override
-        public String getErrorMessage() {
-          return CellValidatorAdapter.this.getErrorMessage();
-        }
-      };
-
-      validators.add(validator);
-    }
-
-    return validators.toArray(new CellValidator[0]);
   }
 
   protected abstract T getThis();
@@ -160,12 +143,12 @@ public abstract class CellValidatorAdapter<T extends CellValidatorAdapter<T>> {
     return group;
   }
 
-  protected Set<String> getDependsOn() {
-    return dependsOn;
+  public String getMatchField() {
+    return matchField;
   }
 
-  protected List<String> getMatchFields() {
-    return matchFields;
+  protected Set<String> getDependsOn() {
+    return dependsOn;
   }
 
   protected String getErrorMessage() {

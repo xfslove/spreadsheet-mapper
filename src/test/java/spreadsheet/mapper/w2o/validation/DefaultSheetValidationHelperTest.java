@@ -34,8 +34,8 @@ public class DefaultSheetValidationHelperTest {
   @Test(groups = "missingTest")
   public void testMissing() {
 
-    CellValidator[] cellValidators1 = new TestCellValidator().matchField("1").dependsOn("3").end();
-    CellValidator[] cellValidators2 = new TestCellValidator().matchField("2").end();
+    CellValidator cellValidators1 = new TestCellValidator().matchField("1").dependsOn("3").end();
+    CellValidator cellValidators2 = new TestCellValidator().matchField("2").end();
 
     SheetValidationHelper sheetValidationHelper = new DefaultSheetValidationHelper().sheetMeta(new SheetMetaBean(2)).sheet(new SheetBean());
     sheetValidationHelper.cellValidators(cellValidators1);
