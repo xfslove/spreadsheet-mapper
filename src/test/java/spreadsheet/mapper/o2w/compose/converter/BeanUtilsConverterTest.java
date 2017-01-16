@@ -14,13 +14,13 @@ import static org.testng.Assert.assertNull;
 /**
  * Created by hanwen on 2017/1/4.
  */
-public class BeanUtilsValueConverterTest {
+public class BeanUtilsConverterTest {
 
   @Test
   public void testGetStringValue() throws Exception {
 
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
-    BeanUtilsValueConverter extractor = new BeanUtilsValueConverter();
+    BeanUtilsConverter<TestBean> extractor = new BeanUtilsConverter<>();
 
     TestBean testBean1 = TestFactory.createBean1();
 

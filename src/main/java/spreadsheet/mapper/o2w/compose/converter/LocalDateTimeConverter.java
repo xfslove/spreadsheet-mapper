@@ -16,15 +16,20 @@ import spreadsheet.mapper.utils.FieldUtils;
  * <p>
  * Created by hanwen on 5/3/16.
  */
-public class LocalDateTimeConverter<T> extends FieldValueConverterAdapter<T> {
+public class LocalDateTimeConverter<T> extends FieldConverterAdapter<T, LocalDateTimeConverter<T>> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(LocalDateTimeConverter.class);
 
   private String pattern;
 
-  public LocalDateTimeConverter(String pattern, String matchField) {
-    super(matchField);
+  public LocalDateTimeConverter<T> pattern(String pattern) {
     this.pattern = pattern;
+    return getThis();
+  }
+
+  @Override
+  protected LocalDateTimeConverter<T> getThis() {
+    return this;
   }
 
   @Override

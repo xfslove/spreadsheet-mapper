@@ -20,14 +20,14 @@ public class DigitsValidatorTest {
 
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
 
-    CellValidator validator0 = new DigitsValidator().matchField("test.int1").end();
-    CellValidator validator1 = new DigitsValidator().matchField("test.int2").end();
-    CellValidator validator2 = new DigitsValidator().matchField("test.long1").end();
-    CellValidator validator3 = new DigitsValidator().matchField("test.long2").end();
-    CellValidator validator4 = new DigitsValidator().matchField("test.float1").end();
-    CellValidator validator5 = new DigitsValidator().matchField("test.float2").end();
-    CellValidator validator6 = new DigitsValidator().matchField("test.double1").end();
-    CellValidator validator7 = new DigitsValidator().matchField("test.double2").end();
+    CellValidator validator0 = new DigitsValidator().matchField("test.int1");
+    CellValidator validator1 = new DigitsValidator().matchField("test.int2");
+    CellValidator validator2 = new DigitsValidator().matchField("test.long1");
+    CellValidator validator3 = new DigitsValidator().matchField("test.long2");
+    CellValidator validator4 = new DigitsValidator().matchField("test.float1");
+    CellValidator validator5 = new DigitsValidator().matchField("test.float2");
+    CellValidator validator6 = new DigitsValidator().matchField("test.double1");
+    CellValidator validator7 = new DigitsValidator().matchField("test.double2");
 
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
     assertTrue(validator0.valid(cellMap1.get("test.int1"), fieldMetaMap.get("test.int1")));

@@ -16,9 +16,9 @@ import spreadsheet.mapper.utils.FieldUtils;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public class BeanUtilsValueConverter<T> implements ValueConverter<T> {
+public class BeanUtilsConverter<T> implements Converter<T> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(BeanUtilsValueConverter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BeanUtilsConverter.class);
 
   @Override
   public String getStringValue(T object, Row row, FieldMeta fieldMeta) {

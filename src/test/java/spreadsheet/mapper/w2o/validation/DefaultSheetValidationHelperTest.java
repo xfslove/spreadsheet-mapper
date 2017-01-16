@@ -34,8 +34,8 @@ public class DefaultSheetValidationHelperTest {
   @Test(groups = "missingTest")
   public void testMissing() {
 
-    CellValidator cellValidators1 = new TestCellValidator().matchField("1").dependsOn("3").end();
-    CellValidator cellValidators2 = new TestCellValidator().matchField("2").end();
+    CellValidator cellValidators1 = new TestCellValidator().matchField("1").dependsOn("3");
+    CellValidator cellValidators2 = new TestCellValidator().matchField("2");
 
     SheetValidationHelper sheetValidationHelper = new DefaultSheetValidationHelper().sheetMeta(new SheetMetaBean(2)).sheet(new SheetBean());
     sheetValidationHelper.cellValidators(cellValidators1);
@@ -64,8 +64,8 @@ public class DefaultSheetValidationHelperTest {
      */
     List<CellValidator> cellValidators = new ArrayList<>();
 
-    Collections.addAll(cellValidators, new TestCellValidator().group("3").matchField("1").dependsOn("4").messageOnField("5").errorMessage("test1").end());
-    Collections.addAll(cellValidators, new TestCellValidator().group("4").matchField("2").messageOnField("6").errorMessage("test2").end());
+    Collections.addAll(cellValidators, new TestCellValidator().group("3").matchField("1").dependsOn("4").messageOnField("5").errorMessage("test1"));
+    Collections.addAll(cellValidators, new TestCellValidator().group("4").matchField("2").messageOnField("6").errorMessage("test2"));
 
     assertEquals(cellValidators.get(0).getMatchField(), "1");
     assertEquals(cellValidators.get(1).getMatchField(), "2");
@@ -77,7 +77,7 @@ public class DefaultSheetValidationHelperTest {
     assertEquals(cellValidators.get(1).getMessageOnField(), "6");
 
     RowValidator[] rowValidators = new RowValidator[]{
-        new TestRowValidator().group("4").dependsOn("4").messageOnFields("2").errorMessage("test2").end()
+        new TestRowValidator().group("4").dependsOn("4").messageOnFields("2").errorMessage("test2")
     };
     assertValid(cellValidators, rowValidators, true);
   }
@@ -95,24 +95,24 @@ public class DefaultSheetValidationHelperTest {
        6 -> 7
      */
     List<CellValidator> cellValidators = new ArrayList<>();
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("1").dependsOn("2").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("1").dependsOn("3").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("1").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("1").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("2").dependsOn("4").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("3").dependsOn("6").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("3").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("3").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("3").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("4").dependsOn("5", "6").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("5").dependsOn("7").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("6").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("6").dependsOn("7").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("6").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("7").end());
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("1").dependsOn("2"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("1").dependsOn("3"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("1"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("1"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("2").dependsOn("4"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("3").dependsOn("6"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("3"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("3"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("3"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("4").dependsOn("5", "6"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("5").dependsOn("7"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("6"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("6").dependsOn("7"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("6"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("7"));
 
     RowValidator[] rowValidators = new RowValidator[]{
-        new TestRowValidator().group("1").dependsOn("7").end()
+        new TestRowValidator().group("1").dependsOn("7")
     };
 
     assertValid(cellValidators, rowValidators, false);
@@ -131,14 +131,14 @@ public class DefaultSheetValidationHelperTest {
      */
     List<CellValidator> cellValidators = new ArrayList<>();
 
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("1").dependsOn("2").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("2").dependsOn("4").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("3").dependsOn("4", "5").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("5").dependsOn("6").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("6").end());
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("1").dependsOn("2"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("2").dependsOn("4"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("3").dependsOn("4", "5"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("5").dependsOn("6"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("6"));
 
     RowValidator[] rowValidators = new RowValidator[]{
-        new TestRowValidator().group("4").dependsOn("6", "1").end(),
+        new TestRowValidator().group("4").dependsOn("6", "1"),
     };
 
     assertValid(cellValidators, rowValidators, true);
@@ -162,18 +162,18 @@ public class DefaultSheetValidationHelperTest {
       11 -> 10
      */
     List<CellValidator> cellValidators = new ArrayList<>();
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("1").dependsOn("2").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("2").dependsOn("3", "7").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("3").dependsOn("4", "5").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("4").dependsOn("8").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("5").dependsOn("6").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("6").dependsOn("8").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("7").dependsOn("5", "9", "11").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("8").dependsOn("9").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("9").dependsOn("10", "11").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("10").dependsOn("12").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("11").dependsOn("10").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("12").end());
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("1").dependsOn("2"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("2").dependsOn("3", "7"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("3").dependsOn("4", "5"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("4").dependsOn("8"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("5").dependsOn("6"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("6").dependsOn("8"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("7").dependsOn("5", "9", "11"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("8").dependsOn("9"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("9").dependsOn("10", "11"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("10").dependsOn("12"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("11").dependsOn("10"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("12"));
 
     assertValid(cellValidators, null, false);
   }
@@ -196,18 +196,18 @@ public class DefaultSheetValidationHelperTest {
       11 -> 10,6
      */
     List<CellValidator> cellValidators = new ArrayList<>();
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("1").dependsOn("2").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("2").dependsOn("3", "7").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("3").dependsOn("4", "5").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("4").dependsOn("8").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("5").dependsOn("6").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("6").dependsOn("8").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("7").dependsOn("5", "9", "11").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("8").dependsOn("9").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("9").dependsOn("10", "11").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("10").dependsOn("12").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("11").dependsOn("10", "6").end());
-    Collections.addAll(cellValidators, new TestCellValidator().matchField("12").end());
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("1").dependsOn("2"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("2").dependsOn("3", "7"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("3").dependsOn("4", "5"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("4").dependsOn("8"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("5").dependsOn("6"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("6").dependsOn("8"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("7").dependsOn("5", "9", "11"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("8").dependsOn("9"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("9").dependsOn("10", "11"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("10").dependsOn("12"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("11").dependsOn("10", "6"));
+    Collections.addAll(cellValidators, new TestCellValidator().matchField("12"));
 
     assertValid(cellValidators, null, true);
   }
@@ -218,26 +218,26 @@ public class DefaultSheetValidationHelperTest {
     Counter counter = new Counter();
 
     List<CellValidator> cellValidators = new ArrayList<>();
-    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.int1").dependsOn("test.int2").end());
-    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.int2").dependsOn("test.long1").end());
-    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.long1").dependsOn("test.long2").end());
-    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.long2").dependsOn("test.double2").end());
-    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.float1").dependsOn("test.float2").end());
-    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.float2").dependsOn("test.double2").end());
-    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.double1").dependsOn("test.float1").end());
-    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.double2").dependsOn("test.string").end());
-    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.string").dependsOn("test.boolean1").end());
-    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.string").dependsOn("test.boolean2").end());
-    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.boolean1").dependsOn("test.bigDecimal").end());
-    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.boolean2").dependsOn("test.boolean1").end());
-    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.bigDecimal").end());
+    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.int1").dependsOn("test.int2"));
+    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.int2").dependsOn("test.long1"));
+    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.long1").dependsOn("test.long2"));
+    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.long2").dependsOn("test.double2"));
+    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.float1").dependsOn("test.float2"));
+    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.float2").dependsOn("test.double2"));
+    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.double1").dependsOn("test.float1"));
+    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.double2").dependsOn("test.string"));
+    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.string").dependsOn("test.boolean1"));
+    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.string").dependsOn("test.boolean2"));
+    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.boolean1").dependsOn("test.bigDecimal"));
+    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.boolean2").dependsOn("test.boolean1"));
+    Collections.addAll(cellValidators, new TestCellValidator(counter).matchField("test.bigDecimal"));
 
     List<RowValidator> rowValidators = new ArrayList<>();
-    rowValidators.add(new TestRowValidator(counter).group("test.int2").dependsOn("test.double1").end());
-    rowValidators.add(new TestRowValidator(counter).group("test.long1").dependsOn("test.float1").end());
-    rowValidators.add(new TestRowValidator(counter).group("test.double1").dependsOn("test.string").end());
-    rowValidators.add(new TestRowValidator(counter).group("test.double1").dependsOn("test.boolean2").end());
-    rowValidators.add(new TestRowValidator(counter).group("test.boolean2").dependsOn("test.boolean1").end());
+    rowValidators.add(new TestRowValidator(counter).group("test.int2").dependsOn("test.double1"));
+    rowValidators.add(new TestRowValidator(counter).group("test.long1").dependsOn("test.float1"));
+    rowValidators.add(new TestRowValidator(counter).group("test.double1").dependsOn("test.string"));
+    rowValidators.add(new TestRowValidator(counter).group("test.double1").dependsOn("test.boolean2"));
+    rowValidators.add(new TestRowValidator(counter).group("test.boolean2").dependsOn("test.boolean1"));
 
     SheetMeta sheetMeta = TestFactory.createSheetMeta(true);
     Sheet sheet = getSheet();
@@ -265,19 +265,19 @@ public class DefaultSheetValidationHelperTest {
        test.float2 -> test.double1
      */
     List<CellValidator> cellValidators = new ArrayList<>();
-    Collections.addAll(cellValidators, new TrueCellValidator(hitValidators).matchField("test.float2").dependsOn("test.double1").end());
-    Collections.addAll(cellValidators, new FalseCellValidator(hitValidators).matchField("test.int1").dependsOn("test.int2").end());
-    Collections.addAll(cellValidators, new TrueCellValidator(hitValidators).matchField("test.int1").dependsOn("test.long1").end());
-    Collections.addAll(cellValidators, new TrueCellValidator(hitValidators).matchField("test.int2").dependsOn("test.long2").end());
-    Collections.addAll(cellValidators, new TrueCellValidator(hitValidators).matchField("test.long1").dependsOn("test.float2").end());
-    Collections.addAll(cellValidators, new TrueCellValidator(hitValidators).matchField("test.long2").dependsOn("test.float1").end());
-    Collections.addAll(cellValidators, new FalseCellValidator(hitValidators).matchField("test.float1").end());
-    Collections.addAll(cellValidators, new TrueCellValidator(hitValidators).matchField("test.double1").end());
+    Collections.addAll(cellValidators, new TrueCellValidator(hitValidators).matchField("test.float2").dependsOn("test.double1"));
+    Collections.addAll(cellValidators, new FalseCellValidator(hitValidators).matchField("test.int1").dependsOn("test.int2"));
+    Collections.addAll(cellValidators, new TrueCellValidator(hitValidators).matchField("test.int1").dependsOn("test.long1"));
+    Collections.addAll(cellValidators, new TrueCellValidator(hitValidators).matchField("test.int2").dependsOn("test.long2"));
+    Collections.addAll(cellValidators, new TrueCellValidator(hitValidators).matchField("test.long1").dependsOn("test.float2"));
+    Collections.addAll(cellValidators, new TrueCellValidator(hitValidators).matchField("test.long2").dependsOn("test.float1"));
+    Collections.addAll(cellValidators, new FalseCellValidator(hitValidators).matchField("test.float1"));
+    Collections.addAll(cellValidators, new TrueCellValidator(hitValidators).matchField("test.double1"));
 
     List<RowValidator> rowValidators = new ArrayList<>();
-    rowValidators.add(new TrueRowValidator(hitValidators).group("test.int1").dependsOn("test.double1").end());
-    rowValidators.add(new TrueRowValidator(hitValidators).group("test.long2").dependsOn("test.float2").end());
-    rowValidators.add(new FalseRowValidator(hitValidators).group("test.float1").dependsOn("test.double1").end());
+    rowValidators.add(new TrueRowValidator(hitValidators).group("test.int1").dependsOn("test.double1"));
+    rowValidators.add(new TrueRowValidator(hitValidators).group("test.long2").dependsOn("test.float2"));
+    rowValidators.add(new FalseRowValidator(hitValidators).group("test.float1").dependsOn("test.double1"));
 
     SheetMeta sheetMeta = TestFactory.createSheetMeta(true);
     Sheet sheet = getSheet();
@@ -316,7 +316,7 @@ public class DefaultSheetValidationHelperTest {
     }
   }
 
-  private class TrueCellValidator extends CellValidatorAdapter {
+  private class TrueCellValidator extends CellValidatorAdapter<TrueCellValidator> {
 
     private List<String> hitValidators;
 
@@ -327,13 +327,13 @@ public class DefaultSheetValidationHelperTest {
     }
 
     @Override
-    public CellValidatorAdapter matchField(String matchField) {
+    public TrueCellValidator matchField(String matchField) {
       this.group = matchField;
       return super.matchField(matchField);
     }
 
     @Override
-    protected CellValidatorAdapter getThis() {
+    protected TrueCellValidator getThis() {
       return this;
     }
 
@@ -373,7 +373,7 @@ public class DefaultSheetValidationHelperTest {
     }
   }
 
-  private class FalseCellValidator extends CellValidatorAdapter {
+  private class FalseCellValidator extends CellValidatorAdapter<FalseCellValidator> {
 
     private List<String> hitValidators;
 
@@ -384,13 +384,13 @@ public class DefaultSheetValidationHelperTest {
     }
 
     @Override
-    public CellValidatorAdapter matchField(String matchField) {
+    public FalseCellValidator matchField(String matchField) {
       this.group = matchField;
       return super.matchField(matchField);
     }
 
     @Override
-    protected CellValidatorAdapter getThis() {
+    protected FalseCellValidator getThis() {
       return this;
     }
 
@@ -429,7 +429,7 @@ public class DefaultSheetValidationHelperTest {
     }
   }
 
-  private class TestCellValidator extends CellValidatorAdapter {
+  private class TestCellValidator extends CellValidatorAdapter<TestCellValidator> {
 
     private Counter counter;
 
@@ -441,7 +441,7 @@ public class DefaultSheetValidationHelperTest {
     }
 
     @Override
-    protected CellValidatorAdapter getThis() {
+    protected TestCellValidator getThis() {
       return this;
     }
 

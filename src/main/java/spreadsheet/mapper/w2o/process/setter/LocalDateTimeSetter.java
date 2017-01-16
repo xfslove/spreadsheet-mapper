@@ -17,28 +17,28 @@ import spreadsheet.mapper.w2o.process.WorkbookProcessException;
  * <p>
  * Created by hanwen on 5/3/16.
  */
-public class LocalDateTimeValueSetter<T> extends FieldValueSetterAdapter<T> {
+public class LocalDateTimeSetter<T> extends FieldSetterAdapter<T, LocalDateTimeSetter<T>> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(LocalDateTimeValueSetter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LocalDateTimeSetter.class);
 
   private String pattern;
 
-  public LocalDateTimeValueSetter(String pattern, String matchField) {
-    super(matchField);
+  public LocalDateTimeSetter<T> pattern(String pattern) {
     this.pattern = pattern;
+    return getThis();
   }
 
   @Override
-  public void set(T object, Cell cell, FieldMeta fieldMeta) {
+  protected LocalDateTimeSetter<T> getThis() {
+    return this;
+  }
+
+  @Override
+  public void customSet(T object, Cell cell, FieldMeta fieldMeta) {
     try {
       DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(pattern);
       String value = cell.getValue();
       String fieldName = FieldUtils.detectRealFieldName(fieldMeta);
-
-      if (value == null) {
-        PropertyUtils.setProperty(object, fieldName, null);
-        return;
-      }
 
       LocalDateTime localDateTime = null;
       try {

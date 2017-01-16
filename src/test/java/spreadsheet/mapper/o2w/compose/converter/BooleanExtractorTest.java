@@ -23,8 +23,8 @@ public class BooleanExtractorTest {
     FieldMeta fieldMeta1 = fieldMetaMap.get("test.boolean1");
     FieldMeta fieldMeta2 = fieldMetaMap.get("test.boolean2");
 
-    BooleanConverter extractor1 = new BooleanConverter("pass", "failure", "test.boolean1");
-    BooleanConverter extractor2 = new BooleanConverter("pass", "failure", "test.boolean2");
+    BooleanConverter<TestBean> extractor1 = new BooleanConverter<TestBean>().trueString("pass").falseString("failure").matchField("test.boolean1");
+    BooleanConverter<TestBean> extractor2 = new BooleanConverter<TestBean>().trueString("pass").falseString("failure").matchField("test.boolean2");
 
     TestBean testBean1 = TestFactory.createBean1();
     String s11 = extractor1.getStringValue(testBean1, new RowBean(), fieldMeta1);

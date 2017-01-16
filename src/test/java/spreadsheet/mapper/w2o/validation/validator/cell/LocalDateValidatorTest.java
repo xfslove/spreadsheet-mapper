@@ -18,7 +18,7 @@ public class LocalDateValidatorTest {
   public void testCustomValidate() throws Exception {
 
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
-    CellValidator validator = new LocalDateValidator().matchField("test.localDate").pattern("yyyy-MM-dd").end();
+    CellValidator validator = new LocalDateValidator().matchField("test.localDate").pattern("yyyy-MM-dd");
 
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
     assertTrue(validator.valid(cellMap1.get("test.localDate"), fieldMetaMap.get("test.localDate")));

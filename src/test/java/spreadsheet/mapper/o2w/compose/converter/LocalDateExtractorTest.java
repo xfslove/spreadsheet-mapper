@@ -22,9 +22,9 @@ public class LocalDateExtractorTest {
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
     FieldMeta fieldMeta1 = fieldMetaMap.get("test.localDate");
 
-    LocalDateConverter extractor1 = new LocalDateConverter("yyyy-MM-dd", "test.localDate");
-    LocalDateConverter extractor2 = new LocalDateConverter("yyyy-MM", "test.localDate");
-    LocalDateConverter extractor3 = new LocalDateConverter("yyyy", "test.localDate");
+    LocalDateConverter<TestBean> extractor1 = new LocalDateConverter<TestBean>().matchField("test.localDate").pattern("yyyy-MM-dd");
+    LocalDateConverter<TestBean> extractor2 = new LocalDateConverter<TestBean>().matchField("test.localDate").pattern("yyyy-MM");
+    LocalDateConverter<TestBean> extractor3 = new LocalDateConverter<TestBean>().matchField("test.localDate").pattern("yyyy");
 
     TestBean testBean1 = TestFactory.createBean1();
     String s11 = extractor1.getStringValue(testBean1, new RowBean(), fieldMeta1);

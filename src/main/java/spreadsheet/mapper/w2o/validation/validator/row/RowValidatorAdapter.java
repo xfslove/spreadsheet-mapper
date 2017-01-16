@@ -12,11 +12,11 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * row values validator adapter, using builder pattern, easy implements customer row validator extends this.
+ * row values validator adapter, easy implements customer row validator extends this.
  * <p>
  * Created by hanwen on 4/26/16.
  */
-public abstract class RowValidatorAdapter<T extends RowValidatorAdapter<T>> {
+public abstract class RowValidatorAdapter<V extends RowValidatorAdapter<V>> implements RowValidator {
 
   private String group;
 
@@ -28,18 +28,18 @@ public abstract class RowValidatorAdapter<T extends RowValidatorAdapter<T>> {
 
   /**
    * @param errorMessage {@link RowValidator#getErrorMessage()}
-   * @return {@link T}
+   * @return {@link V}
    */
-  public T errorMessage(String errorMessage) {
+  public V errorMessage(String errorMessage) {
     this.errorMessage = errorMessage;
     return getThis();
   }
 
   /**
    * @param messageOnFields {@link RowValidator#getMessageOnFields()}
-   * @return {@link T}
+   * @return {@link V}
    */
-  public T messageOnFields(String... messageOnFields) {
+  public V messageOnFields(String... messageOnFields) {
     if (messageOnFields == null) {
       return getThis();
     }
@@ -49,9 +49,9 @@ public abstract class RowValidatorAdapter<T extends RowValidatorAdapter<T>> {
 
   /**
    * @param dependsOn {@link RowValidator#getDependsOn()}
-   * @return {@link T}
+   * @return {@link V}
    */
-  public T dependsOn(String... dependsOn) {
+  public V dependsOn(String... dependsOn) {
     if (dependsOn == null) {
       return getThis();
     }
@@ -61,71 +61,42 @@ public abstract class RowValidatorAdapter<T extends RowValidatorAdapter<T>> {
 
   /**
    * @param group {@link RowValidator#getGroup()}
-   * @return {@link T}
+   * @return {@link V}
    */
-  public T group(String group) {
+  public V group(String group) {
     this.group = group;
     return getThis();
   }
 
-  /**
-   * finish build a row validator from supplied properties
-   *
-   * @return {@link RowValidator}
-   */
-  public RowValidator end() {
-
-    return new RowValidator() {
-      @Override
-      public boolean valid(Row row, SheetMeta sheetMeta) {
-        return customValid(row, sheetMeta);
-      }
-
-      @Override
-      public Set<String> getMessageOnFields() {
-        return RowValidatorAdapter.this.getMessageOnFields();
-      }
-
-      @Override
-      public String getGroup() {
-        if (StringUtils.isBlank(RowValidatorAdapter.this.getGroup())) {
-          throw new WorkbookValidateException("row validator group must be set");
-        }
-        return RowValidatorAdapter.this.getGroup();
-      }
-
-      @Override
-      public Set<String> getDependsOn() {
-        return RowValidatorAdapter.this.getDependsOn();
-      }
-
-      @Override
-      public String getErrorMessage() {
-        return RowValidatorAdapter.this.getErrorMessage();
-      }
-    };
+  @Override
+  public boolean valid(Row row, SheetMeta sheetMeta) {
+    return customValid(row, sheetMeta);
   }
 
-  protected abstract boolean customValid(Row row, SheetMeta sheetMeta);
-
-  protected abstract T getThis();
-
-  /*=====================
-    for customer access
-   =====================*/
-  protected String getGroup() {
+  @Override
+  public String getGroup() {
+    if (StringUtils.isBlank(group)) {
+      throw new WorkbookValidateException("row validator group must be set");
+    }
     return group;
   }
 
-  protected Set<String> getDependsOn() {
+  @Override
+  public Set<String> getDependsOn() {
     return dependsOn;
   }
 
-  protected Set<String> getMessageOnFields() {
+  @Override
+  public Set<String> getMessageOnFields() {
     return messageOnFields;
   }
 
-  protected String getErrorMessage() {
+  @Override
+  public String getErrorMessage() {
     return errorMessage;
   }
+
+  protected abstract V getThis();
+
+  protected abstract boolean customValid(Row row, SheetMeta sheetMeta);
 }

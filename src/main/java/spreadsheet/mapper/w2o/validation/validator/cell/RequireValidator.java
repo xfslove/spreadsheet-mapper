@@ -17,7 +17,7 @@ public class RequireValidator extends CellValidatorAdapter<RequireValidator> {
   }
 
   @Override
-  protected boolean valid(Cell cell, FieldMeta fieldMeta) {
+  public boolean valid(Cell cell, FieldMeta fieldMeta) {
     return customValid(cell, fieldMeta);
   }
 

@@ -8,7 +8,7 @@ import spreadsheet.mapper.model.meta.FieldMeta;
  * <p>
  * Created by hanwen on 15-12-16.
  */
-public interface FieldValueSetter<T> extends ValueSetter<T> {
+public interface FieldSetter<T> extends Setter<T> {
 
   /**
    * @return which field this setter matched

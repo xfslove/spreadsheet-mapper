@@ -20,12 +20,12 @@ public class RegexFormatValidatorTest {
 
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
 
-    CellValidator validator0 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.int1").end();
-    CellValidator validator1 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.int2").end();
-    CellValidator validator2 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.long1").end();
-    CellValidator validator3 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.double1").end();
-    CellValidator validator4 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.string").end();
-    CellValidator validator5 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.localDate").end();
+    CellValidator validator0 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.int1");
+    CellValidator validator1 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.int2");
+    CellValidator validator2 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.long1");
+    CellValidator validator3 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.double1");
+    CellValidator validator4 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.string");
+    CellValidator validator5 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.localDate");
 
 
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();

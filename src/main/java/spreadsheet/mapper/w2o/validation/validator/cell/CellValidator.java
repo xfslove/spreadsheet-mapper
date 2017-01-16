@@ -29,6 +29,7 @@ public interface CellValidator extends DependencyValidator {
 
   /**
    * @return message on which field
+   * @see FieldMeta#getName()
    */
   String getMessageOnField();
 }

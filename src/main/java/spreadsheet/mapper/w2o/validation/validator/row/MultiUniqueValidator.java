@@ -36,7 +36,7 @@ public class MultiUniqueValidator extends RowValidatorAdapter<MultiUniqueValidat
   }
 
   @Override
-  protected Set<String> getMessageOnFields() {
+  public Set<String> getMessageOnFields() {
     Set<String> messageOnFields = super.getMessageOnFields();
 
     if (CollectionUtils.isEmpty(messageOnFields)) {
@@ -55,7 +55,7 @@ public class MultiUniqueValidator extends RowValidatorAdapter<MultiUniqueValidat
 
     List<String> holdStringList = new ArrayList<>();
 
-    for (String field : getMultiUniqueFields()) {
+    for (String field : multiUniqueFields) {
       FieldMeta fieldMeta = sheetMeta.getFieldMeta(field);
       Cell cell = row.getCell(fieldMeta.getColumnIndex());
       holdStringList.add(buildHoldString(fieldMeta, cell));
@@ -80,12 +80,5 @@ public class MultiUniqueValidator extends RowValidatorAdapter<MultiUniqueValidat
    */
   protected String buildHoldString(FieldMeta fieldMeta, Cell cell) {
     return fieldMeta.getName() + Constants.NEGATIVE_SEPARATOR + cell.getValue();
-  }
-
-  /*=====================
-    for customer access
-   =====================*/
-  protected Set<String> getMultiUniqueFields() {
-    return multiUniqueFields;
   }
 }

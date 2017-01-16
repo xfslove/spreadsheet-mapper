@@ -6,9 +6,9 @@ import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.w2o.process.factory.ObjectFactory;
-import spreadsheet.mapper.w2o.process.setter.BeanUtilsValueSetter;
-import spreadsheet.mapper.w2o.process.setter.FieldValueSetter;
-import spreadsheet.mapper.w2o.process.setter.ValueSetter;
+import spreadsheet.mapper.w2o.process.setter.BeanUtilsSetter;
+import spreadsheet.mapper.w2o.process.setter.FieldSetter;
+import spreadsheet.mapper.w2o.process.setter.Setter;
 import spreadsheet.mapper.w2o.process.listener.*;
 
 import java.util.*;
@@ -32,19 +32,19 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
 
   private CellProcessListener<T> cellProcessListener = new NoopCellProcessListener<>();
 
-  private Map<String, FieldValueSetter<T>> key2fieldValueSetter = new LinkedHashMap<>();
+  private Map<String, FieldSetter<T>> field2setter = new LinkedHashMap<>();
 
-  private ValueSetter<T> defaultValueSetter = new BeanUtilsValueSetter<>();
+  private Setter<T> defaultSetter = new BeanUtilsSetter<>();
 
   @Override
   @SuppressWarnings("unchecked")
-  public SheetProcessHelper<T> fieldValueSetters(FieldValueSetter<T>... fieldValueSetters) {
-    if (fieldValueSetters == null) {
+  public SheetProcessHelper<T> fieldSetters(FieldSetter<T>... fieldSetters) {
+    if (fieldSetters == null) {
       return this;
     }
 
-    for (FieldValueSetter<T> setter : fieldValueSetters) {
-      key2fieldValueSetter.put(setter.getMatchField(), setter);
+    for (FieldSetter<T> setter : fieldSetters) {
+      field2setter.put(setter.getMatchField(), setter);
     }
     return this;
   }
@@ -123,13 +123,13 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
 
         cellProcessListener.before(cell, fieldMeta, object);
 
-        FieldValueSetter<T> fieldValueSetter = key2fieldValueSetter.get(fieldMeta.getName());
+        FieldSetter<T> fieldSetter = field2setter.get(fieldMeta.getName());
 
-        if (fieldValueSetter != null) {
-          fieldValueSetter.set(object, cell, fieldMeta);
+        if (fieldSetter != null) {
+          fieldSetter.set(object, cell, fieldMeta);
         } else {
 
-          defaultValueSetter.set(object, cell, fieldMeta);
+          defaultSetter.set(object, cell, fieldMeta);
         }
 
         cellProcessListener.after(cell, fieldMeta, object);

@@ -54,18 +54,18 @@ public class DefaultSheetComposeHelperTest {
   }
 
   private void addExtractor(SheetComposeHelper<TestBean> sheetComposeHelper) {
-    sheetComposeHelper.fieldValueConverters(
-        new PlainNumberConverter("test.int1"),
-        new PlainNumberConverter("test.int2"),
-        new PlainNumberConverter("test.long1"),
-        new PlainNumberConverter("test.long2"),
-        new PlainNumberConverter("test.float1"),
-        new PlainNumberConverter("test.float2"),
-        new PlainNumberConverter("test.double1"),
-        new PlainNumberConverter("test.double2"),
-        new BooleanConverter("pass", "failure", "test.boolean1"),
-        new BooleanConverter("pass", "failure", "test.boolean2"),
-        new LocalDateTimeConverter("yyyy-MM-dd HH:mm:ss", "test.localDateTime")
+    sheetComposeHelper.fieldConverters(
+        new PlainNumberConverter<TestBean>().matchField("test.int1"),
+        new PlainNumberConverter<TestBean>().matchField("test.int2"),
+        new PlainNumberConverter<TestBean>().matchField("test.long1"),
+        new PlainNumberConverter<TestBean>().matchField("test.long2"),
+        new PlainNumberConverter<TestBean>().matchField("test.float1"),
+        new PlainNumberConverter<TestBean>().matchField("test.float2"),
+        new PlainNumberConverter<TestBean>().matchField("test.double1"),
+        new PlainNumberConverter<TestBean>().matchField("test.double2"),
+        new BooleanConverter<TestBean>().matchField("test.boolean1").trueString("pass").falseString("failure"),
+        new BooleanConverter<TestBean>().matchField("test.boolean2").trueString("pass").falseString("failure"),
+        new LocalDateTimeConverter<TestBean>().matchField("test.localDateTime").pattern("yyyy-MM-dd HH:mm:ss")
     );
   }
 }

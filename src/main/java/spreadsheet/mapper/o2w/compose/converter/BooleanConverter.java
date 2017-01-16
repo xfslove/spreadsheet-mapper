@@ -16,7 +16,7 @@ import spreadsheet.mapper.utils.FieldUtils;
  * <p>
  * Created by hanwen on 16/3/18.
  */
-public class BooleanConverter<T> extends FieldValueConverterAdapter<T> {
+public class BooleanConverter<T> extends FieldConverterAdapter<T, BooleanConverter<T>> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BooleanConverter.class);
 
@@ -24,10 +24,19 @@ public class BooleanConverter<T> extends FieldValueConverterAdapter<T> {
 
   private String falseString;
 
-  public BooleanConverter(String trueString, String falseString, String matchField) {
-    super(matchField);
+  public BooleanConverter<T> trueString(String trueString) {
     this.trueString = trueString;
+    return getThis();
+  }
+
+  public BooleanConverter<T> falseString(String falseString) {
     this.falseString = falseString;
+    return getThis();
+  }
+
+  @Override
+  protected BooleanConverter<T> getThis() {
+    return this;
   }
 
   @Override

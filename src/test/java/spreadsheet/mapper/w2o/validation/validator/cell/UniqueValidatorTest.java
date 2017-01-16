@@ -24,7 +24,7 @@ public class UniqueValidatorTest {
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
     Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
 
-    CellValidator validator = new UniqueValidator().matchField("test.string").end();
+    CellValidator validator = new UniqueValidator().matchField("test.string");
 
     assertTrue(validator.valid(cellMap1.get("test.string"), fieldMetaMap.get("test.string")));
     assertFalse(validator.valid(cellMap2.get("test.string"), fieldMetaMap.get("test.string")));

@@ -23,9 +23,9 @@ import java.util.Calendar;
  * <p>
  * Created by hanwen on 15-12-18.
  */
-public class BeanUtilsValueSetter<T> implements ValueSetter<T> {
+public class BeanUtilsSetter<T> implements Setter<T> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(BeanUtilsValueSetter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BeanUtilsSetter.class);
 
   {
     registerDefaultConverter();

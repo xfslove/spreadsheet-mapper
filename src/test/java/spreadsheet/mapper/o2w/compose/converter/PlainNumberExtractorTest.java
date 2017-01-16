@@ -30,15 +30,15 @@ public class PlainNumberExtractorTest {
     FieldMeta fieldMeta8 = fieldMetaMap.get("test.float2");
     FieldMeta fieldMeta9 = fieldMetaMap.get("test.bigDecimal");
 
-    PlainNumberConverter extractor1 = new PlainNumberConverter("test.double1");
-    PlainNumberConverter extractor2 = new PlainNumberConverter("test.double2");
-    PlainNumberConverter extractor3 = new PlainNumberConverter("test.long1");
-    PlainNumberConverter extractor4 = new PlainNumberConverter("test.long2");
-    PlainNumberConverter extractor5 = new PlainNumberConverter("test.int1");
-    PlainNumberConverter extractor6 = new PlainNumberConverter("test.int2");
-    PlainNumberConverter extractor7 = new PlainNumberConverter("test.float1");
-    PlainNumberConverter extractor8 = new PlainNumberConverter("test.float2");
-    PlainNumberConverter extractor9 = new PlainNumberConverter("test.float2");
+    PlainNumberConverter<TestBean> extractor1 = new PlainNumberConverter<TestBean>().matchField("test.double1");
+    PlainNumberConverter<TestBean> extractor2 = new PlainNumberConverter<TestBean>().matchField("test.double2");
+    PlainNumberConverter<TestBean> extractor3 = new PlainNumberConverter<TestBean>().matchField("test.long1");
+    PlainNumberConverter<TestBean> extractor4 = new PlainNumberConverter<TestBean>().matchField("test.long2");
+    PlainNumberConverter<TestBean> extractor5 = new PlainNumberConverter<TestBean>().matchField("test.int1");
+    PlainNumberConverter<TestBean> extractor6 = new PlainNumberConverter<TestBean>().matchField("test.int2");
+    PlainNumberConverter<TestBean> extractor7 = new PlainNumberConverter<TestBean>().matchField("test.float1");
+    PlainNumberConverter<TestBean> extractor8 = new PlainNumberConverter<TestBean>().matchField("test.float2");
+    PlainNumberConverter<TestBean> extractor9 = new PlainNumberConverter<TestBean>().matchField("test.float2");
 
     TestBean testBean1 = TestFactory.createBean1();
     assertEquals(extractor1.getStringValue(testBean1, new RowBean(), fieldMeta1), "0.00000000000000000001");

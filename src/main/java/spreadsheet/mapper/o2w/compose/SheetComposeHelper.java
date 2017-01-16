@@ -2,7 +2,7 @@ package spreadsheet.mapper.o2w.compose;
 
 import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.SheetMeta;
-import spreadsheet.mapper.o2w.compose.converter.FieldValueConverter;
+import spreadsheet.mapper.o2w.compose.converter.FieldConverter;
 
 import java.util.List;
 
@@ -15,16 +15,16 @@ public interface SheetComposeHelper<T> {
 
   /**
    * <pre>
-   * {@link FieldValueConverter} unique with {@link FieldValueConverter#getMatchField()} in one sheet (one to one),
-   * if you add {@link FieldValueConverter} with same {@link FieldValueConverter#getMatchField()},
+   * {@link FieldConverter} unique with {@link FieldConverter#getMatchField()} in one sheet (one to one),
+   * if you add {@link FieldConverter} with same {@link FieldConverter#getMatchField()},
    * after add will override before add
    * </pre>
    *
-   * @param fieldValueExtractors {@link FieldValueConverter}
+   * @param fieldValueExtractors {@link FieldConverter}
    * @return {@link SheetComposeHelper}
    */
   @SuppressWarnings("unchecked")
-  SheetComposeHelper<T> fieldValueConverters(FieldValueConverter<T>... fieldValueExtractors);
+  SheetComposeHelper<T> fieldConverters(FieldConverter<T>... fieldValueExtractors);
 
   /**
    * @param sheetMeta {@link SheetMeta}

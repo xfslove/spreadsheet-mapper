@@ -20,7 +20,7 @@ public class LocalDateTimeValidatorTest {
   public void testCustomValidate() throws Exception {
 
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
-    CellValidator validator = new LocalDateTimeValidator().matchField("test.localDateTime").pattern("yyyy-MM-dd HH:mm:ss").end();
+    CellValidator validator = new LocalDateTimeValidator().matchField("test.localDateTime").pattern("yyyy-MM-dd HH:mm:ss");
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
     assertTrue(validator.valid(cellMap1.get("test.localDateTime"), fieldMetaMap.get("test.localDateTime")));
 

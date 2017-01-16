@@ -8,7 +8,7 @@ import spreadsheet.mapper.model.meta.FieldMeta;
  * <p>
  * Created by hanwen on 2016/12/30.
  */
-public interface ValueSetter<T> {
+public interface Setter<T> {
 
   /**
    * set object field from cell value

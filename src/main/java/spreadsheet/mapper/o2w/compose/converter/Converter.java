@@ -8,7 +8,7 @@ import spreadsheet.mapper.model.meta.FieldMeta;
  * <p>
  * Created by hanwen on 2016/12/30.
  */
-public interface ValueConverter<T> {
+public interface Converter<T> {
 
   /**
    * get human readable value to shown on cell

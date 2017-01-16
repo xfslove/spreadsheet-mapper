@@ -4,7 +4,7 @@ import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.w2o.validation.validator.cell.CellValidator;
 import spreadsheet.mapper.model.core.Sheet;
-import spreadsheet.mapper.w2o.process.setter.FieldValueSetter;
+import spreadsheet.mapper.w2o.process.setter.FieldSetter;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.List;
  * required field validator
  *
  * all validators matches by field,
- * if field lost means all the ({@link CellValidator} and {@link FieldValueSetter}) of this field will skip.
+ * if field lost means all the ({@link CellValidator} and {@link FieldSetter}) of this field will skip.
  * this validator useful to detect if excel files contains all the fields you want after.
  *
  * eg: class A has fields [A, B...].

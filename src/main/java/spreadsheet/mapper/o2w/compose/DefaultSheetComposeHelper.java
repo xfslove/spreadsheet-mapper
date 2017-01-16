@@ -6,9 +6,9 @@ import spreadsheet.mapper.model.core.*;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.HeaderMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
-import spreadsheet.mapper.o2w.compose.converter.BeanUtilsValueConverter;
-import spreadsheet.mapper.o2w.compose.converter.FieldValueConverter;
-import spreadsheet.mapper.o2w.compose.converter.ValueConverter;
+import spreadsheet.mapper.o2w.compose.converter.BeanUtilsConverter;
+import spreadsheet.mapper.o2w.compose.converter.FieldConverter;
+import spreadsheet.mapper.o2w.compose.converter.Converter;
 
 import java.util.*;
 
@@ -21,18 +21,18 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
 
   private List<T> data = new ArrayList<>();
 
-  private Map<String, FieldValueConverter<T>> key2fieldValueExtractor = new LinkedHashMap<>();
+  private Map<String, FieldConverter<T>> field2converter = new LinkedHashMap<>();
 
-  private ValueConverter<T> defaultValueConverter = new BeanUtilsValueConverter<>();
+  private Converter<T> defaultConverter = new BeanUtilsConverter<>();
 
   @Override
   @SuppressWarnings("unchecked")
-  public SheetComposeHelper<T> fieldValueConverters(FieldValueConverter<T>... fieldValueExtractors) {
+  public SheetComposeHelper<T> fieldConverters(FieldConverter<T>... fieldValueExtractors) {
     if (fieldValueExtractors == null) {
       return this;
     }
-    for (FieldValueConverter<T> extractor : fieldValueExtractors) {
-      key2fieldValueExtractor.put(extractor.getMatchField(), extractor);
+    for (FieldConverter<T> extractor : fieldValueExtractors) {
+      field2converter.put(extractor.getMatchField(), extractor);
     }
     return this;
   }
@@ -146,13 +146,13 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
   }
 
   private String getFieldStringValue(T object, Row row, FieldMeta fieldMeta) {
-    FieldValueConverter<T> extractor = key2fieldValueExtractor.get(fieldMeta.getName());
+    FieldConverter<T> extractor = field2converter.get(fieldMeta.getName());
 
     if (extractor != null) {
       return extractor.getStringValue(object, row, fieldMeta);
     }
 
-    return defaultValueConverter.getStringValue(object, row, fieldMeta);
+    return defaultConverter.getStringValue(object, row, fieldMeta);
   }
 
   private int getLastColumnNum(List<FieldMeta> fieldMetas) {

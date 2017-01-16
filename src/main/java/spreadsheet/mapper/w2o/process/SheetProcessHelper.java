@@ -6,7 +6,7 @@ import spreadsheet.mapper.w2o.process.factory.ObjectFactory;
 import spreadsheet.mapper.w2o.process.listener.CellProcessListener;
 import spreadsheet.mapper.w2o.process.listener.RowProcessListener;
 import spreadsheet.mapper.w2o.process.listener.SheetProcessListener;
-import spreadsheet.mapper.w2o.process.setter.FieldValueSetter;
+import spreadsheet.mapper.w2o.process.setter.FieldSetter;
 
 import java.util.List;
 
@@ -19,17 +19,17 @@ public interface SheetProcessHelper<T> {
 
   /**
    * <pre>
-   * {@link FieldValueSetter} unique with {@link FieldValueSetter#getMatchField()} in one sheet (one to one),
-   * if you add {@link FieldValueSetter} same {@link FieldValueSetter#getMatchField()},
+   * {@link FieldSetter} unique with {@link FieldSetter#getMatchField()} in one sheet (one to one),
+   * if you add {@link FieldSetter} same {@link FieldSetter#getMatchField()},
    * after add will override before add
    * </pre>
    *
-   * @param fieldValueSetters {@link FieldValueSetter}
+   * @param fieldSetters {@link FieldSetter}
    * @return {@link SheetProcessHelper}
-   * @see FieldValueSetter
+   * @see FieldSetter
    */
   @SuppressWarnings("unchecked")
-  SheetProcessHelper<T> fieldValueSetters(FieldValueSetter<T>... fieldValueSetters);
+  SheetProcessHelper<T> fieldSetters(FieldSetter<T>... fieldSetters);
 
   /**
    * @param objectFactory {@link ObjectFactory}

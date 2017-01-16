@@ -15,7 +15,7 @@ import static org.testng.Assert.assertNull;
 /**
  * Created by hanwen on 2017/1/5.
  */
-public class LocalDateTimeValueSetterTest {
+public class LocalDateTimeSetterTest {
 
   @Test
   public void testSet() throws Exception {
@@ -25,7 +25,7 @@ public class LocalDateTimeValueSetterTest {
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
     Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
 
-    LocalDateTimeValueSetter setter = new LocalDateTimeValueSetter("yyyy-MM-dd HH:mm:ss", "test.localDateTime");
+    LocalDateTimeSetter<TestBean> setter = new LocalDateTimeSetter<TestBean>().matchField("test.localDateTime").pattern("yyyy-MM-dd HH:mm:ss");
 
     TestBean testBean1 = new TestBean();
     setter.set(testBean1, cellMap1.get("test.localDateTime"), fieldMetaMap.get("test.localDateTime"));

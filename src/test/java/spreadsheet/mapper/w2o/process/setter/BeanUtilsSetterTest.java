@@ -14,14 +14,14 @@ import static org.testng.Assert.*;
 /**
  * Created by hanwen on 2017/1/5.
  */
-public class BeanUtilsValueSetterTest {
+public class BeanUtilsSetterTest {
 
   @Test
   public void testSet() throws Exception {
 
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
 
-    BeanUtilsValueSetter setter = new BeanUtilsValueSetter();
+    BeanUtilsSetter<TestBean> setter = new BeanUtilsSetter<>();
 
 
     TestBean testBean = new TestBean();

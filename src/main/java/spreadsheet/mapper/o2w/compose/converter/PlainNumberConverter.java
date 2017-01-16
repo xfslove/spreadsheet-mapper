@@ -17,12 +17,13 @@ import java.math.BigDecimal;
  * <p>
  * Created by hanwen on 2017/1/4.
  */
-public class PlainNumberConverter<T> extends FieldValueConverterAdapter<T> {
+public class PlainNumberConverter<T> extends FieldConverterAdapter<T, PlainNumberConverter<T>> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PlainNumberConverter.class);
 
-  public PlainNumberConverter(String matchField) {
-    super(matchField);
+  @Override
+  protected PlainNumberConverter<T> getThis() {
+    return this;
   }
 
   @Override

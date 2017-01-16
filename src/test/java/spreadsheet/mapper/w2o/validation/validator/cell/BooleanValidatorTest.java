@@ -20,8 +20,8 @@ public class BooleanValidatorTest {
   public void testCustomValidate() throws Exception {
 
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
-    CellValidator validator0 = new BooleanValidator().matchField("test.boolean1").supportedTrue("pass").supportedFalse("failure").end();
-    CellValidator validator1 = new BooleanValidator().matchField("test.boolean2").supportedTrue("pass").supportedFalse("failure").end();
+    CellValidator validator0 = new BooleanValidator().matchField("test.boolean1").supportedTrue("pass").supportedFalse("failure");
+    CellValidator validator1 = new BooleanValidator().matchField("test.boolean2").supportedTrue("pass").supportedFalse("failure");
 
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
     assertTrue(validator0.valid(cellMap1.get("test.boolean1"), fieldMetaMap.get("test.boolean1")));

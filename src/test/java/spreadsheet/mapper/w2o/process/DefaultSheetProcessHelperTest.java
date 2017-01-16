@@ -9,9 +9,9 @@ import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.model.meta.SheetMetaBean;
 import spreadsheet.mapper.w2o.process.factory.ObjectFactory;
-import spreadsheet.mapper.w2o.process.setter.BooleanValueSetter;
-import spreadsheet.mapper.w2o.process.setter.LocalDateTimeValueSetter;
-import spreadsheet.mapper.w2o.process.setter.LocalDateValueSetter;
+import spreadsheet.mapper.w2o.process.setter.BooleanSetter;
+import spreadsheet.mapper.w2o.process.setter.LocalDateTimeSetter;
+import spreadsheet.mapper.w2o.process.setter.LocalDateSetter;
 
 import java.util.List;
 
@@ -31,11 +31,11 @@ public class DefaultSheetProcessHelperTest {
     SheetProcessHelper<TestBean> processor1 = new DefaultSheetProcessHelper<TestBean>()
         .sheet(sheet).sheetMeta(sheetMeta1).objectFactory(new TestBeanObjectFactory());
 
-    processor1.fieldValueSetters(
-        new LocalDateTimeValueSetter("yyyy-MM-dd HH:mm:ss", "test.localDateTime"),
-        new LocalDateValueSetter("yyyy-MM-dd", "test.localDate"),
-        new BooleanValueSetter(new String[]{"pass"}, new String[]{"failure"}, "test.boolean1"),
-        new BooleanValueSetter(new String[]{"pass"}, new String[]{"failure"}, "test.boolean2")
+    processor1.fieldSetters(
+        new LocalDateTimeSetter<TestBean>().pattern("yyyy-MM-dd HH:mm:ss").matchField("test.localDateTime"),
+        new LocalDateSetter<TestBean>().pattern("yyyy-MM-dd").matchField("test.localDate"),
+        new BooleanSetter<TestBean>().matchField("test.boolean1").toTrue("pass").toFalse("failure"),
+        new BooleanSetter<TestBean>().toTrue("pass").toFalse("failure").matchField("test.boolean2")
     );
 
     List<TestBean> list1 = processor1.process();

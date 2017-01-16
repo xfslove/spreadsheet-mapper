@@ -13,7 +13,7 @@ import static org.testng.Assert.*;
 /**
  * Created by hanwen on 2017/1/5.
  */
-public class BooleanValueSetterTest {
+public class BooleanSetterTest {
 
   @Test
   public void testSet() throws Exception {
@@ -24,10 +24,10 @@ public class BooleanValueSetterTest {
     Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
 
     // touch register
-    new BeanUtilsValueSetter();
+    new BeanUtilsSetter();
 
-    BooleanValueSetter setter1 = new BooleanValueSetter(new String[]{"pass"}, new String[]{"failure"}, "test.boolean1");
-    BooleanValueSetter setter2 = new BooleanValueSetter(new String[]{"pass"}, new String[]{"failure"}, "test.boolean2");
+    BooleanSetter<TestBean> setter1 = new BooleanSetter<TestBean>().matchField("test.boolean1").toFalse("failure").toTrue("pass");
+    BooleanSetter<TestBean> setter2 = new BooleanSetter<TestBean>().toTrue("pass").toFalse("failure").matchField("test.boolean2");
 
     TestBean testBean1 = new TestBean();
     setter1.set(testBean1, cellMap1.get("test.boolean1"), fieldMetaMap.get("test.boolean1"));

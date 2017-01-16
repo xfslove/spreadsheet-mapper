@@ -20,10 +20,10 @@ public class NumberScaleRangeValidatorTest {
 
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
 
-    CellValidator validator0 = new NumberScaleRangeValidator().matchField("test.float1").gte(1).lte(10).end();
-    CellValidator validator1 = new NumberScaleRangeValidator().matchField("test.float2").gte(1).lte(10).end();
-    CellValidator validator2 = new NumberScaleRangeValidator().matchField("test.double1").gte(1).lte(10).end();
-    CellValidator validator3 = new NumberScaleRangeValidator().matchField("test.double2").gte(1).lte(10).end();
+    CellValidator validator0 = new NumberScaleRangeValidator().matchField("test.float1").gte(1).lte(10);
+    CellValidator validator1 = new NumberScaleRangeValidator().matchField("test.float2").gte(1).lte(10);
+    CellValidator validator2 = new NumberScaleRangeValidator().matchField("test.double1").gte(1).lte(10);
+    CellValidator validator3 = new NumberScaleRangeValidator().matchField("test.double2").gte(1).lte(10);
 
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
     assertTrue(validator0.valid(cellMap1.get("test.float1"), fieldMetaMap.get("test.float1")));

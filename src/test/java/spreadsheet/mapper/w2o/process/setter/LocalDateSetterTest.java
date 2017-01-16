@@ -14,7 +14,7 @@ import static org.testng.Assert.assertEquals;
 /**
  * Created by hanwen on 2017/1/5.
  */
-public class LocalDateValueSetterTest {
+public class LocalDateSetterTest {
 
   @Test
   public void testSet() throws Exception {
@@ -24,8 +24,8 @@ public class LocalDateValueSetterTest {
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
     Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
 
-    LocalDateValueSetter setter1 = new LocalDateValueSetter("yyyy-MM-dd", "test.localDate");
-    LocalDateValueSetter setter2 = new LocalDateValueSetter("yyyy/MM/dd", "test.localDate");
+    LocalDateSetter<TestBean> setter1 = new LocalDateSetter<TestBean>().matchField("test.localDate").pattern("yyyy-MM-dd");
+    LocalDateSetter<TestBean> setter2 = new LocalDateSetter<TestBean>().pattern("yyyy/MM/dd").matchField("test.localDate");
 
     TestBean testBean1 = new TestBean();
     setter1.set(testBean1, cellMap1.get("test.localDate"), fieldMetaMap.get("test.localDate"));
