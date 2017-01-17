@@ -1,7 +1,6 @@
 package spreadsheet.mapper.w2o.process;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -12,11 +11,12 @@ public class DefaultWorkbookProcessHelper implements WorkbookProcessHelper {
   private List<SheetProcessHelper> sheetProcessHelpers = new ArrayList<>();
 
   @Override
-  public WorkbookProcessHelper sheetProcesses(SheetProcessHelper... sheetProcessHelpers) {
+  public WorkbookProcessHelper addSheetProcessHelper(SheetProcessHelper sheetProcessHelper) {
     if (sheetProcessHelpers == null) {
-      return this;
+      throw new WorkbookProcessException("sheet process helper can not be null");
     }
-    Collections.addAll(this.sheetProcessHelpers, sheetProcessHelpers);
+
+    sheetProcessHelpers.add(sheetProcessHelper);
     return this;
   }
 

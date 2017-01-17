@@ -6,10 +6,10 @@ import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.w2o.process.factory.ObjectFactory;
+import spreadsheet.mapper.w2o.process.listener.*;
 import spreadsheet.mapper.w2o.process.setter.BeanUtilsSetter;
 import spreadsheet.mapper.w2o.process.setter.FieldSetter;
 import spreadsheet.mapper.w2o.process.setter.Setter;
-import spreadsheet.mapper.w2o.process.listener.*;
 
 import java.util.*;
 
@@ -37,50 +37,71 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
   private Setter<T> defaultSetter = new BeanUtilsSetter<>();
 
   @Override
-  @SuppressWarnings("unchecked")
-  public SheetProcessHelper<T> fieldSetters(FieldSetter<T>... fieldSetters) {
-    if (fieldSetters == null) {
-      return this;
+  public SheetProcessHelper<T> addFieldSetter(FieldSetter<T> fieldSetter) {
+    if (fieldSetter == null) {
+      throw new WorkbookProcessException("field setter can not be null");
     }
 
-    for (FieldSetter<T> setter : fieldSetters) {
-      field2setter.put(setter.getMatchField(), setter);
-    }
+    field2setter.put(fieldSetter.getMatchField(), fieldSetter);
     return this;
   }
 
   @Override
-  public SheetProcessHelper<T> objectFactory(ObjectFactory<T> objectFactory) {
+  public SheetProcessHelper<T> setObjectFactory(ObjectFactory<T> objectFactory) {
+    if (objectFactory == null) {
+      throw new WorkbookProcessException("object factory can not be null");
+    }
+
     this.objectFactory = objectFactory;
     return this;
   }
 
   @Override
-  public SheetProcessHelper<T> sheetProcessorListener(SheetProcessListener<T> sheetProcessListener) {
+  public SheetProcessHelper<T> setSheetProcessorListener(SheetProcessListener<T> sheetProcessListener) {
+    if (sheetProcessListener == null) {
+      throw new WorkbookProcessException("sheet process listener can not be null");
+    }
+
     this.sheetProcessListener = sheetProcessListener;
     return this;
   }
 
   @Override
-  public SheetProcessHelper<T> rowProcessorListener(RowProcessListener<T> rowProcessListener) {
+  public SheetProcessHelper<T> setRowProcessorListener(RowProcessListener<T> rowProcessListener) {
+    if (rowProcessListener == null) {
+      throw new WorkbookProcessException("row process listener can not be null");
+    }
+
     this.rowProcessListener = rowProcessListener;
     return this;
   }
 
   @Override
-  public SheetProcessHelper<T> cellProcessorListener(CellProcessListener<T> cellProcessListener) {
+  public SheetProcessHelper<T> setCellProcessorListener(CellProcessListener<T> cellProcessListener) {
+    if (cellProcessListener == null) {
+      throw new WorkbookProcessException("cell process listener can not be null");
+    }
+
     this.cellProcessListener = cellProcessListener;
     return this;
   }
 
   @Override
-  public SheetProcessHelper<T> sheet(Sheet sheet) {
+  public SheetProcessHelper<T> setSheet(Sheet sheet) {
+    if (sheet == null) {
+      throw new WorkbookProcessException("sheet can not be null");
+    }
+
     this.sheet = sheet;
     return this;
   }
 
   @Override
-  public SheetProcessHelper<T> sheetMeta(SheetMeta sheetMeta) {
+  public SheetProcessHelper<T> setSheetMeta(SheetMeta sheetMeta) {
+    if (sheetMeta == null) {
+      throw new WorkbookProcessException("sheet meta can not be null");
+    }
+
     this.sheetMeta = sheetMeta;
     return this;
   }
@@ -108,9 +129,9 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
     for (int i = sheetMeta.getDataStartRowIndex(); i <= sheet.sizeOfRows(); i++) {
       Row row = sheet.getRow(i);
 
-      T object = objectFactory.create(row);
+      T object = objectFactory.create(row, sheetMeta);
 
-      rowProcessListener.before(row, sheetMeta, object);
+      rowProcessListener.before(object, row, sheetMeta);
 
       for (Cell cell : row.getCells()) {
 
@@ -121,27 +142,27 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
           continue;
         }
 
-        cellProcessListener.before(cell, fieldMeta, object);
+        cellProcessListener.before(object, cell, fieldMeta);
+
+        // use default setter first
+        defaultSetter.set(object, cell, fieldMeta);
 
         FieldSetter<T> fieldSetter = field2setter.get(fieldMeta.getName());
 
         if (fieldSetter != null) {
           fieldSetter.set(object, cell, fieldMeta);
-        } else {
-
-          defaultSetter.set(object, cell, fieldMeta);
         }
 
-        cellProcessListener.after(cell, fieldMeta, object);
+        cellProcessListener.after(object, cell, fieldMeta);
 
       }
 
-      rowProcessListener.after(row, sheetMeta, object);
+      rowProcessListener.after(object, row, sheetMeta);
 
       oneSheetObjects.add(object);
     }
 
-    sheetProcessListener.after(sheet, sheetMeta, oneSheetObjects);
+    sheetProcessListener.after(oneSheetObjects, sheet, sheetMeta);
 
     return oneSheetObjects;
   }

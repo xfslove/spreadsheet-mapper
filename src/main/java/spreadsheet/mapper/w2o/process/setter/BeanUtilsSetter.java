@@ -19,7 +19,7 @@ import java.util.Calendar;
 
 
 /**
- * using {@link BeanUtils#setProperty(Object, String, Object)}, this use to fallback
+ * using {@link BeanUtils#setProperty(Object, String, Object)}, this used as default setter
  * <p>
  * Created by hanwen on 15-12-18.
  */

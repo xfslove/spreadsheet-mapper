@@ -7,8 +7,8 @@ import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.HeaderMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.o2w.compose.converter.BeanUtilsConverter;
-import spreadsheet.mapper.o2w.compose.converter.FieldConverter;
 import spreadsheet.mapper.o2w.compose.converter.Converter;
+import spreadsheet.mapper.o2w.compose.converter.FieldConverter;
 
 import java.util.*;
 
@@ -26,25 +26,29 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
   private Converter<T> defaultConverter = new BeanUtilsConverter<>();
 
   @Override
-  @SuppressWarnings("unchecked")
-  public SheetComposeHelper<T> fieldConverters(FieldConverter<T>... fieldValueExtractors) {
-    if (fieldValueExtractors == null) {
-      return this;
+  public SheetComposeHelper<T> addFieldConverter(FieldConverter<T> fieldConverter) {
+    if (fieldConverter == null) {
+      throw new WorkbookComposeException("field converter can not be null");
     }
-    for (FieldConverter<T> extractor : fieldValueExtractors) {
-      field2converter.put(extractor.getMatchField(), extractor);
-    }
+
+    field2converter.put(fieldConverter.getMatchField(), fieldConverter);
     return this;
   }
 
   @Override
-  public SheetComposeHelper<T> sheetMeta(SheetMeta sheetMeta) {
+  public SheetComposeHelper<T> setSheetMeta(SheetMeta sheetMeta) {
+    if (sheetMeta == null) {
+      throw new WorkbookComposeException("sheet meta can not be null");
+    }
     this.sheetMeta = sheetMeta;
     return this;
   }
 
   @Override
-  public SheetComposeHelper<T> data(List<T> data) {
+  public SheetComposeHelper<T> setData(List<T> data) {
+    if (data == null) {
+      throw new WorkbookComposeException("data can not be null");
+    }
     this.data = data;
     return this;
   }
@@ -72,7 +76,7 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
     for (T object : data) {
       Row row = createRow();
       sheet.addRow(row);
-      createDataCells(row, object, sheetMeta);
+      createDataCells(object, row, sheetMeta);
     }
 
     return sheet;
@@ -122,37 +126,32 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
 
   }
 
-  private void createDataCells(Row row, T object, SheetMeta sheetMeta) {
+  private void createDataCells(T object, Row row, SheetMeta sheetMeta) {
 
     List<FieldMeta> fieldMetas = sheetMeta.getFieldMetas();
     int lastColumnNum = getLastColumnNum(fieldMetas);
     Map<Integer, FieldMeta> columnIndex2fieldMeta = buildFieldMetaMap(fieldMetas);
 
     for (int i = 1; i <= lastColumnNum; i++) {
-      Cell cell;
+      Cell cell = new CellBean();
       FieldMeta fieldMeta = columnIndex2fieldMeta.get(i);
 
       if (fieldMeta == null) {
-
-        cell = new CellBean();
         row.addCell(cell);
         continue;
       }
 
-      String value = getFieldStringValue(object, row, fieldMeta);
-      cell = new CellBean(value);
+      // use default converter first
+      cell = new CellBean(defaultConverter.getValue(object, cell, fieldMeta));
+
+      FieldConverter<T> converter = field2converter.get(fieldMeta.getName());
+
+      if (converter != null) {
+        cell = new CellBean(converter.getValue(object, cell, fieldMeta));
+      }
+
       row.addCell(cell);
     }
-  }
-
-  private String getFieldStringValue(T object, Row row, FieldMeta fieldMeta) {
-    FieldConverter<T> extractor = field2converter.get(fieldMeta.getName());
-
-    if (extractor != null) {
-      return extractor.getStringValue(object, row, fieldMeta);
-    }
-
-    return defaultConverter.getStringValue(object, row, fieldMeta);
   }
 
   private int getLastColumnNum(List<FieldMeta> fieldMetas) {

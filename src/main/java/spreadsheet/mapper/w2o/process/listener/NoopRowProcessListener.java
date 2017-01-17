@@ -9,12 +9,12 @@ import spreadsheet.mapper.model.meta.SheetMeta;
 public final class NoopRowProcessListener<T> implements RowProcessListener<T> {
 
   @Override
-  public void before(Row row, SheetMeta sheetMeta, T object) {
+  public void before(T object, Row row, SheetMeta sheetMeta) {
     // nothing
   }
 
   @Override
-  public void after(Row row, SheetMeta sheetMeta, T object) {
+  public void after(T object, Row row, SheetMeta sheetMeta) {
     // nothing
   }
 }

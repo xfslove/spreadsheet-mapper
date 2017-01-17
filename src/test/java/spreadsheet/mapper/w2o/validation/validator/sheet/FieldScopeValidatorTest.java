@@ -27,11 +27,11 @@ public class FieldScopeValidatorTest {
 
     String[] fields1 = fieldMetaMap.keySet().toArray(new String[0]);
 
-    FieldScopeValidator validator1 = new FieldScopeValidator("", fields1);
+    FieldScopeValidator validator1 = new FieldScopeValidator().fieldScopes(fields1).errorMessage("");
     assertTrue(validator1.valid(sheet, sheetMeta));
 
     String[] fields2 = new String[]{"1", "2", "3"};
-    FieldScopeValidator validator2 = new FieldScopeValidator("", fields2);
+    FieldScopeValidator validator2 = new FieldScopeValidator().fieldScopes(fields2).errorMessage("");
     assertFalse(validator2.valid(sheet, sheetMeta));
 
 
@@ -39,7 +39,7 @@ public class FieldScopeValidatorTest {
     System.arraycopy(fields1, 0, fields3, 0, fields1.length);
     fields3[fields3.length - 1] = "1";
 
-    FieldScopeValidator validator3 = new FieldScopeValidator("", fields3);
+    FieldScopeValidator validator3 = new FieldScopeValidator().fieldScopes(fields3).errorMessage("");;
     assertTrue(validator3.valid(sheet, sheetMeta));
   }
 

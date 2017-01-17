@@ -9,12 +9,12 @@ import spreadsheet.mapper.model.meta.FieldMeta;
 public final class NoopCellProcessListener<T> implements CellProcessListener<T> {
 
   @Override
-  public void before(Cell cell, FieldMeta fieldMeta, T object) {
+  public void before(T object, Cell cell, FieldMeta fieldMeta) {
     // nothing
   }
 
   @Override
-  public void after(Cell cell, FieldMeta fieldMeta, T object) {
+  public void after(T object, Cell cell, FieldMeta fieldMeta) {
     // nothing
   }
 }

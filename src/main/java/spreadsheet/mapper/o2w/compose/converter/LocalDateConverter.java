@@ -6,7 +6,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import spreadsheet.mapper.model.core.Row;
+import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.o2w.compose.WorkbookComposeException;
 import spreadsheet.mapper.utils.FieldUtils;
@@ -33,7 +33,7 @@ public class LocalDateConverter<T> extends FieldConverterAdapter<T, LocalDateCon
   }
 
   @Override
-  public String getStringValue(T object, Row row, FieldMeta fieldMeta) {
+  public String getValue(T object, Cell cell, FieldMeta fieldMeta) {
 
     try {
       Object value = PropertyUtils.getProperty(object, FieldUtils.detectRealFieldName(fieldMeta));

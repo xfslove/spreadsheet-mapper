@@ -36,9 +36,8 @@ public class Message2ExcelWriter implements MessageWriter {
   private Workbook workbook;
 
   {
-    messageWriteStrategies(
-        new SingleCommentInCellStrategy(),
-        new SingleTextBoxInSheetStrategy());
+    addMessageWriteStrategy(new SingleCommentInCellStrategy());
+    addMessageWriteStrategy(new SingleTextBoxInSheetStrategy());
   }
 
   /**
@@ -65,13 +64,12 @@ public class Message2ExcelWriter implements MessageWriter {
   }
 
   @Override
-  public MessageWriter messageWriteStrategies(MessageWriteStrategy... messageWriteStrategies) {
-    if (messageWriteStrategies == null) {
-      return this;
+  public MessageWriter addMessageWriteStrategy(MessageWriteStrategy messageWriteStrategy) {
+    if (messageWriteStrategy == null) {
+      throw new WorkbookWriteException("no message write strategy can not be null");
     }
-    for (MessageWriteStrategy messageWriteStrategy : messageWriteStrategies) {
-      strategy2writeStrategy.put(messageWriteStrategy.getStrategy(), messageWriteStrategy);
-    }
+
+    strategy2writeStrategy.put(messageWriteStrategy.getStrategy(), messageWriteStrategy);
     return this;
   }
 
@@ -81,7 +79,7 @@ public class Message2ExcelWriter implements MessageWriter {
     for (String writeStrategy : messageWriteStrategyMap.keySet()) {
       MessageWriteStrategy messageWriteStrategy = strategy2writeStrategy.get(writeStrategy);
       if (messageWriteStrategy == null) {
-        throw new WorkbookWriteException("no message write helper of [" + writeStrategy + "]");
+        throw new WorkbookWriteException("no message write strategy of [" + writeStrategy + "]");
       }
 
       messageWriteStrategy.write(workbook, messageWriteStrategyMap.get(writeStrategy));

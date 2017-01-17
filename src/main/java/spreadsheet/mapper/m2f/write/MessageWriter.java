@@ -6,6 +6,7 @@ import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * message writer
@@ -21,10 +22,10 @@ public interface MessageWriter {
    * after add will override before add
    * </pre>
    *
-   * @param messageWriteStrategies {@link MessageWriteStrategy}
+   * @param messageWriteStrategy {@link MessageWriteStrategy}
    * @return {@link MessageWriter}
    */
-  MessageWriter messageWriteStrategies(MessageWriteStrategy... messageWriteStrategies);
+  MessageWriter addMessageWriteStrategy(MessageWriteStrategy messageWriteStrategy);
 
   /**
    * write messages to supplied output stream

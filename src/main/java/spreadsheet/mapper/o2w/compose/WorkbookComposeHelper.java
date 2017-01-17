@@ -10,10 +10,10 @@ import spreadsheet.mapper.model.core.Workbook;
 public interface WorkbookComposeHelper {
 
   /**
-   * @param sheetComposeHelpers {@link SheetComposeHelper}
+   * @param sheetComposeHelper {@link SheetComposeHelper}
    * @return {@link WorkbookComposeHelper}
    */
-  WorkbookComposeHelper sheetComposes(SheetComposeHelper... sheetComposeHelpers);
+  WorkbookComposeHelper addSheetComposeHelper(SheetComposeHelper sheetComposeHelper);
 
   /**
    * @return {@link Workbook}

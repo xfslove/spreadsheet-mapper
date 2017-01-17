@@ -24,48 +24,47 @@ public interface SheetProcessHelper<T> {
    * after add will override before add
    * </pre>
    *
-   * @param fieldSetters {@link FieldSetter}
+   * @param fieldSetter {@link FieldSetter}
    * @return {@link SheetProcessHelper}
    * @see FieldSetter
    */
-  @SuppressWarnings("unchecked")
-  SheetProcessHelper<T> fieldSetters(FieldSetter<T>... fieldSetters);
+  SheetProcessHelper<T> addFieldSetter(FieldSetter<T> fieldSetter);
 
   /**
    * @param objectFactory {@link ObjectFactory}
    * @return {@link SheetProcessHelper}
    */
-  SheetProcessHelper<T> objectFactory(ObjectFactory<T> objectFactory);
+  SheetProcessHelper<T> setObjectFactory(ObjectFactory<T> objectFactory);
 
   /**
    * @param sheetProcessListener {@link SheetProcessListener}
    * @return {@link SheetProcessHelper}
    */
-  SheetProcessHelper<T> sheetProcessorListener(SheetProcessListener<T> sheetProcessListener);
+  SheetProcessHelper<T> setSheetProcessorListener(SheetProcessListener<T> sheetProcessListener);
 
   /**
    * @param rowProcessListener {@link RowProcessListener}
    * @return {@link SheetProcessHelper}
    */
-  SheetProcessHelper<T> rowProcessorListener(RowProcessListener<T> rowProcessListener);
+  SheetProcessHelper<T> setRowProcessorListener(RowProcessListener<T> rowProcessListener);
 
   /**
    * @param cellProcessListener {@link CellProcessListener}
    * @return {@link SheetProcessHelper}
    */
-  SheetProcessHelper<T> cellProcessorListener(CellProcessListener<T> cellProcessListener);
+  SheetProcessHelper<T> setCellProcessorListener(CellProcessListener<T> cellProcessListener);
 
   /**
    * @param sheet {@link Sheet}
    * @return {@link SheetProcessHelper}
    */
-  SheetProcessHelper<T> sheet(Sheet sheet);
+  SheetProcessHelper<T> setSheet(Sheet sheet);
 
   /**
    * @param sheetMeta {@link SheetMeta}
    * @return {@link SheetProcessHelper}
    */
-  SheetProcessHelper<T> sheetMeta(SheetMeta sheetMeta);
+  SheetProcessHelper<T> setSheetMeta(SheetMeta sheetMeta);
 
   /**
    * @return list of data

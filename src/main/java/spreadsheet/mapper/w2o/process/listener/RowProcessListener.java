@@ -13,18 +13,18 @@ public interface RowProcessListener<T> {
   /**
    * before object value set
    *
+   * @param object    value not set
    * @param row       {@link Row}
    * @param sheetMeta {@link SheetMeta}
-   * @param object    value not set
    */
-  void before(Row row, SheetMeta sheetMeta, T object);
+  void before(T object, Row row, SheetMeta sheetMeta);
 
   /**
    * after object value set
    *
+   * @param object    value set but same object
    * @param row       {@link Row}
    * @param sheetMeta {@link SheetMeta}
-   * @param object    value set but same object
    */
-  void after(Row row, SheetMeta sheetMeta, T object);
+  void after(T object, Row row, SheetMeta sheetMeta);
 }

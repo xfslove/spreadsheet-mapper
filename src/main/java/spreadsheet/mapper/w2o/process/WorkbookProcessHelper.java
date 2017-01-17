@@ -10,10 +10,10 @@ import java.util.List;
 public interface WorkbookProcessHelper {
 
   /**
-   * @param sheetProcessHelpers {@link SheetProcessHelper}
+   * @param sheetProcessHelper {@link SheetProcessHelper}
    * @return {@link WorkbookProcessHelper}
    */
-  WorkbookProcessHelper sheetProcesses(SheetProcessHelper... sheetProcessHelpers);
+  WorkbookProcessHelper addSheetProcessHelper(SheetProcessHelper sheetProcessHelper);
 
   /**
    * @return list of sheet list data

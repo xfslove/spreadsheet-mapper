@@ -28,20 +28,22 @@ public class DefaultWorkbookValidationHelper implements WorkbookValidationHelper
   private static final int WORKBOOK_ERROR_MESSAGE_ON_SHEET = 1;
 
   @Override
-  public WorkbookValidationHelper workbookValidators(WorkbookValidator... workbookValidators) {
-    if (workbookValidators == null) {
-      return this;
+  public WorkbookValidationHelper addWorkbookValidator(WorkbookValidator workbookValidator) {
+    if (workbookValidator == null) {
+      throw new WorkbookValidateException("workbook validator can not be null");
     }
-    Collections.addAll(this.workbookValidators, workbookValidators);
+
+    workbookValidators.add(workbookValidator);
     return this;
   }
 
   @Override
-  public WorkbookValidationHelper sheetValidations(SheetValidationHelper... sheetValidationHelpers) {
+  public WorkbookValidationHelper addSheetValidationHelper(SheetValidationHelper sheetValidationHelper) {
     if (sheetValidationHelpers == null) {
-      return this;
+      throw new WorkbookValidateException("sheet validation helper can not be null");
     }
-    Collections.addAll(this.sheetValidationHelpers, sheetValidationHelpers);
+
+    sheetValidationHelpers.add(sheetValidationHelper);
     return this;
   }
 

@@ -14,7 +14,7 @@ public interface Setter<T> {
    * set object field from cell value
    *
    * @param object    supplied object
-   * @param cell      {@link Cell}
+   * @param cell      which cell value
    * @param fieldMeta {@link FieldMeta}
    */
   void set(T object, Cell cell, FieldMeta fieldMeta);

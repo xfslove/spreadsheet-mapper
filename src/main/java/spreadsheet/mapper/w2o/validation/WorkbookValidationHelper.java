@@ -13,16 +13,16 @@ import java.util.List;
 public interface WorkbookValidationHelper {
 
   /**
-   * @param workbookValidators {@link WorkbookValidator}
+   * @param workbookValidator {@link WorkbookValidator}
    * @return {@link WorkbookValidationHelper}
    */
-  WorkbookValidationHelper workbookValidators(WorkbookValidator... workbookValidators);
+  WorkbookValidationHelper addWorkbookValidator(WorkbookValidator workbookValidator);
 
   /**
-   * @param sheetValidationHelpers {@link SheetValidationHelper}
+   * @param sheetValidationHelper {@link SheetValidationHelper}
    * @return {@link WorkbookValidationHelper}
    */
-  WorkbookValidationHelper sheetValidations(SheetValidationHelper... sheetValidationHelpers);
+  WorkbookValidationHelper addSheetValidationHelper(SheetValidationHelper sheetValidationHelper);
 
   /**
    * @return true if pass all

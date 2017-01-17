@@ -1,15 +1,13 @@
 package spreadsheet.mapper.w2o.validation.validator.sheet;
 
+import org.apache.commons.collections.CollectionUtils;
+import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
-import spreadsheet.mapper.w2o.validation.validator.cell.CellValidator;
-import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.w2o.process.setter.FieldSetter;
-import org.apache.commons.collections.CollectionUtils;
+import spreadsheet.mapper.w2o.validation.validator.cell.CellValidator;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * <pre>
@@ -27,15 +25,21 @@ import java.util.List;
  */
 public class RequireFieldValidator implements SheetValidator {
 
-  private List<String> requireFields = new ArrayList<>();
+  private Set<String> requireFields = new HashSet<>();
 
   private String errorMessage;
 
-  public RequireFieldValidator(String errorMessage, String[] requireFields) {
-    this.errorMessage = errorMessage;
-    if (requireFields != null) {
-      Collections.addAll(this.requireFields, requireFields);
+  public RequireFieldValidator requireFields(String... requireFields) {
+    if (requireFields == null) {
+      return this;
     }
+    Collections.addAll(this.requireFields, requireFields);
+    return this;
+  }
+
+  public RequireFieldValidator errorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
+    return this;
   }
 
   @Override

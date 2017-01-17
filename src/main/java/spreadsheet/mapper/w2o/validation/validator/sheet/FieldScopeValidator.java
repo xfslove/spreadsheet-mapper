@@ -1,12 +1,13 @@
 package spreadsheet.mapper.w2o.validation.validator.sheet;
 
+import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
-import spreadsheet.mapper.model.core.Sheet;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <pre>
@@ -22,15 +23,21 @@ import java.util.List;
  */
 public class FieldScopeValidator implements SheetValidator {
 
-  private List<String> fieldScopes = new ArrayList<>();
+  private Set<String> fieldScopes = new HashSet<>();
 
   private String errorMessage;
 
-  public FieldScopeValidator(String errorMessage, String[] fieldScopes) {
-    this.errorMessage = errorMessage;
-    if (fieldScopes != null) {
-      Collections.addAll(this.fieldScopes, fieldScopes);
+  public FieldScopeValidator fieldScopes(String... fieldScopes) {
+    if (fieldScopes == null) {
+      return this;
     }
+    Collections.addAll(this.fieldScopes, fieldScopes);
+    return this;
+  }
+
+  public FieldScopeValidator errorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
+    return this;
   }
 
   @Override

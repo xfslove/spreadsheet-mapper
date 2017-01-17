@@ -14,9 +14,14 @@ public class SheetSizeValidator implements WorkbookValidator {
 
   private String errorMessage;
 
-  public SheetSizeValidator(int size, String errorMessage) {
+  public SheetSizeValidator size(int size) {
     this.size = size;
+    return this;
+  }
+
+  public SheetSizeValidator errorMessage(String errorMessage) {
     this.errorMessage = errorMessage;
+    return this;
   }
 
   @Override

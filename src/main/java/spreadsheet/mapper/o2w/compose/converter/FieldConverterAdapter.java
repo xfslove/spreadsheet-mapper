@@ -1,7 +1,7 @@
 package spreadsheet.mapper.o2w.compose.converter;
 
 import org.apache.commons.lang3.StringUtils;
-import spreadsheet.mapper.model.core.Row;
+import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.w2o.validation.WorkbookValidateException;
 
@@ -30,5 +30,5 @@ public abstract class FieldConverterAdapter<T, V extends FieldConverterAdapter<T
   protected abstract V getThis();
 
   @Override
-  public abstract String getStringValue(T object, Row row, FieldMeta fieldMeta);
+  public abstract String getValue(T object, Cell cell, FieldMeta fieldMeta);
 }

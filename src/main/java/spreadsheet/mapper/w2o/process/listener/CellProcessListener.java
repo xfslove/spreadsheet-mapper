@@ -13,18 +13,18 @@ public interface CellProcessListener<T> {
   /**
    * before object value set
    *
+   * @param object    value not set
    * @param cell      {@link Cell}
    * @param fieldMeta {@link FieldMeta}
-   * @param object    value not set
    */
-  void before(Cell cell, FieldMeta fieldMeta, T object);
+  void before(T object, Cell cell, FieldMeta fieldMeta);
 
   /**
    * after object value set
    *
+   * @param object    value set but same object
    * @param cell      {@link Cell}
    * @param fieldMeta {@link FieldMeta}
-   * @param object    value set but same object
    */
-  void after(Cell cell, FieldMeta fieldMeta, T object);
+  void after(T object, Cell cell, FieldMeta fieldMeta);
 }

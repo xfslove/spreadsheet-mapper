@@ -3,7 +3,7 @@ package spreadsheet.mapper.o2w.compose.converter;
 import org.testng.annotations.Test;
 import spreadsheet.mapper.TestBean;
 import spreadsheet.mapper.TestFactory;
-import spreadsheet.mapper.model.core.RowBean;
+import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
 
 import java.util.Map;
@@ -41,26 +41,48 @@ public class PlainNumberExtractorTest {
     PlainNumberConverter<TestBean> extractor9 = new PlainNumberConverter<TestBean>().matchField("test.float2");
 
     TestBean testBean1 = TestFactory.createBean1();
-    assertEquals(extractor1.getStringValue(testBean1, new RowBean(), fieldMeta1), "0.00000000000000000001");
-    assertEquals(extractor2.getStringValue(testBean1, new RowBean(), fieldMeta2), "0.00000000000000000002");
-    assertEquals(extractor3.getStringValue(testBean1, new RowBean(), fieldMeta3), "10000000000000");
-    assertEquals(extractor4.getStringValue(testBean1, new RowBean(), fieldMeta4), "20000000000000");
-    assertEquals(extractor5.getStringValue(testBean1, new RowBean(), fieldMeta5), "10000");
-    assertEquals(extractor6.getStringValue(testBean1, new RowBean(), fieldMeta6), "-20000");
-    assertEquals(extractor7.getStringValue(testBean1, new RowBean(), fieldMeta7), "0.001");
-    assertEquals(extractor8.getStringValue(testBean1, new RowBean(), fieldMeta8), "0.00000002");
-    assertEquals(extractor9.getStringValue(testBean1, new RowBean(), fieldMeta9), "0.00000000000000000001");
+    Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
+    Cell cell11 = cellMap1.get("test.double1");
+    Cell cell12 = cellMap1.get("test.double2");
+    Cell cell13 = cellMap1.get("test.long1");
+    Cell cell14 = cellMap1.get("test.long2");
+    Cell cell15 = cellMap1.get("test.int1");
+    Cell cell16 = cellMap1.get("test.int2");
+    Cell cell17 = cellMap1.get("test.float1");
+    Cell cell18 = cellMap1.get("test.float2");
+    Cell cell19 = cellMap1.get("test.bigDecimal");
+
+    assertEquals(extractor1.getValue(testBean1, cell11, fieldMeta1), "0.00000000000000000001");
+    assertEquals(extractor2.getValue(testBean1, cell12, fieldMeta2), "0.00000000000000000002");
+    assertEquals(extractor3.getValue(testBean1, cell13, fieldMeta3), "10000000000000");
+    assertEquals(extractor4.getValue(testBean1, cell14, fieldMeta4), "20000000000000");
+    assertEquals(extractor5.getValue(testBean1, cell15, fieldMeta5), "10000");
+    assertEquals(extractor6.getValue(testBean1, cell16, fieldMeta6), "-20000");
+    assertEquals(extractor7.getValue(testBean1, cell17, fieldMeta7), "0.001");
+    assertEquals(extractor8.getValue(testBean1, cell18, fieldMeta8), "0.00000002");
+    assertEquals(extractor9.getValue(testBean1, cell19, fieldMeta9), "0.00000000000000000001");
 
     TestBean testBean2 = TestFactory.createBean2();
-    assertEquals(extractor1.getStringValue(testBean2, new RowBean(), fieldMeta1), "0.00001");
-    assertNull(extractor2.getStringValue(testBean2, new RowBean(), fieldMeta2));
-    assertEquals(extractor3.getStringValue(testBean2, new RowBean(), fieldMeta3), "1");
-    assertNull(extractor4.getStringValue(testBean2, new RowBean(), fieldMeta4));
-    assertEquals(extractor5.getStringValue(testBean2, new RowBean(), fieldMeta5), "1");
-    assertNull(extractor6.getStringValue(testBean2, new RowBean(), fieldMeta6));
-    assertEquals(extractor7.getStringValue(testBean2, new RowBean(), fieldMeta7), "0.1");
-    assertNull(extractor8.getStringValue(testBean2, new RowBean(), fieldMeta8));
-    assertNull(extractor9.getStringValue(testBean2, new RowBean(), fieldMeta9));
+    Map<String, Cell> cellMap2 = TestFactory.createCellMap2();
+    Cell cell21 = cellMap2.get("test.double1");
+    Cell cell22 = cellMap2.get("test.double2");
+    Cell cell23 = cellMap2.get("test.long1");
+    Cell cell24 = cellMap2.get("test.long2");
+    Cell cell25 = cellMap2.get("test.int1");
+    Cell cell26 = cellMap2.get("test.int2");
+    Cell cell27 = cellMap2.get("test.float1");
+    Cell cell28 = cellMap2.get("test.float2");
+    Cell cell29 = cellMap2.get("test.bigDecimal");
+
+    assertEquals(extractor1.getValue(testBean2, cell21, fieldMeta1), "0.00001");
+    assertNull(extractor2.getValue(testBean2, cell22, fieldMeta2));
+    assertEquals(extractor3.getValue(testBean2, cell23, fieldMeta3), "1");
+    assertNull(extractor4.getValue(testBean2, cell24, fieldMeta4));
+    assertEquals(extractor5.getValue(testBean2, cell25, fieldMeta5), "1");
+    assertNull(extractor6.getValue(testBean2, cell26, fieldMeta6));
+    assertEquals(extractor7.getValue(testBean2, cell27, fieldMeta7), "0.1");
+    assertNull(extractor8.getValue(testBean2, cell28, fieldMeta8));
+    assertNull(extractor9.getValue(testBean2, cell29, fieldMeta9));
 
   }
 

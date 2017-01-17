@@ -46,40 +46,46 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   private boolean validResult = true;
 
   @Override
-  public SheetValidationHelper sheetValidators(SheetValidator... validators) {
-    if (validators == null) {
-      return this;
+  public SheetValidationHelper addSheetValidator(SheetValidator sheetValidator) {
+    if (sheetValidator == null) {
+      throw new WorkbookValidateException("sheet validator can not be null");
     }
-    Collections.addAll(this.sheetValidators, validators);
+    sheetValidators.add(sheetValidator);
     return this;
   }
 
   @Override
-  public SheetValidationHelper rowValidators(RowValidator... validators) {
-    if (validators == null) {
-      return this;
+  public SheetValidationHelper addRowValidator(RowValidator rowValidator) {
+    if (rowValidator == null) {
+      throw new WorkbookValidateException("row validator can not be null");
     }
-    Collections.addAll(this.rowValidators, validators);
+    rowValidators.add(rowValidator);
     return this;
   }
 
   @Override
-  public SheetValidationHelper cellValidators(CellValidator... validators) {
-    if (validators == null) {
-      return this;
+  public SheetValidationHelper addCellValidator(CellValidator cellValidator) {
+    if (cellValidator == null) {
+      throw new WorkbookValidateException("cell validator can not be null");
     }
-    Collections.addAll(this.cellValidators, validators);
+    cellValidators.add(cellValidator);
     return this;
   }
 
   @Override
-  public SheetValidationHelper sheet(Sheet sheet) {
+  public SheetValidationHelper setSheet(Sheet sheet) {
+    if (sheet == null) {
+      throw new WorkbookValidateException("sheet can not be null");
+    }
     this.sheet = sheet;
     return this;
   }
 
   @Override
-  public SheetValidationHelper sheetMeta(SheetMeta sheetMeta) {
+  public SheetValidationHelper setSheetMeta(SheetMeta sheetMeta) {
+    if (sheetMeta == null) {
+      throw new WorkbookValidateException("sheet meta can not be null");
+    }
     this.sheetMeta = sheetMeta;
     return this;
   }

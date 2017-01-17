@@ -20,23 +20,22 @@ public interface SheetComposeHelper<T> {
    * after add will override before add
    * </pre>
    *
-   * @param fieldValueExtractors {@link FieldConverter}
+   * @param fieldConverter {@link FieldConverter}
    * @return {@link SheetComposeHelper}
    */
-  @SuppressWarnings("unchecked")
-  SheetComposeHelper<T> fieldConverters(FieldConverter<T>... fieldValueExtractors);
+  SheetComposeHelper<T> addFieldConverter(FieldConverter<T> fieldConverter);
 
   /**
    * @param sheetMeta {@link SheetMeta}
    * @return {@link SheetComposeHelper}
    */
-  SheetComposeHelper<T> sheetMeta(SheetMeta sheetMeta);
+  SheetComposeHelper<T> setSheetMeta(SheetMeta sheetMeta);
 
   /**
    * @param data list of data
    * @return {@link SheetComposeHelper}
    */
-  SheetComposeHelper<T> data(List<T> data);
+  SheetComposeHelper<T> setData(List<T> data);
 
   /**
    * @return {@link Sheet}

@@ -4,7 +4,6 @@ import spreadsheet.mapper.model.core.Workbook;
 import spreadsheet.mapper.model.core.WorkbookBean;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -15,11 +14,12 @@ public class DefaultWorkbookComposeHelper implements WorkbookComposeHelper {
   private List<SheetComposeHelper> sheetComposeHelpers = new ArrayList<>();
 
   @Override
-  public WorkbookComposeHelper sheetComposes(SheetComposeHelper... sheetComposeHelpers) {
-    if (sheetComposeHelpers == null) {
-      return this;
+  public WorkbookComposeHelper addSheetComposeHelper(SheetComposeHelper sheetComposeHelper) {
+    if (sheetComposeHelper == null) {
+      throw new WorkbookComposeException("sheet compose helper can not be null");
     }
-    Collections.addAll(this.sheetComposeHelpers, sheetComposeHelpers);
+
+    sheetComposeHelpers.add(sheetComposeHelper);
     return this;
   }
 

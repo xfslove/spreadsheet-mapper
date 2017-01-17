@@ -30,8 +30,8 @@ public class DefaultSheetComposeHelperTest {
 
     List<TestBean> data = Arrays.asList(testBean1, testBean2);
 
-    SheetComposeHelper<TestBean> sheetComposeHelper1 = new DefaultSheetComposeHelper<TestBean>().sheetMeta(sheetMeta1).data(data);
-    addExtractor(sheetComposeHelper1);
+    SheetComposeHelper<TestBean> sheetComposeHelper1 = new DefaultSheetComposeHelper<TestBean>().setSheetMeta(sheetMeta1).setData(data);
+    addConverters(sheetComposeHelper1);
 
     Sheet sheet1 = sheetComposeHelper1.compose();
 
@@ -39,33 +39,33 @@ public class DefaultSheetComposeHelperTest {
 
     SheetMeta sheetMeta2 = TestFactory.createSheetMeta(false);
 
-    SheetComposeHelper<TestBean> sheetComposeHelper2 = new DefaultSheetComposeHelper<TestBean>().sheetMeta(sheetMeta2).data(data);
-    addExtractor(sheetComposeHelper2);
+    SheetComposeHelper<TestBean> sheetComposeHelper2 = new DefaultSheetComposeHelper<TestBean>().setSheetMeta(sheetMeta2).setData(data);
+    addConverters(sheetComposeHelper2);
 
     Sheet sheet2 = sheetComposeHelper2.compose();
 
     AssertUtil.assertSheetEquals(sheet2, false);
 
-    SheetComposeHelper<TestBean> sheetComposeHelper3 = new DefaultSheetComposeHelper<TestBean>().sheetMeta(sheetMeta1);
+    SheetComposeHelper<TestBean> sheetComposeHelper3 = new DefaultSheetComposeHelper<TestBean>().setSheetMeta(sheetMeta1);
 
     Sheet sheet3 = sheetComposeHelper3.compose();
     assertEquals(sheet3.sizeOfRows(), 1);
     AssertUtil.assertHeaderRowEquals(sheet3.getRow(1), true);
   }
 
-  private void addExtractor(SheetComposeHelper<TestBean> sheetComposeHelper) {
-    sheetComposeHelper.fieldConverters(
-        new PlainNumberConverter<TestBean>().matchField("test.int1"),
-        new PlainNumberConverter<TestBean>().matchField("test.int2"),
-        new PlainNumberConverter<TestBean>().matchField("test.long1"),
-        new PlainNumberConverter<TestBean>().matchField("test.long2"),
-        new PlainNumberConverter<TestBean>().matchField("test.float1"),
-        new PlainNumberConverter<TestBean>().matchField("test.float2"),
-        new PlainNumberConverter<TestBean>().matchField("test.double1"),
-        new PlainNumberConverter<TestBean>().matchField("test.double2"),
-        new BooleanConverter<TestBean>().matchField("test.boolean1").trueString("pass").falseString("failure"),
-        new BooleanConverter<TestBean>().matchField("test.boolean2").trueString("pass").falseString("failure"),
-        new LocalDateTimeConverter<TestBean>().matchField("test.localDateTime").pattern("yyyy-MM-dd HH:mm:ss")
-    );
+  private void addConverters(SheetComposeHelper<TestBean> sheetComposeHelper) {
+
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.int1"));
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.int2"));
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.long1"));
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.long2"));
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.float1"));
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.float2"));
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.double1"));
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.double2"));
+    sheetComposeHelper.addFieldConverter(new BooleanConverter<TestBean>().matchField("test.boolean1").trueString("pass").falseString("failure"));
+    sheetComposeHelper.addFieldConverter(new BooleanConverter<TestBean>().matchField("test.boolean2").trueString("pass").falseString("failure"));
+    sheetComposeHelper.addFieldConverter(new LocalDateTimeConverter<TestBean>().matchField("test.localDateTime").pattern("yyyy-MM-dd HH:mm:ss"));
+
   }
 }

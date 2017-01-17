@@ -19,38 +19,38 @@ import java.util.List;
 public interface SheetValidationHelper {
 
   /**
-   * @param validators {@link SheetValidator}
+   * @param sheetValidator {@link SheetValidator}
    * @return {@link SheetValidationHelper}
    */
-  SheetValidationHelper sheetValidators(SheetValidator... validators);
+  SheetValidationHelper addSheetValidator(SheetValidator sheetValidator);
 
   /**
-   * @param validators {@link RowValidator}
+   * @param rowValidator {@link RowValidator}
    * @return {@link SheetValidationHelper}
    * @see DependencyValidator#getGroup()
    * @see DependencyValidator#getDependsOn()
    */
-  SheetValidationHelper rowValidators(RowValidator... validators);
+  SheetValidationHelper addRowValidator(RowValidator rowValidator);
 
   /**
-   * @param validators {@link CellValidator}
+   * @param cellValidator {@link CellValidator}
    * @return {@link SheetValidationHelper}
    * @see DependencyValidator#getGroup()
    * @see DependencyValidator#getDependsOn()
    */
-  SheetValidationHelper cellValidators(CellValidator... validators);
+  SheetValidationHelper addCellValidator(CellValidator cellValidator);
 
   /**
    * @param sheet {@link Sheet}
    * @return {@link SheetValidationHelper}
    */
-  SheetValidationHelper sheet(Sheet sheet);
+  SheetValidationHelper setSheet(Sheet sheet);
 
   /**
    * @param sheetMeta {@link SheetMeta}
    * @return {@link SheetValidationHelper}
    */
-  SheetValidationHelper sheetMeta(SheetMeta sheetMeta);
+  SheetValidationHelper setSheetMeta(SheetMeta sheetMeta);
 
   /**
    * execute valid
