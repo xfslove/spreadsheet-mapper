@@ -3,6 +3,7 @@ package spreadsheet.mapper.w2o.process.setter;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,13 @@ public class BeanUtilsSetter<T> implements Setter<T> {
   @Override
   public void set(T object, Cell cell, FieldMeta fieldMeta) {
     try {
-      BeanUtils.setProperty(object, FieldUtils.detectRealFieldName(fieldMeta), lookup(object, fieldMeta) ? cell.getValue() : null);
+      String value = cell.getValue();
+      if (StringUtils.isBlank(value) || !lookup(object, fieldMeta)) {
+        return;
+      }
+
+      BeanUtils.setProperty(object, FieldUtils.detectRealFieldName(fieldMeta), value);
+
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new WorkbookProcessException(e);
@@ -43,7 +50,7 @@ public class BeanUtilsSetter<T> implements Setter<T> {
 
   private boolean lookup(T object, FieldMeta fieldMeta) {
     Class fieldType = FieldUtils.getFieldType(object.getClass(), FieldUtils.detectRealFieldName(fieldMeta).split("\\."));
-    return ConvertUtils.lookup(fieldType) != null;
+    return fieldType != null && ConvertUtils.lookup(fieldType) != null;
   }
 
   private void registerDefaultConverter() {

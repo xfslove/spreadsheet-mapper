@@ -1,13 +1,9 @@
 package spreadsheet.mapper.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import spreadsheet.mapper.Constants;
 import spreadsheet.mapper.model.meta.FieldMeta;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * object field utils
@@ -59,19 +55,13 @@ public class FieldUtils {
       return fieldMeta.getName();
     }
 
-    String fieldName = StringUtils.substring(fieldMeta.getName(), fieldMeta.getPrefix().length());
+    String realFieldName = StringUtils.substring(fieldMeta.getName(), fieldMeta.getPrefix().length());
 
-    if (fieldName.contains(BUSINESS_KEY_PREFIX)) {
-      fieldName = subtractBusinessKey(fieldName);
+    if (realFieldName.contains(BUSINESS_KEY_PREFIX)) {
+      realFieldName = subtractBusinessKey(realFieldName);
     }
 
-    List<String> splitFields = new ArrayList<>(Arrays.asList(fieldName.split("\\.")));
-    if (splitFields.size() == 1) {
-      return splitFields.get(0);
-    } else {
-      splitFields.remove(0);
-      return StringUtils.join(splitFields, Constants.DOT_SEPARATOR);
-    }
+    return realFieldName;
   }
 
   /**
