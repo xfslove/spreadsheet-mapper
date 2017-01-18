@@ -34,8 +34,8 @@ public class Message2ExcelWriterTest {
   @Test
   public void testWrite() throws Exception {
 
-    MessageWriter messageWriter = new Message2ExcelWriter(true);
-    messageWriter.write(createErrorMessages(), new FileOutputStream(file));
+    MessageWriteHelper messageWriteHelper = new Message2ExcelWriteHelper();
+    messageWriteHelper.write(createErrorMessages(), new FileOutputStream(file));
   }
 
   private Collection<Message> createErrorMessages() {

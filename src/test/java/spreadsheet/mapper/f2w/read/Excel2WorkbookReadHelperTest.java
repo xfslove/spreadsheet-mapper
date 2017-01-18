@@ -15,7 +15,7 @@ import static org.testng.Assert.assertEquals;
  * Created by hanwen on 2017/1/5.
  */
 @Test(groups = "Excel2WorkbookReaderTest")
-public class Excel2WorkbookReaderTest {
+public class Excel2WorkbookReadHelperTest {
 
   @Test
   public void testRead() throws Exception {
@@ -26,7 +26,7 @@ public class Excel2WorkbookReaderTest {
 
     InputStream is1 = getClass().getResourceAsStream("test.xls");
 
-    WorkbookReader reader = new Excel2WorkbookReader();
+    WorkbookReadHelper reader = new Excel2WorkbookReadHelper();
 
     Workbook workbook1 = reader.read(is1);
 
@@ -44,7 +44,7 @@ public class Excel2WorkbookReaderTest {
 
     InputStream is1 = getClass().getResourceAsStream("dateFormatTest.xlsx");
 
-    WorkbookReader reader = new Excel2WorkbookReader();
+    WorkbookReadHelper reader = new Excel2WorkbookReadHelper();
 
     Workbook workbook = reader.read(is1);
 

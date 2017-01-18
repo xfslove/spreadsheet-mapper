@@ -6,14 +6,13 @@ import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 
 import java.io.OutputStream;
 import java.util.Collection;
-import java.util.List;
 
 /**
- * message writer
+ * message write helper
  * <p>
  * Created by hanwen on 2017/1/3.
  */
-public interface MessageWriter {
+public interface MessageWriteHelper {
 
   /**
    * <pre>
@@ -23,9 +22,9 @@ public interface MessageWriter {
    * </pre>
    *
    * @param messageWriteStrategy {@link MessageWriteStrategy}
-   * @return {@link MessageWriter}
+   * @return {@link MessageWriteHelper}
    */
-  MessageWriter addMessageWriteStrategy(MessageWriteStrategy messageWriteStrategy);
+  MessageWriteHelper addMessageWriteStrategy(MessageWriteStrategy messageWriteStrategy);
 
   /**
    * write messages to supplied output stream

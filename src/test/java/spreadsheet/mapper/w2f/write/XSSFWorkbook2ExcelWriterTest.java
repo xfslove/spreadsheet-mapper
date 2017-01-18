@@ -7,8 +7,8 @@ import org.testng.annotations.Test;
 import spreadsheet.mapper.AssertUtil;
 import spreadsheet.mapper.Constants;
 import spreadsheet.mapper.TestFactory;
-import spreadsheet.mapper.f2w.read.Excel2WorkbookReader;
-import spreadsheet.mapper.f2w.read.WorkbookReader;
+import spreadsheet.mapper.f2w.read.Excel2WorkbookReadHelper;
+import spreadsheet.mapper.f2w.read.WorkbookReadHelper;
 import spreadsheet.mapper.model.core.Workbook;
 
 import java.io.File;
@@ -37,11 +37,11 @@ public class XSSFWorkbook2ExcelWriterTest {
 
     Workbook workbook = TestFactory.createWorkbook();
 
-    WorkbookWriter workbookWriter = new Workbook2ExcelWriter();
+    WorkbookWriteHelper workbookWriteHelper = new Workbook2ExcelWriteHelper();
 
-    workbookWriter.write(workbook, new FileOutputStream(file));
+    workbookWriteHelper.write(workbook, new FileOutputStream(file));
 
-    WorkbookReader reader = new Excel2WorkbookReader();
+    WorkbookReadHelper reader = new Excel2WorkbookReadHelper();
 
     Workbook workbook1 = reader.read(new FileInputStream(file));
 

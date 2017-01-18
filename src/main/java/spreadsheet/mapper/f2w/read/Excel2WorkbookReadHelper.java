@@ -19,9 +19,9 @@ import java.text.SimpleDateFormat;
  * <p>
  * Created by hanwen on 2017/1/3.
  */
-public class Excel2WorkbookReader implements WorkbookReader {
+public class Excel2WorkbookReadHelper implements WorkbookReadHelper {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Excel2WorkbookReader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Excel2WorkbookReadHelper.class);
 
   private org.apache.poi.ss.usermodel.Workbook workbook;
 

@@ -27,9 +27,9 @@ import java.util.Map;
  * <p>
  * Created by hanwen on 2017/1/3.
  */
-public class Message2ExcelWriter implements MessageWriter {
+public class Message2ExcelWriteHelper implements MessageWriteHelper {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Message2ExcelWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Message2ExcelWriteHelper.class);
 
   private Map<String, MessageWriteStrategy> strategy2writeStrategy = new HashMap<>();
 
@@ -41,11 +41,20 @@ public class Message2ExcelWriter implements MessageWriter {
   }
 
   /**
+   * default new excel with xlsx
+   *
+   * @see #Message2ExcelWriteHelper(boolean)
+   */
+  public Message2ExcelWriteHelper() {
+    this(true);
+  }
+
+  /**
    * this will create a new excel workbook to write messages
    *
    * @param xlsx true use {@link XSSFWorkbook} else use {@link HSSFWorkbook}
    */
-  public Message2ExcelWriter(boolean xlsx) {
+  public Message2ExcelWriteHelper(boolean xlsx) {
     workbook = xlsx ? new XSSFWorkbook() : new HSSFWorkbook();
   }
 
@@ -54,7 +63,7 @@ public class Message2ExcelWriter implements MessageWriter {
    *
    * @param inputStream auto close
    */
-  public Message2ExcelWriter(InputStream inputStream) {
+  public Message2ExcelWriteHelper(InputStream inputStream) {
     try {
       workbook = WorkbookFactory.create(inputStream);
     } catch (Exception e) {
@@ -64,7 +73,7 @@ public class Message2ExcelWriter implements MessageWriter {
   }
 
   @Override
-  public MessageWriter addMessageWriteStrategy(MessageWriteStrategy messageWriteStrategy) {
+  public MessageWriteHelper addMessageWriteStrategy(MessageWriteStrategy messageWriteStrategy) {
     if (messageWriteStrategy == null) {
       throw new WorkbookWriteException("no message write strategy can not be null");
     }

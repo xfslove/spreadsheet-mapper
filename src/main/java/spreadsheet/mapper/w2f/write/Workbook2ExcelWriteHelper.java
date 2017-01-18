@@ -21,18 +21,18 @@ import java.io.OutputStream;
  * <p>
  * Created by hanwen on 2016/12/30.
  */
-public class Workbook2ExcelWriter implements WorkbookWriter {
+public class Workbook2ExcelWriteHelper implements WorkbookWriteHelper {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Workbook2ExcelWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Workbook2ExcelWriteHelper.class);
 
   private org.apache.poi.ss.usermodel.Workbook poiWorkbook;
 
   /**
    * default xlsx is true
    *
-   * @see #Workbook2ExcelWriter(boolean)
+   * @see #Workbook2ExcelWriteHelper(boolean)
    */
-  public Workbook2ExcelWriter() {
+  public Workbook2ExcelWriteHelper() {
     this(true);
   }
 
@@ -41,7 +41,7 @@ public class Workbook2ExcelWriter implements WorkbookWriter {
    *
    * @param xlsx true use {@link SXSSFWorkbook} else use {@link HSSFWorkbook}
    */
-  public Workbook2ExcelWriter(boolean xlsx) {
+  public Workbook2ExcelWriteHelper(boolean xlsx) {
     // sxssf keep 100 rows in memory, exceeding rows will be flushed to disk
     poiWorkbook = xlsx ? new SXSSFWorkbook(100) : new HSSFWorkbook();
   }
