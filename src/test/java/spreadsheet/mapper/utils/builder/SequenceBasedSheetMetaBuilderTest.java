@@ -1,4 +1,4 @@
-package spreadsheet.mapper.o2w.compose.builder;
+package spreadsheet.mapper.utils.builder;
 
 import org.testng.annotations.Test;
 import spreadsheet.mapper.TestFactory;
@@ -94,7 +94,9 @@ public class SequenceBasedSheetMetaBuilderTest {
         .field("test2").headers("title1", "title2").next()
         .skip(2)
         .field("test3").headers("title1", "title2").skip().header("title3").next()
-        .toSheetMeta("testSheet", 5);
+        .sheetName("testSheet")
+        .dataStartRowIndex(5)
+        .toSheetMeta();
 
     assertEquals(sheetMeta.getDataStartRowIndex(), 5);
     assertEquals(sheetMeta.getFieldMetas().size(), 3);

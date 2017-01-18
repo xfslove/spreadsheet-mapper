@@ -1,4 +1,4 @@
-package spreadsheet.mapper.o2w.compose.builder;
+package spreadsheet.mapper.utils.builder;
 
 import spreadsheet.mapper.model.meta.*;
 
@@ -6,22 +6,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link SheetMeta} builder, build start at cell[1,1]
- * <p>
+ * <pre>
+ * {@link SheetMeta} builder, build start at cell[1,1],
+ * if {@link #dataStartRowIndex} is null, data start at max header row index plus 1
+ * </pre>
  * Created by hanwen on 2017/1/10.
  */
-public class SequenceBasedSheetMetaBuilder {
+public class SequenceBasedSheetMetaBuilder implements SheetMetaBuilder {
 
   private int columnIndex = 0;
   private int rowIndex = 0;
   private List<FieldMeta> fieldMetas = new ArrayList<>();
+
+  private String sheetName;
+  private Integer dataStartRowIndex;
 
   /**
    * create a field meta and add at {@link #columnIndex}, after add {@link #columnIndex} will plus 1
    *
    * @param prefix {@link FieldMeta#getPrefix()}
    * @param name   {@link FieldMeta#getName()}
-   * @return this
+   * @return {@link SequenceBasedSheetMetaBuilder}
    */
   public SequenceBasedFieldMetaBuilder field(String prefix, String name) {
     SequenceBasedFieldMetaBuilder sequenceBasedFieldMetaBuilder = new SequenceBasedFieldMetaBuilder(prefix, name, columnIndex + 1);
@@ -31,7 +36,7 @@ public class SequenceBasedSheetMetaBuilder {
 
   /**
    * @param name {@link FieldMeta#getName()}
-   * @return this
+   * @return {@link SequenceBasedSheetMetaBuilder}
    * @see #field(String, String)
    */
   public SequenceBasedFieldMetaBuilder field(String name) {
@@ -41,7 +46,7 @@ public class SequenceBasedSheetMetaBuilder {
   /**
    * skip one column
    *
-   * @return this
+   * @return {@link SequenceBasedSheetMetaBuilder}
    */
   public SequenceBasedSheetMetaBuilder skip() {
     skip(1);
@@ -52,7 +57,7 @@ public class SequenceBasedSheetMetaBuilder {
    * skip supplied numbers columns
    *
    * @param columnNum skip how much columns
-   * @return this
+   * @return {@link SequenceBasedSheetMetaBuilder}
    */
   public SequenceBasedSheetMetaBuilder skip(int columnNum) {
     columnIndex += columnNum;
@@ -60,29 +65,30 @@ public class SequenceBasedSheetMetaBuilder {
   }
 
   /**
-   * data start at max header row index plus 1
-   *
-   * @return sheet meta
-   * @see #toSheetMeta(int)
+   * @param sheetName {@link SheetMeta#getSheetName()}
+   * @return {@link SequenceBasedSheetMetaBuilder}
    */
-  public SheetMeta toSheetMeta() {
-    return toSheetMeta(rowIndex + 1);
+  public SequenceBasedSheetMetaBuilder sheetName(String sheetName) {
+    this.sheetName = sheetName;
+    return this;
   }
 
   /**
-   * to sheet meta
-   *
    * @param dataStartRowIndex {@link SheetMeta#getDataStartRowIndex()}
-   * @return {@link SheetMeta}
+   * @return {@link SequenceBasedSheetMetaBuilder}
    */
-  public SheetMeta toSheetMeta(int dataStartRowIndex) {
-    return toSheetMeta(null, dataStartRowIndex);
+  public SequenceBasedSheetMetaBuilder dataStartRowIndex(int dataStartRowIndex) {
+    this.dataStartRowIndex = dataStartRowIndex;
+    return this;
   }
 
-  public SheetMeta toSheetMeta(String sheetName, int dataStartRowIndex) {
-    if (dataStartRowIndex <= rowIndex) {
+  @Override
+  public SheetMeta toSheetMeta() {
+    if (dataStartRowIndex != null && dataStartRowIndex <= rowIndex) {
       throw new IllegalArgumentException("data start row index must be greater than max header row index[" + rowIndex + "]");
     }
+
+    int dataStartRowIndex = this.dataStartRowIndex == null ? rowIndex + 1 : this.dataStartRowIndex;
 
     SheetMeta sheetMeta = new SheetMetaBean(sheetName, dataStartRowIndex);
     for (FieldMeta fieldMeta : fieldMetas) {

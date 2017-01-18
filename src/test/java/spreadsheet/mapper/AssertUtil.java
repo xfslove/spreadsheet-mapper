@@ -169,6 +169,7 @@ public class AssertUtil {
   public static void assertFieldMetaEquals(FieldMeta f1, FieldMeta f2) {
     assertEquals(f1.getColumnIndex(), f2.getColumnIndex());
     assertEquals(f1.getName(), f2.getName());
+    assertEquals(f1.getPrefix(), f2.getPrefix());
     List<HeaderMeta> hm1 = f1.getHeaderMetas();
     List<HeaderMeta> hm2 = f2.getHeaderMetas();
     assertEquals(hm1.size(), hm2.size());
