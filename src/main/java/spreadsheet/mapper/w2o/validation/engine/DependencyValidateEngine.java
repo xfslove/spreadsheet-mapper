@@ -1,6 +1,8 @@
 package spreadsheet.mapper.w2o.validation.engine;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.meta.FieldMeta;
@@ -20,6 +22,8 @@ import java.util.*;
  * Created by hanwen on 2017/1/6.
  */
 public class DependencyValidateEngine {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DependencyValidateEngine.class);
 
   private Map<String, List<DependencyValidator>> validatorMap = new LinkedHashMap<>();
 
@@ -67,10 +71,13 @@ public class DependencyValidateEngine {
     visited.put(v, true);
 
     if (skip) {
+      LOGGER.debug("skip validator at group:[" + v + "]");
       return;
     }
 
     List<DependencyValidator> validators = validatorMap.get(v);
+
+    LOGGER.debug("do valid at group:[" + v + "] and validator numbers of this group is:[" + validators.size() + "]");
 
     for (DependencyValidator validator : validators) {
       boolean vResult = doRowCellsValid(row, sheetMeta, validator);

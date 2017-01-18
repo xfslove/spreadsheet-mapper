@@ -9,7 +9,7 @@ public class MessageBean implements Message {
 
   private String messageWriteStrategy;
 
-  private String errorMessage;
+  private String message;
 
   private int sheetIndex;
 
@@ -17,17 +17,17 @@ public class MessageBean implements Message {
 
   private Integer columnIndex;
 
-  public MessageBean(String messageWriteStrategy, String errorMessage, int sheetIndex) {
-    this(messageWriteStrategy, errorMessage, sheetIndex, null, null);
+  public MessageBean(String messageWriteStrategy, String message, int sheetIndex) {
+    this(messageWriteStrategy, message, sheetIndex, null, null);
   }
 
-  public MessageBean(String messageWriteStrategy, String errorMessage, int sheetIndex, Integer rowIndex, Integer columnIndex) {
+  public MessageBean(String messageWriteStrategy, String message, int sheetIndex, Integer rowIndex, Integer columnIndex) {
     if (rowIndex == null ^ columnIndex == null) {
       throw new IllegalArgumentException("row index and column index must both null or both not null");
     }
 
     this.messageWriteStrategy = messageWriteStrategy;
-    this.errorMessage = errorMessage;
+    this.message = message;
     this.sheetIndex = sheetIndex;
     this.rowIndex = rowIndex;
     this.columnIndex = columnIndex;
@@ -55,7 +55,7 @@ public class MessageBean implements Message {
 
   @Override
   public String getMessage() {
-    return errorMessage;
+    return message;
   }
 
   @Override
@@ -64,7 +64,7 @@ public class MessageBean implements Message {
         .append("sheetIndex", sheetIndex)
         .append("rowIndex", rowIndex)
         .append("columnIndex", columnIndex)
-        .append("errorMessage", errorMessage)
+        .append("message", message)
         .append("messageWriteStrategy", messageWriteStrategy)
         .toString();
   }

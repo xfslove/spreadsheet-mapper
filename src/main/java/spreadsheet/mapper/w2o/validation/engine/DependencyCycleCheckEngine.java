@@ -1,6 +1,8 @@
 package spreadsheet.mapper.w2o.validation.engine;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.w2o.validation.validator.DependencyValidator;
 
 import java.util.*;
@@ -13,6 +15,8 @@ import java.util.*;
  * Created by hanwen on 2017/1/5.
  */
 public class DependencyCycleCheckEngine {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DependencyCycleCheckEngine.class);
 
   private Map<String, Set<String>> vGraph = new HashMap<>();
   private Stack<String> vStack = new Stack<>();
@@ -34,6 +38,7 @@ public class DependencyCycleCheckEngine {
     for (String v : vGraph.keySet()) {
 
       if (vGraph.get(v).contains(v)) {
+        LOGGER.debug("dependency cycle is:[" + v + "]");
         cycling = true;
       }
 
@@ -78,7 +83,10 @@ public class DependencyCycleCheckEngine {
         connectedComponents.add(connectedComponent);
       }
 
-      cycling = connectedComponents.size() > 1;
+      if (connectedComponents.size() > 1) {
+        cycling = true;
+        LOGGER.debug("dependency cycle is:" + connectedComponents.toString());
+      }
     }
   }
 
