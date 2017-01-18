@@ -12,8 +12,8 @@ import java.util.List;
  */
 public class SequenceBasedSheetMetaBuilder {
 
-  private int columnIndex = 1;
-  private int rowIndex = 1;
+  private int columnIndex = 0;
+  private int rowIndex = 0;
   private List<FieldMeta> fieldMetas = new ArrayList<>();
 
   /**
@@ -24,7 +24,7 @@ public class SequenceBasedSheetMetaBuilder {
    * @return this
    */
   public SequenceBasedFieldMetaBuilder field(String prefix, String name) {
-    SequenceBasedFieldMetaBuilder sequenceBasedFieldMetaBuilder = new SequenceBasedFieldMetaBuilder(prefix, name, columnIndex);
+    SequenceBasedFieldMetaBuilder sequenceBasedFieldMetaBuilder = new SequenceBasedFieldMetaBuilder(prefix, name, columnIndex + 1);
     columnIndex++;
     return sequenceBasedFieldMetaBuilder;
   }
@@ -66,7 +66,7 @@ public class SequenceBasedSheetMetaBuilder {
    * @see #toSheetMeta(int)
    */
   public SheetMeta toSheetMeta() {
-    return toSheetMeta(rowIndex);
+    return toSheetMeta(rowIndex + 1);
   }
 
   /**
@@ -80,7 +80,7 @@ public class SequenceBasedSheetMetaBuilder {
   }
 
   public SheetMeta toSheetMeta(String sheetName, int dataStartRowIndex) {
-    if (dataStartRowIndex < rowIndex) {
+    if (dataStartRowIndex <= rowIndex) {
       throw new IllegalArgumentException("data start row index must be greater than max header row index[" + rowIndex + "]");
     }
 
@@ -96,7 +96,7 @@ public class SequenceBasedSheetMetaBuilder {
    */
   public class SequenceBasedFieldMetaBuilder {
 
-    private int rowIndex = 1;
+    private int rowIndex = 0;
     private FieldMeta fieldMeta;
 
     private SequenceBasedFieldMetaBuilder(String prefix, String name, int columnIndex) {
@@ -126,7 +126,7 @@ public class SequenceBasedSheetMetaBuilder {
         return this;
       }
       for (String value : values) {
-        fieldMeta.addHeaderMeta(new HeaderMetaBean(rowIndex, value));
+        fieldMeta.addHeaderMeta(new HeaderMetaBean(rowIndex + 1, value));
         rowIndex++;
       }
       return this;

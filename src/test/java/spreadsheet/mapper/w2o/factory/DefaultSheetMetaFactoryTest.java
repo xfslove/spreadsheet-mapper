@@ -1,4 +1,4 @@
-package spreadsheet.mapper.w2o.process.factory;
+package spreadsheet.mapper.w2o.factory;
 
 import org.testng.annotations.Test;
 import spreadsheet.mapper.AssertUtil;

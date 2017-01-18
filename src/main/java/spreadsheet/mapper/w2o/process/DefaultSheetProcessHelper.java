@@ -5,7 +5,6 @@ import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
-import spreadsheet.mapper.w2o.process.factory.ObjectFactory;
 import spreadsheet.mapper.w2o.process.listener.*;
 import spreadsheet.mapper.w2o.process.setter.BeanUtilsSetter;
 import spreadsheet.mapper.w2o.process.setter.FieldSetter;

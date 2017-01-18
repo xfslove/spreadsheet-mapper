@@ -2,13 +2,16 @@ package spreadsheet.mapper.f2w.read;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.NumberToTextConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.model.core.*;
 import spreadsheet.mapper.f2w.DateFormatRegisterer;
+import spreadsheet.mapper.model.core.Cell;
+import spreadsheet.mapper.model.core.Row;
+import spreadsheet.mapper.model.core.Sheet;
+import spreadsheet.mapper.model.core.Workbook;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,15 +52,15 @@ public class Excel2WorkbookReadHelper implements WorkbookReadHelper {
         Sheet excelSheet = createSheet(sheet);
         excelWorkbook.addSheet(excelSheet);
 
-        int lastRowNum = sheet.getLastRowNum();
-        for (int j = 0; j <= lastRowNum; j++) {
+        int maxColNum = 0;
+        for (int j = 0; j <= sheet.getLastRowNum(); j++) {
 
           org.apache.poi.ss.usermodel.Row row = sheet.getRow(j);
           Row excelRow = createRow();
           excelSheet.addRow(excelRow);
 
-          int lastColumnNum = row.getLastCellNum() > 0 ? row.getLastCellNum() : 0;
-          for (int k = 0; k < lastColumnNum; k++) {
+          maxColNum = Math.max(row.getLastCellNum(), maxColNum);
+          for (int k = 0; k < maxColNum; k++) {
 
             org.apache.poi.ss.usermodel.Cell cell = row.getCell(k);
             excelRow.addCell(createCell(cell));

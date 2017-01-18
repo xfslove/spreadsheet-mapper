@@ -1,10 +1,12 @@
-package spreadsheet.mapper.w2o.process.factory;
+package spreadsheet.mapper.w2o.factory;
 
 import org.apache.commons.lang3.StringUtils;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.*;
+
+import java.util.Arrays;
 
 /**
  * default sheet meta factory
@@ -27,9 +29,20 @@ public class DefaultSheetMetaFactory implements SheetMetaFactory {
    * @param headerRowIndices  which rows is headers, maybe no headers
    */
   public DefaultSheetMetaFactory(int fieldRowIndex, int dataStartRowIndex, int... headerRowIndices) {
+    if (dataStartRowIndex <= fieldRowIndex) {
+      throw new IllegalArgumentException("data start row index must be greater than field row index[" + fieldRowIndex + "]");
+    }
+
     this.dataStartRowIndex = dataStartRowIndex;
     this.fieldRowIndex = fieldRowIndex;
     if (headerRowIndices != null) {
+
+      Arrays.sort(headerRowIndices);
+      int maxHeaderRowIndex = headerRowIndices[headerRowIndices.length - 1];
+      if (dataStartRowIndex <= maxHeaderRowIndex) {
+        throw new IllegalArgumentException("data start row index must be greater than max header row index[" + maxHeaderRowIndex + "]");
+      }
+
       this.headerRowIndices = headerRowIndices;
     }
   }
