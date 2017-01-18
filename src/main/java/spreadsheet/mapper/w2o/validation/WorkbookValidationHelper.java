@@ -1,5 +1,6 @@
 package spreadsheet.mapper.w2o.validation;
 
+import spreadsheet.mapper.model.core.Workbook;
 import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.w2o.validation.validator.workbook.WorkbookValidator;
 
@@ -23,6 +24,12 @@ public interface WorkbookValidationHelper {
    * @return {@link WorkbookValidationHelper}
    */
   WorkbookValidationHelper addSheetValidationHelper(SheetValidationHelper sheetValidationHelper);
+
+  /**
+   * @param workbook {@link Workbook}
+   * @return {@link WorkbookValidationHelper}
+   */
+  WorkbookValidationHelper setWorkbook(Workbook workbook);
 
   /**
    * @return true if pass all

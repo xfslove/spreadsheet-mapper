@@ -8,7 +8,6 @@ import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 import spreadsheet.mapper.w2o.validation.validator.workbook.WorkbookValidator;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,9 +22,6 @@ public class DefaultWorkbookValidationHelper implements WorkbookValidationHelper
   private List<SheetValidationHelper> sheetValidationHelpers = new ArrayList<>();
 
   private List<Message> errorMessages = new ArrayList<>();
-
-  // write workbook error message on sheet 1.
-  private static final int WORKBOOK_ERROR_MESSAGE_ON_SHEET = 1;
 
   @Override
   public WorkbookValidationHelper addWorkbookValidator(WorkbookValidator workbookValidator) {
@@ -47,7 +43,8 @@ public class DefaultWorkbookValidationHelper implements WorkbookValidationHelper
     return this;
   }
 
-  public WorkbookValidationHelper workbook(Workbook workbook) {
+  @Override
+  public WorkbookValidationHelper setWorkbook(Workbook workbook) {
     this.workbook = workbook;
     return this;
   }
@@ -88,7 +85,7 @@ public class DefaultWorkbookValidationHelper implements WorkbookValidationHelper
 
     for (WorkbookValidator validator : workbookValidators) {
       if (!validator.valid(workbook)) {
-        errorMessages.add(new MessageBean(MessageWriteStrategies.TEXT_BOX, validator.getErrorMessage(), WORKBOOK_ERROR_MESSAGE_ON_SHEET));
+        errorMessages.add(new MessageBean(MessageWriteStrategies.TEXT_BOX, validator.getErrorMessage(), validator.getMessageOnSheet()));
       }
     }
 

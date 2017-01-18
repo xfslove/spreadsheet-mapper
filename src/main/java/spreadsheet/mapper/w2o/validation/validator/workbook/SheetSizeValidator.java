@@ -10,6 +10,9 @@ import spreadsheet.mapper.model.core.Workbook;
  */
 public class SheetSizeValidator implements WorkbookValidator {
 
+  // default write workbook error message on sheet 1.
+  private int messageOnSheet = 1;
+
   private int size;
 
   private String errorMessage;
@@ -24,6 +27,11 @@ public class SheetSizeValidator implements WorkbookValidator {
     return this;
   }
 
+  public SheetSizeValidator messageOnSheet(int messageOnSheet) {
+    this.messageOnSheet = messageOnSheet;
+    return this;
+  }
+
   @Override
   public String getErrorMessage() {
     return errorMessage;
@@ -32,5 +40,10 @@ public class SheetSizeValidator implements WorkbookValidator {
   @Override
   public boolean valid(Workbook workbook) {
     return workbook.sizeOfSheets() == size;
+  }
+
+  @Override
+  public int getMessageOnSheet() {
+    return messageOnSheet;
   }
 }

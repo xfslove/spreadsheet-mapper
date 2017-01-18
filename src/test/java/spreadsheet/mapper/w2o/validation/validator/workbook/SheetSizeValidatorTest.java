@@ -16,7 +16,7 @@ public class SheetSizeValidatorTest {
   @Test
   public void testValid() throws Exception {
 
-    SheetSizeValidator sheetSizeValidator = new SheetSizeValidator().size(2).errorMessage("");
+    SheetSizeValidator sheetSizeValidator = new SheetSizeValidator().size(2).errorMessage("test").messageOnSheet(1);
 
     Workbook workbook = TestFactory.createWorkbook();
 

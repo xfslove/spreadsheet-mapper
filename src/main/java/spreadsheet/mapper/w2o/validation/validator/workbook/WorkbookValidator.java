@@ -18,4 +18,9 @@ public interface WorkbookValidator extends Validator {
    * @return true if pass
    */
   boolean valid(Workbook workbook);
+
+  /**
+   * @return message on which sheet
+   */
+  int getMessageOnSheet();
 }
