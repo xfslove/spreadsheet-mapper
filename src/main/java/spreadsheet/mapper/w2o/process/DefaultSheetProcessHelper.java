@@ -1,5 +1,6 @@
 package spreadsheet.mapper.w2o.process;
 
+import org.apache.commons.lang3.StringUtils;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.core.Sheet;
@@ -9,6 +10,7 @@ import spreadsheet.mapper.w2o.process.listener.*;
 import spreadsheet.mapper.w2o.process.setter.BeanUtilsSetter;
 import spreadsheet.mapper.w2o.process.setter.FieldSetter;
 import spreadsheet.mapper.w2o.process.setter.Setter;
+import spreadsheet.mapper.w2o.validation.WorkbookValidateException;
 
 import java.util.*;
 
@@ -37,7 +39,12 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
       throw new WorkbookProcessException("field setter can not be null");
     }
 
-    field2setter.put(fieldSetter.getMatchField(), fieldSetter);
+    String matchField = fieldSetter.getMatchField();
+    if (StringUtils.isBlank(matchField)) {
+      throw new WorkbookValidateException("field value setter match field can not be null");
+    }
+
+    field2setter.put(matchField, fieldSetter);
     return this;
   }
 

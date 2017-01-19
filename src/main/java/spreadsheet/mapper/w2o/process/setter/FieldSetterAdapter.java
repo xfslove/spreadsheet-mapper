@@ -4,7 +4,6 @@ package spreadsheet.mapper.w2o.process.setter;
 import org.apache.commons.lang3.StringUtils;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
-import spreadsheet.mapper.w2o.validation.WorkbookValidateException;
 
 /**
  * <pre>
@@ -24,9 +23,6 @@ public abstract class FieldSetterAdapter<T, V extends FieldSetterAdapter<T, V>> 
 
   @Override
   public String getMatchField() {
-    if (StringUtils.isBlank(matchField)) {
-      throw new WorkbookValidateException("field value setter match field must be set");
-    }
     return matchField;
   }
 

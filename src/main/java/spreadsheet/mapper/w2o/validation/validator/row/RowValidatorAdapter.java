@@ -1,10 +1,8 @@
 package spreadsheet.mapper.w2o.validation.validator.row;
 
 
-import org.apache.commons.lang3.StringUtils;
 import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.meta.SheetMeta;
-import spreadsheet.mapper.w2o.validation.WorkbookValidateException;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -75,9 +73,6 @@ public abstract class RowValidatorAdapter<V extends RowValidatorAdapter<V>> impl
 
   @Override
   public String getGroup() {
-    if (StringUtils.isBlank(group)) {
-      throw new WorkbookValidateException("row validator group must be set");
-    }
     return group;
   }
 

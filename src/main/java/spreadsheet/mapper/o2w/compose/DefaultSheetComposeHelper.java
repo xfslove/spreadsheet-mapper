@@ -9,6 +9,7 @@ import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.o2w.compose.converter.BeanUtilsConverter;
 import spreadsheet.mapper.o2w.compose.converter.Converter;
 import spreadsheet.mapper.o2w.compose.converter.FieldConverter;
+import spreadsheet.mapper.w2o.validation.WorkbookValidateException;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -30,7 +31,12 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
       throw new WorkbookComposeException("field converter can not be null");
     }
 
-    field2converter.put(fieldConverter.getMatchField(), fieldConverter);
+    String matchField = fieldConverter.getMatchField();
+    if (StringUtils.isBlank(matchField)) {
+      throw new WorkbookValidateException("field value setter match field can not be null");
+    }
+
+    field2converter.put(matchField, fieldConverter);
     return this;
   }
 

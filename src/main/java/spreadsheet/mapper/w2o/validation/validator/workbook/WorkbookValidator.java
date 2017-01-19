@@ -3,14 +3,20 @@ package spreadsheet.mapper.w2o.validation.validator.workbook;
 
 import spreadsheet.mapper.model.core.Workbook;
 import spreadsheet.mapper.model.meta.WorkbookMeta;
-import spreadsheet.mapper.w2o.validation.validator.Validator;
 
 /**
  * workbook template validator
  * <p>
  * Created by hanwen on 4/26/16.
  */
-public interface WorkbookValidator extends Validator {
+public interface WorkbookValidator {
+
+  /**
+   * the error message will be collected when validator failure if error message is not blank
+   *
+   * @return valid error message
+   */
+  String getErrorMessage();
 
   /**
    * valid supplied workbook

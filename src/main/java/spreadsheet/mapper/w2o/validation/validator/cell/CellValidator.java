@@ -13,6 +13,13 @@ import spreadsheet.mapper.w2o.validation.validator.DependencyValidator;
 public interface CellValidator extends DependencyValidator {
 
   /**
+   * the error message will be collected when validator failure if error message is not blank
+   *
+   * @return valid error message
+   */
+  String getErrorMessage();
+
+  /**
    * valid supplied cell
    *
    * @param cell      {@link Cell}

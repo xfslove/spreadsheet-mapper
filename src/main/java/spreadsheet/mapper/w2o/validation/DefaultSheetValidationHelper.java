@@ -146,6 +146,10 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
 
     for (RowValidator validator : rowValidators) {
       String group = validator.getGroup();
+      if (StringUtils.isBlank(group)) {
+        throw new WorkbookValidateException("row validator[" + validator.getClass().getName() + "] group can not be null");
+      }
+
       if (!validatorMap.containsKey(group)) {
         validatorMap.put(group, new ArrayList<DependencyValidator>());
       }
@@ -154,6 +158,10 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
 
     for (CellValidator validator : cellValidators) {
       String group = validator.getGroup();
+      if (StringUtils.isBlank(group)) {
+        throw new WorkbookValidateException("cell validator[" + validator.getClass().getName() + "] group can not be null");
+      }
+
       if (!validatorMap.containsKey(group)) {
         validatorMap.put(group, new ArrayList<DependencyValidator>());
       }

@@ -3,7 +3,6 @@ package spreadsheet.mapper.w2o.validation.validator.cell;
 import org.apache.commons.lang3.StringUtils;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
-import spreadsheet.mapper.w2o.validation.WorkbookValidateException;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -96,9 +95,6 @@ public abstract class CellValidatorAdapter<V extends CellValidatorAdapter<V>> im
 
   @Override
   public String getMatchField() {
-    if (StringUtils.isBlank(matchField)) {
-      throw new WorkbookValidateException("cell validator match field must be set");
-    }
     return matchField;
   }
 

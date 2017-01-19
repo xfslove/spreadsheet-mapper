@@ -2,14 +2,20 @@ package spreadsheet.mapper.w2o.validation.validator.sheet;
 
 import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.SheetMeta;
-import spreadsheet.mapper.w2o.validation.validator.Validator;
 
 /**
  * sheet validator, after workbook validators, if workbook validators failure, sheet validators will skip.
  * <p>
  * Created by hanwen on 2016/12/23.
  */
-public interface SheetValidator extends Validator {
+public interface SheetValidator {
+
+  /**
+   * the error message will be collected when validator failure if error message is not blank
+   *
+   * @return valid error message
+   */
+  String getErrorMessage();
 
   /**
    * valid supplied sheet

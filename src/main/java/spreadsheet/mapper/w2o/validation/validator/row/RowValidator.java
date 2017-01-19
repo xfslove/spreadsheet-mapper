@@ -15,6 +15,13 @@ import java.util.Set;
 public interface RowValidator extends DependencyValidator {
 
   /**
+   * the error message will be collected when validator failure if error message is not blank
+   *
+   * @return valid error message
+   */
+  String getErrorMessage();
+
+  /**
    * valid supplied row
    *
    * @param row       {@link Row}

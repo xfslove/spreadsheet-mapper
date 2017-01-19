@@ -1,5 +1,6 @@
 package spreadsheet.mapper.w2o.validation.engine;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.model.msg.MessageBean;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
+import spreadsheet.mapper.w2o.validation.WorkbookValidateException;
 import spreadsheet.mapper.w2o.validation.validator.DependencyValidator;
 import spreadsheet.mapper.w2o.validation.validator.cell.CellValidator;
 import spreadsheet.mapper.w2o.validation.validator.row.RowValidator;
@@ -99,9 +101,10 @@ public class DependencyValidateEngine {
 
         validResult = false;
         String errorMessage = rowValidator.getErrorMessage();
+        Set<String> messageOnFields = rowValidator.getMessageOnFields();
 
-        if (StringUtils.isNotBlank(errorMessage)) {
-          for (String messageOnField : rowValidator.getMessageOnFields()) {
+        if (StringUtils.isNotBlank(errorMessage) && CollectionUtils.isNotEmpty(messageOnFields)) {
+          for (String messageOnField : messageOnFields) {
             FieldMeta fieldMeta = sheetMeta.getFieldMeta(messageOnField);
 
             errorMessages.add(new MessageBean(MessageWriteStrategies.COMMENT, errorMessage, row.getSheet().getIndex(), row.getIndex(), fieldMeta.getColumnIndex()));
@@ -114,7 +117,12 @@ public class DependencyValidateEngine {
     } else {
 
       CellValidator cellValidator = (CellValidator) dependencyValidator;
-      FieldMeta fieldMeta = sheetMeta.getFieldMeta(cellValidator.getMatchField());
+      String matchField = cellValidator.getMatchField();
+      if (StringUtils.isBlank(matchField)) {
+        throw new WorkbookValidateException("cell validator[" + cellValidator.getClass().getName() + "] match field can not be null");
+      }
+
+      FieldMeta fieldMeta = sheetMeta.getFieldMeta(matchField);
 
       Cell cell = row.getCell(fieldMeta.getColumnIndex());
       boolean result = cellValidator.valid(cell, fieldMeta);
@@ -123,9 +131,9 @@ public class DependencyValidateEngine {
 
         validResult = false;
         String errorMessage = cellValidator.getErrorMessage();
+        String messageOnField = cellValidator.getMessageOnField();
 
-        if (StringUtils.isNotBlank(errorMessage)) {
-          String messageOnField = cellValidator.getMessageOnField();
+        if (StringUtils.isNotBlank(errorMessage) && StringUtils.isNotBlank(messageOnField)) {
           FieldMeta messageOnFieldMeta = sheetMeta.getFieldMeta(messageOnField);
 
           errorMessages.add(new MessageBean(MessageWriteStrategies.COMMENT, errorMessage, row.getSheet().getIndex(), row.getIndex(), messageOnFieldMeta.getColumnIndex()));
