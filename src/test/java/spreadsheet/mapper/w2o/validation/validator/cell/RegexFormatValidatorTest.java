@@ -20,22 +20,22 @@ public class RegexFormatValidatorTest {
 
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
 
-    CellValidator validator0 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.int1");
-    CellValidator validator1 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.int2");
-    CellValidator validator2 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.long1");
-    CellValidator validator3 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.double1");
-    CellValidator validator4 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.string");
-    CellValidator validator5 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("test.localDate");
+    CellValidator validator0 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("int1");
+    CellValidator validator1 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("int2");
+    CellValidator validator2 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("long1");
+    CellValidator validator3 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("double1");
+    CellValidator validator4 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("string");
+    CellValidator validator5 = new RegexFormatValidator().regex("^[1-9]\\d*$").matchField("localDate");
 
 
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
 
-    assertTrue(validator0.valid(cellMap1.get("test.int1"), fieldMetaMap.get("test.int1")));
-    assertFalse(validator1.valid(cellMap1.get("test.int2"), fieldMetaMap.get("test.int2")));
-    assertTrue(validator2.valid(cellMap1.get("test.long1"), fieldMetaMap.get("test.long1")));
-    assertFalse(validator3.valid(cellMap1.get("test.double1"), fieldMetaMap.get("test.double1")));
-    assertFalse(validator4.valid(cellMap1.get("test.string"), fieldMetaMap.get("test.string")));
-    assertFalse(validator5.valid(cellMap1.get("test.localDate"), fieldMetaMap.get("test.localDate")));
+    assertTrue(validator0.valid(cellMap1.get("int1"), fieldMetaMap.get("int1")));
+    assertFalse(validator1.valid(cellMap1.get("int2"), fieldMetaMap.get("int2")));
+    assertTrue(validator2.valid(cellMap1.get("long1"), fieldMetaMap.get("long1")));
+    assertFalse(validator3.valid(cellMap1.get("double1"), fieldMetaMap.get("double1")));
+    assertFalse(validator4.valid(cellMap1.get("string"), fieldMetaMap.get("string")));
+    assertFalse(validator5.valid(cellMap1.get("localDate"), fieldMetaMap.get("localDate")));
   }
 
 }

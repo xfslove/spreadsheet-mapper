@@ -50,54 +50,54 @@ public class AssertUtil {
 
   public static void assertHeaderRowEquals(Row r1, boolean hasHeader) {
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
-    assertEquals(r1.getCell(1).getValue(), hasHeader ? fieldMetaMap.get("test.int1").getName() : null);
-    assertEquals(r1.getCell(2).getValue(), hasHeader ? fieldMetaMap.get("test.int2").getName() : null);
-    assertEquals(r1.getCell(3).getValue(), hasHeader ? fieldMetaMap.get("test.long1").getName() : null);
-    assertEquals(r1.getCell(4).getValue(), hasHeader ? fieldMetaMap.get("test.long2").getName() : null);
-    assertEquals(r1.getCell(5).getValue(), hasHeader ? fieldMetaMap.get("test.float1").getName() : null);
-    assertEquals(r1.getCell(6).getValue(), hasHeader ? fieldMetaMap.get("test.float2").getName() : null);
-    assertEquals(r1.getCell(7).getValue(), hasHeader ? fieldMetaMap.get("test.double1").getName() : null);
-    assertEquals(r1.getCell(8).getValue(), hasHeader ? fieldMetaMap.get("test.double2").getName() : null);
-    assertEquals(r1.getCell(9).getValue(), hasHeader ? fieldMetaMap.get("test.boolean1").getName() : null);
-    assertEquals(r1.getCell(10).getValue(), hasHeader ? fieldMetaMap.get("test.boolean2").getName() : null);
-    assertEquals(r1.getCell(11).getValue(), hasHeader ? fieldMetaMap.get("test.string").getName() : null);
-    assertEquals(r1.getCell(12).getValue(), hasHeader ? fieldMetaMap.get("test.bigDecimal").getName() : null);
-    assertEquals(r1.getCell(13).getValue(), hasHeader ? fieldMetaMap.get("test.localDate").getName() : null);
-    assertEquals(r1.getCell(14).getValue(), hasHeader ? fieldMetaMap.get("test.localDateTime").getName() : null);
+    assertEquals(r1.getCell(1).getValue(), hasHeader ? fieldMetaMap.get("int1").getName() : null);
+    assertEquals(r1.getCell(2).getValue(), hasHeader ? fieldMetaMap.get("int2").getName() : null);
+    assertEquals(r1.getCell(3).getValue(), hasHeader ? fieldMetaMap.get("long1").getName() : null);
+    assertEquals(r1.getCell(4).getValue(), hasHeader ? fieldMetaMap.get("long2").getName() : null);
+    assertEquals(r1.getCell(5).getValue(), hasHeader ? fieldMetaMap.get("float1").getName() : null);
+    assertEquals(r1.getCell(6).getValue(), hasHeader ? fieldMetaMap.get("float2").getName() : null);
+    assertEquals(r1.getCell(7).getValue(), hasHeader ? fieldMetaMap.get("double1").getName() : null);
+    assertEquals(r1.getCell(8).getValue(), hasHeader ? fieldMetaMap.get("double2").getName() : null);
+    assertEquals(r1.getCell(9).getValue(), hasHeader ? fieldMetaMap.get("boolean1").getName() : null);
+    assertEquals(r1.getCell(10).getValue(), hasHeader ? fieldMetaMap.get("boolean2").getName() : null);
+    assertEquals(r1.getCell(11).getValue(), hasHeader ? fieldMetaMap.get("string").getName() : null);
+    assertEquals(r1.getCell(12).getValue(), hasHeader ? fieldMetaMap.get("bigDecimal").getName() : null);
+    assertEquals(r1.getCell(13).getValue(), hasHeader ? fieldMetaMap.get("localDate").getName() : null);
+    assertEquals(r1.getCell(14).getValue(), hasHeader ? fieldMetaMap.get("localDateTime").getName() : null);
   }
 
   public static void assertRow2Equals(Row r2) {
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
 
-    assertEquals(r2.getCell(1).getValue(), cellMap1.get("test.int1").getValue());
-    assertEquals(r2.getCell(2).getValue(), cellMap1.get("test.int2").getValue());
-    assertEquals(r2.getCell(3).getValue(), cellMap1.get("test.long1").getValue());
-    assertEquals(r2.getCell(4).getValue(), cellMap1.get("test.long2").getValue());
-    assertEquals(r2.getCell(5).getValue(), cellMap1.get("test.float1").getValue());
-    assertEquals(r2.getCell(6).getValue(), cellMap1.get("test.float2").getValue());
-    assertEquals(r2.getCell(7).getValue(), cellMap1.get("test.double1").getValue());
-    assertEquals(r2.getCell(8).getValue(), cellMap1.get("test.double2").getValue());
-    assertEquals(r2.getCell(9).getValue(), cellMap1.get("test.boolean1").getValue());
-    assertEquals(r2.getCell(10).getValue(), cellMap1.get("test.boolean2").getValue());
-    assertEquals(r2.getCell(11).getValue(), cellMap1.get("test.string").getValue());
-    assertEquals(r2.getCell(12).getValue(), cellMap1.get("test.bigDecimal").getValue());
-    assertEquals(r2.getCell(13).getValue(), cellMap1.get("test.localDate").getValue());
-    assertEquals(r2.getCell(14).getValue(), cellMap1.get("test.localDateTime").getValue());
+    assertEquals(r2.getCell(1).getValue(), cellMap1.get("int1").getValue());
+    assertEquals(r2.getCell(2).getValue(), cellMap1.get("int2").getValue());
+    assertEquals(r2.getCell(3).getValue(), cellMap1.get("long1").getValue());
+    assertEquals(r2.getCell(4).getValue(), cellMap1.get("long2").getValue());
+    assertEquals(r2.getCell(5).getValue(), cellMap1.get("float1").getValue());
+    assertEquals(r2.getCell(6).getValue(), cellMap1.get("float2").getValue());
+    assertEquals(r2.getCell(7).getValue(), cellMap1.get("double1").getValue());
+    assertEquals(r2.getCell(8).getValue(), cellMap1.get("double2").getValue());
+    assertEquals(r2.getCell(9).getValue(), cellMap1.get("boolean1").getValue());
+    assertEquals(r2.getCell(10).getValue(), cellMap1.get("boolean2").getValue());
+    assertEquals(r2.getCell(11).getValue(), cellMap1.get("string").getValue());
+    assertEquals(r2.getCell(12).getValue(), cellMap1.get("bigDecimal").getValue());
+    assertEquals(r2.getCell(13).getValue(), cellMap1.get("localDate").getValue());
+    assertEquals(r2.getCell(14).getValue(), cellMap1.get("localDateTime").getValue());
   }
 
   public static void assertRow3Equals(Row r3) {
     Map<String, Cell> cellMap2 = TestFactory.createCellMap2();
-    assertEquals(r3.getCell(1).getValue(), cellMap2.get("test.int1").getValue());
+    assertEquals(r3.getCell(1).getValue(), cellMap2.get("int1").getValue());
     assertEquals(r3.getCell(2).getValue(), new CellBean().getValue());
-    assertEquals(r3.getCell(3).getValue(), cellMap2.get("test.long1").getValue());
+    assertEquals(r3.getCell(3).getValue(), cellMap2.get("long1").getValue());
     assertEquals(r3.getCell(4).getValue(), new CellBean().getValue());
-    assertEquals(r3.getCell(5).getValue(), cellMap2.get("test.float1").getValue());
+    assertEquals(r3.getCell(5).getValue(), cellMap2.get("float1").getValue());
     assertEquals(r3.getCell(6).getValue(), new CellBean().getValue());
-    assertEquals(r3.getCell(7).getValue(), cellMap2.get("test.double1").getValue());
+    assertEquals(r3.getCell(7).getValue(), cellMap2.get("double1").getValue());
     assertEquals(r3.getCell(8).getValue(), new CellBean().getValue());
-    assertEquals(r3.getCell(9).getValue(), cellMap2.get("test.boolean1").getValue());
+    assertEquals(r3.getCell(9).getValue(), cellMap2.get("boolean1").getValue());
     assertEquals(r3.getCell(10).getValue(), new CellBean().getValue());
-    assertEquals(r3.getCell(11).getValue(), cellMap2.get("test.string").getValue());
+    assertEquals(r3.getCell(11).getValue(), cellMap2.get("string").getValue());
     assertEquals(r3.getCell(12).getValue(), new CellBean().getValue());
     assertEquals(r3.getCell(13).getValue(), new CellBean().getValue());
     assertEquals(r3.getCell(14).getValue(), new CellBean().getValue());
@@ -171,7 +171,6 @@ public class AssertUtil {
   public static void assertFieldMetaEquals(FieldMeta f1, FieldMeta f2) {
     assertEquals(f1.getColumnIndex(), f2.getColumnIndex());
     assertEquals(f1.getName(), f2.getName());
-    assertEquals(f1.getPrefix(), f2.getPrefix());
     List<HeaderMeta> hm1 = f1.getHeaderMetas();
     List<HeaderMeta> hm2 = f2.getHeaderMetas();
     assertEquals(hm1.size(), hm2.size());

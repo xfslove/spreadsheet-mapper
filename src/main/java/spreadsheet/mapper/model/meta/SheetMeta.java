@@ -43,10 +43,10 @@ public interface SheetMeta extends Serializable {
   List<FieldMeta> getFieldMetas();
 
   /**
-   * @param field field
-   * @return field meta name of field
+   * @param fieldName field
+   * @return field meta of field name
    */
-  FieldMeta getFieldMeta(String field);
+  FieldMeta getFieldMeta(String fieldName);
 
   /**
    * add field meta

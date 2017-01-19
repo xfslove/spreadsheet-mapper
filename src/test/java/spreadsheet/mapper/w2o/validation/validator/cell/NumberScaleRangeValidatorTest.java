@@ -20,22 +20,22 @@ public class NumberScaleRangeValidatorTest {
 
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
 
-    CellValidator validator0 = new NumberScaleRangeValidator().matchField("test.float1").gte(1).lte(10);
-    CellValidator validator1 = new NumberScaleRangeValidator().matchField("test.float2").gte(1).lte(10);
-    CellValidator validator2 = new NumberScaleRangeValidator().matchField("test.double1").gte(1).lte(10);
-    CellValidator validator3 = new NumberScaleRangeValidator().matchField("test.double2").gte(1).lte(10);
+    CellValidator validator0 = new NumberScaleRangeValidator().matchField("float1").gte(1).lte(10);
+    CellValidator validator1 = new NumberScaleRangeValidator().matchField("float2").gte(1).lte(10);
+    CellValidator validator2 = new NumberScaleRangeValidator().matchField("double1").gte(1).lte(10);
+    CellValidator validator3 = new NumberScaleRangeValidator().matchField("double2").gte(1).lte(10);
 
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
-    assertTrue(validator0.valid(cellMap1.get("test.float1"), fieldMetaMap.get("test.float1")));
-    assertTrue(validator1.valid(cellMap1.get("test.float2"), fieldMetaMap.get("test.float2")));
-    assertFalse(validator2.valid(cellMap1.get("test.double1"), fieldMetaMap.get("test.double1")));
-    assertFalse(validator3.valid(cellMap1.get("test.double2"), fieldMetaMap.get("test.double2")));
+    assertTrue(validator0.valid(cellMap1.get("float1"), fieldMetaMap.get("float1")));
+    assertTrue(validator1.valid(cellMap1.get("float2"), fieldMetaMap.get("float2")));
+    assertFalse(validator2.valid(cellMap1.get("double1"), fieldMetaMap.get("double1")));
+    assertFalse(validator3.valid(cellMap1.get("double2"), fieldMetaMap.get("double2")));
 
     Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
-    assertFalse(validator0.valid(cellMap2.get("test.float1"), fieldMetaMap.get("test.float1")));
-    assertTrue(validator1.valid(cellMap2.get("test.float2"), fieldMetaMap.get("test.float2")));
-    assertFalse(validator2.valid(cellMap2.get("test.double1"), fieldMetaMap.get("test.double1")));
-    assertTrue(validator3.valid(cellMap2.get("test.double2"), fieldMetaMap.get("test.double2")));
+    assertFalse(validator0.valid(cellMap2.get("float1"), fieldMetaMap.get("float1")));
+    assertTrue(validator1.valid(cellMap2.get("float2"), fieldMetaMap.get("float2")));
+    assertFalse(validator2.valid(cellMap2.get("double1"), fieldMetaMap.get("double1")));
+    assertTrue(validator3.valid(cellMap2.get("double2"), fieldMetaMap.get("double2")));
   }
 
 }

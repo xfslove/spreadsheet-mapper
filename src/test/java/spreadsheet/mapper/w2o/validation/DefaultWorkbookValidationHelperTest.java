@@ -36,16 +36,16 @@ public class DefaultWorkbookValidationHelperTest {
     WorkbookValidationHelper workbookValidationHelper = new DefaultWorkbookValidationHelper();
 
     SheetValidationHelper sheetValidationHelper = new DefaultSheetValidationHelper();
-    sheetValidationHelper.addCellValidator(new DefaultSheetValidationHelperTest.TestCellValidator(counter).matchField("test.int1"));
-    sheetValidationHelper.addCellValidator(new DefaultSheetValidationHelperTest.TestCellValidator(counter).matchField("test.int2"));
-    sheetValidationHelper.addCellValidator(new DefaultSheetValidationHelperTest.TestCellValidator(counter).matchField("test.long1"));
-    sheetValidationHelper.addCellValidator(new DefaultSheetValidationHelperTest.TestCellValidator(counter).matchField("test.long2"));
-    sheetValidationHelper.addCellValidator(new DefaultSheetValidationHelperTest.TestCellValidator(counter).matchField("test.float1"));
-    sheetValidationHelper.addCellValidator(new DefaultSheetValidationHelperTest.TestCellValidator(counter).matchField("test.float2"));
-    sheetValidationHelper.addCellValidator(new DefaultSheetValidationHelperTest.TestCellValidator(counter).matchField("test.string"));
+    sheetValidationHelper.addCellValidator(new DefaultSheetValidationHelperTest.TestCellValidator(counter).matchField("int1"));
+    sheetValidationHelper.addCellValidator(new DefaultSheetValidationHelperTest.TestCellValidator(counter).matchField("int2"));
+    sheetValidationHelper.addCellValidator(new DefaultSheetValidationHelperTest.TestCellValidator(counter).matchField("long1"));
+    sheetValidationHelper.addCellValidator(new DefaultSheetValidationHelperTest.TestCellValidator(counter).matchField("long2"));
+    sheetValidationHelper.addCellValidator(new DefaultSheetValidationHelperTest.TestCellValidator(counter).matchField("float1"));
+    sheetValidationHelper.addCellValidator(new DefaultSheetValidationHelperTest.TestCellValidator(counter).matchField("float2"));
+    sheetValidationHelper.addCellValidator(new DefaultSheetValidationHelperTest.TestCellValidator(counter).matchField("string"));
 
-    sheetValidationHelper.addRowValidator(new DefaultSheetValidationHelperTest.TestRowValidator(counter).group("test.int1"));
-    sheetValidationHelper.addRowValidator(new DefaultSheetValidationHelperTest.TestRowValidator(counter).group("test.int2"));
+    sheetValidationHelper.addRowValidator(new DefaultSheetValidationHelperTest.TestRowValidator(counter).group("int1"));
+    sheetValidationHelper.addRowValidator(new DefaultSheetValidationHelperTest.TestRowValidator(counter).group("int2"));
 
 
     Workbook workbook = new WorkbookBean();

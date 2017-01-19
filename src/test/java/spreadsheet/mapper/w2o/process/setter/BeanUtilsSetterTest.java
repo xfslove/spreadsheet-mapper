@@ -26,20 +26,20 @@ public class BeanUtilsSetterTest {
 
     TestBean testBean = new TestBean();
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
-    setter.set(testBean, cellMap1.get("test.int1"), fieldMetaMap.get("test.int1"));
-    setter.set(testBean, cellMap1.get("test.int2"), fieldMetaMap.get("test.int2"));
-    setter.set(testBean, cellMap1.get("test.long1"), fieldMetaMap.get("test.long1"));
-    setter.set(testBean, cellMap1.get("test.long2"), fieldMetaMap.get("test.long2"));
-    setter.set(testBean, cellMap1.get("test.float1"), fieldMetaMap.get("test.float1"));
-    setter.set(testBean, cellMap1.get("test.float2"), fieldMetaMap.get("test.float2"));
-    setter.set(testBean, cellMap1.get("test.double1"), fieldMetaMap.get("test.double1"));
-    setter.set(testBean, cellMap1.get("test.double2"), fieldMetaMap.get("test.double2"));
-    setter.set(testBean, cellMap1.get("test.string"), fieldMetaMap.get("test.string"));
-    setter.set(testBean, cellMap1.get("test.bigDecimal"), fieldMetaMap.get("test.bigDecimal"));
-    setter.set(testBean, cellMap1.get("test.localDate"), fieldMetaMap.get("test.localDate"));
-    setter.set(testBean, cellMap1.get("test.localDateTime"), fieldMetaMap.get("test.localDateTime"));
-    setter.set(testBean, cellMap1.get("test.boolean1"), fieldMetaMap.get("test.boolean1"));
-    setter.set(testBean, cellMap1.get("test.boolean2"), fieldMetaMap.get("test.boolean2"));
+    setter.set(testBean, cellMap1.get("int1"), fieldMetaMap.get("int1"));
+    setter.set(testBean, cellMap1.get("int2"), fieldMetaMap.get("int2"));
+    setter.set(testBean, cellMap1.get("long1"), fieldMetaMap.get("long1"));
+    setter.set(testBean, cellMap1.get("long2"), fieldMetaMap.get("long2"));
+    setter.set(testBean, cellMap1.get("float1"), fieldMetaMap.get("float1"));
+    setter.set(testBean, cellMap1.get("float2"), fieldMetaMap.get("float2"));
+    setter.set(testBean, cellMap1.get("double1"), fieldMetaMap.get("double1"));
+    setter.set(testBean, cellMap1.get("double2"), fieldMetaMap.get("double2"));
+    setter.set(testBean, cellMap1.get("string"), fieldMetaMap.get("string"));
+    setter.set(testBean, cellMap1.get("bigDecimal"), fieldMetaMap.get("bigDecimal"));
+    setter.set(testBean, cellMap1.get("localDate"), fieldMetaMap.get("localDate"));
+    setter.set(testBean, cellMap1.get("localDateTime"), fieldMetaMap.get("localDateTime"));
+    setter.set(testBean, cellMap1.get("boolean1"), fieldMetaMap.get("boolean1"));
+    setter.set(testBean, cellMap1.get("boolean2"), fieldMetaMap.get("boolean2"));
 
 
     assertEquals(testBean.getInt1(), 10000);
@@ -60,20 +60,20 @@ public class BeanUtilsSetterTest {
 
     TestBean testBean1 = new TestBean();
     Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
-    setter.set(testBean1, cellMap2.get("test.int1"), fieldMetaMap.get("test.int1"));
-    setter.set(testBean1, cellMap2.get("test.int2"), fieldMetaMap.get("test.int2"));
-    setter.set(testBean1, cellMap2.get("test.long1"), fieldMetaMap.get("test.long1"));
-    setter.set(testBean1, cellMap2.get("test.long2"), fieldMetaMap.get("test.long2"));
-    setter.set(testBean1, cellMap2.get("test.float1"), fieldMetaMap.get("test.float1"));
-    setter.set(testBean1, cellMap2.get("test.float2"), fieldMetaMap.get("test.float2"));
-    setter.set(testBean1, cellMap2.get("test.double1"), fieldMetaMap.get("test.double1"));
-    setter.set(testBean1, cellMap2.get("test.double2"), fieldMetaMap.get("test.double2"));
-    setter.set(testBean1, cellMap2.get("test.string"), fieldMetaMap.get("test.string"));
-    setter.set(testBean1, cellMap2.get("test.bigDecimal"), fieldMetaMap.get("test.bigDecimal"));
-    setter.set(testBean1, cellMap2.get("test.localDate"), fieldMetaMap.get("test.localDate"));
-    setter.set(testBean1, cellMap2.get("test.localDateTime"), fieldMetaMap.get("test.localDateTime"));
-    setter.set(testBean1, cellMap2.get("test.boolean1"), fieldMetaMap.get("test.boolean1"));
-    setter.set(testBean1, cellMap2.get("test.boolean2"), fieldMetaMap.get("test.boolean2"));
+    setter.set(testBean1, cellMap2.get("int1"), fieldMetaMap.get("int1"));
+    setter.set(testBean1, cellMap2.get("int2"), fieldMetaMap.get("int2"));
+    setter.set(testBean1, cellMap2.get("long1"), fieldMetaMap.get("long1"));
+    setter.set(testBean1, cellMap2.get("long2"), fieldMetaMap.get("long2"));
+    setter.set(testBean1, cellMap2.get("float1"), fieldMetaMap.get("float1"));
+    setter.set(testBean1, cellMap2.get("float2"), fieldMetaMap.get("float2"));
+    setter.set(testBean1, cellMap2.get("double1"), fieldMetaMap.get("double1"));
+    setter.set(testBean1, cellMap2.get("double2"), fieldMetaMap.get("double2"));
+    setter.set(testBean1, cellMap2.get("string"), fieldMetaMap.get("string"));
+    setter.set(testBean1, cellMap2.get("bigDecimal"), fieldMetaMap.get("bigDecimal"));
+    setter.set(testBean1, cellMap2.get("localDate"), fieldMetaMap.get("localDate"));
+    setter.set(testBean1, cellMap2.get("localDateTime"), fieldMetaMap.get("localDateTime"));
+    setter.set(testBean1, cellMap2.get("boolean1"), fieldMetaMap.get("boolean1"));
+    setter.set(testBean1, cellMap2.get("boolean2"), fieldMetaMap.get("boolean2"));
 
     assertEquals(testBean1.getInt1(), 0);
     assertNull(testBean1.getInt2());

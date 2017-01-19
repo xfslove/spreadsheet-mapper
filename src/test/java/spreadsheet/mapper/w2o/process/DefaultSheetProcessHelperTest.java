@@ -76,10 +76,10 @@ public class DefaultSheetProcessHelperTest {
   }
 
   static void addSetter(SheetProcessHelper<TestBean> processor1) {
-    processor1.addFieldSetter(new LocalDateTimeSetter<TestBean>().pattern("yyyy-MM-dd HH:mm:ss").matchField("test.localDateTime"));
-    processor1.addFieldSetter(new LocalDateSetter<TestBean>().pattern("yyyy-MM-dd").matchField("test.localDate"));
-    processor1.addFieldSetter(new BooleanSetter<TestBean>().matchField("test.boolean1").toTrue("pass").toFalse("failure"));
-    processor1.addFieldSetter(new BooleanSetter<TestBean>().toTrue("pass").toFalse("failure").matchField("test.boolean2"));
+    processor1.addFieldSetter(new LocalDateTimeSetter<TestBean>().pattern("yyyy-MM-dd HH:mm:ss").matchField("localDateTime"));
+    processor1.addFieldSetter(new LocalDateSetter<TestBean>().pattern("yyyy-MM-dd").matchField("localDate"));
+    processor1.addFieldSetter(new BooleanSetter<TestBean>().matchField("boolean1").toTrue("pass").toFalse("failure"));
+    processor1.addFieldSetter(new BooleanSetter<TestBean>().toTrue("pass").toFalse("failure").matchField("boolean2"));
 
   }
 

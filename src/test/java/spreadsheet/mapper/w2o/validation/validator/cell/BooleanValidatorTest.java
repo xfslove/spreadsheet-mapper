@@ -20,16 +20,16 @@ public class BooleanValidatorTest {
   public void testCustomValidate() throws Exception {
 
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
-    CellValidator validator0 = new BooleanValidator().matchField("test.boolean1").supportedTrue("pass").supportedFalse("failure");
-    CellValidator validator1 = new BooleanValidator().matchField("test.boolean2").supportedTrue("pass").supportedFalse("failure");
+    CellValidator validator0 = new BooleanValidator().matchField("boolean1").supportedTrue("pass").supportedFalse("failure");
+    CellValidator validator1 = new BooleanValidator().matchField("boolean2").supportedTrue("pass").supportedFalse("failure");
 
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
-    assertTrue(validator0.valid(cellMap1.get("test.boolean1"), fieldMetaMap.get("test.boolean1")));
-    assertTrue(validator1.valid(cellMap1.get("test.boolean2"), fieldMetaMap.get("test.boolean2")));
+    assertTrue(validator0.valid(cellMap1.get("boolean1"), fieldMetaMap.get("boolean1")));
+    assertTrue(validator1.valid(cellMap1.get("boolean2"), fieldMetaMap.get("boolean2")));
 
     Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
-    assertFalse(validator0.valid(cellMap2.get("test.boolean1"), fieldMetaMap.get("test.boolean1")));
-    assertTrue(validator1.valid(cellMap2.get("test.boolean2"), fieldMetaMap.get("test.boolean2")));
+    assertFalse(validator0.valid(cellMap2.get("boolean1"), fieldMetaMap.get("boolean1")));
+    assertTrue(validator1.valid(cellMap2.get("boolean2"), fieldMetaMap.get("boolean2")));
   }
 
 }

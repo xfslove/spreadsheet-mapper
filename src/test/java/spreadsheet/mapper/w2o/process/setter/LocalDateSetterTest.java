@@ -24,14 +24,14 @@ public class LocalDateSetterTest {
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
     Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
 
-    LocalDateSetter<TestBean> setter1 = new LocalDateSetter<TestBean>().matchField("test.localDate").pattern("yyyy-MM-dd");
-    LocalDateSetter<TestBean> setter2 = new LocalDateSetter<TestBean>().pattern("yyyy/MM/dd").matchField("test.localDate");
+    LocalDateSetter<TestBean> setter1 = new LocalDateSetter<TestBean>().matchField("localDate").pattern("yyyy-MM-dd");
+    LocalDateSetter<TestBean> setter2 = new LocalDateSetter<TestBean>().pattern("yyyy/MM/dd").matchField("localDate");
 
     TestBean testBean1 = new TestBean();
-    setter1.set(testBean1, cellMap1.get("test.localDate"), fieldMetaMap.get("test.localDate"));
+    setter1.set(testBean1, cellMap1.get("localDate"), fieldMetaMap.get("localDate"));
 
     TestBean testBean2 = new TestBean();
-    setter2.set(testBean2, cellMap2.get("test.localDate"), fieldMetaMap.get("test.localDate"));
+    setter2.set(testBean2, cellMap2.get("localDate"), fieldMetaMap.get("localDate"));
 
     assertEquals(testBean1.getLocalDate(), new LocalDate(1984, 11, 22));
     assertEquals(testBean2.getLocalDate(), new LocalDate(1984, 11, 22));

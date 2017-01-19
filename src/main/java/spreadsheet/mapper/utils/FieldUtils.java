@@ -25,25 +25,13 @@ public class FieldUtils {
   public static final String BUSINESS_KEY_PREFIX = "businessKey.";
 
   /**
-   * get field with out business key({@link #BUSINESS_KEY_PREFIX})
-   *
-   * @param field field
-   * @return field without business key
-   */
-  public static String subtractBusinessKey(String field) {
-    if (!StringUtils.contains(field, BUSINESS_KEY_PREFIX)) {
-      throw new IllegalArgumentException("field is not business key");
-    }
-    return field.substring(BUSINESS_KEY_PREFIX.length());
-  }
-
-  /**
    * <pre>
-   * get real field name from field meta name, without prefix if has prefix
+   * get real field name from field name, if field name has {@link #BUSINESS_KEY_PREFIX} subtract it.
    *
    * eg:
-   * object.name -&gt; name
-   * object.nested.name -&gt; nested.name
+   * name -&gt; name
+   * nested.name -&gt; nested.name
+   * businessKey.name -&gt; name
    * </pre>
    *
    * @param fieldMeta {@link FieldMeta}
@@ -51,14 +39,10 @@ public class FieldUtils {
    */
   public static String detectRealFieldName(FieldMeta fieldMeta) {
 
-    if (StringUtils.isBlank(fieldMeta.getPrefix())) {
-      return fieldMeta.getName();
-    }
+    String realFieldName = fieldMeta.getName();
 
-    String realFieldName = StringUtils.substring(fieldMeta.getName(), fieldMeta.getPrefix().length());
-
-    if (realFieldName.contains(BUSINESS_KEY_PREFIX)) {
-      realFieldName = subtractBusinessKey(realFieldName);
+    if (StringUtils.startsWith(realFieldName, BUSINESS_KEY_PREFIX)) {
+      realFieldName = StringUtils.substring(realFieldName, BUSINESS_KEY_PREFIX.length());
     }
 
     return realFieldName;

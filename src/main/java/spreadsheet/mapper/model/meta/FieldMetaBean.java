@@ -13,8 +13,6 @@ import java.util.List;
  */
 public class FieldMetaBean implements FieldMeta {
 
-  private String prefix;
-
   private String name;
 
   private int columnIndex;
@@ -24,21 +22,11 @@ public class FieldMetaBean implements FieldMeta {
   private SheetMeta sheetMeta;
 
   public FieldMetaBean(String name, int columnIndex) {
-    this(null, name, columnIndex);
-  }
-
-  public FieldMetaBean(String prefix, String name, int columnIndex) {
     if (StringUtils.isBlank(name)) {
       throw new IllegalArgumentException("name can not be null");
     }
-    this.prefix = prefix;
     this.name = name;
     this.columnIndex = columnIndex;
-  }
-
-  @Override
-  public String getPrefix() {
-    return prefix;
   }
 
   @Override
@@ -91,7 +79,6 @@ public class FieldMetaBean implements FieldMeta {
   @Override
   public String toString() {
     return new ToStringBuilder(this)
-        .append("prefix", prefix)
         .append("name", name)
         .append("columnIndex", columnIndex)
         .toString();

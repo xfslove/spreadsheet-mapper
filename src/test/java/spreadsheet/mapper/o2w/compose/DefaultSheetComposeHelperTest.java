@@ -67,17 +67,17 @@ public class DefaultSheetComposeHelperTest {
 
   static void addConverters(SheetComposeHelper<TestBean> sheetComposeHelper) {
 
-    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.int1"));
-    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.int2"));
-    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.long1"));
-    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.long2"));
-    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.float1"));
-    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.float2"));
-    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.double1"));
-    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("test.double2"));
-    sheetComposeHelper.addFieldConverter(new BooleanConverter<TestBean>().matchField("test.boolean1").trueString("pass").falseString("failure"));
-    sheetComposeHelper.addFieldConverter(new BooleanConverter<TestBean>().matchField("test.boolean2").trueString("pass").falseString("failure"));
-    sheetComposeHelper.addFieldConverter(new LocalDateTimeConverter<TestBean>().matchField("test.localDateTime").pattern("yyyy-MM-dd HH:mm:ss"));
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("int1"));
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("int2"));
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("long1"));
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("long2"));
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("float1"));
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("float2"));
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("double1"));
+    sheetComposeHelper.addFieldConverter(new PlainNumberConverter<TestBean>().matchField("double2"));
+    sheetComposeHelper.addFieldConverter(new BooleanConverter<TestBean>().matchField("boolean1").trueString("pass").falseString("failure"));
+    sheetComposeHelper.addFieldConverter(new BooleanConverter<TestBean>().matchField("boolean2").trueString("pass").falseString("failure"));
+    sheetComposeHelper.addFieldConverter(new LocalDateTimeConverter<TestBean>().matchField("localDateTime").pattern("yyyy-MM-dd HH:mm:ss"));
 
   }
 }

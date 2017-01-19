@@ -229,25 +229,25 @@ public class DefaultSheetValidationHelperTest {
 
     SheetValidationHelper sheetValidationHelper = new DefaultSheetValidationHelper();
 
-    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("test.int1").dependsOn("test.int2"));
-    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("test.int2").dependsOn("test.long1"));
-    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("test.long1").dependsOn("test.long2"));
-    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("test.long2").dependsOn("test.double2"));
-    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("test.float1").dependsOn("test.float2"));
-    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("test.float2").dependsOn("test.double2"));
-    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("test.double1").dependsOn("test.float1"));
-    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("test.double2").dependsOn("test.string"));
-    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("test.string").dependsOn("test.boolean1"));
-    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("test.string").dependsOn("test.boolean2"));
-    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("test.boolean1").dependsOn("test.bigDecimal"));
-    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("test.boolean2").dependsOn("test.boolean1"));
-    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("test.bigDecimal"));
+    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("int1").dependsOn("int2"));
+    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("int2").dependsOn("long1"));
+    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("long1").dependsOn("long2"));
+    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("long2").dependsOn("double2"));
+    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("float1").dependsOn("float2"));
+    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("float2").dependsOn("double2"));
+    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("double1").dependsOn("float1"));
+    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("double2").dependsOn("string"));
+    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("string").dependsOn("boolean1"));
+    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("string").dependsOn("boolean2"));
+    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("boolean1").dependsOn("bigDecimal"));
+    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("boolean2").dependsOn("boolean1"));
+    sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("bigDecimal"));
 
-    sheetValidationHelper.addRowValidator(new TestRowValidator(counter).group("test.int2").dependsOn("test.double1"));
-    sheetValidationHelper.addRowValidator(new TestRowValidator(counter).group("test.long1").dependsOn("test.float1"));
-    sheetValidationHelper.addRowValidator(new TestRowValidator(counter).group("test.double1").dependsOn("test.string"));
-    sheetValidationHelper.addRowValidator(new TestRowValidator(counter).group("test.double1").dependsOn("test.boolean2"));
-    sheetValidationHelper.addRowValidator(new TestRowValidator(counter).group("test.boolean2").dependsOn("test.boolean1"));
+    sheetValidationHelper.addRowValidator(new TestRowValidator(counter).group("int2").dependsOn("double1"));
+    sheetValidationHelper.addRowValidator(new TestRowValidator(counter).group("long1").dependsOn("float1"));
+    sheetValidationHelper.addRowValidator(new TestRowValidator(counter).group("double1").dependsOn("string"));
+    sheetValidationHelper.addRowValidator(new TestRowValidator(counter).group("double1").dependsOn("boolean2"));
+    sheetValidationHelper.addRowValidator(new TestRowValidator(counter).group("boolean2").dependsOn("boolean1"));
 
     boolean valid = sheetValidationHelper.valid(sheet, sheetMeta);
     assertTrue(valid);
@@ -260,33 +260,33 @@ public class DefaultSheetValidationHelperTest {
     List<String> hitValidators = new ArrayList<>();
     /*
        no cycle
-       test.int1 -> test.int2, test.long1, test.double1
-       test.int2 -> test.long2
-       test.long1 -> test.float2
-       test.long2 -> test.float1, test.float2
-       test.float1 -> test.double1
-       test.float2 -> test.double1
+       int1 -> int2, long1, double1
+       int2 -> long2
+       long1 -> float2
+       long2 -> float1, float2
+       float1 -> double1
+       float2 -> double1
      */
     SheetMeta sheetMeta = TestFactory.createSheetMeta(true);
     Sheet sheet = getSheet();
 
     SheetValidationHelper sheetValidationHelper = new DefaultSheetValidationHelper();
-    sheetValidationHelper.addCellValidator(new TrueCellValidator(hitValidators).matchField("test.float2").dependsOn("test.double1"));
-    sheetValidationHelper.addCellValidator(new FalseCellValidator(hitValidators).matchField("test.int1").dependsOn("test.int2"));
-    sheetValidationHelper.addCellValidator(new TrueCellValidator(hitValidators).matchField("test.int1").dependsOn("test.long1"));
-    sheetValidationHelper.addCellValidator(new TrueCellValidator(hitValidators).matchField("test.int2").dependsOn("test.long2"));
-    sheetValidationHelper.addCellValidator(new TrueCellValidator(hitValidators).matchField("test.long1").dependsOn("test.float2"));
-    sheetValidationHelper.addCellValidator(new TrueCellValidator(hitValidators).matchField("test.long2").dependsOn("test.float1"));
-    sheetValidationHelper.addCellValidator(new FalseCellValidator(hitValidators).matchField("test.float1"));
-    sheetValidationHelper.addCellValidator(new TrueCellValidator(hitValidators).matchField("test.double1"));
+    sheetValidationHelper.addCellValidator(new TrueCellValidator(hitValidators).matchField("float2").dependsOn("double1"));
+    sheetValidationHelper.addCellValidator(new FalseCellValidator(hitValidators).matchField("int1").dependsOn("int2"));
+    sheetValidationHelper.addCellValidator(new TrueCellValidator(hitValidators).matchField("int1").dependsOn("long1"));
+    sheetValidationHelper.addCellValidator(new TrueCellValidator(hitValidators).matchField("int2").dependsOn("long2"));
+    sheetValidationHelper.addCellValidator(new TrueCellValidator(hitValidators).matchField("long1").dependsOn("float2"));
+    sheetValidationHelper.addCellValidator(new TrueCellValidator(hitValidators).matchField("long2").dependsOn("float1"));
+    sheetValidationHelper.addCellValidator(new FalseCellValidator(hitValidators).matchField("float1"));
+    sheetValidationHelper.addCellValidator(new TrueCellValidator(hitValidators).matchField("double1"));
 
-    sheetValidationHelper.addRowValidator(new TrueRowValidator(hitValidators).group("test.int1").dependsOn("test.double1"));
-    sheetValidationHelper.addRowValidator(new TrueRowValidator(hitValidators).group("test.long2").dependsOn("test.float2"));
-    sheetValidationHelper.addRowValidator(new FalseRowValidator(hitValidators).group("test.float1").dependsOn("test.double1"));
+    sheetValidationHelper.addRowValidator(new TrueRowValidator(hitValidators).group("int1").dependsOn("double1"));
+    sheetValidationHelper.addRowValidator(new TrueRowValidator(hitValidators).group("long2").dependsOn("float2"));
+    sheetValidationHelper.addRowValidator(new FalseRowValidator(hitValidators).group("float1").dependsOn("double1"));
     boolean result = sheetValidationHelper.valid(sheet, sheetMeta);
     assertFalse(result);
 
-    List<String> expected = Arrays.asList("cell:true:test.double1", "cell:true:test.float2", "row:false:test.float1");
+    List<String> expected = Arrays.asList("cell:true:double1", "cell:true:float2", "row:false:float1");
 
     assertEquals(hitValidators, expected);
   }

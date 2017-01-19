@@ -26,20 +26,20 @@ public class BooleanSetterTest {
     // touch register
     new BeanUtilsSetter();
 
-    BooleanSetter<TestBean> setter1 = new BooleanSetter<TestBean>().matchField("test.boolean1").toFalse("failure").toTrue("pass");
-    BooleanSetter<TestBean> setter2 = new BooleanSetter<TestBean>().toTrue("pass").toFalse("failure").matchField("test.boolean2");
+    BooleanSetter<TestBean> setter1 = new BooleanSetter<TestBean>().matchField("boolean1").toFalse("failure").toTrue("pass");
+    BooleanSetter<TestBean> setter2 = new BooleanSetter<TestBean>().toTrue("pass").toFalse("failure").matchField("boolean2");
 
     TestBean testBean1 = new TestBean();
-    setter1.set(testBean1, cellMap1.get("test.boolean1"), fieldMetaMap.get("test.boolean1"));
-    setter2.set(testBean1, cellMap1.get("test.boolean2"), fieldMetaMap.get("test.boolean2"));
+    setter1.set(testBean1, cellMap1.get("boolean1"), fieldMetaMap.get("boolean1"));
+    setter2.set(testBean1, cellMap1.get("boolean2"), fieldMetaMap.get("boolean2"));
 
     assertTrue(testBean1.isBoolean1());
     assertFalse(testBean1.getBoolean2());
 
 
     TestBean testBean2 = new TestBean();
-    setter1.set(testBean2, cellMap2.get("test.boolean1"), fieldMetaMap.get("test.boolean1"));
-    setter2.set(testBean2, cellMap2.get("test.boolean2"), fieldMetaMap.get("test.boolean2"));
+    setter1.set(testBean2, cellMap2.get("boolean1"), fieldMetaMap.get("boolean1"));
+    setter2.set(testBean2, cellMap2.get("boolean2"), fieldMetaMap.get("boolean2"));
 
     assertFalse(testBean2.isBoolean1());
     assertNull(testBean2.getBoolean2());

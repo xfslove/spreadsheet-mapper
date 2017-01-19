@@ -20,12 +20,12 @@ public class MultiUniqueValidatorTest {
 
     SheetMeta sheetMeta = TestFactory.createSheetMeta(true);
 
-    RowValidator validator1 = new MultiUniqueValidator().multiUniqueFields("test.int1", "test.int2").group("test.multi.unique");
+    RowValidator validator1 = new MultiUniqueValidator().multiUniqueFields("int1", "int2").group("multi.unique");
 
     assertTrue(validator1.valid(sheet.getRow(2), sheetMeta));
     assertTrue(validator1.valid(sheet.getRow(3), sheetMeta));
 
-    RowValidator validator2 = new MultiUniqueValidator().multiUniqueFields("test.string").group("test.multi.unique");
+    RowValidator validator2 = new MultiUniqueValidator().multiUniqueFields("string").group("multi.unique");
 
     assertTrue(validator2.valid(sheet.getRow(2), sheetMeta));
     assertFalse(validator2.valid(sheet.getRow(3), sheetMeta));

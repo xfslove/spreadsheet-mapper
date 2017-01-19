@@ -53,9 +53,9 @@ public class SheetMetaBean implements SheetMeta {
   }
 
   @Override
-  public FieldMeta getFieldMeta(String field) {
+  public FieldMeta getFieldMeta(String fieldName) {
     for (FieldMeta fieldMeta : fieldMetas) {
-      if (StringUtils.equals(fieldMeta.getName(), field)) {
+      if (StringUtils.equals(fieldMeta.getName(), fieldName)) {
         return fieldMeta;
       }
     }

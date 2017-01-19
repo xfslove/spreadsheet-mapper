@@ -24,22 +24,22 @@ public class UniqueValidatorTest {
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
     Map<String, Cell> cellMap2 = TestFactory.createErrorCellMap();
 
-    CellValidator validator = new UniqueValidator().matchField("test.string");
+    CellValidator validator = new UniqueValidator().matchField("string");
 
-    assertTrue(validator.valid(cellMap1.get("test.string"), fieldMetaMap.get("test.string")));
-    assertFalse(validator.valid(cellMap2.get("test.string"), fieldMetaMap.get("test.string")));
+    assertTrue(validator.valid(cellMap1.get("string"), fieldMetaMap.get("string")));
+    assertFalse(validator.valid(cellMap2.get("string"), fieldMetaMap.get("string")));
 
-    assertTrue(validator.valid(cellMap1.get("test.int1"), fieldMetaMap.get("test.int1")));
-    assertTrue(validator.valid(cellMap2.get("test.int1"), fieldMetaMap.get("test.int1")));
+    assertTrue(validator.valid(cellMap1.get("int1"), fieldMetaMap.get("int1")));
+    assertTrue(validator.valid(cellMap2.get("int1"), fieldMetaMap.get("int1")));
 
-    assertTrue(validator.valid(cellMap1.get("test.int2"), fieldMetaMap.get("test.int2")));
-    assertTrue(validator.valid(cellMap2.get("test.int2"), fieldMetaMap.get("test.int2")));
+    assertTrue(validator.valid(cellMap1.get("int2"), fieldMetaMap.get("int2")));
+    assertTrue(validator.valid(cellMap2.get("int2"), fieldMetaMap.get("int2")));
 
-    assertTrue(validator.valid(cellMap1.get("test.bigDecimal"), fieldMetaMap.get("test.bigDecimal")));
-    assertTrue(validator.valid(cellMap2.get("test.bigDecimal"), fieldMetaMap.get("test.bigDecimal")));
+    assertTrue(validator.valid(cellMap1.get("bigDecimal"), fieldMetaMap.get("bigDecimal")));
+    assertTrue(validator.valid(cellMap2.get("bigDecimal"), fieldMetaMap.get("bigDecimal")));
 
-    assertTrue(validator.valid(cellMap1.get("test.localDate"), fieldMetaMap.get("test.localDate")));
-    assertTrue(validator.valid(cellMap2.get("test.localDate"), fieldMetaMap.get("test.localDate")));
+    assertTrue(validator.valid(cellMap1.get("localDate"), fieldMetaMap.get("localDate")));
+    assertTrue(validator.valid(cellMap2.get("localDate"), fieldMetaMap.get("localDate")));
   }
 
 }
