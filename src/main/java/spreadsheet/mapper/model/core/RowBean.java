@@ -55,14 +55,6 @@ public class RowBean implements Row {
   }
 
   @Override
-  public Cell getLastCell() {
-    if (sizeOfCells() == 0) {
-      return null;
-    }
-    return getCell(sizeOfCells());
-  }
-
-  @Override
   public Sheet getSheet() {
     return sheet;
   }

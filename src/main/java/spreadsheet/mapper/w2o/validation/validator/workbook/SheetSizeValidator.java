@@ -2,6 +2,7 @@ package spreadsheet.mapper.w2o.validation.validator.workbook;
 
 
 import spreadsheet.mapper.model.core.Workbook;
+import spreadsheet.mapper.model.meta.WorkbookMeta;
 
 /**
  * sheet size validator
@@ -38,7 +39,7 @@ public class SheetSizeValidator implements WorkbookValidator {
   }
 
   @Override
-  public boolean valid(Workbook workbook) {
+  public boolean valid(Workbook workbook, WorkbookMeta workbookMeta) {
     return workbook.sizeOfSheets() == size;
   }
 

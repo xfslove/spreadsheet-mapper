@@ -51,6 +51,9 @@ public class SheetBean implements Sheet {
     if (rowIndex < 1 || rowIndex > sizeOfRows()) {
       throw new IllegalArgumentException("row index out of bounds");
     }
+    if (sizeOfRows() == 0) {
+      return null;
+    }
     return rows.get(rowIndex - 1);
   }
 
@@ -63,18 +66,7 @@ public class SheetBean implements Sheet {
 
   @Override
   public Row getFirstRow() {
-    if (sizeOfRows() == 0) {
-      return null;
-    }
     return getRow(1);
-  }
-
-  @Override
-  public Row getLastRow() {
-    if (sizeOfRows() == 0) {
-      return null;
-    }
-    return getRow(sizeOfRows());
   }
 
   @Override

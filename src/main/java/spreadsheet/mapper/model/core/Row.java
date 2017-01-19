@@ -47,11 +47,6 @@ public interface Row extends Serializable {
   Cell getFirstCell();
 
   /**
-   * @return last cell of this row
-   */
-  Cell getLastCell();
-
-  /**
    * @return the sheet of this
    */
   Sheet getSheet();

@@ -23,6 +23,11 @@ public interface WorkbookMeta extends Serializable {
   List<SheetMeta> getSheetMetas();
 
   /**
+   * @return first sheet meta
+   */
+  SheetMeta getFirstSheetMeta();
+
+  /**
    * get sheet meta by sheet index
    *
    * @param sheetIndex 1-based

@@ -54,11 +54,6 @@ public interface Sheet extends Serializable {
   Row getFirstRow();
 
   /**
-   * @return last row
-   */
-  Row getLastRow();
-
-  /**
    * @return the workbook of this
    */
   Workbook getWorkbook();

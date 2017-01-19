@@ -57,7 +57,7 @@ public class DefaultWorkbookValidationHelper implements WorkbookValidationHelper
       throw new IllegalArgumentException("workbook's sheet size[" + sizeOfSheets + "] not equals sheet validation helper size[" + sizeOfHelper + "]");
     }
 
-    validWorkbook(workbook);
+    validWorkbook(workbook, workbookMeta);
 
     if (CollectionUtils.isNotEmpty(errorMessages)) {
       return false;
@@ -88,10 +88,10 @@ public class DefaultWorkbookValidationHelper implements WorkbookValidationHelper
   /*==============
     workbook valid
    ===============*/
-  private void validWorkbook(Workbook workbook) {
+  private void validWorkbook(Workbook workbook, WorkbookMeta workbookMeta) {
 
     for (WorkbookValidator validator : workbookValidators) {
-      if (!validator.valid(workbook)) {
+      if (!validator.valid(workbook, workbookMeta)) {
         errorMessages.add(new MessageBean(MessageWriteStrategies.TEXT_BOX, validator.getErrorMessage(), validator.getMessageOnSheet()));
       }
     }
