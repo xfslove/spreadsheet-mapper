@@ -28,6 +28,7 @@ public class XSSFWorkbook2ExcelWriterTest {
 
   @BeforeClass
   public void before() throws IOException {
+    LOGGER.debug("-------------------starting test xssf workbook write helper-------------------");
     file = File.createTempFile("test", Constants.SUFFIX_XLSX);
     LOGGER.debug(file.getAbsolutePath());
   }

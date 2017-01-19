@@ -26,19 +26,9 @@ public interface SheetComposeHelper<T> {
   SheetComposeHelper<T> addFieldConverter(FieldConverter<T> fieldConverter);
 
   /**
-   * @param sheetMeta {@link SheetMeta}
-   * @return {@link SheetComposeHelper}
-   */
-  SheetComposeHelper<T> setSheetMeta(SheetMeta sheetMeta);
-
-  /**
-   * @param data list of data
-   * @return {@link SheetComposeHelper}
-   */
-  SheetComposeHelper<T> setData(List<T> data);
-
-  /**
+   * @param dataOfSheet list of data, may null
+   * @param sheetMeta   {@link SheetMeta}
    * @return {@link Sheet}
    */
-  Sheet compose();
+  Sheet compose(List<T> dataOfSheet, SheetMeta sheetMeta);
 }

@@ -69,9 +69,9 @@ public class FieldMetaBean implements FieldMeta {
   }
 
   @Override
-  public void addHeaderMeta(HeaderMeta headerMeta) {
+  public boolean addHeaderMeta(HeaderMeta headerMeta) {
     ((HeaderMetaBean) headerMeta).setFieldMeta(this);
-    headerMetas.add(headerMeta);
+    return headerMetas.add(headerMeta);
   }
 
   @Override

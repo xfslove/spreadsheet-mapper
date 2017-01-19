@@ -1,5 +1,10 @@
 package spreadsheet.mapper.w2o.process;
 
+import spreadsheet.mapper.model.core.Sheet;
+import spreadsheet.mapper.model.core.Workbook;
+import spreadsheet.mapper.model.meta.SheetMeta;
+import spreadsheet.mapper.model.meta.WorkbookMeta;
+
 import java.util.List;
 
 /**
@@ -10,14 +15,18 @@ import java.util.List;
 public interface WorkbookProcessHelper {
 
   /**
+   * the sequence of the sheet process helper add is the helper used to process workbook's sheets sequence.
+   *
    * @param sheetProcessHelper {@link SheetProcessHelper}
    * @return {@link WorkbookProcessHelper}
    */
   WorkbookProcessHelper addSheetProcessHelper(SheetProcessHelper sheetProcessHelper);
 
   /**
+   * @param workbook     {@link Workbook}
+   * @param workbookMeta {@link WorkbookMeta}
    * @return list of sheet list data
-   * @see SheetProcessHelper#process()
+   * @see SheetProcessHelper#process(Sheet, SheetMeta)
    */
-  List<List> process();
+  List<List> process(Workbook workbook, WorkbookMeta workbookMeta);
 }

@@ -155,6 +155,8 @@ public class AssertUtil {
   }
 
   public static void assertSheetMetaEquals(SheetMeta s1, SheetMeta s2) {
+    assertEquals(s1.getSheetIndex(), s2.getSheetIndex());
+    assertEquals(s1.getSheetName(), s2.getSheetName());
     assertEquals(s1.getDataStartRowIndex(), s2.getDataStartRowIndex());
 
     List<FieldMeta> fm1 = s1.getFieldMetas();

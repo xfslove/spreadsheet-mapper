@@ -1,5 +1,8 @@
 package spreadsheet.mapper.f2w.read;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import spreadsheet.mapper.AssertUtil;
 import spreadsheet.mapper.model.core.Row;
@@ -16,6 +19,13 @@ import static org.testng.Assert.assertEquals;
  */
 @Test(groups = "Excel2WorkbookReaderTest")
 public class Excel2WorkbookReadHelperTest {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(Excel2WorkbookReadHelperTest.class);
+
+  @BeforeClass
+  public void before() {
+    LOGGER.debug("-------------------starting test workbook read helper-------------------");
+  }
 
   @Test
   public void testRead() throws Exception {

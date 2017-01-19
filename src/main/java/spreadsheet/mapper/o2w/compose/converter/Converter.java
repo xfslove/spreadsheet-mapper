@@ -15,7 +15,8 @@ public interface Converter<T> {
    *
    * @param object    supplied object
    * @param cell      convert which cell value
-   * @param fieldMeta {@link FieldMeta}  @return human readable value
+   * @param fieldMeta {@link FieldMeta}
+   * @return human readable value
    */
   String getValue(T object, Cell cell, FieldMeta fieldMeta);
 }

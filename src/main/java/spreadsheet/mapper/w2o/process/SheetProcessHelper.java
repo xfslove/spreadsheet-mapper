@@ -54,19 +54,9 @@ public interface SheetProcessHelper<T> {
   SheetProcessHelper<T> setCellProcessorListener(CellProcessListener<T> cellProcessListener);
 
   /**
-   * @param sheet {@link Sheet}
-   * @return {@link SheetProcessHelper}
-   */
-  SheetProcessHelper<T> setSheet(Sheet sheet);
-
-  /**
+   * @param sheet     {@link Sheet}
    * @param sheetMeta {@link SheetMeta}
-   * @return {@link SheetProcessHelper}
-   */
-  SheetProcessHelper<T> setSheetMeta(SheetMeta sheetMeta);
-
-  /**
    * @return list of data
    */
-  List<T> process();
+  List<T> process(Sheet sheet, SheetMeta sheetMeta);
 }

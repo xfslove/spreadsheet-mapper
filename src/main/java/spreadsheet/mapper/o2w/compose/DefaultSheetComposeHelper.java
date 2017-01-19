@@ -10,16 +10,15 @@ import spreadsheet.mapper.o2w.compose.converter.BeanUtilsConverter;
 import spreadsheet.mapper.o2w.compose.converter.Converter;
 import spreadsheet.mapper.o2w.compose.converter.FieldConverter;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by hanwen on 15-12-16.
  */
 public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
-
-  private SheetMeta sheetMeta;
-
-  private List<T> data = new ArrayList<>();
 
   private Map<String, FieldConverter<T>> field2converter = new LinkedHashMap<>();
 
@@ -36,28 +35,7 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
   }
 
   @Override
-  public SheetComposeHelper<T> setSheetMeta(SheetMeta sheetMeta) {
-    if (sheetMeta == null) {
-      throw new WorkbookComposeException("sheet meta can not be null");
-    }
-    this.sheetMeta = sheetMeta;
-    return this;
-  }
-
-  @Override
-  public SheetComposeHelper<T> setData(List<T> data) {
-    if (data == null) {
-      throw new WorkbookComposeException("data can not be null");
-    }
-    this.data = data;
-    return this;
-  }
-
-  @Override
-  public Sheet compose() {
-    if (sheetMeta == null) {
-      throw new WorkbookComposeException("set sheet meta first");
-    }
+  public Sheet compose(List<T> dataOfSheet, SheetMeta sheetMeta) {
 
     Sheet sheet = createSheet(sheetMeta);
 
@@ -69,11 +47,11 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
       createHeaderCellsIfNecessary(row, sheetMeta);
     }
 
-    if (CollectionUtils.isEmpty(data)) {
+    if (CollectionUtils.isEmpty(dataOfSheet)) {
       return sheet;
     }
 
-    for (T object : data) {
+    for (T object : dataOfSheet) {
       Row row = createRow();
       sheet.addRow(row);
       createDataCells(object, row, sheetMeta);

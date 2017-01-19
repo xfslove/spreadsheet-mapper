@@ -9,11 +9,11 @@ import java.util.Objects;
  */
 public class CellBean implements Cell {
 
-  private Row row;
+  private int index = 1;
 
   private String value;
 
-  private int index;
+  private Row row;
 
   public CellBean() {
     // default constructor, empty cell

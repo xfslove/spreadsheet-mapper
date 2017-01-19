@@ -27,6 +27,7 @@ public class Message2ExcelWriterTest {
 
   @BeforeClass
   public void before() throws IOException {
+    LOGGER.debug("-------------------starting test message write helper-------------------");
     file = File.createTempFile("test", Constants.SUFFIX_XLSX);
     LOGGER.debug(file.getAbsolutePath());
   }

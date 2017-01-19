@@ -1,6 +1,10 @@
 package spreadsheet.mapper.o2w.compose;
 
 import spreadsheet.mapper.model.core.Workbook;
+import spreadsheet.mapper.model.meta.SheetMeta;
+import spreadsheet.mapper.model.meta.WorkbookMeta;
+
+import java.util.List;
 
 /**
  * workbook compose helper, simply adapter of sheet compose helper
@@ -10,14 +14,18 @@ import spreadsheet.mapper.model.core.Workbook;
 public interface WorkbookComposeHelper {
 
   /**
+   * the sequence of the sheet compose helper add is the helper used to compose data's sequence.
+   *
    * @param sheetComposeHelper {@link SheetComposeHelper}
    * @return {@link WorkbookComposeHelper}
    */
   WorkbookComposeHelper addSheetComposeHelper(SheetComposeHelper sheetComposeHelper);
 
   /**
+   * @param dataOfSheets data of sheets
+   * @param workbookMeta {@link WorkbookMeta}
    * @return {@link Workbook}
-   * @see SheetComposeHelper#compose()
+   * @see SheetComposeHelper#compose(List, SheetMeta)
    */
-  Workbook compose();
+  Workbook compose(List<List> dataOfSheets, WorkbookMeta workbookMeta);
 }

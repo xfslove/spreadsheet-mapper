@@ -19,10 +19,6 @@ import java.util.*;
  */
 public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
 
-  private Sheet sheet;
-
-  private SheetMeta sheetMeta;
-
   private ObjectFactory<T> objectFactory;
 
   private SheetProcessListener<T> sheetProcessListener = new NoopSheetProcessListener<>();
@@ -86,35 +82,7 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
   }
 
   @Override
-  public SheetProcessHelper<T> setSheet(Sheet sheet) {
-    if (sheet == null) {
-      throw new WorkbookProcessException("sheet can not be null");
-    }
-
-    this.sheet = sheet;
-    return this;
-  }
-
-  @Override
-  public SheetProcessHelper<T> setSheetMeta(SheetMeta sheetMeta) {
-    if (sheetMeta == null) {
-      throw new WorkbookProcessException("sheet meta can not be null");
-    }
-
-    this.sheetMeta = sheetMeta;
-    return this;
-  }
-
-  @Override
-  public List<T> process() {
-    if (sheet == null) {
-      throw new WorkbookProcessException("set sheet first");
-    }
-
-    if (sheetMeta == null) {
-      throw new WorkbookProcessException("set sheet meta first");
-    }
-
+  public List<T> process(Sheet sheet, SheetMeta sheetMeta) {
     if (objectFactory == null) {
       throw new WorkbookProcessException("set object factory first");
     }
@@ -122,7 +90,7 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
     List<FieldMeta> fieldMetas = sheetMeta.getFieldMetas();
     Map<Integer, FieldMeta> columnIndex2fieldMeta = buildFieldMetaMap(fieldMetas);
 
-    List<T> oneSheetObjects = new ArrayList<>();
+    List<T> dataOfSheet = new ArrayList<>();
     sheetProcessListener.before(sheet, sheetMeta);
 
     for (int i = sheetMeta.getDataStartRowIndex(); i <= sheet.sizeOfRows(); i++) {
@@ -158,12 +126,12 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
 
       rowProcessListener.after(object, row, sheetMeta);
 
-      oneSheetObjects.add(object);
+      dataOfSheet.add(object);
     }
 
-    sheetProcessListener.after(oneSheetObjects, sheet, sheetMeta);
+    sheetProcessListener.after(dataOfSheet, sheet, sheetMeta);
 
-    return oneSheetObjects;
+    return dataOfSheet;
   }
 
   private Map<Integer, FieldMeta> buildFieldMetaMap(List<FieldMeta> fieldMetas) {

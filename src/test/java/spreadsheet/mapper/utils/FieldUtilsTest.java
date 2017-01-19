@@ -4,10 +4,12 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import spreadsheet.mapper.TestBean;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.FieldMetaBean;
+import spreadsheet.mapper.o2w.compose.DefaultWorkbookComposeHelperTest;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -20,6 +22,11 @@ import static org.testng.Assert.*;
 public class FieldUtilsTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(FieldUtilsTest.class);
+
+  @BeforeClass
+  public void before() {
+    LOGGER.debug("-------------------starting test field utils-------------------");
+  }
 
   @Test
   public void testSubtractBusinessKey() throws Exception {

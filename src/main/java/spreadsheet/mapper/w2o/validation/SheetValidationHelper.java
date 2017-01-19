@@ -41,23 +41,13 @@ public interface SheetValidationHelper {
   SheetValidationHelper addCellValidator(CellValidator cellValidator);
 
   /**
-   * @param sheet {@link Sheet}
-   * @return {@link SheetValidationHelper}
-   */
-  SheetValidationHelper setSheet(Sheet sheet);
-
-  /**
-   * @param sheetMeta {@link SheetMeta}
-   * @return {@link SheetValidationHelper}
-   */
-  SheetValidationHelper setSheetMeta(SheetMeta sheetMeta);
-
-  /**
    * execute valid
    *
+   * @param sheet     {@link Sheet}
+   * @param sheetMeta {@link SheetMeta}
    * @return true if pass all
    */
-  boolean valid();
+  boolean valid(Sheet sheet, SheetMeta sheetMeta);
 
   /**
    * <pre>

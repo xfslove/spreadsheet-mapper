@@ -1,5 +1,10 @@
 package spreadsheet.mapper.w2o.process;
 
+import spreadsheet.mapper.model.core.Sheet;
+import spreadsheet.mapper.model.core.Workbook;
+import spreadsheet.mapper.model.meta.SheetMeta;
+import spreadsheet.mapper.model.meta.WorkbookMeta;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +26,27 @@ public class DefaultWorkbookProcessHelper implements WorkbookProcessHelper {
   }
 
   @Override
-  public List<List> process() {
+  public List<List> process(Workbook workbook, WorkbookMeta workbookMeta) {
+    int sizeOfSheets = workbook.sizeOfSheets();
+    int sizeOfSheetMetas = workbookMeta.sizeOfSheetMetas();
+    int sizeOfHelper = sheetProcessHelpers.size();
+
+    if (sizeOfSheets != sizeOfSheetMetas) {
+      throw new IllegalArgumentException("workbook's sheet size[" + sizeOfSheets + "] not equals workbook meta's sheet meta size[" + sizeOfSheetMetas + "]");
+    }
+    if (sizeOfSheets != sizeOfHelper) {
+      throw new IllegalArgumentException("workbook's sheet size[" + sizeOfSheets + "] not equals sheet process helper size[" + sizeOfHelper + "]");
+    }
+
     List<List> objects = new ArrayList<>();
 
-    for (SheetProcessHelper sheetProcessHelper : sheetProcessHelpers) {
+    for (int i = 1; i <= sizeOfSheets; i++) {
 
-      objects.add(sheetProcessHelper.process());
+      SheetProcessHelper sheetProcessHelper = sheetProcessHelpers.get(i - 1);
+      Sheet sheet = workbook.getSheet(i);
+      SheetMeta sheetMeta = workbookMeta.getSheetMeta(i);
+
+      objects.add(sheetProcessHelper.process(sheet, sheetMeta));
     }
 
     return objects;

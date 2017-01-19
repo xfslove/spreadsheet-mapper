@@ -3,6 +3,7 @@ package spreadsheet.mapper.w2o.validation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import spreadsheet.mapper.TestFactory;
 import spreadsheet.mapper.model.core.Cell;
@@ -27,9 +28,15 @@ import static org.testng.Assert.*;
 /**
  * Created by hanwen on 2017/1/5.
  */
+@Test(groups = "sheetValidationHelperTest")
 public class DefaultSheetValidationHelperTest {
 
   private static Logger LOGGER = LoggerFactory.getLogger(DefaultSheetValidationHelperTest.class);
+
+  @BeforeClass
+  public void before() {
+    LOGGER.debug("-------------------starting test sheet validation helper-------------------");
+  }
 
   @Test(groups = "missingTest")
   public void testMissing() {
@@ -37,13 +44,15 @@ public class DefaultSheetValidationHelperTest {
     CellValidator cellValidators1 = new TestCellValidator().matchField("1").dependsOn("3");
     CellValidator cellValidators2 = new TestCellValidator().matchField("2");
 
-    SheetValidationHelper sheetValidationHelper = new DefaultSheetValidationHelper().setSheetMeta(new SheetMetaBean(2)).setSheet(new SheetBean());
+    SheetMetaBean sheetMetaBean = new SheetMetaBean(2);
+    SheetBean sheetBean = new SheetBean();
+    SheetValidationHelper sheetValidationHelper = new DefaultSheetValidationHelper();
     sheetValidationHelper.addCellValidator(cellValidators1);
     sheetValidationHelper.addCellValidator(cellValidators2);
 
     boolean missing = false;
     try {
-      sheetValidationHelper.valid();
+      sheetValidationHelper.valid(sheetBean, sheetMetaBean);
     } catch (WorkbookValidateException e) {
       LOGGER.debug("valid missing dependency group");
       if (StringUtils.contains(e.getMessage(), "missing")) {
@@ -218,7 +227,7 @@ public class DefaultSheetValidationHelperTest {
     SheetMeta sheetMeta = TestFactory.createSheetMeta(true);
     Sheet sheet = getSheet();
 
-    SheetValidationHelper sheetValidationHelper = new DefaultSheetValidationHelper().setSheetMeta(sheetMeta).setSheet(sheet);
+    SheetValidationHelper sheetValidationHelper = new DefaultSheetValidationHelper();
 
     sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("test.int1").dependsOn("test.int2"));
     sheetValidationHelper.addCellValidator(new TestCellValidator(counter).matchField("test.int2").dependsOn("test.long1"));
@@ -240,7 +249,7 @@ public class DefaultSheetValidationHelperTest {
     sheetValidationHelper.addRowValidator(new TestRowValidator(counter).group("test.double1").dependsOn("test.boolean2"));
     sheetValidationHelper.addRowValidator(new TestRowValidator(counter).group("test.boolean2").dependsOn("test.boolean1"));
 
-    boolean valid = sheetValidationHelper.valid();
+    boolean valid = sheetValidationHelper.valid(sheet, sheetMeta);
     assertTrue(valid);
     assertEquals(counter.hitTime(), 13 + 5);
   }
@@ -261,7 +270,7 @@ public class DefaultSheetValidationHelperTest {
     SheetMeta sheetMeta = TestFactory.createSheetMeta(true);
     Sheet sheet = getSheet();
 
-    SheetValidationHelper sheetValidationHelper = new DefaultSheetValidationHelper().setSheetMeta(sheetMeta).setSheet(sheet);
+    SheetValidationHelper sheetValidationHelper = new DefaultSheetValidationHelper();
     sheetValidationHelper.addCellValidator(new TrueCellValidator(hitValidators).matchField("test.float2").dependsOn("test.double1"));
     sheetValidationHelper.addCellValidator(new FalseCellValidator(hitValidators).matchField("test.int1").dependsOn("test.int2"));
     sheetValidationHelper.addCellValidator(new TrueCellValidator(hitValidators).matchField("test.int1").dependsOn("test.long1"));
@@ -274,7 +283,7 @@ public class DefaultSheetValidationHelperTest {
     sheetValidationHelper.addRowValidator(new TrueRowValidator(hitValidators).group("test.int1").dependsOn("test.double1"));
     sheetValidationHelper.addRowValidator(new TrueRowValidator(hitValidators).group("test.long2").dependsOn("test.float2"));
     sheetValidationHelper.addRowValidator(new FalseRowValidator(hitValidators).group("test.float1").dependsOn("test.double1"));
-    boolean result = sheetValidationHelper.valid();
+    boolean result = sheetValidationHelper.valid(sheet, sheetMeta);
     assertFalse(result);
 
     List<String> expected = Arrays.asList("cell:true:test.double1", "cell:true:test.float2", "row:false:test.float1");
@@ -283,7 +292,7 @@ public class DefaultSheetValidationHelperTest {
   }
 
   private void assertValid(List<CellValidator> cellValidators, List<RowValidator> rowValidators, boolean cycling) {
-    SheetValidationHelper sheetValidationHelper = new DefaultSheetValidationHelper().setSheetMeta(new SheetMetaBean(2)).setSheet(new SheetBean());
+    SheetValidationHelper sheetValidationHelper = new DefaultSheetValidationHelper();
 
     for (RowValidator rowValidator : rowValidators) {
       sheetValidationHelper.addRowValidator(rowValidator);
@@ -295,7 +304,7 @@ public class DefaultSheetValidationHelperTest {
 
     boolean result = false;
     try {
-      sheetValidationHelper.valid();
+      sheetValidationHelper.valid(new SheetBean(), new SheetMetaBean(2));
     } catch (WorkbookValidateException e) {
       LOGGER.debug("valid dependency cycling");
       if (StringUtils.contains(e.getMessage(), "cycling")) {
@@ -422,7 +431,7 @@ public class DefaultSheetValidationHelperTest {
     }
   }
 
-  private class TestCellValidator extends CellValidatorAdapter<TestCellValidator> {
+  static class TestCellValidator extends CellValidatorAdapter<TestCellValidator> {
 
     private Counter counter;
 
@@ -447,7 +456,7 @@ public class DefaultSheetValidationHelperTest {
     }
   }
 
-  private class TestRowValidator extends RowValidatorAdapter {
+  static class TestRowValidator extends RowValidatorAdapter {
 
     private Counter counter;
 
@@ -472,7 +481,7 @@ public class DefaultSheetValidationHelperTest {
     }
   }
 
-  private class Counter {
+  static class Counter {
     private int count = 0;
 
     void hit() {
@@ -484,7 +493,7 @@ public class DefaultSheetValidationHelperTest {
     }
   }
 
-  private Sheet getSheet() {
+  static Sheet getSheet() {
     Sheet baseSheet = TestFactory.createSheet();
     Sheet sheet = new SheetBean();
     sheet.addRow(baseSheet.getRow(1));

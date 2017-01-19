@@ -8,7 +8,6 @@ import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.model.msg.MessageBean;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
-import spreadsheet.mapper.w2o.process.WorkbookProcessException;
 import spreadsheet.mapper.w2o.validation.engine.DependencyCycleCheckEngine;
 import spreadsheet.mapper.w2o.validation.engine.DependencyEngineHelper;
 import spreadsheet.mapper.w2o.validation.engine.DependencyValidateEngine;
@@ -23,10 +22,6 @@ import java.util.*;
  * Created by hanwen on 15-12-16.
  */
 public class DefaultSheetValidationHelper implements SheetValidationHelper {
-
-  private Sheet sheet;
-
-  private SheetMeta sheetMeta;
 
   /*===============
     validators
@@ -73,48 +68,24 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   }
 
   @Override
-  public SheetValidationHelper setSheet(Sheet sheet) {
-    if (sheet == null) {
-      throw new WorkbookValidateException("sheet can not be null");
-    }
-    this.sheet = sheet;
-    return this;
-  }
-
-  @Override
-  public SheetValidationHelper setSheetMeta(SheetMeta sheetMeta) {
-    if (sheetMeta == null) {
-      throw new WorkbookValidateException("sheet meta can not be null");
-    }
-    this.sheetMeta = sheetMeta;
-    return this;
-  }
-
   public List<Message> getErrorMessages() {
     return errorMessages;
   }
 
   @Override
-  public boolean valid() {
-    if (sheet == null) {
-      throw new WorkbookValidateException("set sheet first");
-    }
-
-    if (sheetMeta == null) {
-      throw new WorkbookProcessException("set sheet meta first");
-    }
+  public boolean valid(Sheet sheet, SheetMeta sheetMeta) {
 
     // check dependency of this sheet
     checkValidatorKeyDependency();
 
-    validSheet(sheet);
+    validSheet(sheet, sheetMeta);
 
     if (!validResult) {
       return false;
     }
 
     for (int i = sheetMeta.getDataStartRowIndex(); i <= sheet.sizeOfRows(); i++) {
-      validRowCells(sheet.getRow(i));
+      validRowCells(sheet.getRow(i), sheetMeta);
     }
 
     return validResult;
@@ -143,7 +114,7 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   /*=========================
    below is internal valid
    ==========================*/
-  private void validSheet(Sheet sheet) {
+  private void validSheet(Sheet sheet, SheetMeta sheetMeta) {
     for (SheetValidator validator : sheetValidators) {
 
       if (!validator.valid(sheet, sheetMeta)) {
@@ -159,7 +130,7 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
     }
   }
 
-  private void validRowCells(Row row) {
+  private void validRowCells(Row row, SheetMeta sheetMeta) {
     Map<String, List<DependencyValidator>> validatorMap = buildRelationValidatorMap();
 
     DependencyValidateEngine dependencyValidateEngine = new DependencyValidateEngine(validatorMap);

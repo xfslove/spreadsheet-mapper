@@ -1,5 +1,8 @@
 package spreadsheet.mapper.w2o.process;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import spreadsheet.mapper.AssertUtil;
 import spreadsheet.mapper.TestBean;
@@ -10,6 +13,7 @@ import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.model.meta.SheetMetaBean;
+import spreadsheet.mapper.o2w.compose.DefaultSheetComposeHelperTest;
 import spreadsheet.mapper.w2o.process.listener.CellProcessListener;
 import spreadsheet.mapper.w2o.process.listener.RowProcessListener;
 import spreadsheet.mapper.w2o.process.listener.SheetProcessListener;
@@ -24,7 +28,15 @@ import static org.testng.Assert.assertEquals;
 /**
  * Created by hanwen on 2017/1/5.
  */
+@Test(groups = "sheetProcessHelperTest")
 public class DefaultSheetProcessHelperTest {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSheetProcessHelperTest.class);
+
+  @BeforeClass
+  public void before() {
+    LOGGER.debug("-------------------starting test sheet process helper-------------------");
+  }
 
   @Test
   public void testProcess() throws Exception {
@@ -34,17 +46,14 @@ public class DefaultSheetProcessHelperTest {
 
     Counter counter = new Counter();
     SheetProcessHelper<TestBean> processor1 = new DefaultSheetProcessHelper<TestBean>()
-        .setSheet(sheet).setSheetMeta(sheetMeta1).setObjectFactory(new TestBeanObjectFactory())
+        .setObjectFactory(new TestBeanObjectFactory())
         .setSheetProcessorListener(new TestSheetProcessListener(counter))
         .setRowProcessorListener(new TestRowProcessListener(counter))
         .setCellProcessorListener(new TestCellProcessListener(counter));
 
-    processor1.addFieldSetter(new LocalDateTimeSetter<TestBean>().pattern("yyyy-MM-dd HH:mm:ss").matchField("test.localDateTime"));
-    processor1.addFieldSetter(new LocalDateSetter<TestBean>().pattern("yyyy-MM-dd").matchField("test.localDate"));
-    processor1.addFieldSetter(new BooleanSetter<TestBean>().matchField("test.boolean1").toTrue("pass").toFalse("failure"));
-    processor1.addFieldSetter(new BooleanSetter<TestBean>().toTrue("pass").toFalse("failure").matchField("test.boolean2"));
+    addSetter(processor1);
 
-    List<TestBean> list1 = processor1.process();
+    List<TestBean> list1 = processor1.process(sheet, sheetMeta1);
 
     assertEquals(counter.hitTime(), 2 + 2 * 2 + 14 * 2 * 2);
 
@@ -56,9 +65,9 @@ public class DefaultSheetProcessHelperTest {
     SheetMeta sheetMeta2 = new SheetMetaBean(sheetMeta1.getDataStartRowIndex());
 
     SheetProcessHelper<TestBean> processor2 = new DefaultSheetProcessHelper<TestBean>()
-        .setSheet(sheet).setSheetMeta(sheetMeta2).setObjectFactory(new TestBeanObjectFactory());
+        .setObjectFactory(new TestBeanObjectFactory());
 
-    List<TestBean> list2 = processor2.process();
+    List<TestBean> list2 = processor2.process(sheet, sheetMeta2);
 
     assertEquals(list2.size(), 2);
     for (TestBean testBean : list2) {
@@ -66,7 +75,15 @@ public class DefaultSheetProcessHelperTest {
     }
   }
 
-  private class TestBeanObjectFactory implements ObjectFactory<TestBean> {
+  static void addSetter(SheetProcessHelper<TestBean> processor1) {
+    processor1.addFieldSetter(new LocalDateTimeSetter<TestBean>().pattern("yyyy-MM-dd HH:mm:ss").matchField("test.localDateTime"));
+    processor1.addFieldSetter(new LocalDateSetter<TestBean>().pattern("yyyy-MM-dd").matchField("test.localDate"));
+    processor1.addFieldSetter(new BooleanSetter<TestBean>().matchField("test.boolean1").toTrue("pass").toFalse("failure"));
+    processor1.addFieldSetter(new BooleanSetter<TestBean>().toTrue("pass").toFalse("failure").matchField("test.boolean2"));
+
+  }
+
+  static class TestBeanObjectFactory implements ObjectFactory<TestBean> {
 
     @Override
     public TestBean create(Row row, SheetMeta sheetMeta) {
@@ -131,7 +148,7 @@ public class DefaultSheetProcessHelperTest {
     }
   }
 
-  private class Counter {
+  static class Counter {
     private int count = 0;
 
     void hit() {

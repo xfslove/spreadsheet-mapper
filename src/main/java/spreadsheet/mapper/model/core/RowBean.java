@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class RowBean implements Row {
 
-  private int index;
+  private int index = 1;
 
   private List<Cell> cells = new ArrayList<>();
 

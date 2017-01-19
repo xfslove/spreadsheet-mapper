@@ -12,11 +12,15 @@ import java.util.List;
  */
 public class SheetMetaBean implements SheetMeta {
 
+  private int sheetIndex = 1;
+
   private String sheetName;
 
   private int dataStartRowIndex;
 
   private List<FieldMeta> fieldMetas = new ArrayList<>();
+
+  private WorkbookMeta workbookMeta;
 
   public SheetMetaBean(int dataStartRowIndex) {
     this(null, dataStartRowIndex);
@@ -27,6 +31,12 @@ public class SheetMetaBean implements SheetMeta {
     this.dataStartRowIndex = dataStartRowIndex;
   }
 
+  @Override
+  public int getSheetIndex() {
+    return sheetIndex;
+  }
+
+  @Override
   public String getSheetName() {
     return sheetName;
   }
@@ -53,9 +63,22 @@ public class SheetMetaBean implements SheetMeta {
   }
 
   @Override
-  public void addFieldMeta(FieldMeta fieldMeta) {
+  public boolean addFieldMeta(FieldMeta fieldMeta) {
     ((FieldMetaBean) fieldMeta).setSheetMeta(this);
-    this.fieldMetas.add(fieldMeta);
+    return fieldMetas.add(fieldMeta);
+  }
+
+  @Override
+  public WorkbookMeta getWorkbookMeta() {
+    return workbookMeta;
+  }
+
+  void setWorkbookMeta(WorkbookMeta workbookMeta) {
+    this.workbookMeta = workbookMeta;
+  }
+
+  void setSheetIndex(int sheetIndex) {
+    this.sheetIndex = sheetIndex;
   }
 
   @Override
