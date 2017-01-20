@@ -1,5 +1,7 @@
 package spreadsheet.mapper.model.core;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +10,7 @@ import java.util.List;
  */
 public class SheetBean implements Sheet {
 
-  private int index;
+  private int index = 1;
 
   private String name;
 
@@ -49,6 +51,9 @@ public class SheetBean implements Sheet {
     if (rowIndex < 1 || rowIndex > sizeOfRows()) {
       throw new IllegalArgumentException("row index out of bounds");
     }
+    if (sizeOfRows() == 0) {
+      return null;
+    }
     return rows.get(rowIndex - 1);
   }
 
@@ -61,23 +66,20 @@ public class SheetBean implements Sheet {
 
   @Override
   public Row getFirstRow() {
-    if (sizeOfRows() == 0) {
-      return null;
-    }
     return getRow(1);
-  }
-
-  @Override
-  public Row getLastRow() {
-    if (sizeOfRows() == 0) {
-      return null;
-    }
-    return getRow(sizeOfRows());
   }
 
   @Override
   public Workbook getWorkbook() {
     return workbook;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("index", index)
+        .append("name", name)
+        .toString();
   }
 
   public void setWorkbook(Workbook workbook) {

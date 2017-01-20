@@ -1,6 +1,7 @@
 package spreadsheet.mapper.model.meta;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Objects;
 
@@ -56,5 +57,13 @@ public class HeaderMetaBean implements HeaderMeta {
   @Override
   public int compareTo(HeaderMeta o) {
     return new CompareToBuilder().append(rowIndex, o.getRowIndex()).toComparison();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("rowIndex", rowIndex)
+        .append("value", value)
+        .toString();
   }
 }

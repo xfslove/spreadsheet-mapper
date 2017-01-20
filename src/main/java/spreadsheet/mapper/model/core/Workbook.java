@@ -37,11 +37,6 @@ public interface Workbook extends Serializable {
   Sheet getSheet(int sheetIndex);
 
   /**
-   * @return last sheet
-   */
-  Sheet getLastSheet();
-
-  /**
    * @return first Sheet
    */
   Sheet getFirstSheet();

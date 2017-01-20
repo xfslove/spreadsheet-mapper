@@ -1,5 +1,7 @@
 package spreadsheet.mapper.model.shapes;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Created by hanwen on 15-12-17.
  */
@@ -17,6 +19,10 @@ public class CommentBean implements Comment {
 
   private int height;
 
+  public CommentBean(String message, int sheetIndex, int rowIndex, int columnIndex) {
+    this(message, sheetIndex, rowIndex, columnIndex, 3, 1);
+  }
+
   public CommentBean(String message, int sheetIndex, int rowIndex, int columnIndex, int length, int height) {
     this.message = message;
     this.sheetIndex = sheetIndex;
@@ -24,15 +30,6 @@ public class CommentBean implements Comment {
     this.columnIndex = columnIndex;
     this.length = length;
     this.height = height;
-  }
-
-  public CommentBean(String message, int sheetIndex, int rowIndex, int columnIndex) {
-    this.message = message;
-    this.sheetIndex = sheetIndex;
-    this.rowIndex = rowIndex;
-    this.columnIndex = columnIndex;
-    this.length = 3;
-    this.height = 1;
   }
 
   @Override
@@ -63,5 +60,17 @@ public class CommentBean implements Comment {
   @Override
   public int getColumnIndex() {
     return columnIndex;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("message", message)
+        .append("sheetIndex", sheetIndex)
+        .append("rowIndex", rowIndex)
+        .append("columnIndex", columnIndex)
+        .append("length", length)
+        .append("height", height)
+        .toString();
   }
 }

@@ -11,10 +11,16 @@ import java.util.List;
  * list of field meta (see {@link FieldMeta})
  * data start at which row ({@link #getDataStartRowIndex()})
  * sheet name ({@link Sheet#getName()})
+ * sheet index ({@link Sheet#getIndex()})
  * </pre>
  * Created by hanwen on 2016/12/27.
  */
 public interface SheetMeta extends Serializable {
+
+  /**
+   * @return sheet index
+   */
+  int getSheetIndex();
 
   /**
    * @return sheet name
@@ -37,10 +43,10 @@ public interface SheetMeta extends Serializable {
   List<FieldMeta> getFieldMetas();
 
   /**
-   * @param field field
-   * @return field meta name of field
+   * @param fieldName field
+   * @return field meta of field name
    */
-  FieldMeta getFieldMeta(String field);
+  FieldMeta getFieldMeta(String fieldName);
 
   /**
    * add field meta
@@ -48,4 +54,9 @@ public interface SheetMeta extends Serializable {
    * @param fieldMeta field meta
    */
   void addFieldMeta(FieldMeta fieldMeta);
+
+  /**
+   * @return the workbook meta of this
+   */
+  WorkbookMeta getWorkbookMeta();
 }

@@ -1,5 +1,7 @@
 package spreadsheet.mapper.model.shapes;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Created by hanwen on 2016/12/27.
  */
@@ -12,9 +14,7 @@ public class TextBoxBean implements TextBox {
   private TextBoxStyle style;
 
   public TextBoxBean(String message, int sheetIndex) {
-    this.sheetIndex = sheetIndex;
-    this.message = message;
-    this.style = TextBoxStyle.DEFAULT;
+    this(message, sheetIndex, TextBoxStyle.DEFAULT);
   }
 
   public TextBoxBean(String message, int sheetIndex, TextBoxStyle style) {
@@ -36,5 +36,14 @@ public class TextBoxBean implements TextBox {
   @Override
   public TextBoxStyle getStyle() {
     return style;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("message", message)
+        .append("sheetIndex", sheetIndex)
+        .append("style", style)
+        .toString();
   }
 }

@@ -22,10 +22,9 @@ public class WorkbookBean implements Workbook {
 
   @Override
   public boolean addSheet(Sheet sheet) {
-    boolean success = sheets.add(sheet);
     ((SheetBean) sheet).setWorkbook(this);
     ((SheetBean) sheet).setIndex(sizeOfSheets() + 1);
-    return success;
+    return sheets.add(sheet);
   }
 
   @Override
@@ -33,22 +32,14 @@ public class WorkbookBean implements Workbook {
     if (sheetIndex < 1 || sheetIndex > sizeOfSheets()) {
       throw new IllegalArgumentException("sheet index index out of bounds");
     }
+    if (sizeOfSheets() == 0) {
+      return null;
+    }
     return sheets.get(sheetIndex - 1);
   }
 
   @Override
-  public Sheet getLastSheet() {
-    if (sizeOfSheets() == 0) {
-      return null;
-    }
-    return getSheet(sizeOfSheets());
-  }
-
-  @Override
   public Sheet getFirstSheet() {
-    if (sizeOfSheets() == 0) {
-      return null;
-    }
     return getSheet(1);
   }
 }

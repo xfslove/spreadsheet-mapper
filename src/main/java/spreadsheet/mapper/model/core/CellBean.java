@@ -1,5 +1,7 @@
 package spreadsheet.mapper.model.core;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.Objects;
 
 /**
@@ -7,11 +9,11 @@ import java.util.Objects;
  */
 public class CellBean implements Cell {
 
-  private Row row;
+  private int index = 1;
 
   private String value;
 
-  private int index;
+  private Row row;
 
   public CellBean() {
     // default constructor, empty cell
@@ -52,6 +54,14 @@ public class CellBean implements Cell {
   @Override
   public int hashCode() {
     return Objects.hash(index, value);
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("value", value)
+        .append("index", index)
+        .toString();
   }
 
   void setRow(Row row) {

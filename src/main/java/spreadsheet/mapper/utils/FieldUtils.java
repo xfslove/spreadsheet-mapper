@@ -1,13 +1,9 @@
 package spreadsheet.mapper.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import spreadsheet.mapper.Constants;
 import spreadsheet.mapper.model.meta.FieldMeta;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * object field utils
@@ -21,49 +17,35 @@ public class FieldUtils {
   }
 
   /**
-   * get field with out business key({@link Constants#BUSINESS_KEY_PREFIX})
-   *
-   * @param field field
-   * @return field without business key
+   * <pre>
+   * the business key present a domain object, it can identified a domain object.
+   * it useful where update a domain object.
+   * </pre>
    */
-  public static String subtractBusinessKey(String field) {
-    if (!StringUtils.contains(field, Constants.BUSINESS_KEY_PREFIX)) {
-      throw new IllegalStateException("field is not business key");
-    }
-    return field.substring(Constants.BUSINESS_KEY_PREFIX.length());
-  }
+  public static final String BUSINESS_KEY_PREFIX = "businessKey.";
 
   /**
    * <pre>
-   * get real field name from field meta name, without prefix if has prefix
+   * get real field name from field name, if field name has {@link #BUSINESS_KEY_PREFIX} subtract it.
    *
    * eg:
-   * object.name -&gt; name
-   * object.nested.name -&gt; nested.name
+   * name -&gt; name
+   * nested.name -&gt; nested.name
+   * businessKey.name -&gt; name
    * </pre>
    *
-   * @param fieldMeta field meta
+   * @param fieldMeta {@link FieldMeta}
    * @return real field name of object
    */
   public static String detectRealFieldName(FieldMeta fieldMeta) {
 
-    if (StringUtils.isBlank(fieldMeta.getPrefix())) {
-      return fieldMeta.getName();
+    String realFieldName = fieldMeta.getName();
+
+    if (StringUtils.startsWith(realFieldName, BUSINESS_KEY_PREFIX)) {
+      realFieldName = StringUtils.substring(realFieldName, BUSINESS_KEY_PREFIX.length());
     }
 
-    String fieldName = StringUtils.substring(fieldMeta.getName(), fieldMeta.getPrefix().length());
-
-    if (fieldName.contains(Constants.BUSINESS_KEY_PREFIX)) {
-      fieldName = FieldUtils.subtractBusinessKey(fieldName);
-    }
-
-    List<String> splitFields = new ArrayList<>(Arrays.asList(fieldName.split("\\.")));
-    if (splitFields.size() == 1) {
-      return splitFields.get(0);
-    } else {
-      splitFields.remove(0);
-      return StringUtils.join(splitFields, Constants.DOT_SEPARATOR);
-    }
+    return realFieldName;
   }
 
   /**
