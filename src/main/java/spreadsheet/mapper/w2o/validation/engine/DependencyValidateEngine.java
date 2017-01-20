@@ -73,7 +73,7 @@ public class DependencyValidateEngine {
     visited.put(v, true);
 
     if (skip) {
-      LOGGER.debug("skip validator at group:[" + v + "]");
+      LOGGER.debug("skip valid at group:[" + v + "]");
       return;
     }
 

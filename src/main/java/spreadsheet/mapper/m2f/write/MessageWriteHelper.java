@@ -15,11 +15,7 @@ import java.util.Collection;
 public interface MessageWriteHelper {
 
   /**
-   * <pre>
-   * {@link MessageWriteStrategy} unique with {@link MessageWriteStrategies} (one to one),
-   * if you add message write strategy with same {@link MessageWriteStrategies},
-   * after add will override before add
-   * </pre>
+   * {@link MessageWriteStrategy} unique with {@link MessageWriteStrategies} (one to one)
    *
    * @param messageWriteStrategy {@link MessageWriteStrategy}
    * @return {@link MessageWriteHelper}

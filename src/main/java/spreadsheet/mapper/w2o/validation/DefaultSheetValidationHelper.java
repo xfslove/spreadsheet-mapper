@@ -30,20 +30,13 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   private List<RowValidator> rowValidators = new ArrayList<>();
   private List<CellValidator> cellValidators = new ArrayList<>();
 
-  /*==============
-    error messages
-   ===============*/
   private List<Message> errorMessages = new ArrayList<>();
-
-  /*============
-    validate result
-   =============*/
   private boolean validResult = true;
 
   @Override
   public SheetValidationHelper addSheetValidator(SheetValidator sheetValidator) {
     if (sheetValidator == null) {
-      throw new WorkbookValidateException("sheet validator can not be null");
+      throw new IllegalArgumentException("sheet validator can not be null");
     }
     sheetValidators.add(sheetValidator);
     return this;
@@ -52,7 +45,7 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   @Override
   public SheetValidationHelper addRowValidator(RowValidator rowValidator) {
     if (rowValidator == null) {
-      throw new WorkbookValidateException("row validator can not be null");
+      throw new IllegalArgumentException("row validator can not be null");
     }
     rowValidators.add(rowValidator);
     return this;
@@ -61,7 +54,7 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   @Override
   public SheetValidationHelper addCellValidator(CellValidator cellValidator) {
     if (cellValidator == null) {
-      throw new WorkbookValidateException("cell validator can not be null");
+      throw new IllegalArgumentException("cell validator can not be null");
     }
     cellValidators.add(cellValidator);
     return this;
@@ -74,9 +67,8 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
 
   @Override
   public boolean valid(Sheet sheet, SheetMeta sheetMeta) {
-
     // check dependency of this sheet
-    checkValidatorKeyDependency();
+    checkValidatorGroupDependency();
 
     validSheet(sheet, sheetMeta);
 
@@ -94,20 +86,25 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   /**
    * check if dependency correct
    */
-  private void checkValidatorKeyDependency() {
+  private void checkValidatorGroupDependency() {
     Map<String, List<DependencyValidator>> validatorMap = buildRelationValidatorMap();
 
     Map<String, Set<String>> vGraph = DependencyEngineHelper.buildVGraph(validatorMap);
     Set<String> allGroups = vGraph.keySet();
-    for (Set<String> dependsOn : vGraph.values()) {
-      if (!CollectionUtils.subtract(dependsOn, allGroups).isEmpty()) {
-        throw new WorkbookValidateException("depends on missing group.");
+
+    for (Map.Entry<String, Set<String>> entry : vGraph.entrySet()) {
+      String group = entry.getKey();
+      Set<String> dependsOn = entry.getValue();
+
+      Collection missingGroups = CollectionUtils.subtract(dependsOn, allGroups);
+      if (!missingGroups.isEmpty()) {
+        throw new WorkbookValidateException("[" + group + "]depends on missing group:" + missingGroups.toString());
       }
     }
 
-    DependencyCycleCheckEngine dependencyCycleCheckEngine = new DependencyCycleCheckEngine(validatorMap);
+    DependencyCycleCheckEngine dependencyCycleCheckEngine = new DependencyCycleCheckEngine(vGraph);
     if (dependencyCycleCheckEngine.cycling()) {
-      throw new WorkbookValidateException("dependency cycling.");
+      throw new WorkbookValidateException("dependency exists cycle:" + dependencyCycleCheckEngine.getCycle().toString());
     }
   }
 

@@ -1,11 +1,8 @@
 package spreadsheet.mapper.model.meta;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by hanwen on 2016/12/27.
@@ -18,7 +15,7 @@ public class SheetMetaBean implements SheetMeta {
 
   private int dataStartRowIndex;
 
-  private List<FieldMeta> fieldMetas = new ArrayList<>();
+  private Map<String, FieldMeta> fieldMetas = new HashMap<>();
 
   private WorkbookMeta workbookMeta;
 
@@ -48,24 +45,31 @@ public class SheetMetaBean implements SheetMeta {
 
   @Override
   public List<FieldMeta> getFieldMetas() {
+    List<FieldMeta> fieldMetas = new ArrayList<>(this.fieldMetas.values());
     Collections.sort(fieldMetas);
     return fieldMetas;
   }
 
   @Override
   public FieldMeta getFieldMeta(String fieldName) {
-    for (FieldMeta fieldMeta : fieldMetas) {
-      if (StringUtils.equals(fieldMeta.getName(), fieldName)) {
-        return fieldMeta;
-      }
+    if (fieldMetas.isEmpty()) {
+      return null;
     }
-    return null;
+    return fieldMetas.get(fieldName);
   }
 
   @Override
-  public boolean addFieldMeta(FieldMeta fieldMeta) {
+  public void addFieldMeta(FieldMeta fieldMeta) {
+    if (fieldMeta == null) {
+      throw new IllegalArgumentException("field meta can not be null");
+    }
+    String fieldName = fieldMeta.getName();
+    if (fieldMetas.containsKey(fieldName)) {
+      throw new IllegalArgumentException("this sheet meta contains multi field meta[" + fieldName + "]");
+    }
+
     ((FieldMetaBean) fieldMeta).setSheetMeta(this);
-    return fieldMetas.add(fieldMeta);
+    fieldMetas.put(fieldName, fieldMeta);
   }
 
   @Override

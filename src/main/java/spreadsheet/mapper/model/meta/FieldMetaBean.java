@@ -4,9 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by hanwen on 2016/12/30.
@@ -17,7 +15,7 @@ public class FieldMetaBean implements FieldMeta {
 
   private int columnIndex;
 
-  private List<HeaderMeta> headerMetas = new ArrayList<>();
+  private Map<Integer, HeaderMeta> headerMetas = new HashMap<>();
 
   private SheetMeta sheetMeta;
 
@@ -41,6 +39,7 @@ public class FieldMetaBean implements FieldMeta {
 
   @Override
   public List<HeaderMeta> getHeaderMetas() {
+    List<HeaderMeta> headerMetas = new ArrayList<>(this.headerMetas.values());
     Collections.sort(headerMetas);
     return headerMetas;
   }
@@ -48,18 +47,24 @@ public class FieldMetaBean implements FieldMeta {
   @Override
   public HeaderMeta getHeaderMeta(int rowIndex) {
     // maybe some row index not has field meta
-    for (HeaderMeta headerMeta : headerMetas) {
-      if (headerMeta.getRowIndex() == rowIndex) {
-        return headerMeta;
-      }
+    if (headerMetas.isEmpty()) {
+      return null;
     }
-    return null;
+    return headerMetas.get(rowIndex);
   }
 
   @Override
-  public boolean addHeaderMeta(HeaderMeta headerMeta) {
+  public void addHeaderMeta(HeaderMeta headerMeta) {
+    if (headerMeta == null) {
+      throw new IllegalArgumentException("header meta can not be null");
+    }
+    int rowIndex = headerMeta.getRowIndex();
+    if (headerMetas.containsKey(rowIndex)) {
+      throw new IllegalArgumentException("the field contains multi headers at row[" + rowIndex + "]");
+    }
+
     ((HeaderMetaBean) headerMeta).setFieldMeta(this);
-    return headerMetas.add(headerMeta);
+    headerMetas.put(rowIndex, headerMeta);
   }
 
   @Override

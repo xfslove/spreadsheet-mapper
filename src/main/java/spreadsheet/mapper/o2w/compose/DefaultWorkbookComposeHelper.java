@@ -18,7 +18,7 @@ public class DefaultWorkbookComposeHelper implements WorkbookComposeHelper {
   @Override
   public WorkbookComposeHelper addSheetComposeHelper(SheetComposeHelper sheetComposeHelper) {
     if (sheetComposeHelper == null) {
-      throw new WorkbookComposeException("sheet compose helper can not be null");
+      throw new IllegalArgumentException("sheet compose helper can not be null");
     }
 
     sheetComposeHelpers.add(sheetComposeHelper);
@@ -32,10 +32,10 @@ public class DefaultWorkbookComposeHelper implements WorkbookComposeHelper {
     int sizeOfHelper = sheetComposeHelpers.size();
 
     if (sizeOfData != sizeOfSheetMetas) {
-      throw new IllegalArgumentException("data's size[" + sizeOfData + "] not equals workbook meta's sheet meta size[" + sizeOfSheetMetas + "]");
+      throw new WorkbookComposeException("data's size[" + sizeOfData + "] not equals workbook meta's sheet meta size[" + sizeOfSheetMetas + "]");
     }
     if (sizeOfHelper != sizeOfData) {
-      throw new IllegalArgumentException("data's size[" + sizeOfData + "] not equals sheet compose helper size[" + sizeOfHelper + "]");
+      throw new WorkbookComposeException("data's size[" + sizeOfData + "] not equals sheet compose helper size[" + sizeOfHelper + "]");
     }
 
     Workbook workbook = new WorkbookBean();

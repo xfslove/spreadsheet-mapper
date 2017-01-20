@@ -1,9 +1,6 @@
 package spreadsheet.mapper.w2o.validation.engine;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import spreadsheet.mapper.w2o.validation.validator.DependencyValidator;
 
 import java.util.*;
 
@@ -16,18 +13,17 @@ import java.util.*;
  */
 public class DependencyCycleCheckEngine {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DependencyCycleCheckEngine.class);
-
   private Map<String, Set<String>> vGraph = new HashMap<>();
   private Stack<String> vStack = new Stack<>();
   private Map<String, Integer> vIndex = new HashMap<>();
   private Map<String, Integer> vLowLink = new HashMap<>();
   private int index;
 
-  private boolean cycling;
+  // found exists cycle
+  private List<String> cycle = new ArrayList<>();
 
-  public DependencyCycleCheckEngine(Map<String, List<DependencyValidator>> validatorMap) {
-    this.vGraph = DependencyEngineHelper.buildVGraph(validatorMap);
+  public DependencyCycleCheckEngine(Map<String, Set<String>> vGraph) {
+    this.vGraph = vGraph;
     for (String s : vGraph.keySet()) {
       vIndex.put(s, 0);
       vLowLink.put(s, 0);
@@ -38,12 +34,11 @@ public class DependencyCycleCheckEngine {
     for (String v : vGraph.keySet()) {
 
       if (vGraph.get(v).contains(v)) {
-        LOGGER.debug("dependency cycle is:[" + v + "]");
-        cycling = true;
+        cycle = Collections.singletonList(v);
       }
 
-      if (cycling) {
-        return cycling;
+      if (isCycling()) {
+        return true;
       }
 
       if (vIndex.get(v) == 0) {
@@ -51,7 +46,11 @@ public class DependencyCycleCheckEngine {
       }
     }
 
-    return cycling;
+    return false;
+  }
+
+  public List<String> getCycle() {
+    return cycle;
   }
 
   private void strongConnect(String v) {
@@ -70,24 +69,30 @@ public class DependencyCycleCheckEngine {
       }
     }
 
-    if (cycling) {
+    if (isCycling()) {
       return;
     }
 
     if (Objects.equals(vLowLink.get(v), vIndex.get(v))) {
-
-      List<String> connectedComponents = new ArrayList<>();
-      String connectedComponent = null;
-      while (!StringUtils.equals(connectedComponent, v)) {
-        connectedComponent = vStack.pop();
-        connectedComponents.add(connectedComponent);
-      }
-
-      if (connectedComponents.size() > 1) {
-        cycling = true;
-        LOGGER.debug("dependency cycle is:" + connectedComponents.toString());
-      }
+      populateConnectedComponents(v);
     }
   }
 
+  private void populateConnectedComponents(String v) {
+    List<String> connectedComponents = new ArrayList<>();
+    String connectedComponent = null;
+
+    while (!StringUtils.equals(connectedComponent, v)) {
+      connectedComponent = vStack.pop();
+      connectedComponents.add(connectedComponent);
+    }
+
+    if (connectedComponents.size() > 1) {
+      cycle = connectedComponents;
+    }
+  }
+
+  private boolean isCycling() {
+    return !cycle.isEmpty();
+  }
 }

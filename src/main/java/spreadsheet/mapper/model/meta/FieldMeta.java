@@ -44,9 +44,8 @@ public interface FieldMeta extends Serializable, Comparable<FieldMeta> {
    * add header meta
    *
    * @param headerMeta header meta
-   * @return true if success
    */
-  boolean addHeaderMeta(HeaderMeta headerMeta);
+  void addHeaderMeta(HeaderMeta headerMeta);
 
   /**
    * @return the sheet meta of this

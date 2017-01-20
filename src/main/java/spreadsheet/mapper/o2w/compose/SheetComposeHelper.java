@@ -14,11 +14,7 @@ import java.util.List;
 public interface SheetComposeHelper<T> {
 
   /**
-   * <pre>
-   * {@link FieldConverter} unique with {@link FieldConverter#getMatchField()} in one sheet (one to one),
-   * if you add {@link FieldConverter} with same {@link FieldConverter#getMatchField()},
-   * after add will override before add
-   * </pre>
+   * {@link FieldConverter} unique with {@link FieldConverter#getMatchField()} in one sheet (one to one)
    *
    * @param fieldConverter {@link FieldConverter}
    * @return {@link SheetComposeHelper}

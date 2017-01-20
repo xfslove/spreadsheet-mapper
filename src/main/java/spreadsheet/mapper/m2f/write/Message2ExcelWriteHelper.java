@@ -75,10 +75,15 @@ public class Message2ExcelWriteHelper implements MessageWriteHelper {
   @Override
   public MessageWriteHelper addMessageWriteStrategy(MessageWriteStrategy messageWriteStrategy) {
     if (messageWriteStrategy == null) {
-      throw new WorkbookWriteException("no message write strategy can not be null");
+      throw new IllegalArgumentException("message write strategy can not be null");
     }
 
-    strategy2writeStrategy.put(messageWriteStrategy.getStrategy(), messageWriteStrategy);
+    String strategy = messageWriteStrategy.getStrategy();
+    if (strategy2writeStrategy.containsKey(strategy)) {
+      throw new IllegalArgumentException("message writer contains multi write strategy[" + strategy + "]");
+    }
+
+    strategy2writeStrategy.put(strategy, messageWriteStrategy);
     return this;
   }
 

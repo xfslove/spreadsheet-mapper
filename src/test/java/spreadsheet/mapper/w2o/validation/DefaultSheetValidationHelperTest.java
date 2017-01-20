@@ -54,7 +54,7 @@ public class DefaultSheetValidationHelperTest {
     try {
       sheetValidationHelper.valid(sheetBean, sheetMetaBean);
     } catch (WorkbookValidateException e) {
-      LOGGER.debug("valid missing dependency group");
+      LOGGER.debug(e.getMessage());
       if (StringUtils.contains(e.getMessage(), "missing")) {
         missing = true;
       }
@@ -306,8 +306,8 @@ public class DefaultSheetValidationHelperTest {
     try {
       sheetValidationHelper.valid(new SheetBean(), new SheetMetaBean(2));
     } catch (WorkbookValidateException e) {
-      LOGGER.debug("valid dependency cycling");
-      if (StringUtils.contains(e.getMessage(), "cycling")) {
+      LOGGER.debug(e.getMessage());
+      if (StringUtils.contains(e.getMessage(), "cycle")) {
         result = true;
       }
     }

@@ -52,9 +52,8 @@ public interface SheetMeta extends Serializable {
    * add field meta
    *
    * @param fieldMeta field meta
-   * @return true if success
    */
-  boolean addFieldMeta(FieldMeta fieldMeta);
+  void addFieldMeta(FieldMeta fieldMeta);
 
   /**
    * @return the workbook meta of this
