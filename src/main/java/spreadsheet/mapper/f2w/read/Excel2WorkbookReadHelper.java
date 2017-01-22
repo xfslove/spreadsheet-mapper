@@ -2,16 +2,13 @@ package spreadsheet.mapper.f2w.read;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.NumberToTextConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import spreadsheet.mapper.model.core.*;
 import spreadsheet.mapper.f2w.DateFormatRegisterer;
-import spreadsheet.mapper.model.core.Cell;
-import spreadsheet.mapper.model.core.Row;
-import spreadsheet.mapper.model.core.Sheet;
-import spreadsheet.mapper.model.core.Workbook;
+import spreadsheet.mapper.model.core.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,14 +49,13 @@ public class Excel2WorkbookReadHelper implements WorkbookReadHelper {
         Sheet excelSheet = createSheet(sheet);
         excelWorkbook.addSheet(excelSheet);
 
-        int maxColNum = 0;
+        int maxColNum = getMaxColNum(sheet);
         for (int j = 0; j <= sheet.getLastRowNum(); j++) {
 
           org.apache.poi.ss.usermodel.Row row = sheet.getRow(j);
           Row excelRow = createRow();
           excelSheet.addRow(excelRow);
 
-          maxColNum = Math.max(row.getLastCellNum(), maxColNum);
           for (int k = 0; k < maxColNum; k++) {
 
             org.apache.poi.ss.usermodel.Cell cell = row.getCell(k);
@@ -125,7 +121,7 @@ public class Excel2WorkbookReadHelper implements WorkbookReadHelper {
     } else if (cellType == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC) {
 
       if (DateUtil.isCellDateFormatted(cell)) {
-        String dateFormat = DateFormatRegisterer.GLOBAL.get(cell.getCellStyle().getDataFormatString());
+        String dateFormat = DateFormatRegisterer.GLOBAL.getCorrespondingFormat(cell.getCellStyle().getDataFormatString());
 
         if (dateFormat == null) {
           value = DateFormatRegisterer.ERROR_PATTERN;
@@ -150,6 +146,15 @@ public class Excel2WorkbookReadHelper implements WorkbookReadHelper {
 
     return new CellBean(value);
 
+  }
+
+  private int getMaxColNum(org.apache.poi.ss.usermodel.Sheet sheet) {
+    int maxColNum = 0;
+    for (int j = 0; j <= sheet.getLastRowNum(); j++) {
+      org.apache.poi.ss.usermodel.Row row = sheet.getRow(j);
+      maxColNum = Math.max(row.getLastCellNum(), maxColNum);
+    }
+    return maxColNum;
   }
 
 }

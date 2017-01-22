@@ -27,7 +27,7 @@ public class DefaultWorkbookValidationHelper implements WorkbookValidationHelper
   @Override
   public WorkbookValidationHelper addWorkbookValidator(WorkbookValidator workbookValidator) {
     if (workbookValidator == null) {
-      throw new WorkbookValidateException("workbook validator can not be null");
+      throw new IllegalArgumentException("workbook validator can not be null");
     }
 
     workbookValidators.add(workbookValidator);
@@ -36,8 +36,8 @@ public class DefaultWorkbookValidationHelper implements WorkbookValidationHelper
 
   @Override
   public WorkbookValidationHelper addSheetValidationHelper(SheetValidationHelper sheetValidationHelper) {
-    if (sheetValidationHelpers == null) {
-      throw new WorkbookValidateException("sheet validation helper can not be null");
+    if (sheetValidationHelper == null) {
+      throw new IllegalArgumentException("sheet validation helper can not be null");
     }
 
     sheetValidationHelpers.add(sheetValidationHelper);
@@ -51,10 +51,10 @@ public class DefaultWorkbookValidationHelper implements WorkbookValidationHelper
     int sizeOfHelper = sheetValidationHelpers.size();
 
     if (sizeOfSheets != sizeOfSheetMetas) {
-      throw new IllegalArgumentException("workbook's sheet size[" + sizeOfSheets + "] not equals workbook meta's sheet meta size[" + sizeOfSheetMetas + "]");
+      throw new WorkbookValidateException("workbook's sheet size[" + sizeOfSheets + "] not equals workbook meta's sheet meta size[" + sizeOfSheetMetas + "]");
     }
     if (sizeOfSheets != sizeOfHelper) {
-      throw new IllegalArgumentException("workbook's sheet size[" + sizeOfSheets + "] not equals sheet validation helper size[" + sizeOfHelper + "]");
+      throw new WorkbookValidateException("workbook's sheet size[" + sizeOfSheets + "] not equals sheet validation helper size[" + sizeOfHelper + "]");
     }
 
     validWorkbook(workbook, workbookMeta);
@@ -91,7 +91,8 @@ public class DefaultWorkbookValidationHelper implements WorkbookValidationHelper
   private void validWorkbook(Workbook workbook, WorkbookMeta workbookMeta) {
 
     for (WorkbookValidator validator : workbookValidators) {
-      if (!validator.valid(workbook, workbookMeta)) {
+      if (!validator.valid(workbook, workbookMeta) && validator.getMessageOnSheet() != null) {
+
         errorMessages.add(new MessageBean(MessageWriteStrategies.TEXT_BOX, validator.getErrorMessage(), validator.getMessageOnSheet()));
       }
     }

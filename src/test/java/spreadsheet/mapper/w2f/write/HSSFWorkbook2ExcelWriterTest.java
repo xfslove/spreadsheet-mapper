@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import spreadsheet.mapper.AssertUtil;
-import spreadsheet.mapper.Constants;
 import spreadsheet.mapper.TestFactory;
 import spreadsheet.mapper.f2w.read.Excel2WorkbookReadHelper;
 import spreadsheet.mapper.f2w.read.WorkbookReadHelper;
@@ -29,7 +28,7 @@ public class HSSFWorkbook2ExcelWriterTest {
   @BeforeClass
   public void before() throws IOException {
     LOGGER.debug("-------------------starting test hssf workbook write helper-------------------");
-    file = File.createTempFile("test", Constants.SUFFIX_XLS);
+    file = File.createTempFile("test", ".xls");
     LOGGER.debug(file.getAbsolutePath());
   }
 

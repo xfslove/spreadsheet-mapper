@@ -9,7 +9,6 @@ import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.o2w.compose.converter.BeanUtilsConverter;
 import spreadsheet.mapper.o2w.compose.converter.Converter;
 import spreadsheet.mapper.o2w.compose.converter.FieldConverter;
-import spreadsheet.mapper.w2o.validation.WorkbookValidateException;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -21,19 +20,22 @@ import java.util.Map;
  */
 public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
 
-  private Map<String, FieldConverter<T>> field2converter = new LinkedHashMap<>();
+  private LinkedHashMap<String, FieldConverter<T>> field2converter = new LinkedHashMap<>();
 
   private Converter<T> defaultConverter = new BeanUtilsConverter<>();
 
   @Override
   public SheetComposeHelper<T> addFieldConverter(FieldConverter<T> fieldConverter) {
     if (fieldConverter == null) {
-      throw new WorkbookComposeException("field converter can not be null");
+      throw new IllegalArgumentException("field converter can not be null");
     }
 
     String matchField = fieldConverter.getMatchField();
     if (StringUtils.isBlank(matchField)) {
-      throw new WorkbookValidateException("field value setter match field can not be null");
+      throw new IllegalArgumentException("field value setter match field can not be null");
+    }
+    if (field2converter.containsKey(matchField)) {
+      throw new IllegalArgumentException("sheet compose helper contains multi field converter at field[" + matchField + "]");
     }
 
     field2converter.put(matchField, fieldConverter);
@@ -82,7 +84,7 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
   private void createHeaderCellsIfNecessary(Row row, SheetMeta sheetMeta) {
     List<FieldMeta> fieldMetas = sheetMeta.getFieldMetas();
 
-    int lastColumnNum = getLastColumnNum(fieldMetas);
+    int lastColumnNum = getMaxColNum(fieldMetas);
     Map<Integer, FieldMeta> columnIndex2fieldMeta = buildFieldMetaMap(fieldMetas);
 
     for (int i = 1; i <= lastColumnNum; i++) {
@@ -113,7 +115,7 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
   private void createDataCells(T object, Row row, SheetMeta sheetMeta) {
 
     List<FieldMeta> fieldMetas = sheetMeta.getFieldMetas();
-    int lastColumnNum = getLastColumnNum(fieldMetas);
+    int lastColumnNum = getMaxColNum(fieldMetas);
     Map<Integer, FieldMeta> columnIndex2fieldMeta = buildFieldMetaMap(fieldMetas);
 
     for (int i = 1; i <= lastColumnNum; i++) {
@@ -138,7 +140,7 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
     }
   }
 
-  private int getLastColumnNum(List<FieldMeta> fieldMetas) {
+  private int getMaxColNum(List<FieldMeta> fieldMetas) {
     if (CollectionUtils.isEmpty(fieldMetas)) {
       return 0;
     }

@@ -17,11 +17,7 @@ import java.util.List;
 public interface SheetProcessHelper<T> {
 
   /**
-   * <pre>
-   * {@link FieldSetter} unique with {@link FieldSetter#getMatchField()} in one sheet (one to one),
-   * if you add {@link FieldSetter} same {@link FieldSetter#getMatchField()},
-   * after add will override before add
-   * </pre>
+   * {@link FieldSetter} unique with {@link FieldSetter#getMatchField()} in one sheet (one to one)
    *
    * @param fieldSetter {@link FieldSetter}
    * @return {@link SheetProcessHelper}

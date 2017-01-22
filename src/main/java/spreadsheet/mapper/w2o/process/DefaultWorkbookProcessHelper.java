@@ -17,8 +17,8 @@ public class DefaultWorkbookProcessHelper implements WorkbookProcessHelper {
 
   @Override
   public WorkbookProcessHelper addSheetProcessHelper(SheetProcessHelper sheetProcessHelper) {
-    if (sheetProcessHelpers == null) {
-      throw new WorkbookProcessException("sheet process helper can not be null");
+    if (sheetProcessHelper == null) {
+      throw new IllegalArgumentException("sheet process helper can not be null");
     }
 
     sheetProcessHelpers.add(sheetProcessHelper);
@@ -32,10 +32,10 @@ public class DefaultWorkbookProcessHelper implements WorkbookProcessHelper {
     int sizeOfHelper = sheetProcessHelpers.size();
 
     if (sizeOfSheets != sizeOfSheetMetas) {
-      throw new IllegalArgumentException("workbook's sheet size[" + sizeOfSheets + "] not equals workbook meta's sheet meta size[" + sizeOfSheetMetas + "]");
+      throw new WorkbookProcessException("workbook's sheet size[" + sizeOfSheets + "] not equals workbook meta's sheet meta size[" + sizeOfSheetMetas + "]");
     }
     if (sizeOfSheets != sizeOfHelper) {
-      throw new IllegalArgumentException("workbook's sheet size[" + sizeOfSheets + "] not equals sheet process helper size[" + sizeOfHelper + "]");
+      throw new WorkbookProcessException("workbook's sheet size[" + sizeOfSheets + "] not equals sheet process helper size[" + sizeOfHelper + "]");
     }
 
     List<List> objects = new ArrayList<>();

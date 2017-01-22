@@ -1,7 +1,7 @@
 package spreadsheet.mapper.w2o.validation.engine;
 
 import org.apache.commons.collections.CollectionUtils;
-import spreadsheet.mapper.w2o.validation.validator.DependencyValidator;
+import spreadsheet.mapper.w2o.validation.validator.cell.DependencyValidator;
 
 import java.util.*;
 
@@ -20,8 +20,8 @@ public class DependencyEngineHelper {
    * @param validatorMap dependency validators
    * @return the directed graph
    */
-  public static Map<String, Set<String>> buildVGraph(Map<String, List<DependencyValidator>> validatorMap) {
-    Map<String, Set<String>> vGraph = new LinkedHashMap<>();
+  public static LinkedHashMap<String, LinkedHashSet<String>> buildVGraph(Map<String, List<DependencyValidator>> validatorMap) {
+    LinkedHashMap<String, LinkedHashSet<String>> vGraph = new LinkedHashMap<>();
 
     for (Map.Entry<String, List<DependencyValidator>> entry : validatorMap.entrySet()) {
       String key = entry.getKey();
