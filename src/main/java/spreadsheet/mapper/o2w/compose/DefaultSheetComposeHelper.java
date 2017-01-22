@@ -2,6 +2,8 @@ package spreadsheet.mapper.o2w.compose;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.model.core.*;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.HeaderMeta;
@@ -19,6 +21,8 @@ import java.util.Map;
  * Created by hanwen on 15-12-16.
  */
 public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSheetComposeHelper.class);
 
   private LinkedHashMap<String, FieldConverter<T>> field2converter = new LinkedHashMap<>();
 
@@ -92,6 +96,7 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
       FieldMeta fieldMeta = columnIndex2fieldMeta.get(i);
 
       if (fieldMeta == null) {
+        LOGGER.debug("no field meta at column index:[" + i + "], will create a empty cell");
 
         cell = new CellBean();
         row.addCell(cell);
@@ -100,6 +105,7 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
 
       HeaderMeta headerMeta = fieldMeta.getHeaderMeta(row.getIndex());
       if (headerMeta == null) {
+        LOGGER.debug("no header meta at row index:[" + row.getIndex() + "], will create an empty cell");
 
         cell = new CellBean();
         row.addCell(cell);
@@ -123,6 +129,8 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
       FieldMeta fieldMeta = columnIndex2fieldMeta.get(i);
 
       if (fieldMeta == null) {
+        LOGGER.debug("no field meta at column index:[" + i + "], will create an empty cell");
+
         row.addCell(cell);
         continue;
       }

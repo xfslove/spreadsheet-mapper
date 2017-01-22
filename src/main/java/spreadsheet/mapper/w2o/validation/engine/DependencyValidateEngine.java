@@ -72,7 +72,6 @@ public class DependencyValidateEngine {
     visited.put(v, true);
 
     if (ifSkip(v)) {
-      LOGGER.debug("skip valid at group:[" + v + "]");
       result.put(v, false);
       return;
     }
@@ -94,6 +93,7 @@ public class DependencyValidateEngine {
   private boolean ifSkip(String v) {
     for (String w : vGraph.get(v)) {
       if (!result.get(w)) {
+        LOGGER.debug("skip valid at group:[" + v + "] because of depends on group:[" + w + "] validate failure");
         return true;
       }
     }
@@ -117,7 +117,8 @@ public class DependencyValidateEngine {
         FieldMeta fieldMeta = sheetMeta.getFieldMeta(matchField);
 
         if (fieldMeta == null) {
-          throw new WorkbookValidateException("no field meta named:[" + matchField + "]");
+          LOGGER.debug("no field meta named:[" + matchField + "], cell validator[" + multiCellValidator.getClass().getName() + "] ignored");
+          return true;
         }
 
         fieldMetas.add(fieldMeta);
@@ -151,7 +152,8 @@ public class DependencyValidateEngine {
       FieldMeta fieldMeta = sheetMeta.getFieldMeta(matchField);
 
       if (fieldMeta == null) {
-        throw new WorkbookValidateException("no field meta named:[" + matchField + "]");
+        LOGGER.debug("no field meta named:[" + matchField + "], cell validator[" + singleCellValidator.getClass().getName() + "] ignored");
+        return true;
       }
 
       Cell cell = row.getCell(fieldMeta.getColumnIndex());

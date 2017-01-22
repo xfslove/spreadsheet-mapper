@@ -1,6 +1,8 @@
 package spreadsheet.mapper.w2o.process;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.core.Sheet;
@@ -11,9 +13,7 @@ import spreadsheet.mapper.w2o.process.setter.BeanUtilsSetter;
 import spreadsheet.mapper.w2o.process.setter.FieldSetter;
 import spreadsheet.mapper.w2o.process.setter.Setter;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * sheet to objects processor
@@ -21,6 +21,8 @@ import java.util.List;
  * Created by hanwen on 15-12-16.
  */
 public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSheetProcessHelper.class);
 
   private ObjectFactory<T> objectFactory;
 
@@ -99,6 +101,7 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
     }
 
     List<FieldMeta> fieldMetas = sheetMeta.getFieldMetas();
+    Map<Integer, FieldMeta> columnIndex2fieldMeta = buildFieldMetaMap(fieldMetas);
 
     List<T> dataOfSheet = new ArrayList<>();
     sheetProcessListener.before(sheet, sheetMeta);
@@ -110,9 +113,15 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
 
       rowProcessListener.before(object, row, sheetMeta);
 
-      for (FieldMeta fieldMeta : fieldMetas) {
+      for (Cell cell : row.getCells()) {
 
-        Cell cell = row.getCell(fieldMeta.getColumnIndex());
+        FieldMeta fieldMeta = columnIndex2fieldMeta.get(cell.getIndex());
+
+        if (fieldMeta == null) {
+          // if missing field meta skip the cell(same column index with field meta)
+          LOGGER.debug("no field meta at row index:[" + cell.getIndex() + "], cell value:[" + cell.getValue() + "] ignored");
+          continue;
+        }
 
         cellProcessListener.before(object, cell, fieldMeta);
 
@@ -136,5 +145,13 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
     sheetProcessListener.after(dataOfSheet, sheet, sheetMeta);
 
     return dataOfSheet;
+  }
+
+  private Map<Integer, FieldMeta> buildFieldMetaMap(List<FieldMeta> fieldMetas) {
+    Map<Integer, FieldMeta> columnIndex2fieldMeta = new HashMap<>();
+    for (FieldMeta fieldMeta : fieldMetas) {
+      columnIndex2fieldMeta.put(fieldMeta.getColumnIndex(), fieldMeta);
+    }
+    return columnIndex2fieldMeta;
   }
 }

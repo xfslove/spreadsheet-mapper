@@ -7,7 +7,10 @@ import org.testng.annotations.Test;
 import spreadsheet.mapper.TestFactory;
 import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.core.Sheet;
+import spreadsheet.mapper.model.meta.FieldMeta;
+import spreadsheet.mapper.model.meta.HeaderMetaBean;
 import spreadsheet.mapper.model.meta.SheetMeta;
+import spreadsheet.mapper.model.meta.SheetMetaBean;
 import spreadsheet.mapper.w2o.validation.validator.row.RowValidator;
 import spreadsheet.mapper.w2o.validation.validator.sheet.SheetValidator;
 
@@ -15,6 +18,7 @@ import java.util.*;
 
 import static java.util.Arrays.asList;
 import static org.testng.Assert.*;
+import static spreadsheet.mapper.TestFactory.createFieldMetaMap;
 import static spreadsheet.mapper.w2o.validation.DefaultSheetValidationHelperExceptionTest.getSheet;
 
 /**
@@ -318,6 +322,44 @@ public class DefaultSheetValidationHelperHitTest {
     assertFalse(valid);
     assertEquals(counter.hitTime(), 1);
 
+  }
+
+  @Test(dependsOnMethods = "testSkip4")
+  public void testSkip5() {
+
+    SheetMeta sheetMeta = new SheetMetaBean(2);
+    Map<String, FieldMeta> fieldMetaMap = createFieldMetaMap();
+    fieldMetaMap.remove("long1");
+    fieldMetaMap.remove("string");
+
+    for (FieldMeta fieldMeta : fieldMetaMap.values()) {
+      fieldMeta.addHeaderMeta(new HeaderMetaBean(1, fieldMeta.getName()));
+      sheetMeta.addFieldMeta(fieldMeta);
+    }
+
+    DefaultSheetValidationHelperExceptionTest.Counter counter = new DefaultSheetValidationHelperExceptionTest.Counter();
+
+    Sheet sheet = getSheet();
+
+    DefaultSheetValidationHelper defaultSheetValidationHelper = new DefaultSheetValidationHelper();
+
+    defaultSheetValidationHelper.addDependencyValidator(
+        new DefaultSheetValidationHelperExceptionTest.TestCellValidator(counter).group("int1").matchField("int1"));
+    defaultSheetValidationHelper.addDependencyValidator(
+        new DefaultSheetValidationHelperExceptionTest.TestCellValidator(counter).group("int2").matchField("int2").dependsOn("int1"));
+    defaultSheetValidationHelper.addDependencyValidator(
+        new DefaultSheetValidationHelperExceptionTest.TestMultiValidator(counter).group("int1").matchFields("long1", "long2"));
+    defaultSheetValidationHelper.addDependencyValidator(
+        new DefaultSheetValidationHelperExceptionTest.TestCellValidator(counter).group("string").matchField("string"));
+    defaultSheetValidationHelper.addDependencyValidator(
+        new DefaultSheetValidationHelperExceptionTest.TestCellValidator(counter).group("float1").matchField("float1").dependsOn("int2"));
+    defaultSheetValidationHelper.addDependencyValidator(
+        new DefaultSheetValidationHelperExceptionTest.TestCellValidator(counter).group("float2").matchField("float2").dependsOn("int2"));
+
+    boolean valid = defaultSheetValidationHelper.valid(sheet, sheetMeta);
+
+    assertTrue(valid);
+    assertEquals(counter.hitTime(), 4);
   }
 
   private class TrueTestRowValidator implements RowValidator {
