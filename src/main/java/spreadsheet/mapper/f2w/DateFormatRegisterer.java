@@ -1,6 +1,8 @@
 package spreadsheet.mapper.f2w;
 
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,8 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DateFormatRegisterer {
 
-  public static DateFormatRegisterer GLOBAL = new DateFormatRegisterer();
-
   public static final String FULL_LOCAL_DATE_PATTERN = "yyyy-MM-dd";
   public static final String LOCAL_DATE_WITH_YEAR_MONTH_PATTERN = "yyyy-MM";
   public static final String LOCAL_DATE_WITH_YEAR_PATTERN = "yyyy";
@@ -21,6 +21,10 @@ public class DateFormatRegisterer {
   public static final String LOCAL_DATE_TIME_WITH_HOUR_MIN_PATTERN = "yyyy-MM-dd HH:mm";
   public static final String LOCAL_DATE_TIME_WITH_HOUR_PATTERN = "yyyy-MM-dd HH";
   public static final String ERROR_PATTERN = "error-date-pattern";
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DateFormatRegisterer.class);
+
+  public static DateFormatRegisterer GLOBAL = new DateFormatRegisterer();
 
   private ConcurrentHashMap<String, String> DATE_FORMAT_CORRESPONDING = new ConcurrentHashMap<>();
 
@@ -36,6 +40,7 @@ public class DateFormatRegisterer {
    */
   public void registerFormat(String customFormat, String dateFormat) {
     DATE_FORMAT_CORRESPONDING.put(customFormat, dateFormat);
+    LOGGER.info("register format[" + customFormat + "] corresponding as[" + dateFormat + "]");
   }
 
   /**

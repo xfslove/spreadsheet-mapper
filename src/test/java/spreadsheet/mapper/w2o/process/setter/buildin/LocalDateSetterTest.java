@@ -1,4 +1,4 @@
-package spreadsheet.mapper.w2o.process.setter;
+package spreadsheet.mapper.w2o.process.setter.buildin;
 
 import org.joda.time.LocalDate;
 import org.testng.annotations.Test;

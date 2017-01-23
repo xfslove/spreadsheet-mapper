@@ -2,11 +2,8 @@ package spreadsheet.mapper.w2o.validation.validator.cell.buildin;
 
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
+import spreadsheet.mapper.w2o.param.BooleanParam;
 import spreadsheet.mapper.w2o.validation.validator.cell.CustomSingleCellValidatorAdapter;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * boolean validator
@@ -15,24 +12,11 @@ import java.util.Set;
  */
 public class BooleanValidator extends CustomSingleCellValidatorAdapter<BooleanValidator> {
 
-  private Set<String> trueStrings = new HashSet<>();
+  private BooleanParam param;
 
-  private Set<String> falseStrings = new HashSet<>();
-
-  public BooleanValidator supportedTrue(String... trueStrings) {
-    if (trueStrings == null) {
-      return getThis();
-    }
-    Collections.addAll(this.trueStrings, trueStrings);
-    return getThis();
-  }
-
-  public BooleanValidator supportedFalse(String... falseStrings) {
-    if (falseStrings == null) {
-      return getThis();
-    }
-    Collections.addAll(this.falseStrings, falseStrings);
-    return getThis();
+  public BooleanValidator param(BooleanParam param) {
+    this.param = param;
+    return this;
   }
 
   @Override
@@ -43,6 +27,6 @@ public class BooleanValidator extends CustomSingleCellValidatorAdapter<BooleanVa
   @Override
   protected boolean customValid(Cell cell, FieldMeta fieldMeta) {
     String value = cell.getValue();
-    return trueStrings.contains(value) || falseStrings.contains(value);
+    return param.getSupportedTrue().contains(value) || param.getSupportedFalse().contains(value);
   }
 }

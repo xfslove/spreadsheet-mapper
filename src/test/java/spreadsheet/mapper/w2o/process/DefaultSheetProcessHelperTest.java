@@ -13,13 +13,13 @@ import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.model.meta.SheetMetaBean;
-import spreadsheet.mapper.o2w.compose.DefaultSheetComposeHelperTest;
+import spreadsheet.mapper.w2o.param.BooleanParam;
 import spreadsheet.mapper.w2o.process.listener.CellProcessListener;
 import spreadsheet.mapper.w2o.process.listener.RowProcessListener;
 import spreadsheet.mapper.w2o.process.listener.SheetProcessListener;
-import spreadsheet.mapper.w2o.process.setter.BooleanSetter;
-import spreadsheet.mapper.w2o.process.setter.LocalDateSetter;
-import spreadsheet.mapper.w2o.process.setter.LocalDateTimeSetter;
+import spreadsheet.mapper.w2o.process.setter.buildin.BooleanSetter;
+import spreadsheet.mapper.w2o.process.setter.buildin.LocalDateSetter;
+import spreadsheet.mapper.w2o.process.setter.buildin.LocalDateTimeSetter;
 
 import java.util.List;
 
@@ -78,8 +78,15 @@ public class DefaultSheetProcessHelperTest {
   static void addSetter(SheetProcessHelper<TestBean> processor1) {
     processor1.addFieldSetter(new LocalDateTimeSetter<TestBean>().pattern("yyyy-MM-dd HH:mm:ss").matchField("localDateTime"));
     processor1.addFieldSetter(new LocalDateSetter<TestBean>().pattern("yyyy-MM-dd").matchField("localDate"));
-    processor1.addFieldSetter(new BooleanSetter<TestBean>().matchField("boolean1").toTrue("pass").toFalse("failure"));
-    processor1.addFieldSetter(new BooleanSetter<TestBean>().toTrue("pass").toFalse("failure").matchField("boolean2"));
+    processor1.addFieldSetter(new BooleanSetter<TestBean>().matchField("boolean1")
+        .param(
+            new BooleanParam().supportedTrue("pass").supportedFalse("failure")
+        ));
+    processor1.addFieldSetter(new BooleanSetter<TestBean>()
+        .param(
+            new BooleanParam().supportedTrue("pass").supportedFalse("failure")
+        )
+        .matchField("boolean2"));
 
   }
 

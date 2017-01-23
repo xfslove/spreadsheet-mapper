@@ -1,34 +1,42 @@
-package spreadsheet.mapper.o2w.compose.converter;
+package spreadsheet.mapper.o2w.compose.converter.buildin;
+
 
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.o2w.compose.WorkbookComposeException;
+import spreadsheet.mapper.o2w.compose.converter.FieldConverterAdapter;
 import spreadsheet.mapper.utils.FieldUtils;
 
 /**
- * local date text value with supplied pattern converter
+ * boolean readable text value converter
  * <p>
- * Created by hanwen on 5/3/16.
+ * Created by hanwen on 16/3/18.
  */
-public class LocalDateConverter<T> extends FieldConverterAdapter<T, LocalDateConverter<T>> {
+public class BooleanConverter<T> extends FieldConverterAdapter<T, BooleanConverter<T>> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(LocalDateConverter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BooleanConverter.class);
 
-  private String pattern;
+  private String trueString;
 
-  public LocalDateConverter<T> pattern(String pattern) {
-    this.pattern = pattern;
+  private String falseString;
+
+  public BooleanConverter<T> trueString(String trueString) {
+    this.trueString = trueString;
+    return getThis();
+  }
+
+  public BooleanConverter<T> falseString(String falseString) {
+    this.falseString = falseString;
     return getThis();
   }
 
   @Override
-  protected LocalDateConverter<T> getThis() {
+  protected BooleanConverter<T> getThis() {
     return this;
   }
 
@@ -38,12 +46,12 @@ public class LocalDateConverter<T> extends FieldConverterAdapter<T, LocalDateCon
     try {
       Object value = PropertyUtils.getProperty(object, FieldUtils.detectRealFieldName(fieldMeta));
 
-      if (!(value instanceof LocalDate)) {
-        return null;
+      if (Boolean.FALSE.equals(value)) {
+        return falseString;
+      } else if (Boolean.TRUE.equals(value)) {
+        return trueString;
       }
-
-      return ((LocalDate) value).toString(pattern);
-
+      return null;
     } catch (NestedNullException e) {
       LOGGER.debug("{} is null", fieldMeta.getName());
       return null;

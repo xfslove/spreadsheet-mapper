@@ -1,10 +1,11 @@
-package spreadsheet.mapper.w2o.process.setter;
+package spreadsheet.mapper.w2o.process.setter.buildin;
 
 import org.testng.annotations.Test;
 import spreadsheet.mapper.TestBean;
 import spreadsheet.mapper.TestFactory;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
+import spreadsheet.mapper.w2o.param.BooleanParam;
 
 import java.util.Map;
 
@@ -26,8 +27,20 @@ public class BooleanSetterTest {
     // touch register
     new BeanUtilsSetter();
 
-    BooleanSetter<TestBean> setter1 = new BooleanSetter<TestBean>().matchField("boolean1").toFalse("failure").toTrue("pass");
-    BooleanSetter<TestBean> setter2 = new BooleanSetter<TestBean>().toTrue("pass").toFalse("failure").matchField("boolean2");
+    BooleanSetter<TestBean> setter1 = new BooleanSetter<TestBean>()
+        .matchField("boolean1")
+        .param(
+            new BooleanParam()
+                .supportedTrue("pass")
+                .supportedFalse("failure")
+        );
+    BooleanSetter<TestBean> setter2 = new BooleanSetter<TestBean>()
+        .param(
+            new BooleanParam()
+                .supportedFalse("failure")
+                .supportedTrue("pass")
+        )
+        .matchField("boolean2");
 
     TestBean testBean1 = new TestBean();
     setter1.set(testBean1, cellMap1.get("boolean1"), fieldMetaMap.get("boolean1"));

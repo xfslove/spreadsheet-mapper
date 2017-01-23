@@ -3,6 +3,7 @@ package spreadsheet.mapper.w2o.validation.validator.cell.buildin;
 import org.apache.commons.lang3.math.NumberUtils;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
+import spreadsheet.mapper.w2o.param.NumberScaleRangeParam;
 import spreadsheet.mapper.w2o.validation.validator.cell.CustomSingleCellValidatorAdapter;
 
 /**
@@ -12,18 +13,11 @@ import spreadsheet.mapper.w2o.validation.validator.cell.CustomSingleCellValidato
  */
 public class NumberScaleRangeValidator extends CustomSingleCellValidatorAdapter<NumberScaleRangeValidator> {
 
-  private int lte;
+  private NumberScaleRangeParam param;
 
-  private int gte;
-
-  public NumberScaleRangeValidator lte(int lte) {
-    this.lte = lte;
-    return getThis();
-  }
-
-  public NumberScaleRangeValidator gte(int gte) {
-    this.gte = gte;
-    return getThis();
+  public NumberScaleRangeValidator param(NumberScaleRangeParam param) {
+    this.param = param;
+    return this;
   }
 
   @Override
@@ -46,6 +40,6 @@ public class NumberScaleRangeValidator extends CustomSingleCellValidatorAdapter<
       scale = numberPlace[1].length();
     }
 
-    return gte <= scale && scale <= lte;
+    return param.getGte() <= scale && scale <= param.getLte();
   }
 }

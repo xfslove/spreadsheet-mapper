@@ -4,6 +4,7 @@ import org.testng.annotations.Test;
 import spreadsheet.mapper.TestFactory;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
+import spreadsheet.mapper.w2o.param.BooleanParam;
 
 import java.util.Map;
 
@@ -20,13 +21,19 @@ public class BooleanValidatorTest {
 
     Map<String, FieldMeta> fieldMetaMap = TestFactory.createFieldMetaMap();
     BooleanValidator validator0 = new BooleanValidator();
+    validator0.param(
+        new BooleanParam()
+            .supportedTrue("pass")
+            .supportedFalse("failure")
+    );
     validator0.matchField("boolean1");
-    validator0.supportedTrue("pass");
-    validator0.supportedFalse("failure");
     BooleanValidator validator1 = new BooleanValidator();
     validator1.matchField("boolean2");
-    validator1.supportedTrue("pass");
-    validator1.supportedFalse("failure");
+    validator1.param(
+        new BooleanParam()
+            .supportedTrue("pass")
+            .supportedFalse("failure")
+    );
 
     Map<String, Cell> cellMap1 = TestFactory.createCellMap1();
     assertTrue(validator0.valid(cellMap1.get("boolean1"), fieldMetaMap.get("boolean1")));

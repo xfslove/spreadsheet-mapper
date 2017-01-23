@@ -1,4 +1,4 @@
-package spreadsheet.mapper.w2o.process.setter;
+package spreadsheet.mapper.w2o.process.setter.buildin;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -7,11 +7,9 @@ import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.utils.FieldUtils;
+import spreadsheet.mapper.w2o.param.BooleanParam;
 import spreadsheet.mapper.w2o.process.WorkbookProcessException;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import spreadsheet.mapper.w2o.process.setter.FieldSetterAdapter;
 
 /**
  * boolean field value setter
@@ -22,24 +20,11 @@ public class BooleanSetter<T> extends FieldSetterAdapter<T, BooleanSetter<T>> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BooleanSetter.class);
 
-  private Set<String> trueStrings = new HashSet<>();
+  private BooleanParam param;
 
-  private Set<String> falseStrings = new HashSet<>();
-
-  public BooleanSetter<T> toTrue(String... trueStrings) {
-    if (trueStrings == null) {
-      return getThis();
-    }
-    Collections.addAll(this.trueStrings, trueStrings);
-    return getThis();
-  }
-
-  public BooleanSetter<T> toFalse(String... falseStrings) {
-    if (falseStrings == null) {
-      return getThis();
-    }
-    Collections.addAll(this.falseStrings, falseStrings);
-    return getThis();
+  public BooleanSetter<T> param(BooleanParam param) {
+    this.param = param;
+    return this;
   }
 
   @Override
@@ -53,9 +38,9 @@ public class BooleanSetter<T> extends FieldSetterAdapter<T, BooleanSetter<T>> {
       String stringValue = cell.getValue();
       Boolean booleanValue = null;
 
-      if (trueStrings.contains(stringValue)) {
+      if (param.getSupportedTrue().contains(stringValue)) {
         booleanValue = Boolean.TRUE;
-      } else if (falseStrings.contains(stringValue)) {
+      } else if (param.getSupportedFalse().contains(stringValue)) {
         booleanValue = Boolean.FALSE;
       }
 

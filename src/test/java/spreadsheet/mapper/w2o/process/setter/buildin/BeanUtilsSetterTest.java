@@ -1,4 +1,4 @@
-package spreadsheet.mapper.w2o.process.setter;
+package spreadsheet.mapper.w2o.process.setter.buildin;
 
 import org.testng.annotations.Test;
 import spreadsheet.mapper.TestBean;

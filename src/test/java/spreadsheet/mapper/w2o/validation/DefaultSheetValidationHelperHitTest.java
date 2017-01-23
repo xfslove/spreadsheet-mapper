@@ -24,8 +24,7 @@ import static spreadsheet.mapper.w2o.validation.DefaultSheetValidationHelperExce
 /**
  * Created by hanwen on 2017/1/22.
  */
-@Test
-//    (groups = "defaultSheetValidationHelperHitTest", dependsOnGroups = "defaultSheetValidationHelperExceptionTest")
+@Test(groups = "defaultSheetValidationHelperHitTest", dependsOnGroups = "defaultSheetValidationHelperExceptionTest")
 public class DefaultSheetValidationHelperHitTest {
 
   private static Logger LOGGER = LoggerFactory.getLogger(DefaultSheetValidationHelperHitTest.class);

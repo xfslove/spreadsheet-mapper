@@ -1,8 +1,8 @@
-package spreadsheet.mapper.w2o.process.setter;
+package spreadsheet.mapper.w2o.process.setter.buildin;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.joda.time.LocalDateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
@@ -11,25 +11,26 @@ import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.utils.FieldUtils;
 import spreadsheet.mapper.w2o.process.WorkbookProcessException;
+import spreadsheet.mapper.w2o.process.setter.FieldSetterAdapter;
 
 /**
- * local date time field value setter
+ * local date field value setter
  * <p>
  * Created by hanwen on 5/3/16.
  */
-public class LocalDateTimeSetter<T> extends FieldSetterAdapter<T, LocalDateTimeSetter<T>> {
+public class LocalDateSetter<T> extends FieldSetterAdapter<T, LocalDateSetter<T>> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(LocalDateTimeSetter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LocalDateSetter.class);
 
   private String pattern;
 
-  public LocalDateTimeSetter<T> pattern(String pattern) {
+  public LocalDateSetter<T> pattern(String pattern) {
     this.pattern = pattern;
     return getThis();
   }
 
   @Override
-  protected LocalDateTimeSetter<T> getThis() {
+  protected LocalDateSetter<T> getThis() {
     return this;
   }
 
@@ -40,13 +41,14 @@ public class LocalDateTimeSetter<T> extends FieldSetterAdapter<T, LocalDateTimeS
       String value = cell.getValue();
       String fieldName = FieldUtils.detectRealFieldName(fieldMeta);
 
-      LocalDateTime localDateTime = null;
+      LocalDate localDate = null;
       try {
-        localDateTime = dateTimeFormatter.parseLocalDateTime(value);
+        localDate = dateTimeFormatter.parseLocalDate(value);
       } catch (IllegalArgumentException e) {
         LOGGER.debug("{} format not valid", value);
       }
-      PropertyUtils.setProperty(object, fieldName, localDateTime);
+
+      PropertyUtils.setProperty(object, fieldName, localDate);
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new WorkbookProcessException(e);
