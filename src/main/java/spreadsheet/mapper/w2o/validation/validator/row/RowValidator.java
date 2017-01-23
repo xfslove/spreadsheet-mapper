@@ -3,16 +3,15 @@ package spreadsheet.mapper.w2o.validation.validator.row;
 
 import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.meta.SheetMeta;
-import spreadsheet.mapper.w2o.validation.validator.DependencyValidator;
 
 import java.util.Set;
 
 /**
- * row values validator, after sheet validators.
+ * row validator, after sheet validators.
  * <p>
  * Created by hanwen on 4/26/16.
  */
-public interface RowValidator extends DependencyValidator {
+public interface RowValidator {
 
   /**
    * the error message will be collected when validator failure if error message is not blank

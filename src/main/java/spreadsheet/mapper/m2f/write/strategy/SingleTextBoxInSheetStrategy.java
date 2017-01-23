@@ -6,7 +6,6 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.*;
-import spreadsheet.mapper.Constants;
 import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 import spreadsheet.mapper.model.shapes.TextBox;
@@ -21,6 +20,8 @@ import java.util.*;
  * Created by hanwen on 2017/1/3.
  */
 public class SingleTextBoxInSheetStrategy implements MessageWriteStrategy {
+
+  private static final String ENTER_SEPARATOR = "\n";
 
   @Override
   public String getStrategy() {
@@ -82,7 +83,7 @@ public class SingleTextBoxInSheetStrategy implements MessageWriteStrategy {
 
     List<TextBox> textBoxes = new ArrayList<>();
     for (Map.Entry<Integer, List<String>> entry : textBoxMessageMap.entrySet()) {
-      textBoxes.add(new TextBoxBean(StringUtils.join(entry.getValue(), Constants.ENTER_SEPARATOR), entry.getKey()));
+      textBoxes.add(new TextBoxBean(StringUtils.join(entry.getValue(), ENTER_SEPARATOR), entry.getKey()));
     }
 
     return textBoxes;

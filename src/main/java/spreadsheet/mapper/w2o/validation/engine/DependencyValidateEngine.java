@@ -12,9 +12,9 @@ import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.model.msg.MessageBean;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 import spreadsheet.mapper.w2o.validation.WorkbookValidateException;
-import spreadsheet.mapper.w2o.validation.validator.DependencyValidator;
-import spreadsheet.mapper.w2o.validation.validator.cell.CellValidator;
-import spreadsheet.mapper.w2o.validation.validator.row.RowValidator;
+import spreadsheet.mapper.w2o.validation.validator.cell.DependencyValidator;
+import spreadsheet.mapper.w2o.validation.validator.cell.MultiCellValidator;
+import spreadsheet.mapper.w2o.validation.validator.cell.SingleCellValidator;
 
 import java.util.*;
 
@@ -27,21 +27,21 @@ public class DependencyValidateEngine {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DependencyValidateEngine.class);
 
-  private Map<String, List<DependencyValidator>> validatorMap = new LinkedHashMap<>();
+  private LinkedHashMap<String, List<DependencyValidator>> validatorMap = new LinkedHashMap<>();
 
-  private Map<String, Set<String>> vGraph = new LinkedHashMap<>();
+  private LinkedHashMap<String, LinkedHashSet<String>> vGraph = new LinkedHashMap<>();
   private Map<String, Boolean> visited = new HashMap<>();
 
-  // is skip valid rest validator in one search tree
-  private boolean skip;
+  // each node validate result
+  private Map<String, Boolean> result = new HashMap<>();
 
   private List<Message> errorMessages = new ArrayList<>();
-  private boolean validResult = true;
 
-  public DependencyValidateEngine(Map<String, List<DependencyValidator>> validatorMap) {
+  public DependencyValidateEngine(LinkedHashMap<String, List<DependencyValidator>> validatorMap) {
     this.vGraph = DependencyEngineHelper.buildVGraph(validatorMap);
     for (String v : vGraph.keySet()) {
       visited.put(v, false);
+      result.put(v, true);
     }
     this.validatorMap = validatorMap;
   }
@@ -49,13 +49,12 @@ public class DependencyValidateEngine {
   public boolean valid(Row row, SheetMeta sheetMeta) {
 
     for (String v : vGraph.keySet()) {
-      skip = false;
       if (!visited.get(v)) {
         dfs(row, sheetMeta, v);
       }
     }
 
-    return validResult;
+    return !result.values().contains(Boolean.FALSE);
   }
 
   public List<Message> getErrorMessages() {
@@ -72,8 +71,8 @@ public class DependencyValidateEngine {
 
     visited.put(v, true);
 
-    if (skip) {
-      LOGGER.debug("skip valid at group:[" + v + "]");
+    if (ifSkip(v)) {
+      result.put(v, false);
       return;
     }
 
@@ -82,31 +81,59 @@ public class DependencyValidateEngine {
     LOGGER.debug("do valid at group:[" + v + "] and validator numbers of this group is:[" + validators.size() + "]");
 
     for (DependencyValidator validator : validators) {
-      boolean vResult = doRowCellsValid(row, sheetMeta, validator);
       // if one of the group valid failure skip rest validators
-      if (!vResult) {
-        skip = true;
+      if (!doValid(row, sheetMeta, validator)) {
+        LOGGER.debug("valid false at group:[" + v + "]");
+        result.put(v, false);
         break;
       }
     }
   }
 
-  private boolean doRowCellsValid(Row row, SheetMeta sheetMeta, DependencyValidator dependencyValidator) {
-    if (dependencyValidator instanceof RowValidator) {
+  private boolean ifSkip(String v) {
+    for (String w : vGraph.get(v)) {
+      if (!result.get(w)) {
+        LOGGER.debug("skip valid at group:[" + v + "] because of depends on group:[" + w + "] validate failure");
+        return true;
+      }
+    }
+    return false;
+  }
 
-      RowValidator rowValidator = (RowValidator) dependencyValidator;
-      boolean result = rowValidator.valid(row, sheetMeta);
+  private boolean doValid(Row row, SheetMeta sheetMeta, DependencyValidator dependencyValidator) {
+    if (dependencyValidator instanceof MultiCellValidator) {
+
+      MultiCellValidator multiCellValidator = (MultiCellValidator) dependencyValidator;
+
+      LinkedHashSet<String> matchFields = multiCellValidator.getMatchFields();
+      if (CollectionUtils.isEmpty(matchFields)) {
+        throw new WorkbookValidateException("cell validator[" + multiCellValidator.getClass().getName() + "] match fields can not be null");
+      }
+
+      List<Cell> validCells = new ArrayList<>();
+      List<FieldMeta> fieldMetas = new ArrayList<>();
+      for (String matchField : matchFields) {
+
+        FieldMeta fieldMeta = sheetMeta.getFieldMeta(matchField);
+
+        if (fieldMeta == null) {
+          LOGGER.debug("no field meta named:[" + matchField + "], cell validator[" + multiCellValidator.getClass().getName() + "] ignored");
+          return true;
+        }
+
+        fieldMetas.add(fieldMeta);
+        validCells.add(row.getCell(fieldMeta.getColumnIndex()));
+      }
+
+      boolean result = multiCellValidator.valid(validCells, fieldMetas);
 
       if (!result) {
 
-        validResult = false;
-        String errorMessage = rowValidator.getErrorMessage();
-        Set<String> messageOnFields = rowValidator.getMessageOnFields();
+        String errorMessage = multiCellValidator.getErrorMessage();
 
-        if (StringUtils.isNotBlank(errorMessage) && CollectionUtils.isNotEmpty(messageOnFields)) {
-          for (String messageOnField : messageOnFields) {
-            FieldMeta fieldMeta = sheetMeta.getFieldMeta(messageOnField);
+        if (StringUtils.isNotBlank(errorMessage)) {
 
+          for (FieldMeta fieldMeta : fieldMetas) {
             errorMessages.add(new MessageBean(MessageWriteStrategies.COMMENT, errorMessage, row.getSheet().getIndex(), row.getIndex(), fieldMeta.getColumnIndex()));
           }
         }
@@ -116,27 +143,28 @@ public class DependencyValidateEngine {
       return result;
     } else {
 
-      CellValidator cellValidator = (CellValidator) dependencyValidator;
-      String matchField = cellValidator.getMatchField();
+      SingleCellValidator singleCellValidator = (SingleCellValidator) dependencyValidator;
+      String matchField = singleCellValidator.getMatchField();
       if (StringUtils.isBlank(matchField)) {
-        throw new WorkbookValidateException("cell validator[" + cellValidator.getClass().getName() + "] match field can not be null");
+        throw new WorkbookValidateException("cell validator[" + singleCellValidator.getClass().getName() + "] match field can not be null");
       }
 
       FieldMeta fieldMeta = sheetMeta.getFieldMeta(matchField);
 
+      if (fieldMeta == null) {
+        LOGGER.debug("no field meta named:[" + matchField + "], cell validator[" + singleCellValidator.getClass().getName() + "] ignored");
+        return true;
+      }
+
       Cell cell = row.getCell(fieldMeta.getColumnIndex());
-      boolean result = cellValidator.valid(cell, fieldMeta);
+      boolean result = singleCellValidator.valid(cell, fieldMeta);
 
       if (!result) {
 
-        validResult = false;
-        String errorMessage = cellValidator.getErrorMessage();
-        String messageOnField = cellValidator.getMessageOnField();
+        String errorMessage = singleCellValidator.getErrorMessage();
 
-        if (StringUtils.isNotBlank(errorMessage) && StringUtils.isNotBlank(messageOnField)) {
-          FieldMeta messageOnFieldMeta = sheetMeta.getFieldMeta(messageOnField);
-
-          errorMessages.add(new MessageBean(MessageWriteStrategies.COMMENT, errorMessage, row.getSheet().getIndex(), row.getIndex(), messageOnFieldMeta.getColumnIndex()));
+        if (StringUtils.isNotBlank(errorMessage)) {
+          errorMessages.add(new MessageBean(MessageWriteStrategies.COMMENT, errorMessage, row.getSheet().getIndex(), row.getIndex(), fieldMeta.getColumnIndex()));
         }
 
       }

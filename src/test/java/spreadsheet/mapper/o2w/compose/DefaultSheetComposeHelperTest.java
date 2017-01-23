@@ -9,9 +9,9 @@ import spreadsheet.mapper.TestBean;
 import spreadsheet.mapper.TestFactory;
 import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.SheetMeta;
-import spreadsheet.mapper.o2w.compose.converter.BooleanConverter;
-import spreadsheet.mapper.o2w.compose.converter.LocalDateTimeConverter;
-import spreadsheet.mapper.o2w.compose.converter.PlainNumberConverter;
+import spreadsheet.mapper.o2w.compose.converter.buildin.BooleanConverter;
+import spreadsheet.mapper.o2w.compose.converter.buildin.LocalDateTimeConverter;
+import spreadsheet.mapper.o2w.compose.converter.buildin.PlainNumberConverter;
 
 import java.util.Arrays;
 import java.util.Collections;

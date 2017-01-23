@@ -4,6 +4,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.core.Sheet;
+import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.model.msg.MessageBean;
@@ -11,8 +12,7 @@ import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 import spreadsheet.mapper.w2o.validation.engine.DependencyCycleCheckEngine;
 import spreadsheet.mapper.w2o.validation.engine.DependencyEngineHelper;
 import spreadsheet.mapper.w2o.validation.engine.DependencyValidateEngine;
-import spreadsheet.mapper.w2o.validation.validator.DependencyValidator;
-import spreadsheet.mapper.w2o.validation.validator.cell.CellValidator;
+import spreadsheet.mapper.w2o.validation.validator.cell.DependencyValidator;
 import spreadsheet.mapper.w2o.validation.validator.row.RowValidator;
 import spreadsheet.mapper.w2o.validation.validator.sheet.SheetValidator;
 
@@ -28,10 +28,10 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
    ================*/
   private List<SheetValidator> sheetValidators = new ArrayList<>();
   private List<RowValidator> rowValidators = new ArrayList<>();
-  private List<CellValidator> cellValidators = new ArrayList<>();
+  // dependency validators one group corresponding multi validators
+  private LinkedHashMap<String, List<DependencyValidator>> dependencyValidators = new LinkedHashMap<>();
 
   private List<Message> errorMessages = new ArrayList<>();
-  private boolean validResult = true;
 
   @Override
   public SheetValidationHelper addSheetValidator(SheetValidator sheetValidator) {
@@ -52,11 +52,19 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   }
 
   @Override
-  public SheetValidationHelper addCellValidator(CellValidator cellValidator) {
-    if (cellValidator == null) {
-      throw new IllegalArgumentException("cell validator can not be null");
+  public SheetValidationHelper addDependencyValidator(DependencyValidator dependencyValidator) {
+    if (dependencyValidator == null) {
+      throw new IllegalArgumentException("dependency validator can not be null");
     }
-    cellValidators.add(cellValidator);
+    String group = dependencyValidator.getGroup();
+    if (StringUtils.isBlank(group)) {
+      throw new WorkbookValidateException("dependency validator[" + dependencyValidator.getClass().getName() + "] group can not be null");
+    }
+
+    if (!dependencyValidators.containsKey(group)) {
+      dependencyValidators.put(group, new ArrayList<DependencyValidator>());
+    }
+    dependencyValidators.get(group).add(dependencyValidator);
     return this;
   }
 
@@ -70,29 +78,37 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
     // check dependency of this sheet
     checkValidatorGroupDependency();
 
-    validSheet(sheet, sheetMeta);
-
-    if (!validResult) {
+    if (!validSheet(sheet, sheetMeta)) {
       return false;
     }
 
-    for (int i = sheetMeta.getDataStartRowIndex(); i <= sheet.sizeOfRows(); i++) {
-      validRowCells(sheet.getRow(i), sheetMeta);
+    boolean result = true;
+    for (Row row : sheet.getRows()) {
+
+      if (!validRow(row, sheetMeta)) {
+        result = false;
+        continue;
+      }
+
+      if (row.getIndex() >= sheetMeta.getDataStartRowIndex()) {
+        if (!validDataRow(row, sheetMeta)) {
+          result = false;
+        }
+      }
     }
 
-    return validResult;
+    return result;
   }
 
   /**
    * check if dependency correct
    */
   private void checkValidatorGroupDependency() {
-    Map<String, List<DependencyValidator>> validatorMap = buildRelationValidatorMap();
 
-    Map<String, Set<String>> vGraph = DependencyEngineHelper.buildVGraph(validatorMap);
+    LinkedHashMap<String, LinkedHashSet<String>> vGraph = DependencyEngineHelper.buildVGraph(dependencyValidators);
     Set<String> allGroups = vGraph.keySet();
 
-    for (Map.Entry<String, Set<String>> entry : vGraph.entrySet()) {
+    for (Map.Entry<String, LinkedHashSet<String>> entry : vGraph.entrySet()) {
       String group = entry.getKey();
       Set<String> dependsOn = entry.getValue();
 
@@ -111,60 +127,57 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   /*=========================
    below is internal valid
    ==========================*/
-  private void validSheet(Sheet sheet, SheetMeta sheetMeta) {
+  private boolean validSheet(Sheet sheet, SheetMeta sheetMeta) {
+    boolean result = true;
+
     for (SheetValidator validator : sheetValidators) {
 
       if (!validator.valid(sheet, sheetMeta)) {
-        validResult = false;
+        result = false;
 
         String errorMessage = validator.getErrorMessage();
 
         if (StringUtils.isNotBlank(errorMessage)) {
 
-          this.errorMessages.add(new MessageBean(MessageWriteStrategies.TEXT_BOX, errorMessage, sheet.getIndex()));
+          errorMessages.add(new MessageBean(MessageWriteStrategies.TEXT_BOX, errorMessage, sheet.getIndex()));
         }
       }
     }
+
+    return result;
   }
 
-  private void validRowCells(Row row, SheetMeta sheetMeta) {
-    Map<String, List<DependencyValidator>> validatorMap = buildRelationValidatorMap();
-
-    DependencyValidateEngine dependencyValidateEngine = new DependencyValidateEngine(validatorMap);
-
-    validResult = dependencyValidateEngine.valid(row, sheetMeta);
-
-    this.errorMessages.addAll(dependencyValidateEngine.getErrorMessages());
-  }
-
-  private Map<String, List<DependencyValidator>> buildRelationValidatorMap() {
-    // one key corresponding multi validators, row validators first
-    Map<String, List<DependencyValidator>> validatorMap = new LinkedHashMap<>();
+  private boolean validRow(Row row, SheetMeta sheetMeta) {
+    boolean result = true;
 
     for (RowValidator validator : rowValidators) {
-      String group = validator.getGroup();
-      if (StringUtils.isBlank(group)) {
-        throw new WorkbookValidateException("row validator[" + validator.getClass().getName() + "] group can not be null");
-      }
 
-      if (!validatorMap.containsKey(group)) {
-        validatorMap.put(group, new ArrayList<DependencyValidator>());
+      if (!validator.valid(row, sheetMeta)) {
+        result = false;
+
+        String errorMessage = validator.getErrorMessage();
+
+        Set<String> messageOnFields = validator.getMessageOnFields();
+        if (StringUtils.isNotBlank(errorMessage) && CollectionUtils.isNotEmpty(messageOnFields)) {
+
+          for (String messageOnField : messageOnFields) {
+
+            FieldMeta fieldMeta = sheetMeta.getFieldMeta(messageOnField);
+            errorMessages.add(new MessageBean(MessageWriteStrategies.COMMENT, errorMessage, row.getSheet().getIndex(), row.getIndex(), fieldMeta.getColumnIndex()));
+          }
+        }
       }
-      validatorMap.get(group).add(validator);
     }
 
-    for (CellValidator validator : cellValidators) {
-      String group = validator.getGroup();
-      if (StringUtils.isBlank(group)) {
-        throw new WorkbookValidateException("cell validator[" + validator.getClass().getName() + "] group can not be null");
-      }
-
-      if (!validatorMap.containsKey(group)) {
-        validatorMap.put(group, new ArrayList<DependencyValidator>());
-      }
-      validatorMap.get(group).add(validator);
-    }
-
-    return validatorMap;
+    return result;
   }
+
+  private boolean validDataRow(Row row, SheetMeta sheetMeta) {
+    DependencyValidateEngine dependencyValidateEngine = new DependencyValidateEngine(dependencyValidators);
+
+    errorMessages.addAll(dependencyValidateEngine.getErrorMessages());
+
+    return dependencyValidateEngine.valid(row, sheetMeta);
+  }
+
 }

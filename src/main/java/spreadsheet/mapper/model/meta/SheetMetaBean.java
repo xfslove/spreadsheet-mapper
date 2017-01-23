@@ -59,6 +59,14 @@ public class SheetMetaBean implements SheetMeta {
   }
 
   @Override
+  public void removeFieldMeta(String fieldName) {
+    if (fieldMetas.isEmpty()) {
+      return;
+    }
+    fieldMetas.remove(fieldName);
+  }
+
+  @Override
   public void addFieldMeta(FieldMeta fieldMeta) {
     if (fieldMeta == null) {
       throw new IllegalArgumentException("field meta can not be null");

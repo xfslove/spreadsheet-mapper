@@ -5,10 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import spreadsheet.mapper.AssertUtil;
+import spreadsheet.mapper.f2w.DateFormatRegisterer;
 import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.core.Workbook;
-import spreadsheet.mapper.f2w.DateFormatRegisterer;
 
 import java.io.InputStream;
 
@@ -30,9 +30,9 @@ public class Excel2WorkbookReadHelperTest {
   @Test
   public void testRead() throws Exception {
 
-    DateFormatRegisterer.GLOBAL.register("[$-409]d\\-mmm\\-yy;@", "yyyy-MM-dd");
-    DateFormatRegisterer.GLOBAL.register("mm/dd/yy;@", "yyyy-MM-dd");
-    DateFormatRegisterer.GLOBAL.register("m/d/yy", "yyyy-MM-dd");
+    DateFormatRegisterer.GLOBAL.registerFormat("[$-409]d\\-mmm\\-yy;@", "yyyy-MM-dd");
+    DateFormatRegisterer.GLOBAL.registerFormat("mm/dd/yy;@", "yyyy-MM-dd");
+    DateFormatRegisterer.GLOBAL.registerFormat("m/d/yy", "yyyy-MM-dd");
 
     InputStream is1 = getClass().getResourceAsStream("test.xls");
 

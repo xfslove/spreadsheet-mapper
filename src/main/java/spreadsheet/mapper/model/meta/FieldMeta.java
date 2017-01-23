@@ -41,6 +41,13 @@ public interface FieldMeta extends Serializable, Comparable<FieldMeta> {
   HeaderMeta getHeaderMeta(int rowIndex);
 
   /**
+   * remove header at row index
+   *
+   * @param rowIndex 1-based
+   */
+  void removeHeaderMeta(int rowIndex);
+
+  /**
    * add header meta
    *
    * @param headerMeta header meta
