@@ -18,8 +18,13 @@ public class DefaultDependencyValidatorBuilder implements DependencyValidatorBui
   private List<DependencyValidator> validators = new ArrayList<>();
 
   @Override
-  public DependencyRuleBuilder rule(String name) {
-    return new DefaultDependencyRuleBuilder(name);
+  public RuleBuilder single(String name) {
+    return new SingleCellRuleBuilder(name);
+  }
+
+  @Override
+  public RuleBuilder multi(String name) {
+    return new MultiCellRuleBuilder(name);
   }
 
   @Override
@@ -27,7 +32,7 @@ public class DefaultDependencyValidatorBuilder implements DependencyValidatorBui
     return validators;
   }
 
-  public class DefaultDependencyRuleBuilder implements DependencyRuleBuilder {
+  public class MultiCellRuleBuilder implements RuleBuilder {
 
     private String name;
 
@@ -35,12 +40,12 @@ public class DefaultDependencyValidatorBuilder implements DependencyValidatorBui
 
     private DependencyRuleParam param = new DependencyRuleParam();
 
-    DefaultDependencyRuleBuilder(String name) {
+    MultiCellRuleBuilder(String name) {
       this.name = name;
     }
 
     @Override
-    public DependencyRuleBuilder matchFields(String... matchFields) {
+    public RuleBuilder matchFields(String... matchFields) {
       if (matchFields == null) {
         return this;
       }
@@ -49,13 +54,13 @@ public class DefaultDependencyValidatorBuilder implements DependencyValidatorBui
     }
 
     @Override
-    public DependencyRuleBuilder group(String group) {
+    public RuleBuilder group(String group) {
       param.setGroup(group);
       return this;
     }
 
     @Override
-    public DependencyRuleBuilder dependsOn(String... dependsOn) {
+    public RuleBuilder dependsOn(String... dependsOn) {
       if (dependsOn == null) {
         return this;
       }
@@ -64,13 +69,13 @@ public class DefaultDependencyValidatorBuilder implements DependencyValidatorBui
     }
 
     @Override
-    public DependencyRuleBuilder errorMessage(String errorMessage) {
+    public RuleBuilder errorMessage(String errorMessage) {
       param.setErrorMessage(errorMessage);
       return this;
     }
 
     @Override
-    public DependencyRuleBuilder param(Object additionalParam) {
+    public RuleBuilder param(Object additionalParam) {
       param.setAdditionalParam(additionalParam);
       return this;
     }
@@ -80,28 +85,87 @@ public class DefaultDependencyValidatorBuilder implements DependencyValidatorBui
 
       DependencyValidatorFactory factory = DependencyValidatorFactoryRegisterer.GLOBAL.getFactoryInstance(name);
 
-      if (factory instanceof MultiCellValidatorFactory) {
+      if (!(factory instanceof MultiCellValidatorFactory)) {
+        throw new IllegalArgumentException("rule[" + name + "] not a multi cell validator rule");
+      }
 
-        MultiCellValidatorFactory multiCellValidatorFactory = (MultiCellValidatorFactory) factory;
-        MultiCellValidator validator = multiCellValidatorFactory.create(param, matchFields);
-        DefaultDependencyValidatorBuilder.this.validators.add(validator);
+      MultiCellValidatorFactory multiCellValidatorFactory = (MultiCellValidatorFactory) factory;
+      MultiCellValidator validator = multiCellValidatorFactory.create(param, matchFields);
+      DefaultDependencyValidatorBuilder.this.validators.add(validator);
 
-      } else if (factory instanceof SingleCellValidatorFactory) {
+      return DefaultDependencyValidatorBuilder.this;
+    }
+  }
 
-        SingleCellValidatorFactory singleCellValidatorFactory = (SingleCellValidatorFactory) factory;
+  public class SingleCellRuleBuilder implements RuleBuilder {
 
-        boolean groupNull = StringUtils.isBlank(param.getGroup());
+    private String name;
 
-        for (String field : matchFields) {
+    private List<String> matchFields = new ArrayList<>();
 
-          if (groupNull) {
-            param.setGroup(field);
-          }
+    private DependencyRuleParam param = new DependencyRuleParam();
 
-          SingleCellValidator validator = singleCellValidatorFactory.create(param, field);
-          DefaultDependencyValidatorBuilder.this.validators.add(validator);
+    SingleCellRuleBuilder(String name) {
+      this.name = name;
+    }
+
+    @Override
+    public RuleBuilder matchFields(String... matchFields) {
+      if (matchFields == null) {
+        return this;
+      }
+      Collections.addAll(this.matchFields, matchFields);
+      return this;
+    }
+
+    @Override
+    public RuleBuilder group(String group) {
+      param.setGroup(group);
+      return this;
+    }
+
+    @Override
+    public RuleBuilder dependsOn(String... dependsOn) {
+      if (dependsOn == null) {
+        return this;
+      }
+      param.setDependsOn(Arrays.asList(dependsOn));
+      return this;
+    }
+
+    @Override
+    public RuleBuilder errorMessage(String errorMessage) {
+      param.setErrorMessage(errorMessage);
+      return this;
+    }
+
+    @Override
+    public RuleBuilder param(Object additionalParam) {
+      param.setAdditionalParam(additionalParam);
+      return this;
+    }
+
+    @Override
+    public DependencyValidatorBuilder end() {
+
+      DependencyValidatorFactory factory = DependencyValidatorFactoryRegisterer.GLOBAL.getFactoryInstance(name);
+
+      if (!(factory instanceof SingleCellValidatorFactory)) {
+        throw new IllegalArgumentException("rule[" + name + "] not a single cell validator rule");
+      }
+
+      SingleCellValidatorFactory singleCellValidatorFactory = (SingleCellValidatorFactory) factory;
+
+      boolean groupNull = StringUtils.isBlank(param.getGroup());
+
+      for (String field : matchFields) {
+
+        if (groupNull) {
+          param.setGroup(field);
         }
 
+        SingleCellValidator validator = singleCellValidatorFactory.create(param, field);
+        DefaultDependencyValidatorBuilder.this.validators.add(validator);
       }
 
       return DefaultDependencyValidatorBuilder.this;

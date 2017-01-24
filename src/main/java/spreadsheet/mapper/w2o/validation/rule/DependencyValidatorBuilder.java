@@ -13,13 +13,24 @@ import java.util.List;
 public interface DependencyValidatorBuilder {
 
   /**
-   * start build a validate rule
+   * start build a single cell validate rule
    *
    * @param name rule name
-   * @return {@link DependencyRuleBuilder}
+   * @return {@link RuleBuilder}
    * @see DependencyValidatorFactoryRegisterer
+   * @see spreadsheet.mapper.w2o.validation.validator.cell.SingleCellValidator
    */
-  DependencyRuleBuilder rule(String name);
+  RuleBuilder single(String name);
+
+  /**
+   * start build a multi cell validate rule
+   *
+   * @param name rule name
+   * @return {@link RuleBuilder}
+   * @see DependencyValidatorFactoryRegisterer
+   * @see spreadsheet.mapper.w2o.validation.validator.cell.MultiCellValidator
+   */
+  RuleBuilder multi(String name);
 
   /**
    * build validators from supplied rules
@@ -29,41 +40,41 @@ public interface DependencyValidatorBuilder {
   List<DependencyValidator> build();
 
   /**
-   * dependency validate rule builder
+   * validate rule builder
    */
-  interface DependencyRuleBuilder {
+  interface RuleBuilder {
 
     /**
      * @param matchFields {@link SingleCellValidator#getMatchField()}
-     * @return {@link DependencyRuleBuilder}
+     * @return {@link RuleBuilder}
      */
-    DependencyRuleBuilder matchFields(String... matchFields);
+    RuleBuilder matchFields(String... matchFields);
 
     /**
      * if empty default is field
      *
      * @param group {@link SingleCellValidator#getGroup()}
-     * @return {@link DependencyRuleBuilder}
+     * @return {@link RuleBuilder}
      */
-    DependencyRuleBuilder group(String group);
+    RuleBuilder group(String group);
 
     /**
      * @param dependsOn {@link SingleCellValidator#getDependsOn()}
-     * @return {@link DependencyRuleBuilder}
+     * @return {@link RuleBuilder}
      */
-    DependencyRuleBuilder dependsOn(String... dependsOn);
+    RuleBuilder dependsOn(String... dependsOn);
 
     /**
      * @param errorMessage {@link SingleCellValidator#getErrorMessage()}
-     * @return {@link DependencyRuleBuilder}
+     * @return {@link RuleBuilder}
      */
-    DependencyRuleBuilder errorMessage(String errorMessage);
+    RuleBuilder errorMessage(String errorMessage);
 
     /**
      * @param additionalParam the additional param validator need
-     * @return {@link DependencyRuleBuilder}
+     * @return {@link RuleBuilder}
      */
-    DependencyRuleBuilder param(Object additionalParam);
+    RuleBuilder param(Object additionalParam);
 
     /**
      * finish a rule

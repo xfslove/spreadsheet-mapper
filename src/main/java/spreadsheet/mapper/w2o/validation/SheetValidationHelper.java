@@ -5,6 +5,7 @@ import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 import spreadsheet.mapper.w2o.validation.validator.cell.DependencyValidator;
+import spreadsheet.mapper.w2o.validation.validator.cell.MultiCellValidator;
 import spreadsheet.mapper.w2o.validation.validator.cell.SingleCellValidator;
 import spreadsheet.mapper.w2o.validation.validator.row.RowValidator;
 import spreadsheet.mapper.w2o.validation.validator.sheet.SheetValidator;
@@ -33,6 +34,8 @@ public interface SheetValidationHelper {
   /**
    * @param dependencyValidator {@link DependencyValidator}
    * @return {@link SheetValidationHelper}
+   * @see SingleCellValidator
+   * @see MultiCellValidator
    */
   SheetValidationHelper addDependencyValidator(DependencyValidator dependencyValidator);
 

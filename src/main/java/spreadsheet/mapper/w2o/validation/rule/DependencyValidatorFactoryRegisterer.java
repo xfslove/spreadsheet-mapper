@@ -53,14 +53,14 @@ public class DependencyValidatorFactoryRegisterer {
       throw new IllegalArgumentException("register factory name can not be null");
     }
     validatorFactories.put(buildRegisterName(name), factoryClazz);
-    LOGGER.info("register factory[" + factoryClazz.getName() + "] success, named[" + name + "]");
+    LOGGER.info("register validator factory[" + factoryClazz.getName() + "] success, named[" + name + "]");
   }
 
   /**
-   * get validator clazz
+   * get validator factory clazz
    *
    * @param name register name
-   * @return validator clazz
+   * @return validator factory clazz
    */
   public Class<? extends DependencyValidatorFactory> getFactoryClazz(String name) {
     if (name == null) {
@@ -77,10 +77,10 @@ public class DependencyValidatorFactoryRegisterer {
   }
 
   /**
-   * get validator instance by register name
+   * get validator factory instance by register name
    *
    * @param name register name
-   * @return validator
+   * @return validator factory
    */
   public DependencyValidatorFactory getFactoryInstance(String name) {
 

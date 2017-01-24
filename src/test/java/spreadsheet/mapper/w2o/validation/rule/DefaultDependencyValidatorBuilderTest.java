@@ -21,9 +21,9 @@ import static org.testng.Assert.assertNull;
 /**
  * Created by hanwen on 2017/1/23.
  */
-public class DefaultDependencyRuleBuilderTest {
+public class DefaultDependencyValidatorBuilderTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDependencyRuleBuilderTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDependencyValidatorBuilderTest.class);
 
   @BeforeClass
   public void before() {
@@ -36,7 +36,7 @@ public class DefaultDependencyRuleBuilderTest {
     DependencyValidatorBuilder builder = new DefaultDependencyValidatorBuilder();
 
     List<DependencyValidator> validators = builder
-        .rule("bool")
+        .single("bool")
         .errorMessage("test")
         .matchFields("t1")
         .group("t1")
@@ -48,7 +48,7 @@ public class DefaultDependencyRuleBuilderTest {
         )
         .end()
 
-        .rule("numberScaleRange")
+        .single("numberScaleRange")
         .errorMessage("test")
         .group("t2")
         .matchFields("t2")
@@ -59,35 +59,35 @@ public class DefaultDependencyRuleBuilderTest {
         )
         .end()
 
-        .rule("localDateTime")
+        .single("localDateTime")
         .errorMessage("test")
         .group("t3")
         .matchFields("t3")
         .param("yyyy-MM-dd HH:mm:ss")
         .end()
 
-        .rule("multiUnique")
+        .multi("multiUnique")
         .group("t4")
         .dependsOn("t1")
         .errorMessage("test")
         .matchFields("t4", "t5")
         .end()
 
-        .rule("digits")
+        .single("digits")
         .matchFields("t6", "t7")
         .end()
 
-        .rule("require")
+        .single("require")
         .matchFields("t1", "t2", "t3", "t4")
         .end()
 
-        .rule("number")
+        .single("number")
         .matchFields("t8")
         .dependsOn("t7")
         .errorMessage("test")
         .end()
 
-        .rule("regex")
+        .single("regex")
         .matchFields("t9")
         .errorMessage("test")
         .group("t9")
@@ -95,14 +95,14 @@ public class DefaultDependencyRuleBuilderTest {
         .param("^[1-9]\\d*$")
         .end()
 
-        .rule("localDate")
+        .single("localDate")
         .matchFields("t10")
         .errorMessage("test")
         .group("t10")
         .param("yyyy-MM-dd")
         .end()
 
-        .rule("unique")
+        .single("unique")
         .matchFields("t11")
         .end()
 
