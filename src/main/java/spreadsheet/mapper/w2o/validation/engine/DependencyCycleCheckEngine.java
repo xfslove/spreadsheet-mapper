@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class DependencyCycleCheckEngine {
 
-  private Map<String, Set<String>> vGraph = new HashMap<>();
+  private LinkedHashMap<String, LinkedHashSet<String>> vGraph = new LinkedHashMap<>();
   private Stack<String> vStack = new Stack<>();
   private Map<String, Integer> vIndex = new HashMap<>();
   private Map<String, Integer> vLowLink = new HashMap<>();
@@ -22,7 +22,7 @@ public class DependencyCycleCheckEngine {
   // found exists cycle
   private List<String> cycle = new ArrayList<>();
 
-  public DependencyCycleCheckEngine(Map<String, Set<String>> vGraph) {
+  public DependencyCycleCheckEngine(LinkedHashMap<String, LinkedHashSet<String>> vGraph) {
     this.vGraph = vGraph;
     for (String s : vGraph.keySet()) {
       vIndex.put(s, 0);

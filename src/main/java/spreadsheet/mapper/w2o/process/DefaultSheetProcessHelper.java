@@ -1,13 +1,15 @@
 package spreadsheet.mapper.w2o.process;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.w2o.process.listener.*;
-import spreadsheet.mapper.w2o.process.setter.BeanUtilsSetter;
+import spreadsheet.mapper.w2o.process.setter.buildin.BeanUtilsSetter;
 import spreadsheet.mapper.w2o.process.setter.FieldSetter;
 import spreadsheet.mapper.w2o.process.setter.Setter;
 
@@ -20,6 +22,8 @@ import java.util.*;
  */
 public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSheetProcessHelper.class);
+
   private ObjectFactory<T> objectFactory;
 
   private SheetProcessListener<T> sheetProcessListener = new NoopSheetProcessListener<>();
@@ -28,7 +32,7 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
 
   private CellProcessListener<T> cellProcessListener = new NoopCellProcessListener<>();
 
-  private Map<String, FieldSetter<T>> field2setter = new LinkedHashMap<>();
+  private LinkedHashMap<String, FieldSetter<T>> field2setter = new LinkedHashMap<>();
 
   private Setter<T> defaultSetter = new BeanUtilsSetter<>();
 
@@ -115,6 +119,7 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
 
         if (fieldMeta == null) {
           // if missing field meta skip the cell(same column index with field meta)
+          LOGGER.debug("no field meta at row index:[" + cell.getIndex() + "], cell value:[" + cell.getValue() + "] ignored");
           continue;
         }
 
@@ -130,7 +135,6 @@ public class DefaultSheetProcessHelper<T> implements SheetProcessHelper<T> {
         }
 
         cellProcessListener.after(object, cell, fieldMeta);
-
       }
 
       rowProcessListener.after(object, row, sheetMeta);

@@ -1,5 +1,6 @@
 package spreadsheet.mapper.o2w.compose;
 
+import org.apache.commons.collections.CollectionUtils;
 import spreadsheet.mapper.model.core.Workbook;
 import spreadsheet.mapper.model.core.WorkbookBean;
 import spreadsheet.mapper.model.meta.SheetMeta;
@@ -27,7 +28,7 @@ public class DefaultWorkbookComposeHelper implements WorkbookComposeHelper {
 
   @Override
   public Workbook compose(List<List> dataOfSheets, WorkbookMeta workbookMeta) {
-    int sizeOfData = dataOfSheets.size();
+    int sizeOfData = CollectionUtils.size(dataOfSheets);
     int sizeOfSheetMetas = workbookMeta.sizeOfSheetMetas();
     int sizeOfHelper = sheetComposeHelpers.size();
 

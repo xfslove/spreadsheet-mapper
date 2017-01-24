@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import spreadsheet.mapper.Constants;
 import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.model.msg.MessageBean;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
@@ -28,7 +27,7 @@ public class Message2ExcelWriterTest {
   @BeforeClass
   public void before() throws IOException {
     LOGGER.debug("-------------------starting test message write helper-------------------");
-    file = File.createTempFile("test", Constants.SUFFIX_XLSX);
+    file = File.createTempFile("test", ".xlsx");
     LOGGER.debug(file.getAbsolutePath());
   }
 

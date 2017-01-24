@@ -30,5 +30,5 @@ public interface WorkbookValidator {
   /**
    * @return message on which sheet
    */
-  int getMessageOnSheet();
+  Integer getMessageOnSheet();
 }

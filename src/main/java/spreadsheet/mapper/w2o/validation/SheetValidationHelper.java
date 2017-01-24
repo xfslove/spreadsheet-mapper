@@ -4,8 +4,9 @@ import spreadsheet.mapper.model.core.Sheet;
 import spreadsheet.mapper.model.meta.SheetMeta;
 import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
-import spreadsheet.mapper.w2o.validation.validator.DependencyValidator;
-import spreadsheet.mapper.w2o.validation.validator.cell.CellValidator;
+import spreadsheet.mapper.w2o.validation.validator.cell.DependencyValidator;
+import spreadsheet.mapper.w2o.validation.validator.cell.MultiCellValidator;
+import spreadsheet.mapper.w2o.validation.validator.cell.SingleCellValidator;
 import spreadsheet.mapper.w2o.validation.validator.row.RowValidator;
 import spreadsheet.mapper.w2o.validation.validator.sheet.SheetValidator;
 
@@ -27,18 +28,16 @@ public interface SheetValidationHelper {
   /**
    * @param rowValidator {@link RowValidator}
    * @return {@link SheetValidationHelper}
-   * @see DependencyValidator#getGroup()
-   * @see DependencyValidator#getDependsOn()
    */
   SheetValidationHelper addRowValidator(RowValidator rowValidator);
 
   /**
-   * @param cellValidator {@link CellValidator}
+   * @param dependencyValidator {@link DependencyValidator}
    * @return {@link SheetValidationHelper}
-   * @see DependencyValidator#getGroup()
-   * @see DependencyValidator#getDependsOn()
+   * @see SingleCellValidator
+   * @see MultiCellValidator
    */
-  SheetValidationHelper addCellValidator(CellValidator cellValidator);
+  SheetValidationHelper addDependencyValidator(DependencyValidator dependencyValidator);
 
   /**
    * execute valid
@@ -52,7 +51,7 @@ public interface SheetValidationHelper {
   /**
    * <pre>
    * message write strategy of {@link SheetValidator#getErrorMessage()} is {@link MessageWriteStrategies#TEXT_BOX}
-   * message write strategy of {@link RowValidator#getErrorMessage()} &amp; {@link CellValidator#getErrorMessage()} is {@link MessageWriteStrategies#COMMENT}
+   * message write strategy of {@link RowValidator#getErrorMessage()} &amp; {@link SingleCellValidator#getErrorMessage()} is {@link MessageWriteStrategies#COMMENT}
    * </pre>
    *
    * @return list of valid error messages

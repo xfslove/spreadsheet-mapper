@@ -7,7 +7,6 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import spreadsheet.mapper.Constants;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.core.Row;
 import spreadsheet.mapper.model.core.Sheet;
@@ -24,6 +23,8 @@ import java.io.OutputStream;
 public class Workbook2ExcelWriteHelper implements WorkbookWriteHelper {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Workbook2ExcelWriteHelper.class);
+
+  private static final String EMPTY_VALUE = "";
 
   private org.apache.poi.ss.usermodel.Workbook poiWorkbook;
 
@@ -105,7 +106,7 @@ public class Workbook2ExcelWriteHelper implements WorkbookWriteHelper {
   private void createCell(org.apache.poi.ss.usermodel.Row row, Cell excelCell) {
     String value = excelCell.getValue();
     org.apache.poi.ss.usermodel.Cell cell = row.createCell(excelCell.getIndex() - 1, CellType.STRING);
-    cell.setCellValue(value == null ? Constants.EMPTY_VALUE : value);
+    cell.setCellValue(value == null ? EMPTY_VALUE : value);
   }
 
 }

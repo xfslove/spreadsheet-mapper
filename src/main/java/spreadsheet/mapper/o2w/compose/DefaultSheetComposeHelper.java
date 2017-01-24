@@ -2,14 +2,15 @@ package spreadsheet.mapper.o2w.compose;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.model.core.*;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.model.meta.HeaderMeta;
 import spreadsheet.mapper.model.meta.SheetMeta;
-import spreadsheet.mapper.o2w.compose.converter.BeanUtilsConverter;
+import spreadsheet.mapper.o2w.compose.converter.buildin.BeanUtilsConverter;
 import spreadsheet.mapper.o2w.compose.converter.Converter;
 import spreadsheet.mapper.o2w.compose.converter.FieldConverter;
-import spreadsheet.mapper.w2o.validation.WorkbookValidateException;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -21,7 +22,9 @@ import java.util.Map;
  */
 public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
 
-  private Map<String, FieldConverter<T>> field2converter = new LinkedHashMap<>();
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSheetComposeHelper.class);
+
+  private LinkedHashMap<String, FieldConverter<T>> field2converter = new LinkedHashMap<>();
 
   private Converter<T> defaultConverter = new BeanUtilsConverter<>();
 
@@ -85,7 +88,7 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
   private void createHeaderCellsIfNecessary(Row row, SheetMeta sheetMeta) {
     List<FieldMeta> fieldMetas = sheetMeta.getFieldMetas();
 
-    int lastColumnNum = getLastColumnNum(fieldMetas);
+    int lastColumnNum = getMaxColNum(fieldMetas);
     Map<Integer, FieldMeta> columnIndex2fieldMeta = buildFieldMetaMap(fieldMetas);
 
     for (int i = 1; i <= lastColumnNum; i++) {
@@ -93,6 +96,7 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
       FieldMeta fieldMeta = columnIndex2fieldMeta.get(i);
 
       if (fieldMeta == null) {
+        LOGGER.debug("no field meta at column index:[" + i + "], will create a empty cell");
 
         cell = new CellBean();
         row.addCell(cell);
@@ -101,6 +105,7 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
 
       HeaderMeta headerMeta = fieldMeta.getHeaderMeta(row.getIndex());
       if (headerMeta == null) {
+        LOGGER.debug("no header meta at row index:[" + row.getIndex() + "], will create an empty cell");
 
         cell = new CellBean();
         row.addCell(cell);
@@ -116,7 +121,7 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
   private void createDataCells(T object, Row row, SheetMeta sheetMeta) {
 
     List<FieldMeta> fieldMetas = sheetMeta.getFieldMetas();
-    int lastColumnNum = getLastColumnNum(fieldMetas);
+    int lastColumnNum = getMaxColNum(fieldMetas);
     Map<Integer, FieldMeta> columnIndex2fieldMeta = buildFieldMetaMap(fieldMetas);
 
     for (int i = 1; i <= lastColumnNum; i++) {
@@ -124,6 +129,8 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
       FieldMeta fieldMeta = columnIndex2fieldMeta.get(i);
 
       if (fieldMeta == null) {
+        LOGGER.debug("no field meta at column index:[" + i + "], will create an empty cell");
+
         row.addCell(cell);
         continue;
       }
@@ -141,7 +148,7 @@ public class DefaultSheetComposeHelper<T> implements SheetComposeHelper<T> {
     }
   }
 
-  private int getLastColumnNum(List<FieldMeta> fieldMetas) {
+  private int getMaxColNum(List<FieldMeta> fieldMetas) {
     if (CollectionUtils.isEmpty(fieldMetas)) {
       return 0;
     }

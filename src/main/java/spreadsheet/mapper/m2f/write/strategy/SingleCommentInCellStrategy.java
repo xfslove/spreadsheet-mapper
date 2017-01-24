@@ -4,7 +4,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellAddress;
-import spreadsheet.mapper.Constants;
 import spreadsheet.mapper.model.msg.Message;
 import spreadsheet.mapper.model.msg.MessageWriteStrategies;
 import spreadsheet.mapper.model.shapes.CommentBean;
@@ -17,6 +16,8 @@ import java.util.*;
  * Created by hanwen on 2017/1/3.
  */
 public class SingleCommentInCellStrategy implements MessageWriteStrategy {
+
+  private static final String ENTER_SEPARATOR = "\n";
 
   @Override
   public String getStrategy() {
@@ -88,7 +89,7 @@ public class SingleCommentInCellStrategy implements MessageWriteStrategy {
         for (Map.Entry<Integer, List<String>> columnEntry : rowEntry.getValue().entrySet()) {
 
           comments.add(
-              new CommentBean(StringUtils.join(columnEntry.getValue(), Constants.ENTER_SEPARATOR), sheetEntry.getKey(), rowEntry.getKey(), columnEntry.getKey()));
+              new CommentBean(StringUtils.join(columnEntry.getValue(), ENTER_SEPARATOR), sheetEntry.getKey(), rowEntry.getKey(), columnEntry.getKey()));
 
         }
       }

@@ -91,7 +91,8 @@ public class DefaultWorkbookValidationHelper implements WorkbookValidationHelper
   private void validWorkbook(Workbook workbook, WorkbookMeta workbookMeta) {
 
     for (WorkbookValidator validator : workbookValidators) {
-      if (!validator.valid(workbook, workbookMeta)) {
+      if (!validator.valid(workbook, workbookMeta) && validator.getMessageOnSheet() != null) {
+
         errorMessages.add(new MessageBean(MessageWriteStrategies.TEXT_BOX, validator.getErrorMessage(), validator.getMessageOnSheet()));
       }
     }

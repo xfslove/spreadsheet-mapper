@@ -54,6 +54,14 @@ public class FieldMetaBean implements FieldMeta {
   }
 
   @Override
+  public void removeHeaderMeta(int rowIndex) {
+    if (headerMetas.isEmpty()) {
+      return;
+    }
+    headerMetas.remove(rowIndex);
+  }
+
+  @Override
   public void addHeaderMeta(HeaderMeta headerMeta) {
     if (headerMeta == null) {
       throw new IllegalArgumentException("header meta can not be null");
