@@ -39,7 +39,7 @@ public class LocalDateSetter<T> extends FieldSetterAdapter<T, LocalDateSetter<T>
     try {
       DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(pattern);
       String value = cell.getValue();
-      String fieldName = FieldUtils.detectRealFieldName(fieldMeta);
+      String fieldName = fieldMeta.getName();
 
       LocalDate localDate = null;
       try {

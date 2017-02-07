@@ -37,7 +37,7 @@ public class LocalDateTimeConverter<T> extends FieldConverterAdapter<T, LocalDat
   public String getValue(T object, Cell cell, FieldMeta fieldMeta) {
 
     try {
-      Object value = PropertyUtils.getProperty(object, FieldUtils.detectRealFieldName(fieldMeta));
+      Object value = PropertyUtils.getProperty(object, fieldMeta.getName());
 
       if (!(value instanceof LocalDateTime)) {
         return null;

@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import spreadsheet.mapper.TestBean;
-import spreadsheet.mapper.model.meta.FieldMeta;
-import spreadsheet.mapper.model.meta.FieldMetaBean;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -26,18 +24,6 @@ public class FieldUtilsTest {
   @BeforeClass
   public void before() {
     LOGGER.debug("-------------------starting test field utils-------------------");
-  }
-
-  @Test
-  public void testDetectRealField() throws Exception {
-
-    FieldMeta fieldMeta1 = new FieldMetaBean("int1", 1);
-    FieldMeta fieldMeta2 = new FieldMetaBean("test.int1", 1);
-    FieldMeta fieldMeta3 = new FieldMetaBean(FieldUtils.BUSINESS_KEY_PREFIX + "test.int1", 1);
-
-    assertEquals(FieldUtils.detectRealFieldName(fieldMeta1), "int1");
-    assertEquals(FieldUtils.detectRealFieldName(fieldMeta2), "test.int1");
-    assertEquals(FieldUtils.detectRealFieldName(fieldMeta3), "test.int1");
   }
 
   @Test

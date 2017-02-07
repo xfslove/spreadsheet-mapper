@@ -39,6 +39,9 @@ public class DateFormatRegisterer {
    * @param dateFormat   date format of {@link SimpleDateFormat} supported
    */
   public void registerFormat(String customFormat, String dateFormat) {
+    if (DATE_FORMAT_CORRESPONDING.containsKey(customFormat)) {
+      throw new IllegalArgumentException("can not register duplicate custom format, already registered custom format [" + customFormat + "]");
+    }
     DATE_FORMAT_CORRESPONDING.put(customFormat, dateFormat);
     LOGGER.info("register format[" + customFormat + "] corresponding as[" + dateFormat + "]");
   }

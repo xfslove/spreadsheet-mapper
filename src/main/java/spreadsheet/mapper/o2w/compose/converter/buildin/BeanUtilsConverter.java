@@ -24,7 +24,7 @@ public class BeanUtilsConverter<T> implements Converter<T> {
   @Override
   public String getValue(T object, Cell cell, FieldMeta fieldMeta) {
     try {
-      return BeanUtils.getProperty(object, FieldUtils.detectRealFieldName(fieldMeta));
+      return BeanUtils.getProperty(object, fieldMeta.getName());
     } catch (NestedNullException e) {
       LOGGER.debug("{} is null", fieldMeta.getName());
       return null;

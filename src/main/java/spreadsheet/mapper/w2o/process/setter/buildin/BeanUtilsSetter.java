@@ -41,7 +41,7 @@ public class BeanUtilsSetter<T> implements Setter<T> {
         return;
       }
 
-      BeanUtils.setProperty(object, FieldUtils.detectRealFieldName(fieldMeta), value);
+      BeanUtils.setProperty(object, fieldMeta.getName(), value);
 
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
@@ -50,7 +50,7 @@ public class BeanUtilsSetter<T> implements Setter<T> {
   }
 
   private boolean lookup(T object, FieldMeta fieldMeta) {
-    Class fieldType = FieldUtils.getFieldType(object.getClass(), FieldUtils.detectRealFieldName(fieldMeta).split("\\."));
+    Class fieldType = FieldUtils.getFieldType(object.getClass(), fieldMeta.getName().split("\\."));
     return fieldType != null && ConvertUtils.lookup(fieldType) != null;
   }
 

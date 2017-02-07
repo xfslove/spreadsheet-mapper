@@ -44,7 +44,7 @@ public class BooleanSetter<T> extends FieldSetterAdapter<T, BooleanSetter<T>> {
         booleanValue = Boolean.FALSE;
       }
 
-      BeanUtils.setProperty(object, FieldUtils.detectRealFieldName(fieldMeta), booleanValue);
+      BeanUtils.setProperty(object, fieldMeta.getName(), booleanValue);
     } catch (Exception e) {
       LOGGER.error(ExceptionUtils.getStackTrace(e));
       throw new WorkbookProcessException(e);

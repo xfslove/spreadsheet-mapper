@@ -52,8 +52,13 @@ public class DependencyValidatorFactoryRegisterer {
     if (name == null) {
       throw new IllegalArgumentException("register factory name can not be null");
     }
-    validatorFactories.put(buildRegisterName(name), factoryClazz);
-    LOGGER.info("register validator factory[" + factoryClazz.getName() + "] success, named[" + name + "]");
+    String registerName = buildRegisterName(name);
+    if (validatorFactories.containsKey(registerName)) {
+      throw new IllegalArgumentException("can not register duplicate rule name, already registered rule name [" + registerName + "]");
+    }
+
+    validatorFactories.put(registerName, factoryClazz);
+    LOGGER.info("registered validator factory[" + factoryClazz.getName() + "] success, named[" + name + "]");
   }
 
   /**
@@ -70,7 +75,7 @@ public class DependencyValidatorFactoryRegisterer {
     Class<? extends DependencyValidatorFactory> factoryClazz = validatorFactories.get(buildRegisterName(name));
 
     if (factoryClazz == null) {
-      throw new IllegalArgumentException("not factory register as [" + buildRegisterName(name) + "]");
+      throw new IllegalArgumentException("not factory registered as [" + buildRegisterName(name) + "]");
     }
 
     return factoryClazz;

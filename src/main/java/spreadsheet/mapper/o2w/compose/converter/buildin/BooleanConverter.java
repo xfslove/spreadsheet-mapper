@@ -44,7 +44,7 @@ public class BooleanConverter<T> extends FieldConverterAdapter<T, BooleanConvert
   public String getValue(T object, Cell cell, FieldMeta fieldMeta) {
 
     try {
-      Object value = PropertyUtils.getProperty(object, FieldUtils.detectRealFieldName(fieldMeta));
+      Object value = PropertyUtils.getProperty(object, fieldMeta.getName());
 
       if (Boolean.FALSE.equals(value)) {
         return falseString;

@@ -31,7 +31,7 @@ public class PlainNumberConverter<T> extends FieldConverterAdapter<T, PlainNumbe
   public String getValue(T object, Cell cell, FieldMeta fieldMeta) {
 
     try {
-      Object value = PropertyUtils.getProperty(object, FieldUtils.detectRealFieldName(fieldMeta));
+      Object value = PropertyUtils.getProperty(object, fieldMeta.getName());
 
       if (!(value instanceof Number)) {
         return null;
