@@ -175,9 +175,10 @@ public class DefaultSheetValidationHelper implements SheetValidationHelper {
   private boolean validDataRow(Row row, SheetMeta sheetMeta) {
     DependencyValidateEngine dependencyValidateEngine = new DependencyValidateEngine(dependencyValidators);
 
+    boolean result = dependencyValidateEngine.valid(row, sheetMeta);
     errorMessages.addAll(dependencyValidateEngine.getErrorMessages());
 
-    return dependencyValidateEngine.valid(row, sheetMeta);
+    return result;
   }
 
 }
