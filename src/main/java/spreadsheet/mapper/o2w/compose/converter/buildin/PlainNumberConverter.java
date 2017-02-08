@@ -9,7 +9,6 @@ import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.o2w.compose.WorkbookComposeException;
 import spreadsheet.mapper.o2w.compose.converter.FieldConverterAdapter;
-import spreadsheet.mapper.utils.FieldUtils;
 
 import java.math.BigDecimal;
 
