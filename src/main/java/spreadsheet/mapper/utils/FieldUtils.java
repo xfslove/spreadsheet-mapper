@@ -1,8 +1,5 @@
 package spreadsheet.mapper.utils;
 
-import org.apache.commons.lang3.StringUtils;
-import spreadsheet.mapper.model.meta.FieldMeta;
-
 import java.lang.reflect.Field;
 
 /**
@@ -14,38 +11,6 @@ public class FieldUtils {
 
   private FieldUtils() {
     // default constructor
-  }
-
-  /**
-   * <pre>
-   * the business key present a domain object, it can identified a domain object.
-   * it useful where update a domain object.
-   * </pre>
-   */
-  public static final String BUSINESS_KEY_PREFIX = "businessKey.";
-
-  /**
-   * <pre>
-   * get real field name from field name, if field name has {@link #BUSINESS_KEY_PREFIX} subtract it.
-   *
-   * eg:
-   * name -&gt; name
-   * nested.name -&gt; nested.name
-   * businessKey.name -&gt; name
-   * </pre>
-   *
-   * @param fieldMeta {@link FieldMeta}
-   * @return real field name of object
-   */
-  public static String detectRealFieldName(FieldMeta fieldMeta) {
-
-    String realFieldName = fieldMeta.getName();
-
-    if (StringUtils.startsWith(realFieldName, BUSINESS_KEY_PREFIX)) {
-      realFieldName = StringUtils.substring(realFieldName, BUSINESS_KEY_PREFIX.length());
-    }
-
-    return realFieldName;
   }
 
   /**

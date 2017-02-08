@@ -10,7 +10,6 @@ import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.o2w.compose.WorkbookComposeException;
 import spreadsheet.mapper.o2w.compose.converter.FieldConverterAdapter;
-import spreadsheet.mapper.utils.FieldUtils;
 
 /**
  * boolean readable text value converter
@@ -44,7 +43,7 @@ public class BooleanConverter<T> extends FieldConverterAdapter<T, BooleanConvert
   public String getValue(T object, Cell cell, FieldMeta fieldMeta) {
 
     try {
-      Object value = PropertyUtils.getProperty(object, FieldUtils.detectRealFieldName(fieldMeta));
+      Object value = PropertyUtils.getProperty(object, fieldMeta.getName());
 
       if (Boolean.FALSE.equals(value)) {
         return falseString;

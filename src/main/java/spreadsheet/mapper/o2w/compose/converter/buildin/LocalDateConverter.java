@@ -10,7 +10,6 @@ import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.o2w.compose.WorkbookComposeException;
 import spreadsheet.mapper.o2w.compose.converter.FieldConverterAdapter;
-import spreadsheet.mapper.utils.FieldUtils;
 
 /**
  * local date text value with supplied pattern converter
@@ -37,7 +36,7 @@ public class LocalDateConverter<T> extends FieldConverterAdapter<T, LocalDateCon
   public String getValue(T object, Cell cell, FieldMeta fieldMeta) {
 
     try {
-      Object value = PropertyUtils.getProperty(object, FieldUtils.detectRealFieldName(fieldMeta));
+      Object value = PropertyUtils.getProperty(object, fieldMeta.getName());
 
       if (!(value instanceof LocalDate)) {
         return null;

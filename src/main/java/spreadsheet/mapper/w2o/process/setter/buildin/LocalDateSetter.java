@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
-import spreadsheet.mapper.utils.FieldUtils;
 import spreadsheet.mapper.w2o.process.WorkbookProcessException;
 import spreadsheet.mapper.w2o.process.setter.FieldSetterAdapter;
 
@@ -39,7 +38,7 @@ public class LocalDateSetter<T> extends FieldSetterAdapter<T, LocalDateSetter<T>
     try {
       DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(pattern);
       String value = cell.getValue();
-      String fieldName = FieldUtils.detectRealFieldName(fieldMeta);
+      String fieldName = fieldMeta.getName();
 
       LocalDate localDate = null;
       try {

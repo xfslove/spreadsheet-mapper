@@ -4,7 +4,9 @@ import org.testng.annotations.Test;
 import spreadsheet.mapper.TestBean;
 import spreadsheet.mapper.TestFactory;
 import spreadsheet.mapper.model.core.Cell;
+import spreadsheet.mapper.model.core.CellBean;
 import spreadsheet.mapper.model.meta.FieldMeta;
+import spreadsheet.mapper.model.meta.FieldMetaBean;
 
 import java.util.Map;
 
@@ -87,6 +89,8 @@ public class BeanUtilsConverterTest {
     assertEquals(extractor.getValue(testBean2, cell212, fieldMetaMap.get("string")), "Scarlett Johansson");
     assertNull(extractor.getValue(testBean2, cell213, fieldMetaMap.get("localDate")));
     assertNull(extractor.getValue(testBean2, cell214, fieldMetaMap.get("localDateTime")));
+
+    assertNull(extractor.getValue(testBean2, new CellBean("businessKey"), new FieldMetaBean("businessKey", 1)));
   }
 
 }

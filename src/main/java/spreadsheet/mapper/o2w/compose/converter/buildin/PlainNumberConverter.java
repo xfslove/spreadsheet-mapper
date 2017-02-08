@@ -9,7 +9,6 @@ import spreadsheet.mapper.model.core.Cell;
 import spreadsheet.mapper.model.meta.FieldMeta;
 import spreadsheet.mapper.o2w.compose.WorkbookComposeException;
 import spreadsheet.mapper.o2w.compose.converter.FieldConverterAdapter;
-import spreadsheet.mapper.utils.FieldUtils;
 
 import java.math.BigDecimal;
 
@@ -31,7 +30,7 @@ public class PlainNumberConverter<T> extends FieldConverterAdapter<T, PlainNumbe
   public String getValue(T object, Cell cell, FieldMeta fieldMeta) {
 
     try {
-      Object value = PropertyUtils.getProperty(object, FieldUtils.detectRealFieldName(fieldMeta));
+      Object value = PropertyUtils.getProperty(object, fieldMeta.getName());
 
       if (!(value instanceof Number)) {
         return null;
