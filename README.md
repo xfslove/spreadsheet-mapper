@@ -31,6 +31,6 @@ https://github.com/xfslove/spreadsheet-mapper/wiki
 compile 'com.github.xfslove:spreadsheet-mapper:1.3.1'
 ```
 
-###*License*
+### *License*
 
 Released under the [Apache 2.0 license](license).
